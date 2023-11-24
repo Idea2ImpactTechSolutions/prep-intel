@@ -1,3 +1,377 @@
+// AcademicInfo.client.js
+"use client";
+
+import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
+import * as Yup from "yup";
+
+// Define the validation schema using Yup
+const validationSchema = Yup.object().shape({
+  departments: Yup.array().of(
+    Yup.object().shape({
+      name: Yup.string().required("Department name is required"),
+    })
+  ),
+  accreditations: Yup.array().of(
+    Yup.object().shape({
+      name: Yup.string().required("Accreditation is required"),
+    })
+  ),
+  researchOpportunities: Yup.array().of(
+    Yup.object().shape({
+      name: Yup.string().required("Research opportunity name is required"),
+    })
+  ),
+  // admissionRequirements: Yup.object().shape({
+  //   actScore: Yup.number().when("actRequired", {
+  //     is: true,
+  //     then: Yup.number().required("ACT score is required"),
+  //   }),
+  //   satScore: Yup.number().when("satRequired", {
+  //     is: true,
+  //     then: Yup.number().required("SAT score is required"),
+  //   }),
+  //   gpa: Yup.number().when("diplomaRequired", {
+  //     is: true,
+  //     then: Yup.number().required("GPA is required").min(0).max(4),
+  //   }),
+  // }),
+  financials: Yup.object().shape({
+    inStateTuition: Yup.number().required("In-state tuition is required"),
+    outOfStateTuition: Yup.number().required(
+      "Out-of-state tuition is required"
+    ),
+    feesPerSemester: Yup.number().required("Fees per semester are required"),
+    scholarshipInfoURL: Yup.string().url("Enter a valid URL"),
+    financialAidInfoURL: Yup.string().url("Enter a valid URL"),
+  }),
+  // You can add research opportunities and other sections similarly
+});
+
 export default function AcademicInfo() {
-    return <h1>This is the academic info page</h1>
-  }
+  const initialValues = {
+    departments: [{ name: "" }],
+    accreditations: [{ name: "" }],
+    researchOpportunities: [{ name: "" }],
+    admissionRequirements: {
+      actRequired: false,
+      satRequired: false,
+      diplomaRequired: false,
+      actScore: "",
+      satScore: "",
+      gpa: "",
+    },
+    financials: {
+      inStateTuition: "",
+      outOfStateTuition: "",
+      feesPerSemester: "",
+      scholarshipInfoURL: "",
+      financialAidInfoURL: "",
+    },
+  };
+
+  const handleSubmit = (values, { setSubmitting }) => {
+    console.log(values);
+    setSubmitting(false);
+  };
+
+  return (
+    <div className="container mx-auto p-4">
+      <h1 className="text-5xl font-bold text-gray-800 mb-6">
+        Create your School's Profile
+      </h1>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ values, isSubmitting }) => (
+          <Form>
+            <h1 className="text-3xl font-bold text-gray-800 mb-6">
+              Academic Information
+            </h1>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Departments FieldArray */}
+              <FieldArray name="departments">
+                {({ insert, remove, push }) => (
+                  <div>
+                    {values.departments.length > 0 &&
+                      values.departments.map((department, index) => (
+                        <div key={index} className="mb-3 space-y-4">
+                          <label
+                            htmlFor={`departments.${index}.name`}
+                            className="block text-sm font-medium text-gray-700"
+                          >
+                            Department or Program
+                          </label>
+                          <Field
+                            name={`departments.${index}.name`}
+                            placeholder="Department or Program"
+                            type="text"
+                            className="border-2 w-full p-2"
+                          />
+                          <ErrorMessage
+                            name={`departments.${index}.name`}
+                            component="div"
+                            className="text-red-500"
+                          />
+                          <div className="flex items-center space-x-2">
+                            <button
+                              type="button"
+                              className="flex-1 rounded-md bg-green-500 text-white px-3 py-1"
+                              onClick={() => push({ name: "" })}
+                            >
+                              Add Additional
+                            </button>
+                            <button
+                              type="button"
+                              className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
+                              onClick={() => remove(index)}
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </FieldArray>
+
+              {/* Accreditations FieldArray */}
+              <FieldArray name="accreditations">
+                {({ insert, remove, push }) => (
+                  <div>
+                    {values.accreditations.length > 0 &&
+                      values.accreditations.map((accreditation, index) => (
+                        <div key={index} className="mb-3 space-y-4">
+                          <label
+                            htmlFor={`accreditations.${index}.name`}
+                            className="block text-sm font-medium text-gray-700"
+                          >
+                            Accreditations
+                          </label>
+                          <Field
+                            name={`accreditations.${index}.name`}
+                            placeholder="Accreditations"
+                            type="text"
+                            className="border-2 w-full p-2"
+                          />
+                          <ErrorMessage
+                            name={`accreditations.${index}.name`}
+                            component="div"
+                            className="text-red-500"
+                          />
+                          <div className="flex items-center space-x-2">
+                            <button
+                              type="button"
+                              className="flex-1 rounded-md bg-green-500 text-white px-3 py-1"
+                              onClick={() => push({ name: "" })}
+                            >
+                              Add Additional
+                            </button>
+                            <button
+                              type="button"
+                              className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
+                              onClick={() => remove(index)}
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </FieldArray>
+              <FieldArray name="researchOpportunities">
+                {({ insert, remove, push }) => (
+                  <div>
+                    {values.researchOpportunities.length > 0 &&
+                      values.researchOpportunities.map((opportunity, index) => (
+                        <div key={index} className="mb-3 space-y-4">
+                          <label
+                            htmlFor={`researchOpportunities.${index}.name`}
+                            className="block text-sm font-medium text-gray-700"
+                          >
+                            Research Opportunities
+                          </label>
+                          <Field
+                            name={`researchOpportunities.${index}.name`}
+                            placeholder="Research Opportunities"
+                            type="text"
+                            className="border-2 w-full p-2"
+                          />
+                          <ErrorMessage
+                            name={`researchOpportunities.${index}.name`}
+                            component="div"
+                            className="text-red-500"
+                          />
+                          <div className="flex items-center space-x-2">
+                            <button
+                              type="button"
+                              className="flex-1 rounded-md bg-green-500 text-white px-3 py-1"
+                              onClick={() => push({ name: "" })}
+                            >
+                              Add Additional
+                            </button>
+                            <button
+                              type="button"
+                              className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
+                              onClick={() => remove(index)}
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </FieldArray>
+              {/* Add your Research Opportunities FieldArray here in a similar manner */}
+            </div>
+            <h2 className="text-xl font-semibold mb-4">
+              Admission Requirements
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div>
+                <label className="inline-flex items-center">
+                  <Field
+                    type="checkbox"
+                    name="admissionRequirements.actRequired"
+                    className="form-checkbox"
+                  />
+                  <span className="ml-2">ACT Required</span>
+                </label>
+                {values.admissionRequirements.actRequired && (
+                  <div className="mb-5 mt-5">
+                    <label
+                      htmlFor="admissionRequirements.actScore"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      ACT Score Requirement
+                    </label>
+                    <Field
+                      name="admissionRequirements.actScore"
+                      type="text"
+                      placeholder="ACT Score Requirement"
+                      className="border-2 w-full p-2 mt-2 rounded-md"
+                    />
+                  </div>
+                )}
+              </div>
+              <div>
+                <label className="inline-flex items-center">
+                  <Field
+                    type="checkbox"
+                    name="admissionRequirements.satRequired"
+                    className="form-checkbox"
+                  />
+                  <span className="ml-2">SAT Required</span>
+                </label>
+                {values.admissionRequirements.satRequired && (
+                  <div className="mb-5 mt-5">
+                    <label
+                      htmlFor="admissionRequirements.satScore"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      SAT Score Requirement
+                    </label>
+                    <Field
+                      name="admissionRequirements.satScore"
+                      type="text"
+                      placeholder="SAT Score Requirement"
+                      className="border-2 w-full p-2 mt-2 rounded-md"
+                    />
+                  </div>
+                )}
+              </div>
+              <div>
+                <label className="inline-flex items-center">
+                  <Field
+                    type="checkbox"
+                    name="admissionRequirements.diplomaRequired"
+                    className="form-checkbox"
+                  />
+                  <span className="ml-2">Diploma/GED Required</span>
+                </label>
+                {values.admissionRequirements.diplomaRequired && (
+                  <div className="mb-5 mt-5">
+                    <label
+                      htmlFor="admissionRequirements.gpa"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      GPA Requirement
+                    </label>
+                    <Field
+                      name="admissionRequirements.gpa"
+                      type="text"
+                      placeholder="GPA Requirement"
+                      className="border-2 w-full p-2 mt-2 rounded-md"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+            <h2 className="text-xl font-semibold mb-4">Financials</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <Field
+                name="financials.inStateTuition"
+                type="text"
+                placeholder="In-State Tuition"
+                className="border-2 w-full p-2 rounded-md"
+              />
+              <Field
+                name="financials.outOfStateTuition"
+                type="text"
+                placeholder="Out-of-State Tuition"
+                className="border-2 w-full p-2 rounded-md"
+              />
+
+              <Field
+                name="financials.feesPerSemester"
+                type="text"
+                placeholder="Fees Per Semester"
+                className="border-2 w-full p-2 rounded-md"
+              />
+              <div className="mb-2 mt-2">
+                <label
+                  htmlFor="financials.scholarshipInfoURL"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Scholarship Information URL
+                </label>
+                <Field
+                  name="financials.scholarshipInfoURL"
+                  type="text"
+                  placeholder="Scholarship Information URL"
+                  className="border-2 w-full p-2 rounded-md"
+                />
+              </div>
+              <Field
+                name="financials.financialAidInfoURL"
+                type="text"
+                placeholder="Financial Aid Information URL"
+                className="border-2 w-full p-2 rounded-md"
+              />
+            </div>
+
+            <div className="flex justify-between mt-6">
+              <button
+                type="button"
+                className="rounded-md bg-gray-200 text-black px-4 py-2"
+              >
+                Back
+              </button>
+              <button
+                type="submit"
+                className="rounded-md bg-blue-500 text-white px-4 py-2"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Please wait..." : "Next"}
+              </button>
+            </div>
+          </Form>
+        )}
+      </Formik>
+    </div>
+  );
+}
