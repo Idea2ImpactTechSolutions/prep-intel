@@ -34,15 +34,15 @@ const validationSchema = Yup.object().shape({
   //     then: Yup.number().required("GPA is required").min(0).max(4),
   //   }),
   // }),
-  financials: Yup.object().shape({
-    inStateTuition: Yup.number().required("In-state tuition is required"),
-    outOfStateTuition: Yup.number().required(
-      "Out-of-state tuition is required"
-    ),
-    feesPerSemester: Yup.number().required("Fees per semester are required"),
-    scholarshipInfoURL: Yup.string().url("Enter a valid URL"),
-    financialAidInfoURL: Yup.string().url("Enter a valid URL"),
-  }),
+  // financials: Yup.object().shape({
+  //   inStateTuition: Yup.number().required("In-state tuition is required"),
+  //   outOfStateTuition: Yup.number().required(
+  //     "Out-of-state tuition is required"
+  //   ),
+  //   feesPerSemester: Yup.number().required("Fees per semester are required"),
+  //   scholarshipInfoURL: Yup.string().url("Enter a valid URL"),
+  //   financialAidInfoURL: Yup.string().url("Enter a valid URL"),
+  // }),
   // You can add research opportunities and other sections similarly
 });
 
