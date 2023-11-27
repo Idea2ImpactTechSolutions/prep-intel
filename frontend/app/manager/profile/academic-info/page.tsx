@@ -3,7 +3,6 @@
 
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 import * as Yup from "yup";
-
 // Define the validation schema using Yup
 const validationSchema = Yup.object().shape({
   departments: Yup.array().of(
@@ -69,9 +68,10 @@ export default function AcademicInfo() {
     },
   };
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    console.log(values);
-    setSubmitting(false);
+  const handleSubmit = (values: any) => {
+    console.log("value", values);
+    // setSubmitting(false);
+    // setSubmitting(true);
   };
 
   return (
@@ -123,13 +123,15 @@ export default function AcademicInfo() {
                             >
                               Add Additional
                             </button>
-                            <button
-                              type="button"
-                              className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
-                              onClick={() => remove(index)}
-                            >
-                              Remove
-                            </button>
+                            {values.departments.length > 1 && (
+                              <button
+                                type="button"
+                                className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
+                                onClick={() => remove(index)}
+                              >
+                                Remove
+                              </button>
+                            )}
                           </div>
                         </div>
                       ))}
@@ -169,13 +171,15 @@ export default function AcademicInfo() {
                             >
                               Add Additional
                             </button>
-                            <button
-                              type="button"
-                              className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
-                              onClick={() => remove(index)}
-                            >
-                              Remove
-                            </button>
+                            {values.departments.length > 1 && (
+                              <button
+                                type="button"
+                                className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
+                                onClick={() => remove(index)}
+                              >
+                                Remove
+                              </button>
+                            )}
                           </div>
                         </div>
                       ))}
@@ -213,13 +217,15 @@ export default function AcademicInfo() {
                             >
                               Add Additional
                             </button>
-                            <button
-                              type="button"
-                              className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
-                              onClick={() => remove(index)}
-                            >
-                              Remove
-                            </button>
+                            {values.departments.length > 1 && (
+                              <button
+                                type="button"
+                                className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
+                                onClick={() => remove(index)}
+                              >
+                                Remove
+                              </button>
+                            )}
                           </div>
                         </div>
                       ))}
@@ -361,10 +367,17 @@ export default function AcademicInfo() {
               >
                 Back
               </button>
+              {/* <button
+                type="submit"
+                // onClick={handleSubmit}
+                className="rounded-md bg-blue-500 text-white px-4 py-2"
+                // disabled={isSubmitting}
+              >
+                {isSubmitting ? "Please wait..." : "Next"}
+              </button> */}
               <button
                 type="submit"
                 className="rounded-md bg-blue-500 text-white px-4 py-2"
-                disabled={isSubmitting}
               >
                 {isSubmitting ? "Please wait..." : "Next"}
               </button>
