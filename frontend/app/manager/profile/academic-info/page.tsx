@@ -51,15 +51,17 @@ const validationSchema = Yup.object().shape({
     }),
   }),
 
-  // financials: Yup.object().shape({
-  //   inStateTuition: Yup.number().required("In-state tuition is required"),
-  //   outOfStateTuition: Yup.number().required(
-  //     "Out-of-state tuition is required"
-  //   ),
-  //   feesPerSemester: Yup.number().required("Fees per semester are required"),
-  //   scholarshipInfoURL: Yup.string().url("Enter a valid URL"),
-  //   financialAidInfoURL: Yup.string().url("Enter a valid URL"),
-  // }),
+  financials: Yup.object().shape({
+    inStateTuition: Yup.number().required("In-state tuition is required"),
+    outOfStateTuition: Yup.number().required(
+      "Out-of-state tuition is required"
+    ),
+    feesPerSemester: Yup.number().required("Fees per semester are required"),
+    // scholarshipInfoURL: Yup.string()
+    //   .required("Scholarship Information URL is required")
+    //   .url("Enter a valid URL"),
+    // financialAidInfoURL: Yup.string().url("Enter a valid URL"),
+  }),
   // You can add research opportunities and other sections similarly
 });
 
@@ -376,45 +378,105 @@ export default function AcademicInfo() {
             </div>
             <h2 className="text-xl font-semibold mb-4">Financials</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <Field
-                name="financials.inStateTuition"
-                type="text"
-                placeholder="In-State Tuition"
-                className="border-2 w-full p-2 rounded-md"
-              />
-              <Field
-                name="financials.outOfStateTuition"
-                type="text"
-                placeholder="Out-of-State Tuition"
-                className="border-2 w-full p-2 rounded-md"
-              />
-
-              <Field
-                name="financials.feesPerSemester"
-                type="text"
-                placeholder="Fees Per Semester"
-                className="border-2 w-full p-2 rounded-md"
-              />
-              <div className="mb-2 mt-2">
+              <div className="space-y-4">
+                <label
+                  htmlFor="financials.inStateTuition"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  In-State Tuition
+                </label>
+                <Field
+                  name="financials.inStateTuition"
+                  type="number"
+                  placeholder="In-State Tuition"
+                  className="border-2 w-full p-2 rounded-md"
+                />
+                <ErrorMessage
+                  name="financials.inStateTuition"
+                  component="div"
+                  className="text-red-500"
+                />
+              </div>
+              <div className="space-y-4">
+                <label
+                  htmlFor="financials.outOfStateTuition"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Out-of-State Tuition
+                </label>
+                <Field
+                  name="financials.outOfStateTuition"
+                  type="number"
+                  placeholder="Out-of-State Tuition"
+                  className="border-2 w-full p-2 rounded-md"
+                />
+                <ErrorMessage
+                  name="financials.outOfStateTuition"
+                  component="div"
+                  className="text-red-500"
+                />
+              </div>
+              <div className="mb-2 mt-2 space-y-4">
+                <label
+                  htmlFor="financials.financialAidInfoURL"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Fees Per Semester
+                </label>
+                <Field
+                  name="financials.feesPerSemester"
+                  type="number"
+                  placeholder="Fees Per Semester"
+                  className="border-2 w-full p-2 rounded-md"
+                />
+                <ErrorMessage
+                  name="financials.feesPerSemester"
+                  component="div"
+                  className="text-red-500"
+                />
+              </div>
+              <div className="mb-2 mt-2 space-y-4">
                 <label
                   htmlFor="financials.scholarshipInfoURL"
                   className="block text-sm font-medium text-gray-700"
                 >
                   Scholarship Information URL
                 </label>
-                <Field
-                  name="financials.scholarshipInfoURL"
-                  type="text"
-                  placeholder="Scholarship Information URL"
-                  className="border-2 w-full p-2 rounded-md"
-                />
+                <div className="space-y-4">
+                  <Field
+                    name="financials.scholarshipInfoURL"
+                    type="text"
+                    placeholder="Scholarship Information URL"
+                    className="border-2 w-full p-2 rounded-md"
+                  />
+                  <ErrorMessage
+                    name="financials.schoolarshipInfoURL"
+                    component="div"
+                    className="text-red-500"
+                  />
+                </div>
               </div>
-              <Field
-                name="financials.financialAidInfoURL"
-                type="text"
-                placeholder="Financial Aid Information URL"
-                className="border-2 w-full p-2 rounded-md"
-              />
+              <div className="space-y-4">
+                <label
+                  htmlFor="financials.financialAidInfoURL"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Financial Information URL
+                </label>
+                <div className="space-y-4">
+                  <Field
+                    name="financials.financialAidInfoURL"
+                    type="text"
+                    placeholder="Financial Aid Information URL"
+                    className="border-2 w-full p-2 rounded-md"
+                  />
+                  <ErrorMessage
+                    name="financials.financeAidInfoURL"
+                    component="div"
+                    className="text-red-500"
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="flex justify-between mt-6">
