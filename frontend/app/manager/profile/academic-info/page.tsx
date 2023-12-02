@@ -68,10 +68,37 @@ export default function AcademicInfo() {
     },
   };
 
-  const handleSubmit = (values: any) => {
-    console.log("value", values);
-    // setSubmitting(false);
-    // setSubmitting(true);
+  const handleSubmit = async (values, { setSubmitting }) => {
+    console.log("Form values", values);
+    setSubmitting(true);
+    //TODO FOR JOEY
+    //We will decide whether we will use post/put calls.
+    //We want to post a new school if there are no schools, if we have an existing school, we will do a put
+    //We don't HAVE to change the way we call it here, we will just handle whether to update or create in the backend
+    //Basically, if there is an id for any of these fields ... ensure that they are being saved
+    try {
+      const url = "/api/manager/profile/academic-info";
+      // Send a POST request to the server
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values), // Convert form values to JSON
+      });
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("Response data:", responseData);
+        // Handle success - you can redirect to another page or show a success message
+      } else {
+        throw new Error(`Error: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      // Handle errors - show error message to the user, etc.
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
