@@ -20,20 +20,37 @@ const validationSchema = Yup.object().shape({
       name: Yup.string().required("Research opportunity name is required"),
     })
   ),
-  // admissionRequirements: Yup.object().shape({
-  //   actScore: Yup.number().when("actRequired", {
-  //     is: true,
-  //     then: Yup.number().required("ACT score is required"),
-  //   }),
-  //   satScore: Yup.number().when("satRequired", {
-  //     is: true,
-  //     then: Yup.number().required("SAT score is required"),
-  //   }),
-  //   gpa: Yup.number().when("diplomaRequired", {
-  //     is: true,
-  //     then: Yup.number().required("GPA is required").min(0).max(4),
-  //   }),
-  // }),
+
+  admissionRequirements: Yup.object().shape({
+    actScore: Yup.number().when("actRequired", {
+      is: true,
+      then: (schema) =>
+        schema
+          .required("ACT Score is required")
+          .min(0, "ACT Score must be at least 0")
+          .max(36, "ACT Score cannot exceed 36"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+    satScore: Yup.number().when("satRequired", {
+      is: true,
+      then: (schema) =>
+        schema
+          .required("SAT Score is required")
+          .min(0, "SAT Score must be at least 0")
+          .max(1600, "SAT Score cannot exceed 1600"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+    gpa: Yup.number().when("diplomaRequired", {
+      is: true,
+      then: (schema) =>
+        schema
+          .required("GPA is required")
+          .min(0, "GPA must be at least 0")
+          .max(4, "GPA cannot exceed 4.0"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+  }),
+
   // financials: Yup.object().shape({
   //   inStateTuition: Yup.number().required("In-state tuition is required"),
   //   outOfStateTuition: Yup.number().required(
@@ -282,9 +299,14 @@ export default function AcademicInfo() {
                     </label>
                     <Field
                       name="admissionRequirements.actScore"
-                      type="text"
+                      type="number"
                       placeholder="ACT Score Requirement"
                       className="border-2 w-full p-2 mt-2 rounded-md"
+                    />
+                    <ErrorMessage
+                      name="admissionRequirements.actScore"
+                      component="div"
+                      className="text-red-500"
                     />
                   </div>
                 )}
@@ -308,9 +330,14 @@ export default function AcademicInfo() {
                     </label>
                     <Field
                       name="admissionRequirements.satScore"
-                      type="text"
+                      type="number"
                       placeholder="SAT Score Requirement"
                       className="border-2 w-full p-2 mt-2 rounded-md"
+                    />
+                    <ErrorMessage
+                      name="admissionRequirements.satScore"
+                      component="div"
+                      className="text-red-500"
                     />
                   </div>
                 )}
@@ -334,9 +361,14 @@ export default function AcademicInfo() {
                     </label>
                     <Field
                       name="admissionRequirements.gpa"
-                      type="text"
+                      type="number"
                       placeholder="GPA Requirement"
                       className="border-2 w-full p-2 mt-2 rounded-md"
+                    />
+                    <ErrorMessage
+                      name="admissionRequirements.gpa"
+                      component="div"
+                      className="text-red-500"
                     />
                   </div>
                 )}
