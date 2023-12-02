@@ -5,7 +5,7 @@ const SchoolDepartment = sequelize.define(
   "school_department",
   {
     // Define model attributes
-    _id: {
+    id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -33,9 +33,12 @@ const SchoolDepartment = sequelize.define(
     description: {
       type: DataTypes.STRING,
     },
+    name: {
+      type: DataTypes.STRING,
+    },
   },
   {
-    // Model options (optional)
+    timestamps: false,
   }
 );
 

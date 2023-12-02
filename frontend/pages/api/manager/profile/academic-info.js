@@ -1,6 +1,6 @@
 // pages/api/manager/profile/academic-info.js
 const { models } = require("../../../../app/models");
-const { School } = models;
+const { School, SchoolDepartment, SchoolAccreditation } = models;
 const { v4 } = require("uuid");
 
 export default async function handler(req, res) {
@@ -48,15 +48,43 @@ export default async function handler(req, res) {
         school = await School.findByPk(schoolId);
         if (school) {
           delete schoolData.id;
-          console.log(school);
           school = await school.update(schoolData);
         }
       } else {
         school = await School.create(schoolData);
       }
 
+      if (school && school.dataValues) {
+        // Assuming `SchoolDepartment` is a model that relates to `School` via a foreign key `schoolId`
+        // Step 1: Delete existing school departments for this school
+        await SchoolAccreditation.destroy({ where: { school_id: school.id } });
+        await SchoolDepartment.destroy({ where: { school_id: school.id } });
+
+        // Step 2: Create new school departments using the department names
+        const schoolDepartmentsData = departments.map((dept) => ({
+          school_id: school.id, // foreign key linking to the school
+          name: dept.name, // or any other fields you have for the department
+        }));
+
+        const schoolAccreditationData = accreditations.map((accred) => ({
+          school_id: school.id,
+          name: accred.name,
+        }));
+
+        const newSchoolDepartments = await SchoolDepartment.bulkCreate(
+          schoolDepartmentsData
+        );
+
+        const newSchoolAccreditations = await SchoolAccreditation.bulkCreate(
+          schoolAccreditationData
+        );
+
+        school.dataValues.schoolDepartments = newSchoolDepartments;
+        school.dataValues.schoolAccreditations = newSchoolAccreditations;
+      }
+
       // Send a successful response
-      res.status(201).json(school);
+      res.status(201).json(school.dataValues);
     } catch (error) {
       // Handle any errors
       console.log("error", error);
