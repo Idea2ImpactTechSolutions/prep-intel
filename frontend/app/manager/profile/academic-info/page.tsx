@@ -1,6 +1,6 @@
 // AcademicInfo.client.js
 "use client";
-
+import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 import * as Yup from "yup";
 // Define the validation schema using Yup
@@ -66,6 +66,8 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function AcademicInfo() {
+  const [isLoading, setIsLoading] = useState(false);
+  const schoolId = "b14e03a9-656a-4726-9d38-6f09c912a543";
   const initialValues = {
     departments: [{ name: "" }],
     accreditations: [{ name: "" }],
@@ -86,6 +88,31 @@ export default function AcademicInfo() {
       financialAidInfoURL: "",
     },
   };
+
+  useEffect(() => {
+    const fetchSchoolData = async () => {
+      setIsLoading(true);
+      const schoolId = "b14e03a9-656a-4726-9d38-6f09c912a543";
+      try {
+        const response = await fetch(
+          `/api/manager/profile/academic-info?schoolId=${schoolId}`
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log("data", data);
+        //setSchoolData(data);
+      } catch (error) {
+        console.error("There was a problem fetching school data:", error);
+      }
+      setIsLoading(false);
+    };
+
+    if (schoolId) {
+      fetchSchoolData();
+    }
+  }, [schoolId]);
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setSubmitting(true);

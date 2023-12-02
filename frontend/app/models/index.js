@@ -5,8 +5,8 @@ const SchoolAccreditation = require("./SchoolAccreditation");
 const SchoolResearchProgram = require("./SchoolResearchProgram");
 
 const models = {
-  School,
   SchoolDepartment,
+  School,
   SchoolAccreditation,
   SchoolResearchProgram,
 };

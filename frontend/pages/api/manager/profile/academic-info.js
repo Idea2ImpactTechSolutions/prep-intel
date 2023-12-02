@@ -107,7 +107,35 @@ export default async function handler(req, res) {
     }
   } else if (req.method === "GET") {
     try {
-    } catch (error) {}
+      let schoolDetails = null;
+      const { schoolId } = req.query;
+      if (schoolId) {
+        schoolDetails = await School.findByPk(schoolId, {
+          include: [
+            { model: SchoolDepartment, as: "school_departments" },
+            { model: SchoolAccreditation, as: "school_accreditations" },
+            { model: SchoolResearchProgram, as: "school_research_programs" },
+          ],
+        });
+
+        // If schoolDetails is not null, format the response object
+        if (schoolDetails) {
+          schoolDetails = {
+            ...schoolDetails.toJSON(),
+            departments: schoolDetails.departments || [],
+            accreditations: schoolDetails.accreditations || [],
+            researchPrograms: schoolDetails.researchPrograms || [],
+          };
+        }
+      }
+
+      // Respond with the school details or null if no schoolId is provided
+      console.log("schoolDetails", schoolDetails);
+      res.status(200).json(schoolDetails);
+    } catch (error) {
+      console.log("error", error);
+      res.status(500).json({ error: error.message });
+    }
   } else {
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
