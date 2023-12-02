@@ -1,6 +1,7 @@
 // pages/api/manager/profile/academic-info.js
 const { models } = require("../../../../app/models");
-const { School, SchoolDepartment, SchoolAccreditation } = models;
+const { School, SchoolDepartment, SchoolAccreditation, SchoolResearchProgram } =
+  models;
 const { v4 } = require("uuid");
 
 export default async function handler(req, res) {
@@ -59,6 +60,9 @@ export default async function handler(req, res) {
         // Step 1: Delete existing school departments for this school
         await SchoolAccreditation.destroy({ where: { school_id: school.id } });
         await SchoolDepartment.destroy({ where: { school_id: school.id } });
+        await SchoolResearchProgram.destroy({
+          where: { school_id: school.id },
+        });
 
         // Step 2: Create new school departments using the department names
         const schoolDepartmentsData = departments.map((dept) => ({
@@ -71,6 +75,13 @@ export default async function handler(req, res) {
           name: accred.name,
         }));
 
+        const schoolResearchProgramData = researchOpportunities.map(
+          (researchOpportunities) => ({
+            school_id: school.id,
+            name: researchOpportunities.name,
+          })
+        );
+
         const newSchoolDepartments = await SchoolDepartment.bulkCreate(
           schoolDepartmentsData
         );
@@ -79,8 +90,12 @@ export default async function handler(req, res) {
           schoolAccreditationData
         );
 
+        const newSchoolResearchPrograms =
+          await SchoolResearchProgram.bulkCreate(schoolResearchProgramData);
+
         school.dataValues.schoolDepartments = newSchoolDepartments;
         school.dataValues.schoolAccreditations = newSchoolAccreditations;
+        school.dataValues.schoolResearchPrograms = newSchoolResearchPrograms;
       }
 
       // Send a successful response
