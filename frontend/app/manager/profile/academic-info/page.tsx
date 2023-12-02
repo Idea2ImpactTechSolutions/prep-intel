@@ -198,7 +198,7 @@ export default function AcademicInfo() {
                             >
                               Add Additional
                             </button>
-                            {values.departments.length > 1 && (
+                            {values.accreditations.length > 1 && (
                               <button
                                 type="button"
                                 className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
@@ -244,7 +244,7 @@ export default function AcademicInfo() {
                             >
                               Add Additional
                             </button>
-                            {values.departments.length > 1 && (
+                            {values.researchOpportunities.length > 1 && (
                               <button
                                 type="button"
                                 className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
