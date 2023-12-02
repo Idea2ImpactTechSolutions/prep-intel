@@ -69,14 +69,13 @@ export default function AcademicInfo() {
   };
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    console.log("Form values", values);
     setSubmitting(true);
     //TODO FOR JOEY
-    //We will decide whether we will use post/put calls.
-    //We want to post a new school if there are no schools, if we have an existing school, we will do a put
-    //We don't HAVE to change the way we call it here, we will just handle whether to update or create in the backend
-    //Basically, if there is an id for any of these fields ... ensure that they are being saved
+    //Pass the school id down, rn it will be static:
+    //b14e03a9-656a-4726-9d38-6f09c912a543
     try {
+      values.schoolId = "b14e03a9-656a-4726-9d38-6f09c912a543";
+      console.log("TEST VALUES", values);
       const url = "/api/manager/profile/academic-info";
       // Send a POST request to the server
       const response = await fetch(url, {
@@ -88,7 +87,6 @@ export default function AcademicInfo() {
       });
       if (response.ok) {
         const responseData = await response.json();
-        console.log("Response data:", responseData);
         // Handle success - you can redirect to another page or show a success message
       } else {
         throw new Error(`Error: ${response.status}`);

@@ -75,7 +75,7 @@ const School = sequelize.define(
     },
   },
   {
-    // Model options (optional)
+    timestamps: false,
   }
 );
 
