@@ -1,3 +1,4 @@
 {
-  "extends": "next/core-web-vitals"
+  // Adding next/babel removed my build errors
+  "extends": ["next/babel", "next/core-web-vitals"]
 }
