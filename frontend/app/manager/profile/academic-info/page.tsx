@@ -22,7 +22,7 @@ const validationSchema = Yup.object().shape({
   ),
 
   admissionRequirements: Yup.object().shape({
-    actScore: Yup.number().when("actRequired", {
+    min_act_score: Yup.number().when("act_required", {
       is: true,
       then: (schema) =>
         schema
@@ -31,7 +31,7 @@ const validationSchema = Yup.object().shape({
           .max(36, "ACT Score cannot exceed 36"),
       otherwise: (schema) => schema.notRequired(),
     }),
-    satScore: Yup.number().when("satRequired", {
+    min_sat_score: Yup.number().when("sat_required", {
       is: true,
       then: (schema) =>
         schema
@@ -40,7 +40,7 @@ const validationSchema = Yup.object().shape({
           .max(1600, "SAT Score cannot exceed 1600"),
       otherwise: (schema) => schema.notRequired(),
     }),
-    gpa: Yup.number().when("diplomaRequired", {
+    gpa_requirement: Yup.number().when("diploma_required", {
       is: true,
       then: (schema) =>
         schema
@@ -75,12 +75,12 @@ export default function AcademicInfo() {
     school_accreditations: [{ name: "" }],
     school_research_programs: [{ name: "" }],
     admissionRequirements: {
-      actRequired: false,
-      satRequired: false,
-      diplomaRequired: false,
-      actScore: 0,
-      satScore: 0,
-      gpa: 0,
+      act_required: false,
+      sat_required: false,
+      diploma_required: false,
+      min_act_score: 0,
+      min_sat_score: 0,
+      gpa_requirement: 0,
     },
     financials: {
       inStateTuition: 0,
@@ -98,9 +98,9 @@ export default function AcademicInfo() {
     act_required: boolean;
     sat_required: boolean;
     diploma_required: boolean;
-    act_score: number;
-    sat_score: number;
-    gpa: number;
+    min_act_score: number;
+    min_sat_score: number;
+    gpa_requirement: number;
     in_state_tuition: number;
     out_state_tuition: number;
     fees_per_semester: number;
@@ -131,12 +131,12 @@ export default function AcademicInfo() {
             )
           : [{ name: "" }],
       admissionRequirements: {
-        actRequired: data.act_required ?? "",
-        satRequired: data.sat_required ?? "",
-        diplomaRequired: data.diploma_required ?? "",
-        actScore: data.act_score ?? "",
-        satScore: data.sat_score ?? "",
-        gpa: data.gpa ?? "",
+        act_required: data.act_required ?? "",
+        sat_required: data.sat_required ?? "",
+        diploma_required: data.diploma_required ?? "",
+        min_act_score: data.min_act_score ?? "",
+        min_sat_score: data.min_sat_score ?? "",
+        gpa_requirement: data.gpa_requirement ?? "",
       },
 
       financials: {
@@ -385,27 +385,27 @@ export default function AcademicInfo() {
                 <label className="inline-flex items-center">
                   <Field
                     type="checkbox"
-                    name="admissionRequirements.actRequired"
+                    name="admissionRequirements.act_required"
                     className="form-checkbox"
                   />
                   <span className="ml-2">ACT Required</span>
                 </label>
-                {values.admissionRequirements.actRequired && (
+                {values.admissionRequirements.act_required && (
                   <div className="mb-5 mt-5">
                     <label
-                      htmlFor="admissionRequirements.actScore"
+                      htmlFor="admissionRequirements.min_act_score"
                       className="block text-sm font-medium text-gray-700"
                     >
                       ACT Score Requirement
                     </label>
                     <Field
-                      name="admissionRequirements.actScore"
+                      name="admissionRequirements.min_act_score"
                       type="number"
                       placeholder="ACT Score Requirement"
                       className="border-2 w-full p-2 mt-2 rounded-md"
                     />
                     <ErrorMessage
-                      name="admissionRequirements.actScore"
+                      name="admissionRequirements.min_act_score"
                       component="div"
                       className="text-red-500"
                     />
@@ -416,27 +416,27 @@ export default function AcademicInfo() {
                 <label className="inline-flex items-center">
                   <Field
                     type="checkbox"
-                    name="admissionRequirements.satRequired"
+                    name="admissionRequirements.sat_required"
                     className="form-checkbox"
                   />
                   <span className="ml-2">SAT Required</span>
                 </label>
-                {values.admissionRequirements.satRequired && (
+                {values.admissionRequirements.sat_required && (
                   <div className="mb-5 mt-5">
                     <label
-                      htmlFor="admissionRequirements.satScore"
+                      htmlFor="admissionRequirements.min_sat_score"
                       className="block text-sm font-medium text-gray-700"
                     >
                       SAT Score Requirement
                     </label>
                     <Field
-                      name="admissionRequirements.satScore"
+                      name="admissionRequirements.min_sat_score"
                       type="number"
                       placeholder="SAT Score Requirement"
                       className="border-2 w-full p-2 mt-2 rounded-md"
                     />
                     <ErrorMessage
-                      name="admissionRequirements.satScore"
+                      name="admissionRequirements.min_sat_score"
                       component="div"
                       className="text-red-500"
                     />
@@ -447,27 +447,27 @@ export default function AcademicInfo() {
                 <label className="inline-flex items-center">
                   <Field
                     type="checkbox"
-                    name="admissionRequirements.diplomaRequired"
+                    name="admissionRequirements.diploma_required"
                     className="form-checkbox"
                   />
                   <span className="ml-2">Diploma/GED Required</span>
                 </label>
-                {values.admissionRequirements.diplomaRequired && (
+                {values.admissionRequirements.diploma_required && (
                   <div className="mb-5 mt-5">
                     <label
-                      htmlFor="admissionRequirements.gpa"
+                      htmlFor="admissionRequirements.gpa_requirement"
                       className="block text-sm font-medium text-gray-700"
                     >
                       GPA Requirement
                     </label>
                     <Field
-                      name="admissionRequirements.gpa"
+                      name="admissionRequirements.gpa_requirement"
                       type="number"
                       placeholder="GPA Requirement"
                       className="border-2 w-full p-2 mt-2 rounded-md"
                     />
                     <ErrorMessage
-                      name="admissionRequirements.gpa"
+                      name="admissionRequirements.gpa_requirement"
                       component="div"
                       className="text-red-500"
                     />
