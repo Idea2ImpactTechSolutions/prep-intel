@@ -57,10 +57,12 @@ const validationSchema = Yup.object().shape({
       "Out-of-state tuition is required"
     ),
     feesPerSemester: Yup.number().required("Fees per semester are required"),
-    // scholarshipInfoURL: Yup.string()
-    //   .required("Scholarship Information URL is required")
-    //   .url("Enter a valid URL"),
-    // financialAidInfoURL: Yup.string().url("Enter a valid URL"),
+    scholarshipInfoURL: Yup.string()
+      .required("Scholarship Information URL is required")
+      .url("Must be a valid URL"),
+    financialAidInfoURL: Yup.string()
+      .required("Financial Aid Information URL is required")
+      .url("Must be a valid URL"),
   }),
   // You can add research opportunities and other sections similarly
 });
@@ -477,7 +479,7 @@ export default function AcademicInfo() {
                     className="border-2 w-full p-2 rounded-md"
                   />
                   <ErrorMessage
-                    name="financials.schoolarshipInfoURL"
+                    name="financials.scholarshipInfoURL"
                     component="div"
                     className="text-red-500"
                   />
@@ -498,7 +500,7 @@ export default function AcademicInfo() {
                     className="border-2 w-full p-2 rounded-md"
                   />
                   <ErrorMessage
-                    name="financials.financeAidInfoURL"
+                    name="financials.financialAidInfoURL"
                     component="div"
                     className="text-red-500"
                   />
