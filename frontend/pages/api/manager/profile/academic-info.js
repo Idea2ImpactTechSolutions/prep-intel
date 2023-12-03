@@ -5,7 +5,6 @@ const { School, SchoolDepartment, SchoolAccreditation, SchoolResearchProgram } =
 const { v4 } = require("uuid");
 
 export default async function handler(req, res) {
-  console.log("test");
   if (req.method === "POST") {
     try {
       // Extract data from request body
@@ -17,7 +16,6 @@ export default async function handler(req, res) {
         school_research_programs,
         schoolId,
       } = req.body;
-      console.log("req.body", req.body);
       const id = v4();
       const {
         inStateTuition,
@@ -30,12 +28,12 @@ export default async function handler(req, res) {
       // Create a new school entry
       const schoolData = {
         id,
-        actRequired: admissionRequirements.actRequired,
-        satRequired: admissionRequirements.satRequired,
-        diplomaRequired: admissionRequirements.diplomaRequired,
-        actScore: admissionRequirements.actScore,
-        satScore: admissionRequirements.satScore,
-        gpa: admissionRequirements.gpa,
+        act_required: admissionRequirements.act_required,
+        sat_required: admissionRequirements.sat_required,
+        diploma_required: admissionRequirements.diploma_required,
+        min_act_score: admissionRequirements.min_act_score,
+        min_sat_score: admissionRequirements.min_sat_score,
+        gpa_requirement: admissionRequirements.gpa_requirement,
         in_state_tuition: inStateTuition,
         out_state_tuition: outOfStateTuition,
         fees_per_semester: feesPerSemester,

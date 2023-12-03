@@ -3,6 +3,9 @@ const sequelize = require("./sequelize");
 const SchoolDepartment = require("./SchoolDepartment");
 const SchoolAccreditation = require("./SchoolAccreditation");
 const SchoolResearchProgram = require("./SchoolResearchProgram");
+const SchoolSocialMedia = require("./SchoolSocialMedia");
+const SchoolContact = require("./SchoolContact");
+const SchoolAddress = require("./SchoolAddress");
 
 const School = sequelize.define(
   "school",
@@ -16,6 +19,9 @@ const School = sequelize.define(
     found_date: {
       type: DataTypes.DATE,
     },
+    institution_type: {
+      type: DataTypes.STRING,
+    },
     name: {
       type: DataTypes.STRING,
     },
@@ -26,7 +32,7 @@ const School = sequelize.define(
       type: DataTypes.INTEGER,
     },
     tagline: {
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.STRING,
     },
     act_required: {
       type: DataTypes.BOOLEAN,
@@ -95,4 +101,18 @@ School.hasMany(SchoolResearchProgram, {
   foreignKey: "school_id",
   as: "school_research_programs",
 });
+
+School.hasOne(SchoolAddress, {
+  foreignKey: "school_id",
+  as: "school_address",
+});
+School.hasMany(SchoolContact, {
+  foreignKey: "school_id",
+  as: "school_contacts",
+});
+School.hasMany(SchoolSocialMedia, {
+  foreignKey: "school_id",
+  as: "school_social_medias",
+});
+
 module.exports = School;

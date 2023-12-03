@@ -3,12 +3,18 @@ const School = require("./School");
 const SchoolDepartment = require("./SchoolDepartment");
 const SchoolAccreditation = require("./SchoolAccreditation");
 const SchoolResearchProgram = require("./SchoolResearchProgram");
+const SchoolContact = require("./SchoolContact");
+const SchoolAddress = require("./SchoolAddress");
+const SchoolSocialMedia = require("./SchoolSocialMedia");
 
 const models = {
   SchoolDepartment,
   School,
   SchoolAccreditation,
   SchoolResearchProgram,
+  SchoolContact,
+  SchoolAddress,
+  SchoolSocialMedia,
 };
 
 // Model associations
