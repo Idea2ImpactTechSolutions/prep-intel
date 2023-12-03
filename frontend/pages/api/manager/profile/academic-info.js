@@ -12,11 +12,12 @@ export default async function handler(req, res) {
       const {
         admissionRequirements,
         financials,
-        departments,
-        accreditations,
-        researchOpportunities,
+        school_departments,
+        school_accreditations,
+        school_research_programs,
         schoolId,
       } = req.body;
+      console.log("req.body", req.body);
       const id = v4();
       const {
         inStateTuition,
@@ -57,28 +58,28 @@ export default async function handler(req, res) {
 
       if (school && school.dataValues) {
         // Assuming `SchoolDepartment` is a model that relates to `School` via a foreign key `schoolId`
-        // Step 1: Delete existing school departments for this school
+        // Step 1: Delete existing school school_departments for this school
         await SchoolAccreditation.destroy({ where: { school_id: school.id } });
         await SchoolDepartment.destroy({ where: { school_id: school.id } });
         await SchoolResearchProgram.destroy({
           where: { school_id: school.id },
         });
 
-        // Step 2: Create new school departments using the department names
-        const schoolDepartmentsData = departments.map((dept) => ({
+        // Step 2: Create new school school_departments using the department names
+        const schoolDepartmentsData = school_departments.map((dept) => ({
           school_id: school.id, // foreign key linking to the school
           name: dept.name, // or any other fields you have for the department
         }));
 
-        const schoolAccreditationData = accreditations.map((accred) => ({
+        const schoolAccreditationData = school_accreditations.map((accred) => ({
           school_id: school.id,
           name: accred.name,
         }));
 
-        const schoolResearchProgramData = researchOpportunities.map(
-          (researchOpportunities) => ({
+        const schoolResearchProgramData = school_research_programs.map(
+          (school_research_programs) => ({
             school_id: school.id,
-            name: researchOpportunities.name,
+            name: school_research_programs.name,
           })
         );
 
@@ -122,8 +123,8 @@ export default async function handler(req, res) {
         if (schoolDetails) {
           schoolDetails = {
             ...schoolDetails.toJSON(),
-            departments: schoolDetails.departments || [],
-            accreditations: schoolDetails.accreditations || [],
+            school_departments: schoolDetails.school_departments || [],
+            school_accreditations: schoolDetails.school_accreditations || [],
             researchPrograms: schoolDetails.researchPrograms || [],
           };
         }

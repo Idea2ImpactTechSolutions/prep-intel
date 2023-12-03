@@ -5,17 +5,17 @@ import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 import * as Yup from "yup";
 // Define the validation schema using Yup
 const validationSchema = Yup.object().shape({
-  departments: Yup.array().of(
+  school_departments: Yup.array().of(
     Yup.object().shape({
       name: Yup.string().required("Department name is required"),
     })
   ),
-  accreditations: Yup.array().of(
+  school_accreditations: Yup.array().of(
     Yup.object().shape({
       name: Yup.string().required("Accreditation is required"),
     })
   ),
-  researchOpportunities: Yup.array().of(
+  school_research_programs: Yup.array().of(
     Yup.object().shape({
       name: Yup.string().required("Research opportunity name is required"),
     })
@@ -57,12 +57,12 @@ const validationSchema = Yup.object().shape({
       "Out-of-state tuition is required"
     ),
     feesPerSemester: Yup.number().required("Fees per semester are required"),
-    scholarshipInfoURL: Yup.string()
-      .required("Scholarship Information URL is required")
-      .url("Must be a valid URL"),
-    financialAidInfoURL: Yup.string()
-      .required("Financial Aid Information URL is required")
-      .url("Must be a valid URL"),
+    scholarshipInfoURL: Yup.string().required(
+      "Scholarship Information URL is required"
+    ),
+    financialAidInfoURL: Yup.string().required(
+      "Financial Aid Information URL is required"
+    ),
   }),
   // You can add research opportunities and other sections similarly
 });
@@ -71,9 +71,9 @@ export default function AcademicInfo() {
   const [isLoading, setIsLoading] = useState(true);
   const schoolId = "b14e03a9-656a-4726-9d38-6f09c912a543";
   const [initialValues, setInitialValues] = useState({
-    departments: [{ name: "" }],
-    accreditations: [{ name: "" }],
-    researchOpportunities: [{ name: "" }],
+    school_departments: [{ name: "" }],
+    school_accreditations: [{ name: "" }],
+    school_research_programs: [{ name: "" }],
     admissionRequirements: {
       actRequired: false,
       satRequired: false,
@@ -92,9 +92,9 @@ export default function AcademicInfo() {
   });
 
   const setSchoolData = (data: {
-    departments: { name: string }[];
-    accreditations: { name: string }[];
-    researchPrograms: { name: string }[];
+    school_departments: { name: string }[];
+    school_accreditations: { name: string }[];
+    school_research_programs: { name: string }[];
     act_required: boolean;
     sat_required: boolean;
     diploma_required: boolean;
@@ -102,29 +102,33 @@ export default function AcademicInfo() {
     sat_score: number;
     gpa: number;
     in_state_tuition: number;
-    out_of_state_tuition: number;
+    out_state_tuition: number;
     fees_per_semester: number;
-    scholarship_info_url: string;
-    financial_aid_info_url: string;
+    scholarship_url: string;
+    financial_aid_url: string;
   }) => {
     setInitialValues({
-      departments:
-        data.departments.length > 0
-          ? data.departments.map((department: { name: string }) => ({
+      school_departments:
+        data.school_departments.length > 0
+          ? data.school_departments.map((department: { name: string }) => ({
               name: department.name ?? "",
             }))
           : [{ name: "" }],
-      accreditations:
-        data.accreditations.length > 0
-          ? data.accreditations.map((accreditation: { name: string }) => ({
-              name: accreditation.name ?? "",
-            }))
+      school_accreditations:
+        data.school_accreditations.length > 0
+          ? data.school_accreditations.map(
+              (accreditation: { name: string }) => ({
+                name: accreditation.name ?? "",
+              })
+            )
           : [{ name: "" }],
-      researchOpportunities:
-        data.researchPrograms.length > 0
-          ? data.researchPrograms.map((opportunity: { name: string }) => ({
-              name: opportunity.name ?? "",
-            }))
+      school_research_programs:
+        data.school_research_programs.length > 0
+          ? data.school_research_programs.map(
+              (opportunity: { name: string }) => ({
+                name: opportunity.name ?? "",
+              })
+            )
           : [{ name: "" }],
       admissionRequirements: {
         actRequired: data.act_required ?? "",
@@ -137,10 +141,10 @@ export default function AcademicInfo() {
 
       financials: {
         inStateTuition: data.in_state_tuition ?? "",
-        outOfStateTuition: data.out_of_state_tuition ?? "",
+        outOfStateTuition: data.out_state_tuition ?? "",
         feesPerSemester: data.fees_per_semester ?? "",
-        scholarshipInfoURL: data.scholarship_info_url ?? "",
-        financialAidInfoURL: data.financial_aid_info_url ?? "",
+        scholarshipInfoURL: data.scholarship_url ?? "",
+        financialAidInfoURL: data.financial_aid_url ?? "",
       },
     });
 
@@ -226,27 +230,27 @@ export default function AcademicInfo() {
             </h1>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* Departments FieldArray */}
-              <FieldArray name="departments">
+              {/* school_departments FieldArray */}
+              <FieldArray name="school_departments">
                 {({ insert, remove, push }) => (
                   <div>
-                    {values.departments.length > 0 &&
-                      values.departments.map((department, index) => (
+                    {values.school_departments.length > 0 &&
+                      values.school_departments.map((department, index) => (
                         <div key={index} className="mb-3 space-y-4">
                           <label
-                            htmlFor={`departments.${index}.name`}
+                            htmlFor={`school_departments.${index}.name`}
                             className="block text-sm font-medium text-gray-700"
                           >
                             Department or Program
                           </label>
                           <Field
-                            name={`departments.${index}.name`}
+                            name={`school_departments.${index}.name`}
                             placeholder="Department or Program"
                             type="text"
                             className="border-2 w-full p-2"
                           />
                           <ErrorMessage
-                            name={`departments.${index}.name`}
+                            name={`school_departments.${index}.name`}
                             component="div"
                             className="text-red-500"
                           />
@@ -258,7 +262,7 @@ export default function AcademicInfo() {
                             >
                               Add Additional
                             </button>
-                            {values.departments.length > 1 && (
+                            {values.school_departments.length > 1 && (
                               <button
                                 type="button"
                                 className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
@@ -275,95 +279,99 @@ export default function AcademicInfo() {
               </FieldArray>
 
               {/* Accreditations FieldArray */}
-              <FieldArray name="accreditations">
+              <FieldArray name="school_accreditations">
                 {({ insert, remove, push }) => (
                   <div>
-                    {values.accreditations.length > 0 &&
-                      values.accreditations.map((accreditation, index) => (
-                        <div key={index} className="mb-3 space-y-4">
-                          <label
-                            htmlFor={`accreditations.${index}.name`}
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            Accreditations
-                          </label>
-                          <Field
-                            name={`accreditations.${index}.name`}
-                            placeholder="Accreditations"
-                            type="text"
-                            className="border-2 w-full p-2"
-                          />
-                          <ErrorMessage
-                            name={`accreditations.${index}.name`}
-                            component="div"
-                            className="text-red-500"
-                          />
-                          <div className="flex items-center space-x-2">
-                            <button
-                              type="button"
-                              className="flex-1 rounded-md bg-green-500 text-white px-3 py-1"
-                              onClick={() => push({ name: "" })}
+                    {values.school_accreditations.length > 0 &&
+                      values.school_accreditations.map(
+                        (accreditation, index) => (
+                          <div key={index} className="mb-3 space-y-4">
+                            <label
+                              htmlFor={`school_accreditations.${index}.name`}
+                              className="block text-sm font-medium text-gray-700"
                             >
-                              Add Additional
-                            </button>
-                            {values.accreditations.length > 1 && (
+                              Accreditations
+                            </label>
+                            <Field
+                              name={`school_accreditations.${index}.name`}
+                              placeholder="Accreditations"
+                              type="text"
+                              className="border-2 w-full p-2"
+                            />
+                            <ErrorMessage
+                              name={`school_accreditations.${index}.name`}
+                              component="div"
+                              className="text-red-500"
+                            />
+                            <div className="flex items-center space-x-2">
                               <button
                                 type="button"
-                                className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
-                                onClick={() => remove(index)}
+                                className="flex-1 rounded-md bg-green-500 text-white px-3 py-1"
+                                onClick={() => push({ name: "" })}
                               >
-                                Remove
+                                Add Additional
                               </button>
-                            )}
+                              {values.school_accreditations.length > 1 && (
+                                <button
+                                  type="button"
+                                  className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
+                                  onClick={() => remove(index)}
+                                >
+                                  Remove
+                                </button>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        )
+                      )}
                   </div>
                 )}
               </FieldArray>
-              <FieldArray name="researchOpportunities">
+              <FieldArray name="school_research_programs">
                 {({ insert, remove, push }) => (
                   <div>
-                    {values.researchOpportunities.length > 0 &&
-                      values.researchOpportunities.map((opportunity, index) => (
-                        <div key={index} className="mb-3 space-y-4">
-                          <label
-                            htmlFor={`researchOpportunities.${index}.name`}
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            Research Opportunities
-                          </label>
-                          <Field
-                            name={`researchOpportunities.${index}.name`}
-                            placeholder="Research Opportunities"
-                            type="text"
-                            className="border-2 w-full p-2"
-                          />
-                          <ErrorMessage
-                            name={`researchOpportunities.${index}.name`}
-                            component="div"
-                            className="text-red-500"
-                          />
-                          <div className="flex items-center space-x-2">
-                            <button
-                              type="button"
-                              className="flex-1 rounded-md bg-green-500 text-white px-3 py-1"
-                              onClick={() => push({ name: "" })}
+                    {values.school_research_programs.length > 0 &&
+                      values.school_research_programs.map(
+                        (opportunity, index) => (
+                          <div key={index} className="mb-3 space-y-4">
+                            <label
+                              htmlFor={`school_research_programs.${index}.name`}
+                              className="block text-sm font-medium text-gray-700"
                             >
-                              Add Additional
-                            </button>
-                            {values.researchOpportunities.length > 1 && (
+                              Research Opportunities
+                            </label>
+                            <Field
+                              name={`school_research_programs.${index}.name`}
+                              placeholder="Research Opportunities"
+                              type="text"
+                              className="border-2 w-full p-2"
+                            />
+                            <ErrorMessage
+                              name={`school_research_programs.${index}.name`}
+                              component="div"
+                              className="text-red-500"
+                            />
+                            <div className="flex items-center space-x-2">
                               <button
                                 type="button"
-                                className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
-                                onClick={() => remove(index)}
+                                className="flex-1 rounded-md bg-green-500 text-white px-3 py-1"
+                                onClick={() => push({ name: "" })}
                               >
-                                Remove
+                                Add Additional
                               </button>
-                            )}
+                              {values.school_research_programs.length > 1 && (
+                                <button
+                                  type="button"
+                                  className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
+                                  onClick={() => remove(index)}
+                                >
+                                  Remove
+                                </button>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        )
+                      )}
                   </div>
                 )}
               </FieldArray>
