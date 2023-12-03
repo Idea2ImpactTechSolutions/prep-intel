@@ -68,9 +68,9 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function AcademicInfo() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const schoolId = "b14e03a9-656a-4726-9d38-6f09c912a543";
-  const initialValues = {
+  const [initialValues, setInitialValues] = useState({
     departments: [{ name: "" }],
     accreditations: [{ name: "" }],
     researchOpportunities: [{ name: "" }],
@@ -78,17 +78,73 @@ export default function AcademicInfo() {
       actRequired: false,
       satRequired: false,
       diplomaRequired: false,
-      actScore: "",
-      satScore: "",
-      gpa: "",
+      actScore: 0,
+      satScore: 0,
+      gpa: 0,
     },
     financials: {
-      inStateTuition: "",
-      outOfStateTuition: "",
-      feesPerSemester: "",
+      inStateTuition: 0,
+      outOfStateTuition: 0,
+      feesPerSemester: 0,
       scholarshipInfoURL: "",
       financialAidInfoURL: "",
     },
+  });
+
+  const setSchoolData = (data: {
+    departments: { name: string }[];
+    accreditations: { name: string }[];
+    researchPrograms: { name: string }[];
+    act_required: boolean;
+    sat_required: boolean;
+    diploma_required: boolean;
+    act_score: number;
+    sat_score: number;
+    gpa: number;
+    in_state_tuition: number;
+    out_of_state_tuition: number;
+    fees_per_semester: number;
+    scholarship_info_url: string;
+    financial_aid_info_url: string;
+  }) => {
+    setInitialValues({
+      departments:
+        data.departments.length > 0
+          ? data.departments.map((department: { name: string }) => ({
+              name: department.name ?? "",
+            }))
+          : [{ name: "" }],
+      accreditations:
+        data.accreditations.length > 0
+          ? data.accreditations.map((accreditation: { name: string }) => ({
+              name: accreditation.name ?? "",
+            }))
+          : [{ name: "" }],
+      researchOpportunities:
+        data.researchPrograms.length > 0
+          ? data.researchPrograms.map((opportunity: { name: string }) => ({
+              name: opportunity.name ?? "",
+            }))
+          : [{ name: "" }],
+      admissionRequirements: {
+        actRequired: data.act_required ?? "",
+        satRequired: data.sat_required ?? "",
+        diplomaRequired: data.diploma_required ?? "",
+        actScore: data.act_score ?? "",
+        satScore: data.sat_score ?? "",
+        gpa: data.gpa ?? "",
+      },
+
+      financials: {
+        inStateTuition: data.in_state_tuition ?? "",
+        outOfStateTuition: data.out_of_state_tuition ?? "",
+        feesPerSemester: data.fees_per_semester ?? "",
+        scholarshipInfoURL: data.scholarship_info_url ?? "",
+        financialAidInfoURL: data.financial_aid_info_url ?? "",
+      },
+    });
+
+    console.log("INITIAL_VALUES", initialValues);
   };
 
   useEffect(() => {
@@ -103,12 +159,11 @@ export default function AcademicInfo() {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        console.log("data", data);
-        //setSchoolData(data);
+        setSchoolData(data);
+        setIsLoading(false);
       } catch (error) {
         console.error("There was a problem fetching school data:", error);
       }
-      setIsLoading(false);
     };
 
     if (schoolId) {
@@ -131,10 +186,12 @@ export default function AcademicInfo() {
         headers: {
           "Content-Type": "application/json",
         },
+
         body: JSON.stringify(values), // Convert form values to JSON
       });
       if (response.ok) {
         const responseData = await response.json();
+        console.log("RESPONSE_DATA", responseData);
         // Handle success - you can redirect to another page or show a success message
       } else {
         throw new Error(`Error: ${response.status}`);
@@ -146,6 +203,11 @@ export default function AcademicInfo() {
       setSubmitting(false);
     }
   };
+
+  if (isLoading) {
+    // TODO: Add loading spinner
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="container mx-auto p-4">
