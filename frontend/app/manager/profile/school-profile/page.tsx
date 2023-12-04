@@ -14,7 +14,7 @@ const validationSchema = Yup.object().shape({
     school_tagline: Yup.string().required("School tagline is required"),
     school_affliations: Yup.string().required("School affliations is required"),
   }),
-  // contact_info: Yup.object().shape({
+  // school_address: Yup.object().shape({
   //   school_street_address: Yup.string().required(
   //     "School street address is required"
   //   ),
@@ -35,7 +35,7 @@ const validationSchema = Yup.object().shape({
   //     })
   //   ),
   // }),
-  social_media: Yup.array().of(
+  school_social_medias: Yup.array().of(
     Yup.object().shape({
       platform: Yup.string().required("Social media platform is required"),
       // url: Yup.string().url("Invalid URL"),
@@ -43,10 +43,10 @@ const validationSchema = Yup.object().shape({
   ),
 });
 
-export default function contact_info() {
+export default function school_address() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-  const schoolId = "b14e03a9-656a-4726-9d38-6f09c912a543";
+  const school_id = "b14e03a9-656a-4726-9d38-6f09c912a543";
   const [initialValues, setInitialValues] = useState({
     school_details: {
       school_name: "",
@@ -56,19 +56,19 @@ export default function contact_info() {
       school_affliations: "",
     },
 
-    contact_info: {
+    school_address: {
       school_street_address: "",
       school_state: "",
-      school_zip: "",
+      school_zip: undefined,
       contact_types: [
         {
           type: "",
-          phone: "",
+          phone: undefined,
           email: "",
         },
       ],
     },
-    social_media: [
+    school_social_medias: [
       { platform: "Facebook", url: "" },
       { platform: "Instagram", url: "" },
     ],
@@ -87,7 +87,24 @@ export default function contact_info() {
     setSubmitting(true);
     try {
       // API call to submit form data
-      console.log("Submitted values:", values);
+      values.school_id = "b14e03a9-656a-4726-9d38-6f09c912a543";
+      console.log("values", values);
+      const url = "/api/manager/profile/school-profile";
+      // Send a POST request to the server
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify(values), // Convert form values to JSON
+      });
+      if (response.ok) {
+        const responseData = await response.json();
+        // Handle success - you can redirect to another page or show a success message
+      } else {
+        throw new Error(`Error: ${response.status}`);
+      }
       router.push("/manager/profile/academic-info");
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -229,57 +246,57 @@ export default function contact_info() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div className="space-y-4">
                 <label
-                  htmlFor="contact_info.school_street_address"
+                  htmlFor="school_address.school_street_address"
                   className="block text-sm font-medium text-gray-700"
                 >
                   School Street Address
                 </label>
                 <Field
-                  name="contact_info.school_street_address"
+                  name="school_address.school_street_address"
                   type="text"
                   placeholder="School Street Address"
                   className="border-2 w-full p-2 rounded-md"
                 />
                 <ErrorMessage
-                  name="contact_info.school_street_address"
+                  name="school_address.school_street_address"
                   component="div"
                   className="text-red-500"
                 />
               </div>
               <div className="space-y-4">
                 <label
-                  htmlFor="contact_info.school_state"
+                  htmlFor="school_address.school_state"
                   className="block text-sm font-medium text-gray-700"
                 >
                   School State
                 </label>
                 <Field
-                  name="contact_info.school_state"
+                  name="school_address.school_state"
                   type="text"
                   placeholder="School State"
                   className="border-2 w-full p-2 rounded-md"
                 />
                 <ErrorMessage
-                  name="contact_info.school_state"
+                  name="school_address.school_state"
                   component="div"
                   className="text-red-500"
                 />
               </div>
               <div className="space-y-4">
                 <label
-                  htmlFor="contact_info.school_zip"
+                  htmlFor="school_address.school_zip"
                   className="block text-sm font-medium text-gray-700"
                 >
                   School Zip Code
                 </label>
                 <Field
-                  name="contact_info.school_zip"
+                  name="school_address.school_zip"
                   type="text"
                   placeholder="School Zip Code"
                   className="border-2 w-full p-2 rounded-md"
                 />
                 <ErrorMessage
-                  name="contact_info.school_zip"
+                  name="school_address.school_zip"
                   component="div"
                   className="text-red-500"
                 />
@@ -287,115 +304,117 @@ export default function contact_info() {
             </div>
 
             {/* Contact Information */}
-            <FieldArray name="contact_info.contact_types">
+            <FieldArray name="school_address.contact_types">
               {({ insert, remove, push }) => (
                 <div>
-                  {values.contact_info.contact_types.length > 0 &&
-                    values.contact_info.contact_types.map((contact, index) => (
-                      <div key={index} className="mb-3 space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <div>
-                            <label
-                              htmlFor={`contact_info.contact_types.${index}.type`}
-                              className="block text-sm font-medium text-gray-700"
-                            >
-                              Contact Type
-                            </label>
-                            <Field
-                              name={`contact_info.contact_types.${index}.type`}
-                              as="select"
-                              className="border-2 w-full p-2"
-                            >
-                              <option value="Admissions">Admissions</option>
-                              <option value="Financial Aid">
-                                Financial Aid
-                              </option>
-                              {/* Add other contact types as needed */}
-                            </Field>
+                  {values.school_address.contact_types.length > 0 &&
+                    values.school_address.contact_types.map(
+                      (contact, index) => (
+                        <div key={index} className="mb-3 space-y-4">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                              <label
+                                htmlFor={`school_address.contact_types.${index}.type`}
+                                className="block text-sm font-medium text-gray-700"
+                              >
+                                Contact Type
+                              </label>
+                              <Field
+                                name={`school_address.contact_types.${index}.type`}
+                                as="select"
+                                className="border-2 w-full p-2"
+                              >
+                                <option value="Admissions">Admissions</option>
+                                <option value="Financial Aid">
+                                  Financial Aid
+                                </option>
+                                {/* Add other contact types as needed */}
+                              </Field>
+                            </div>
+                            <div>
+                              <label
+                                htmlFor={`school_address.contact_types.${index}.phone`}
+                                className="block text-sm font-medium text-gray-700"
+                              >
+                                Phone Number
+                              </label>
+                              <Field
+                                name={`school_address.contact_types.${index}.phone`}
+                                placeholder="Phone Number"
+                                type="text"
+                                className="border-2 w-full p-2"
+                              />
+                              <ErrorMessage
+                                name={`school_address.contact_types.${index}.phone`}
+                                component="div"
+                                className="text-red-500"
+                              />
+                            </div>
+                            <div>
+                              <label
+                                htmlFor={`school_address.contact_types.${index}.email`}
+                                className="block text-sm font-medium text-gray-700"
+                              >
+                                Email Address
+                              </label>
+                              <Field
+                                name={`school_address.contact_types.${index}.email`}
+                                placeholder="Email Address"
+                                type="email"
+                                className="border-2 w-full p-2"
+                              />
+                              <ErrorMessage
+                                name={`school_address.contact_types.${index}.email`}
+                                component="div"
+                                className="text-red-500"
+                              />
+                            </div>
                           </div>
-                          <div>
-                            <label
-                              htmlFor={`contact_info.contact_types.${index}.phone`}
-                              className="block text-sm font-medium text-gray-700"
-                            >
-                              Phone Number
-                            </label>
-                            <Field
-                              name={`contact_info.contact_types.${index}.phone`}
-                              placeholder="Phone Number"
-                              type="text"
-                              className="border-2 w-full p-2"
-                            />
-                            <ErrorMessage
-                              name={`contact_info.contact_types.${index}.phone`}
-                              component="div"
-                              className="text-red-500"
-                            />
-                          </div>
-                          <div>
-                            <label
-                              htmlFor={`contact_info.contact_types.${index}.email`}
-                              className="block text-sm font-medium text-gray-700"
-                            >
-                              Email Address
-                            </label>
-                            <Field
-                              name={`contact_info.contact_types.${index}.email`}
-                              placeholder="Email Address"
-                              type="email"
-                              className="border-2 w-full p-2"
-                            />
-                            <ErrorMessage
-                              name={`contact_info.contact_types.${index}.email`}
-                              component="div"
-                              className="text-red-500"
-                            />
-                          </div>
-                        </div>
 
-                        <div className="flex items-center space-x-2">
-                          <button
-                            type="button"
-                            className="flex-1 rounded-md bg-green-500 text-white px-3 py-1"
-                            onClick={() =>
-                              push({ type: "", phone: "", email: "" })
-                            }
-                          >
-                            Add Additional
-                          </button>
-                          {values.contact_info.contact_types.length > 1 && (
+                          <div className="flex items-center space-x-2">
                             <button
                               type="button"
-                              className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
-                              onClick={() => remove(index)}
+                              className="flex-1 rounded-md bg-green-500 text-white px-3 py-1"
+                              onClick={() =>
+                                push({ type: "", phone: "", email: "" })
+                              }
                             >
-                              Remove
+                              Add Additional
                             </button>
-                          )}
+                            {values.school_address.contact_types.length > 1 && (
+                              <button
+                                type="button"
+                                className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
+                                onClick={() => remove(index)}
+                              >
+                                Remove
+                              </button>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      )
+                    )}
                 </div>
               )}
             </FieldArray>
 
             {/* Social Media Information FieldArray */}
-            <FieldArray name="social_media">
+            <FieldArray name="school_social_medias">
               {({ insert, remove, push }) => (
                 <div>
-                  {values.social_media.length > 0 &&
-                    values.social_media.map((social, index) => (
+                  {values.school_social_medias.length > 0 &&
+                    values.school_social_medias.map((social, index) => (
                       <div key={index} className="mb-3 space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
                             <label
-                              htmlFor={`social_media.${index}.platform`}
+                              htmlFor={`school_social_medias.${index}.platform`}
                               className="block text-sm font-medium text-gray-700"
                             >
                               Social Media Platform
                             </label>
                             <Field
-                              name={`social_media.${index}.platform`}
+                              name={`school_social_medias.${index}.platform`}
                               as="select"
                               className="border-2 w-full p-2"
                             >
@@ -406,19 +425,19 @@ export default function contact_info() {
                           </div>
                           <div>
                             <label
-                              htmlFor={`social_media.${index}.url`}
+                              htmlFor={`school_social_medias.${index}.url`}
                               className="block text-sm font-medium text-gray-700"
                             >
                               URL
                             </label>
                             <Field
-                              name={`social_media.${index}.url`}
+                              name={`school_social_medias.${index}.url`}
                               placeholder="URL"
                               type="text"
                               className="border-2 w-full p-2"
                             />
                             <ErrorMessage
-                              name={`social_media.${index}.url`}
+                              name={`school_social_medias.${index}.url`}
                               component="div"
                               className="text-red-500"
                             />
@@ -432,7 +451,7 @@ export default function contact_info() {
                           >
                             Add Additional
                           </button>
-                          {values.social_media.length > 1 && (
+                          {values.school_social_medias.length > 1 && (
                             <button
                               type="button"
                               className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"

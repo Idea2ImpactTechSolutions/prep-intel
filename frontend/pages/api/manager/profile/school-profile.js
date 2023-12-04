@@ -16,16 +16,16 @@ export default async function handler(req, res) {
         school_image,
         school_details,
         school_address,
-        school_contacts,
         school_social_medias,
         school_id,
       } = req.body;
+      const school_contacts = school_address.contact_types;
       const id = v4();
       // Create a new school entry
       const schoolData = {
         id,
         name: school_details.name,
-        found_date: school_details.founded_date,
+        found_date: new Date(school_details.founded_date),
         tagline: school_details.tagline,
         institution_type: school_details.institution_type,
         affiliations: school_details.affiliations,
@@ -53,7 +53,6 @@ export default async function handler(req, res) {
         await SchoolSocialMedia.destroy({
           where: { school_id: school.id },
         });
-
         // Step 2: Create new school departments using the department names
         const school_contacts_data = school_contacts.map((school_contact) => ({
           school_id: school.id,
@@ -78,11 +77,18 @@ export default async function handler(req, res) {
           school_social_media_data
         );
 
-        const newSchoolResearchPrograms = await SchoolAddress.create(
-          school_address
+        const school_address_data = {
+          school_id,
+          name: school_address.school_name,
+          state: school_address.school_state,
+          postal: school_address.school_zip,
+        };
+
+        const newSchoolAddress = await SchoolAddress.create(
+          school_address_data
         );
 
-        school.dataValues.school_addresses = newSchoolResearchPrograms;
+        school.dataValues.school_address = newSchoolAddress;
         school.dataValues.school_contacts = newSchoolContacts;
         school.dataValues.school_social_medias = newSchoolSocialMedias;
       }

@@ -177,9 +177,6 @@ export default function AcademicInfo() {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setSubmitting(true);
-    //TODO FOR JOEY
-    //Pass the school id down, rn it will be static:
-    //b14e03a9-656a-4726-9d38-6f09c912a543
     try {
       values.schoolId = "b14e03a9-656a-4726-9d38-6f09c912a543";
       console.log("TEST VALUES", values);
@@ -195,7 +192,6 @@ export default function AcademicInfo() {
       });
       if (response.ok) {
         const responseData = await response.json();
-        console.log("RESPONSE_DATA", responseData);
         // Handle success - you can redirect to another page or show a success message
       } else {
         throw new Error(`Error: ${response.status}`);
