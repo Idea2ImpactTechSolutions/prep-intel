@@ -75,14 +75,6 @@ export default function school_address() {
     ],
   });
 
-  // Fetch initial data
-  useEffect(() => {
-    // Fetch and set initial form values here
-    setIsLoading(true);
-    // Simulate fetching data
-    setTimeout(() => setIsLoading(false), 1000);
-  }, []);
-
   const handleBack = () => {
     // Logic for Back button
     console.log("Back button");
@@ -92,6 +84,31 @@ export default function school_address() {
     // Logic for Save for Later button
     console.log("Save for Later");
   };
+
+  useEffect(() => {
+    const fetchSchoolData = async () => {
+      setIsLoading(true);
+      const school_id = "b14e03a9-656a-4726-9d38-6f09c912a543";
+      try {
+        const response = await fetch(
+          `/api/manager/profile/school-profile?school_id=${school_id}`
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log("data", data);
+        // setSchoolData(data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("There was a problem fetching school data:", error);
+      }
+    };
+
+    if (school_id) {
+      fetchSchoolData();
+    }
+  }, [school_id]);
 
   // Handle form submission
   const handleSubmit = async (values, { setSubmitting }) => {
