@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { useRouter } from "next/navigation";
 
 // Define the validation schema using Yup
 const validationSchema = Yup.object().shape({
@@ -13,37 +14,37 @@ const validationSchema = Yup.object().shape({
     school_tagline: Yup.string().required("School tagline is required"),
     school_affliations: Yup.string().required("School affliations is required"),
   }),
-  contact_info: Yup.object().shape({
-    school_street_address: Yup.string().required(
-      "School street address is required"
-    ),
-    school_state: Yup.string().required("School state is required"),
-    school_zip: Yup.string().required("School zip code is required"),
+  // contact_info: Yup.object().shape({
+  //   school_street_address: Yup.string().required(
+  //     "School street address is required"
+  //   ),
+  //   school_state: Yup.string().required("School state is required"),
+  //   school_zip: Yup.string().required("School zip code is required"),
 
-    contact_types: Yup.array().of(
-      Yup.object().shape({
-        type: Yup.string().required("Contact type is required"),
-        phone: Yup.string()
-          .required("Phone Number is required")
-          .matches(
-            /^(?:\(\d{3}\)|\d{3}-)\d{3}-\d{4}$/,
-            "Invalid phone number format"
-          ),
-        email: Yup.string()
-          .email("Invalid email address")
-          .required("Email is required"),
-      })
-    ),
-  }),
+  //   contact_types: Yup.array().of(
+  //     Yup.object().shape({
+  //       type: Yup.string().required("Contact type is required"),
+  //       phone: Yup.string().required("Phone Number is required"),
+  //       .matches(
+  //         /^(?:\(\d{3}\)|\d{3}-)\d{3}-\d{4}$/,
+  //         "Invalid phone number format"
+  //       ),
+  //       email: Yup.string()
+  //         .email("Invalid email address")
+  //         .required("Email is required"),
+  //     })
+  //   ),
+  // }),
   social_media: Yup.array().of(
     Yup.object().shape({
       platform: Yup.string().required("Social media platform is required"),
-      url: Yup.string().url("Invalid URL").required("URL is required"),
+      // url: Yup.string().url("Invalid URL"),
     })
   ),
 });
 
 export default function contact_info() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const schoolId = "b14e03a9-656a-4726-9d38-6f09c912a543";
   const [initialValues, setInitialValues] = useState({
@@ -87,6 +88,7 @@ export default function contact_info() {
     try {
       // API call to submit form data
       console.log("Submitted values:", values);
+      router.push("/manager/profile/academic-info");
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {
