@@ -7,8 +7,13 @@ export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
       // Extract data from request body
+      // 1) Figure out how to do S3 on the backend with Marvin so we can save images
+      // 2) Sync with Joey with figure out how to make loading screen better and the sticky footer
+      // 3) Check with Marvin how to do page numbers and skipping to a page number using the route. Add these page numbers to the route
+      // 4) How to add jwt token
+
       const {
-        image,
+        school_image,
         school_details,
         school_address,
         school_contacts,
