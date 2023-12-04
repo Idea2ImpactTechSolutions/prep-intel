@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
+import BottomBar from "../shared/bottom-bar";
 
 // Define the validation schema using Yup
 const validationSchema = Yup.object().shape({
@@ -81,6 +82,16 @@ export default function school_address() {
     // Simulate fetching data
     setTimeout(() => setIsLoading(false), 1000);
   }, []);
+
+  const handleBack = () => {
+    // Logic for Back button
+    console.log("Back button");
+  };
+
+  const handleSaveForLater = () => {
+    // Logic for Save for Later button
+    console.log("Save for Later");
+  };
 
   // Handle form submission
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -468,31 +479,12 @@ export default function school_address() {
             </FieldArray>
           </div>
 
-          <div className="sticky bottom-0 bg-gray-200 py-2 w-full flex justify-between">
-            <div>
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-5"
-                type="button"
-              >
-                Save for later
-              </button>
-            </div>
-            <div className="flex gap-4 mr-5">
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                type="button"
-              >
-                Back
-              </button>
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                disabled={isSubmitting}
-                type="submit"
-              >
-                Next
-              </button>
-            </div>
-          </div>
+          <BottomBar
+            onBack={handleBack}
+            onSaveForLater={handleSaveForLater}
+            isBackDisabled={false}
+            isSubmitting={isSubmitting}
+          />
         </Form>
       )}
     </Formik>
