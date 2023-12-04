@@ -1,4 +1,4 @@
-// contact_info.client.js
+// ContactInfo.client.js
 "use client";
 import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
@@ -99,17 +99,17 @@ export default function contact_info() {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-5xl font-bold text-gray-800 mb-6">
-        Create Your School's Profile
-      </h1>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-      >
-        {({ values, isSubmitting }) => (
-          <Form>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      {({ values, isSubmitting }) => (
+        <Form>
+          <div className="container mx-auto p-4">
+            <h1 className="text-5xl font-bold text-gray-800 mb-6">
+              Create Your School's Profile
+            </h1>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="col-span-1">
                 <h2 className="text-3xl font-bold text-gray-800 mb-3">
@@ -445,18 +445,35 @@ export default function contact_info() {
                 </div>
               )}
             </FieldArray>
+          </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              className="rounded-md bg-blue-500 text-white px-4 py-2"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Please wait..." : "Submit"}
-            </button>
-          </Form>
-        )}
-      </Formik>
-    </div>
+          <div className="sticky bottom-0 bg-gray-200 py-2 w-full flex justify-between">
+            <div>
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-5"
+                type="button"
+              >
+                Save for later
+              </button>
+            </div>
+            <div className="flex gap-4 mr-5">
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                type="button"
+              >
+                Back
+              </button>
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                disabled={isSubmitting}
+                type="submit"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </Form>
+      )}
+    </Formik>
   );
 }
