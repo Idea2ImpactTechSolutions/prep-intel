@@ -528,7 +528,7 @@ export default function school_address() {
           <BottomBar
             onBack={handleBack}
             onSaveForLater={handleSaveForLater}
-            isBackDisabled={false}
+            isBackDisabled={true}
             isSubmitting={isSubmitting}
           />
         </Form>
