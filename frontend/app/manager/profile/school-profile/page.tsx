@@ -15,27 +15,27 @@ const validationSchema = Yup.object().shape({
     school_tagline: Yup.string().required("School tagline is required"),
     school_affliations: Yup.string().required("School affliations is required"),
   }),
-  // school_address: Yup.object().shape({
-  //   school_street_address: Yup.string().required(
-  //     "School street address is required"
-  //   ),
-  //   school_state: Yup.string().required("School state is required"),
-  //   school_zip: Yup.string().required("School zip code is required"),
+  school_address: Yup.object().shape({
+    school_street_address: Yup.string().required(
+      "School street address is required"
+    ),
+    school_state: Yup.string().required("School state is required"),
+    school_zip: Yup.string().required("School zip code is required"),
 
-  //   contact_types: Yup.array().of(
-  //     Yup.object().shape({
-  //       type: Yup.string().required("Contact type is required"),
-  //       phone: Yup.string().required("Phone Number is required"),
-  //       .matches(
-  //         /^(?:\(\d{3}\)|\d{3}-)\d{3}-\d{4}$/,
-  //         "Invalid phone number format"
-  //       ),
-  //       email: Yup.string()
-  //         .email("Invalid email address")
-  //         .required("Email is required"),
-  //     })
-  //   ),
-  // }),
+    contact_types: Yup.array().of(
+      Yup.object().shape({
+        // type: Yup.string().required("Contact type is required"),
+        phone: Yup.string().required("Phone Number is required"),
+        // .matches(
+        //   /^(?:\(\d{3}\)|\d{3}-)\d{3}-\d{4}$/,
+        //   "Invalid phone number format"
+        // ),
+        email: Yup.string()
+          .email("Invalid email address")
+          .required("Email is required"),
+      })
+    ),
+  }),
   school_social_medias: Yup.array().of(
     Yup.object().shape({
       platform: Yup.string().required("Social media platform is required"),
@@ -61,19 +61,16 @@ export default function school_address() {
     school_address: {
       school_street_address: "",
       school_state: "",
-      school_zip: undefined,
+      school_zip: "",
       contact_types: [
         {
           type: "",
-          phone: undefined,
+          phone: "",
           email: "",
         },
       ],
     },
-    school_social_medias: [
-      { platform: "Facebook", url: "" },
-      { platform: "Instagram", url: "" },
-    ],
+    school_social_medias: [{}],
   });
 
   const handleBack = () => {
@@ -84,6 +81,47 @@ export default function school_address() {
   const handleSaveForLater = () => {
     // Logic for Save for Later button
     console.log("Save for Later");
+  };
+
+  const setSchoolData = (data) => {
+    setInitialValues({
+      school_details: {
+        school_logo: data.school_logo ?? "",
+        school_name: data.name ?? "",
+        founded_date: data.found_date ?? "",
+        institution_type: data.institution_type ?? "",
+        school_tagline: data.tagline ?? "",
+        school_affliations: data.affliations ?? "",
+      },
+
+      school_address: {
+        school_street_address: data.school_address.street_address_1 ?? "",
+        school_state: data.school_address.state ?? "",
+        school_zip: data.school_address.postal ?? "",
+        contact_types:
+          data.school_contacts.legnth > 0
+            ? data.school_contacts.map((contact) => ({
+                type: contact.type ?? "",
+                phone: contact.phone ?? "",
+                email: contact.email ?? "",
+              }))
+            : [
+                {
+                  type: "Admissions",
+                  phone: "",
+                  email: "",
+                },
+              ],
+      },
+
+      school_social_medias:
+        data.school_social_medias.legnth > 0
+          ? data.school_social_medias.map((social) => ({
+              platform: social.platform ?? "",
+              url: social.url ?? "",
+            }))
+          : [{ platform: "Facebook", url: "" }],
+    });
   };
 
   useEffect(() => {
@@ -99,7 +137,7 @@ export default function school_address() {
         }
         const data = await response.json();
         console.log("data", data);
-        // setSchoolData(data);
+        setSchoolData(data);
         setIsLoading(false);
       } catch (error) {
         console.error("There was a problem fetching school data:", error);
