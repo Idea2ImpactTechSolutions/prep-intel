@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("./sequelize");
 
 const SchoolSocialMedia = sequelize.define(
-  "school_social_media",
+  "school_social_medias",
   {
     // Define model attributes
     id: {
