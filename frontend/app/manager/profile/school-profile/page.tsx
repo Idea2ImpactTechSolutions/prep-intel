@@ -39,7 +39,7 @@ const validationSchema = Yup.object().shape({
   }),
   school_social_medias: Yup.array().of(
     Yup.object().shape({
-      platform: Yup.string().required("Social media platform is required"),
+      social_media: Yup.string().required("Social media platform is required"),
       // url: Yup.string().url("Invalid URL"),
     })
   ),
@@ -71,7 +71,7 @@ export default function school_address() {
         },
       ],
     },
-    school_social_medias: [{}],
+    school_social_medias: [{ social_media: "Facebook", url: "" }],
   });
 
   const handleBack = () => {
@@ -118,10 +118,10 @@ export default function school_address() {
       school_social_medias:
         data.school_social_medias.legnth > 0
           ? data.school_social_medias.map((social) => ({
-              platform: social.platform ?? "",
+              social_media: social.social_media ?? "",
               url: social.url ?? "",
             }))
-          : [{ platform: "Facebook", url: "" }],
+          : [{ social_media: "Facebook", url: "" }],
     });
   };
 
@@ -508,13 +508,13 @@ export default function school_address() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
                             <label
-                              htmlFor={`school_social_medias.${index}.platform`}
+                              htmlFor={`school_social_medias.${index}.social_media`}
                               className="block text-sm font-medium text-gray-700"
                             >
                               Social Media Platform
                             </label>
                             <Field
-                              name={`school_social_medias.${index}.platform`}
+                              name={`school_social_medias.${index}.social_media`}
                               as="select"
                               className="border-2 w-full p-2"
                             >
@@ -547,7 +547,7 @@ export default function school_address() {
                           <button
                             type="button"
                             className="flex-1 rounded-md bg-green-500 text-white px-3 py-1"
-                            onClick={() => push({ platform: "", url: "" })}
+                            onClick={() => push({ social_media: "", url: "" })}
                           >
                             Add Additional
                           </button>
