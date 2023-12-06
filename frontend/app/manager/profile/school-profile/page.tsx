@@ -10,11 +10,11 @@ import LoadingSpinner from "../shared/loading-spinner";
 // Define the validation schema using Yup
 const validationSchema = Yup.object().shape({
   school_details: Yup.object().shape({
-    school_name: Yup.string().required("School name is required"),
+    name: Yup.string().required("School name is required"),
     founded_date: Yup.string().required("Founded date is required"),
     institution_type: Yup.string().required("Institution type is required"),
-    school_tagline: Yup.string().required("School tagline is required"),
-    school_affliations: Yup.string().required("School affliations is required"),
+    tagline: Yup.string().required("School tagline is required"),
+    affliations: Yup.string().required("School affliations is required"),
   }),
   school_address: Yup.object().shape({
     school_street_address: Yup.string().required(
@@ -52,11 +52,11 @@ export default function school_address() {
   const [initialValues, setInitialValues] = useState({
     school_details: {
       school_logo: "",
-      school_name: "",
+      name: "",
       founded_date: "",
-      institution_type: "",
-      school_tagline: "",
-      school_affliations: "",
+      institution_type: "University",
+      tagline: "",
+      affliations: "",
     },
 
     school_address: {
@@ -88,11 +88,11 @@ export default function school_address() {
     setInitialValues({
       school_details: {
         school_logo: data.school_logo ?? "",
-        school_name: data.name ?? "",
+        name: data.name ?? "",
         founded_date: data.found_date ?? "",
-        institution_type: data.institution_type ?? "",
-        school_tagline: data.tagline ?? "",
-        school_affliations: data.affliations ?? "",
+        institution_type: data.institution_type ?? "University",
+        tagline: data.tagline ?? "",
+        affliations: data.affliations ?? "",
       },
 
       school_address: {
@@ -239,19 +239,19 @@ export default function school_address() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                   <div className="space-y-4">
                     <label
-                      htmlFor="school_details.school_name"
+                      htmlFor="school_details.name"
                       className="block text-sm font-medium text-gray-700"
                     >
                       School Name
                     </label>
                     <Field
-                      name="school_details.school_name"
+                      name="school_details.name"
                       type="text"
                       placeholder="School Name"
                       className="border-2 w-full p-2 rounded-md"
                     />
                     <ErrorMessage
-                      name="school_details.school_name"
+                      name="school_details.name"
                       component="div"
                       className="text-red-500"
                     />
@@ -283,11 +283,15 @@ export default function school_address() {
                       Institution Type
                     </label>
                     <Field
-                      name="school_details.institution_type"
-                      type="text"
-                      placeholder="Institution Type"
-                      className="border-2 w-full p-2 rounded-md"
-                    />
+                      name={`school_details.institution_type`}
+                      as="select"
+                      className="border-2 w-full p-2"
+                    >
+                      <option value="University">University</option>
+                      <option value="Community College">
+                        Community College
+                      </option>
+                    </Field>
                     <ErrorMessage
                       name="school_details.institution_type"
                       component="div"
@@ -296,38 +300,38 @@ export default function school_address() {
                   </div>
                   <div className="space-y-4">
                     <label
-                      htmlFor="school_details.school_tagline"
+                      htmlFor="school_details.tagline"
                       className="block text-sm font-medium text-gray-700"
                     >
                       School Tagline
                     </label>
                     <Field
-                      name="school_details.school_tagline"
+                      name="school_details.tagline"
                       type="text"
                       placeholder="School Tagline"
                       className="border-2 w-full p-2 rounded-md"
                     />
                     <ErrorMessage
-                      name="school_details.school_tagline"
+                      name="school_details.tagline"
                       component="div"
                       className="text-red-500"
                     />
                   </div>
                   <div className="space-y-4">
                     <label
-                      htmlFor="school_details.school_affliations"
+                      htmlFor="school_details.affliations"
                       className="block text-sm font-medium text-gray-700"
                     >
                       School Affiliations, Separated by Comma
                     </label>
                     <Field
-                      name="school_details.school_affliations"
+                      name="school_details.affliations"
                       type="text"
                       placeholder="School Affiliations"
                       className="border-2 w-full p-2 rounded-md"
                     />
                     <ErrorMessage
-                      name="school_details.school_affliations"
+                      name="school_details.affliations"
                       component="div"
                       className="text-red-500"
                     />
