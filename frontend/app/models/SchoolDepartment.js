@@ -28,7 +28,7 @@ const SchoolDepartment = sequelize.define(
       type: DataTypes.BOOLEAN,
     },
     gpa_requirement: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DOUBLE,
     },
     description: {
       type: DataTypes.STRING,
