@@ -6,6 +6,9 @@ import * as Yup from "yup";
 import BottomBar from "../shared/bottom-bar";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "../shared/loading-spinner";
+import { CompletionPanel } from "@/components/completion-panel";
+import { FormSection } from "@/components/form-section";
+
 // Define the validation schema using Yup
 const validationSchema = Yup.object().shape({
   school_departments: Yup.array().of(
@@ -229,15 +232,16 @@ export default function AcademicInfo() {
       onSubmit={handleSubmit}
     >
       {({ values, isSubmitting }) => (
-        <Form>
-          <div className="container mx-auto p-4">
-            <h1 className="text-5xl font-bold text-gray-800 mb-6">
+
+        <Form className="flex-grow">
+
+          <div className="container mx-auto p-6">
+            <CompletionPanel percentCompleted={20} title={"1/5"}></CompletionPanel>
+            <h1 className="text-2xl my-3 font-bold text-gray-800 mb-6">
               Create your School's Profile
             </h1>
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">
-              Academic Information
-            </h1>
 
+            <FormSection title={"Academic Information"} />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* school_departments FieldArray */}
               <FieldArray name="school_departments">
@@ -386,9 +390,8 @@ export default function AcademicInfo() {
               </FieldArray>
               {/* Add your Research Opportunities FieldArray here in a similar manner */}
             </div>
-            <h2 className="text-xl font-semibold mb-4">
-              Admission Requirements
-            </h2>
+
+            <FormSection title={"Admission Requirements"} />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div>
                 <label className="inline-flex items-center">
@@ -484,7 +487,8 @@ export default function AcademicInfo() {
                 )}
               </div>
             </div>
-            <h2 className="text-xl font-semibold mb-4">Financials</h2>
+
+            <FormSection title={"Financials"} />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div className="space-y-4">
                 <label

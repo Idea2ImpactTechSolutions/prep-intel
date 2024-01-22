@@ -1,4 +1,3 @@
-// ContactInfo.client.js
 "use client";
 import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
@@ -6,6 +5,8 @@ import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import BottomBar from "../shared/bottom-bar";
 import LoadingSpinner from "../shared/loading-spinner";
+import { CompletionPanel } from "@/components/completion-panel";
+import { FormSection } from "@/components/form-section";
 
 // Define the validation schema using Yup
 const validationSchema = Yup.object().shape({
@@ -193,15 +194,17 @@ export default function school_address() {
     >
       {({ values, isSubmitting }) => (
         <Form>
-          <div className="container mx-auto p-4">
-            <h1 className="text-5xl font-bold text-gray-800 mb-6">
+          <div className="container mx-auto p-6">
+            <CompletionPanel percentCompleted={0} title={"0/5"}></CompletionPanel>
+            <h1 className="text-2xl font-bold text-gray-800 mb-6">
               Create Your School's Profile
             </h1>
+
+            <div id="details-box"></div>
+
             <div className="grid grid-cols-1 md:grid-cols-4 gap-5 mb-5">
               <div className="col-span-1">
-                <h2 className="text-3xl font-bold text-gray-800 mb-5">
-                  Upload Your Logo
-                </h2>
+                <FormSection title={"Upload Your Logo"} />
                 <div className="flex items-center justify-center w-full">
                   <label
                     htmlFor="school_details.school_logo"
@@ -233,9 +236,7 @@ export default function school_address() {
                 </div>
               </div>
               <div className="col-span-3">
-                <h2 className="text-3xl font-bold text-gray-800 mb-3">
-                  School Details
-                </h2>
+                <FormSection title={"School Details"} />
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                   <div className="space-y-4">
                     <label
@@ -339,10 +340,8 @@ export default function school_address() {
                 </div>
               </div>
             </div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-3">
-              Contact Information
-            </h2>
 
+            <FormSection title={"Contact Information"} />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div className="space-y-4">
                 <label
