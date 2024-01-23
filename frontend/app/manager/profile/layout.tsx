@@ -26,6 +26,7 @@ export default function StudentOnBoardingLayout({ children }: { children: React.
                         />
                     </Link>
                     { <div className="flex w-[90%] mt-4 md:w-[75vw] md:mt-0">
+                        <a href="/manager/profile/welcome">Claim My Account</a> &nbsp; | &nbsp;
                         <a href="/manager/profile/academic-info">Academic</a> &nbsp; | &nbsp;
                         <a href="/manager/profile/school-profile">Profile</a>
 

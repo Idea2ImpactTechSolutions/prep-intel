@@ -154,8 +154,6 @@ export default function AcademicInfo() {
         financialAidInfoURL: data.financial_aid_url ?? "",
       },
     });
-
-    console.log("INITIAL_VALUES", initialValues);
   };
 
   useEffect(() => {
