@@ -1,6 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 
+const links = `/manager/profile/academic-info
+/manager/profile/school-profile
+/manager/profile/school-welcome
+/manager/profile/welcome
+/recruiter/connections
+/recruiter/dashboard
+/recruiter/profile/personal-info
+/recruiter/profile/territory
+/recruiter/profile/welcome
+/recruiter/student-profile`.split('\n').map(p => p.trim())
+
 export default function Page() {
   return <div>
         <div className="container">
@@ -31,9 +42,14 @@ export default function Page() {
         </div>
         <div className="container">
             <ul>
-                <li><a href="/manager/profile/welcome">Claim My Account</a> </li>
-                <li><a href="/manager/profile/academic-info">Academic</a> </li>
-                <li><a href="/manager/profile/school-profile">Profile</a></li>
+                {
+                    links.map( url => (
+                    <li className="m-2"><Link
+                        href={url}
+                        className={`pb-1 ml-14 text-sm transition-all hover:border-b-[4px] hover:border-b-primary md:ml-12 md:text-[1rem] `}
+                    >{url}</Link></li>
+                    ))
+                }
             </ul>
         </div>
     </div>
