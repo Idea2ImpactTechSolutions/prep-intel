@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import LoadingSpinner from "../shared/loading-spinner";
 import Image from "next/image";
 
-export default function AcademicInfo() {
+export default function Page() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const schoolId = "b14e03a9-656a-4726-9d38-6f09c912a543";

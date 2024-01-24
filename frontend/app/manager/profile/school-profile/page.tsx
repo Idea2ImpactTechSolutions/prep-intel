@@ -46,7 +46,7 @@ const validationSchema = Yup.object().shape({
   ),
 });
 
-export default function school_address() {
+export default function () {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const school_id = "b14e03a9-656a-4726-9d38-6f09c912a543";
@@ -473,7 +473,7 @@ export default function school_address() {
                           <div className="flex items-center space-x-2">
                             <button
                               type="button"
-                              className="flex-1 rounded-md bg-green-500 text-white px-3 py-1"
+                              className="flex-0 w-[50%] rounded-md bg-gray-200 text-primary px-3 py-1"
                               onClick={() =>
                                 push({ type: "", phone: "", email: "" })
                               }
@@ -483,7 +483,7 @@ export default function school_address() {
                             {values.school_address.contact_types.length > 1 && (
                               <button
                                 type="button"
-                                className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
+                                className="flex-1 rounded-md bg-gray-300 text-primary px-3 py-1"
                                 onClick={() => remove(index)}
                               >
                                 Remove
@@ -545,7 +545,7 @@ export default function school_address() {
                         <div className="flex items-center space-x-2">
                           <button
                             type="button"
-                            className="flex-1 rounded-md bg-green-500 text-white px-3 py-1"
+                            className="flex-0 w-[50%] rounded-md bg-gray-200 text-primary px-3 py-1"
                             onClick={() => push({ social_media: "", url: "" })}
                           >
                             Add Additional
@@ -553,7 +553,7 @@ export default function school_address() {
                           {values.school_social_medias.length > 1 && (
                             <button
                               type="button"
-                              className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
+                              className="flex-1 rounded-md bg-gray-300 text-primary px-3 py-1"
                               onClick={() => remove(index)}
                             >
                               Remove

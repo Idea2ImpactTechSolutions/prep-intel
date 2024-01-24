@@ -268,7 +268,7 @@ export default function AcademicInfo() {
                           <div className="flex items-center space-x-2">
                             <button
                               type="button"
-                              className="flex-1 rounded-md bg-green-500 text-white px-3 py-1"
+                              className="flex-1 rounded-md bg-gray-300 text-white px-3 py-1"
                               onClick={() => push({ name: "" })}
                             >
                               Add Additional
@@ -276,7 +276,7 @@ export default function AcademicInfo() {
                             {values.school_departments.length > 1 && (
                               <button
                                 type="button"
-                                className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
+                                className="flex-1 rounded-md bg-red-300 text-white px-3 py-1"
                                 onClick={() => remove(index)}
                               >
                                 Remove
@@ -317,7 +317,7 @@ export default function AcademicInfo() {
                             <div className="flex items-center space-x-2">
                               <button
                                 type="button"
-                                className="flex-1 rounded-md bg-green-500 text-white px-3 py-1"
+                                className="flex-1 rounded-md bg-gray-300 text-white px-3 py-1"
                                 onClick={() => push({ name: "" })}
                               >
                                 Add Additional
@@ -365,7 +365,7 @@ export default function AcademicInfo() {
                             <div className="flex items-center space-x-2">
                               <button
                                 type="button"
-                                className="flex-1 rounded-md bg-green-500 text-white px-3 py-1"
+                                className="flex-1 rounded-md bg-gray-300 text-white px-3 py-1"
                                 onClick={() => push({ name: "" })}
                               >
                                 Add Additional
@@ -373,7 +373,7 @@ export default function AcademicInfo() {
                               {values.school_research_programs.length > 1 && (
                                 <button
                                   type="button"
-                                  className="flex-1 rounded-md bg-red-500 text-white px-3 py-1"
+                                  className="flex-1 rounded-md bg-red-300 text-white px-3 py-1"
                                   onClick={() => remove(index)}
                                 >
                                   Remove

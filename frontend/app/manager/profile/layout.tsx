@@ -1,21 +1,22 @@
-import CompletionPanel from "@/components/completion-panel";
-import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
+import SchoolTabs from "../profile/shared/school-tabs";
+import { FaBell } from "react-icons/fa";
+import { IoPersonCircle } from "react-icons/io5";
 
 export const metadata: Metadata = {
     title: "Prep Intel | Student Onboarding",
     description: 'Some description here'
 }
 
-export default function StudentOnBoardingLayout({ children }: { children: React.ReactNode }) {
+export default function Layout ({ children }: { children: React.ReactNode }) {
     return (
         <main className="font-sans">
             <nav className={`bg-panel p-2 border-b md:px-6 lg:px-6`}>
-                <div className="flex flex-col items-center md:flex-row md:items-center md:justify-between">
+                <div className="container p-2 px-6 flex flex-col items-center md:flex-row md:items-center md:justify-between pl-0">
                     <Link
-                        href="/login"
+                        href="/"
                     >
                         <Image
                             src="/images/logo/text-logo.png"
@@ -25,12 +26,12 @@ export default function StudentOnBoardingLayout({ children }: { children: React.
                             alt="logo"
                         />
                     </Link>
-                    { <div className="flex w-[90%] mt-4 md:w-[75vw] md:mt-0">
-                        <a href="/manager/profile/welcome">Claim My Account</a> &nbsp; | &nbsp;
-                        <a href="/manager/profile/academic-info">Academic</a> &nbsp; | &nbsp;
-                        <a href="/manager/profile/school-profile">Profile</a>
-
-                    </div>}
+                    <div className=" flex flex-grow-1"></div>
+                    <div className="flex mt-4 md:mt-0 px-6">
+                        <SchoolTabs />
+                        <IoPersonCircle size="1.5em" className="mx-4 w-8" />
+                        <FaBell  size="1.2em" className="w-4 mt-[2px]" />
+                    </div>
                 </div>
             </nav>
             <section className="md:flex">
