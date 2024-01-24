@@ -1,8 +1,9 @@
-import CompletionPanel from "@/components/completion-panel";
-import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
+import RecruiterTabs from "./shared/recruiter-tabs";
+import { FaBell } from "react-icons/fa";
+import { IoPersonCircle } from "react-icons/io5";
 
 export const metadata: Metadata = {
     title: "Prep Intel | Student Onboarding",
