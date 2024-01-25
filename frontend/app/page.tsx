@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const links = `/manager/profile/academic-info
+/manager/profile/dashboard
 /manager/profile/school-profile
 /manager/profile/school-welcome
 /manager/profile/welcome
@@ -10,7 +11,8 @@ const links = `/manager/profile/academic-info
 /recruiter/profile/personal-info
 /recruiter/profile/territory
 /recruiter/profile/welcome
-/recruiter/student-profile`.split('\n').map(p => p.trim())
+/recruiter/student-profile
+/student/explore`.split('\n').map(p => p.trim())
 
 export default function Page() {
   return <div>
@@ -41,6 +43,7 @@ export default function Page() {
             </nav>
         </div>
         <div className="container">
+            <h1 className="text-xl font-bold mt-8">Pages</h1>
             <ul>
                 {
                     links.map( url => (
@@ -51,6 +54,10 @@ export default function Page() {
                     ))
                 }
             </ul>
+            <div>
+                <h1 className="text-xl font-bold mt-8">Rebuild with the command below, executed from the frontend directory :</h1>
+                 <pre className="p-4 text-red-800">find . -name "*page.tsx" | sed 's|^\./app||' | sed 's|/page\.tsx$||' | sed '/^$/d'</pre>
+            </div>
         </div>
     </div>
 }
