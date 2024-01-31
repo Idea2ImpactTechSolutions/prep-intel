@@ -6,6 +6,7 @@ const SchoolResearchProgram = require("./SchoolResearchProgram");
 const SchoolContact = require("./SchoolContact");
 const SchoolAddress = require("./SchoolAddress");
 const SchoolSocialMedia = require("./SchoolSocialMedia");
+const HD2021 = require("./HD2021");
 
 const models = {
   SchoolDepartment,
@@ -15,6 +16,7 @@ const models = {
   SchoolContact,
   SchoolAddress,
   SchoolSocialMedia,
+  HD2021
 };
 
 // Model associations
