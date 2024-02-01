@@ -54,7 +54,7 @@ export default function Page() {
     <Formik
       onSubmit={handleSubmit}
     >
-    <div className="container p-6">
+    <div className="container p-0 mt-6">
         <h1 className="text-2xl font-bold mb-4">Where Do You Recruit?</h1>
         <div className="ml-20 mb-20">
           <MySvg id="us-map" onMouseMove={mouseMove} onClick={mapClick} height="450"  />

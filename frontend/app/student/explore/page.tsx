@@ -93,7 +93,7 @@ export default function Page() {
 }
 
   return (
-    <div className="container p-6">
+    <div className="container p-0 mt-6">
         <h1 className="text-2xl font-bold mb-4">Select the states you would like to explore</h1>
 
         <MySvg id="us-map" onMouseMove={mouseMove} onClick={mapClick} height="350" />

@@ -9,9 +9,10 @@ export default function Page() {
 
   return (
     <Formik>
-    <div className="container p-0 mt-8">
-        <h1 className="text-xl font-bold mb-4">Recruits</h1>
-        <hr className="border-t border-gray-200 mt-4 mb-8" />
+    <div className="container p-0 mt-6">
+
+        <h1 className="text-2xl font-bold mb-4">Recruits</h1>
+        <hr className="border-t border-gray-300 my-4" />
 
         <div className="w-full mt-5 flex">
           <div className="w-[40%]">
