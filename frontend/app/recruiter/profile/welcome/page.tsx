@@ -9,7 +9,7 @@ export default function Page() {
   let isSubmitting = false;
 
   return (
-  <div className="flex flex-col items-center justify-center rows border-2 border-gray-150 p-14 mt-40 self-center rounded-md w-[600px] h-[400px] center">
+  <div className="container flex flex-col items-center justify-center rows border-2 border-gray-150 p-14 mt-40 self-center rounded-md w-[600px] h-[400px] center">
     <h1 className="text-2xl font-bold mb-8">Hello Recruiter</h1>
 
       <div>
