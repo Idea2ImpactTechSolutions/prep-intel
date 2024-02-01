@@ -1,71 +1,23 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
+import React, { useEffect } from "react";
+import { Formik, Field, ErrorMessage } from "formik";
 import { useRouter } from "next/navigation";
-import LoadingSpinner from "../shared/loading-spinner";
 import Image from "next/image";
 
 export default function Page() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
-  const schoolId = "b14e03a9-656a-4726-9d38-6f09c912a543";
 
-  useEffect(() => {
-
-    const fetchSchoolData = async () => {
-      // dummy request to mock actual request
-      setIsLoading(true);
-      try {
-        const response = await fetch(
-          `/api/manager/profile/academic-info?schoolId=${schoolId}`
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setIsLoading(false);
-      } catch (error) {
-        console.error("There was a problem fetching school data:", error);
-      }
-    };
-
-    if (schoolId) {
-      fetchSchoolData();
-    }
-  }, [schoolId]);
+  useEffect(() => {});
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setSubmitting(true);
     try {
-      values.schoolId = "b14e03a9-656a-4726-9d38-6f09c912a543";
-      console.log("TEST VALUES", values);
-      const url = "/api/manager/profile/academic-info";
-      // Send a POST request to the server
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify(values), // Convert form values to JSON
-      });
-      if (response.ok) {
-        const responseData = await response.json();
-        // Handle success - you can redirect to another page or show a success message
-      } else {
-        throw new Error(`Error: ${response.status}`);
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      // Handle errors - show error message to the user, etc.
-    } finally {
+      // Placeholder
       setSubmitting(false);
     }
+    catch {
+    }
   };
-
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
 
   let isSubmitting = false;
   return (
