@@ -15,9 +15,8 @@ export default function Page() {
  }
 
   return (
-    <div className="container p-6">
+    <div className="container p-0 pt-6">
         <h1 className="text-2xl font-bold mb-4">My Dashboard</h1>
-
         <hr className="border-t border-gray-300 my-4" />
 
         <div className="grid grid-cols-4 grid-rows-3 gap-4 w-full" style={{gridTemplateColumns: '1fr 1fr 1fr 2fr'}}>

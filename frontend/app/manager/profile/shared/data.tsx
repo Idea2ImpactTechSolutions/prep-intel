@@ -17,10 +17,4 @@ export const TAB_LINKS = [
         url: '/manager/profile/school-profile',
         isActive: false
     },
-    {
-        id: crypto.randomUUID().toString(),
-        title: 'Admin',
-        url: '/manager/profile/admin',
-        isActive: false
-    },
 ]
