@@ -9,6 +9,7 @@ const links = `/manager/profile/academic-info
 /recruiter/connections
 /recruiter/dashboard
 /recruiter/profile/personal-info
+/recruiter/profile/setup
 /recruiter/profile/territory
 /recruiter/profile/welcome
 /recruiter/student-profile

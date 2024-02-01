@@ -126,3 +126,35 @@
     transition: opacity .4s ease;
     z-index: 1;
 }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  color: #333;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  text-align: left;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  margin: auto;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+table tr {
+  cursor: pointer;
+}
+table th {
+  background-color: #e7cdcd;
+  font-weight: bold;
+  padding: 6px 10px;
+}
+table tr:nth-child(even) td {
+  background-color: hsl(0, 0%, 92%);
+}
+table tr:hover td {
+  background-color: #ffedcc;
+}
+table td {
+  background-color: #fff;
+  padding: 6px 10px;
+  border-bottom: 1px solid #efefef;
+}
