@@ -3,6 +3,7 @@ import Link from "next/link";
 
 const links = `/manager/profile/academic-info
 /manager/profile/dashboard
+/manager/profile/recruits
 /manager/profile/school-profile
 /manager/profile/school-welcome
 /manager/profile/welcome
