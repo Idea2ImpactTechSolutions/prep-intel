@@ -2,6 +2,8 @@
 import React from "react";
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 import { SchoolRecruits as recruits }  from "../../../ui/mock-data/Users"
+import { IoMdEye } from "react-icons/io";
+import { FaEdit } from "react-icons/fa";
 
 export default function Page() {
 
@@ -57,7 +59,7 @@ export default function Page() {
                 <td>{user['Recruiter Name']}</td>
                 <td>{user['Program of Interest']}</td>
                 <td>{user['Email Address']}</td>
-                <td></td>
+                <td ><div className="flex "><IoMdEye className="mr-4" /> <FaEdit /></div></td>
               </tr>))
           }
           </tbody>
