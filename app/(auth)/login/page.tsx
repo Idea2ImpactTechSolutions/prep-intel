@@ -8,7 +8,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState('');
-  const [email, setEmail] = useState('user@x');
+  const [email, setEmail] = useState('recruiter@x');
   const [password, setPassword] = useState('');
 
   function handleSubmit(e) {
@@ -34,12 +34,22 @@ export default function LoginPage() {
         if (data && data.token) {
           //set cookie
           cookie.set('token', data.token, {expires: 2});
+          cookie.set('role', data.role, {expires: 2});
 
-          router.push('/manager/profile/welcome')
+          switch(data.role) {
+            case 'admin':
+              router.push('/manager/profile/welcome');
+              break;
+            case 'recruiter':
+              router.push('/recruiter/profile/welcome')
+              break;
+            case 'student':
+              router.push('/student/explore')
+              break;
+          }
         }
       });
   }
-
 
   return (
     <div>

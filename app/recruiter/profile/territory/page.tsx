@@ -26,6 +26,10 @@ export default function Page() {
           bubbleElement.current.style.left = (x) + 'px';
         }
     };
+
+    return () => {
+      window.onmousemove = null;
+    }
   });
 
   function mapClick() {
