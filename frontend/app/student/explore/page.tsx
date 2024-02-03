@@ -60,48 +60,106 @@ const options = [
 export default function Page() {
 
   const bubbleElement = useRef(null);
+  const svgElement = useRef(null);
   const hoveredLocation = useRef(null);
-  const [location, setLocation] = useState(null);
+  const [schools, setSchools] = useState([]);
+  const [activeOption, setActiveOption] = useState();
+  const svgOffset = useRef([0,0]);
+
+  const fetchSchoolData = async (stateID: String) => {
+    //setIsLoading(true);
+    try {
+      const response = await fetch(
+        `/api/manager/profile/ic-directory?stateID=${stateID}`
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setSchools(data);
+      //setIsLoading(false);
+    } catch (error) {
+      console.error("There was a problem fetching school data:", error);
+    }
+  };
 
   useEffect(() => {
 
-    window.onmousemove = function (e) {
-        var x = e.clientX,
-            y = e.clientY;
-        bubbleElement.current.style.top = (y + 20) + 'px';
-        bubbleElement.current.style.left = (x) + 'px';
-    };
+    var rect = document.querySelectorAll('object')[0].getBoundingClientRect();
+    svgOffset.current = [rect.left, rect.top];
+
+    // Select the child svg and assign events and store a reference in svgElement
+    const svg = document.querySelectorAll('object')[0].contentDocument;
+    svg.onclick = mapClick;
+    svg.onmousemove = mouseMove;
+    svgElement.current = svg;
   });
 
-  function mapClick() {
-    setLocation(`Searching for schools in ${hoveredLocation.current}...`);
+  // useEffect hook
+  useEffect(() => {
+    if (activeOption)
+    {
+      svgElement.current.querySelector('.active')?.classList.remove('active');
+      svgElement.current.getElementById(activeOption.value).classList.add('active');
+      //let x = svgElement.current.childNodes.find(e => e.dataset.id == activeOption.Value);
+      fetchSchoolData(activeOption.value);
+    }
+  }, [activeOption]);
+
+  function mapClick(e) {
+    if (e.target.tagName == 'path') {
+      const stateID = e.target.dataset.id;
+      const listOption = options.find(opt => opt.value === stateID);
+      setActiveOption(listOption);
+    }
   }
 
   function mouseMove(e) {
 
-    if (e.target.tagName == 'path') {
-        var content = e.target.dataset.name;
+    var x = e.clientX,
+    y = e.clientY;
 
+    //console.log(x, y);
+    bubbleElement.current.style.top = (y + 20 +svgOffset.current[1] ) + 'px';
+    bubbleElement.current.style.left = (x+svgOffset.current[0]) + 'px';
+
+    if (e.target.tagName == 'path') {
+        var content = e.target.dataset;
         hoveredLocation.current = content;
 
-        bubbleElement.current.innerHTML = content;
+        bubbleElement.current.innerHTML = content.name;
         bubbleElement.current.style.opacity = "100%";
     }
     else {
         bubbleElement.current.style.opacity = "0%";
     }
-}
+  }
 
   return (
     <div className="container p-0 mt-6">
         <h1 className="text-2xl font-bold mb-4">Select the states you would like to explore</h1>
 
-        <MySvg id="us-map" onMouseMove={mouseMove} onClick={mapClick} height="350" />
+        <object ref={svgElement} type="image/svg+xml" data="/images/us-map.svg">Your browser does not support SVG</object>
+
         <div id="details-box" ref={bubbleElement}></div>
 
-        <h2>{location}</h2>
+        <h2>Select State</h2>
+        <Select instanceId="state-select"
+            options={options}
+            value={activeOption}
+            onChange={setActiveOption}
+            className="w-[400px]" />
 
-        <Select options={options} className="w-[400px]" />
+        <h2 className="mt-4">Schools</h2>
+        <ul className="grid grid-cols-3">
+            {
+                schools.map((school, index) => (
+                <li className="m-2" key={index} >
+                    {school.INSTNM}
+                </li>
+                ))
+            }
+        </ul>
 
     </div>
   );

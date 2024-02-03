@@ -39,9 +39,30 @@ sodipodi:docname="us.svg">
     inkscape:current-layer="svg2" />
 <defs
     id="defs4">
-<style
-    type="text/css"
-    id="style6">path { fill-rule: evenodd; }</style>
+<style type="text/css" id="style6">
+    path {
+      fill-rule: evenodd;
+      stroke: white;
+      fill: #88161856 !important;
+      transition: fill .4s ease;
+      transform-origin: center center;
+    }
+
+    path.active {
+      fill: #881618c3 !important;
+    }
+
+    path:hover {
+        fill: #881618 !important;
+        cursor: pointer;
+        transform: scale(1.002, 1.002);
+    }
+
+
+    display: block;
+    margin-left: -140px;
+    width: 100%;
+    </style>
 </defs>
 <metadata
     id="metadata8">
