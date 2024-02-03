@@ -1,7 +1,9 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("./sequelize");
+import { DataTypes } from "sequelize";
+import elephantsql from "./ElephantSQL";
 
-const HD2021 = sequelize.define(
+// Datsource: https://nces.ed.gov/ipeds/datacenter/DataFiles.aspx
+// HD2021 = "Institutional Characteristics ->	Directory information"
+const ICDirectory = elephantsql.define(
   "hd_2021",
   {
     // Define model attributes
@@ -39,4 +41,4 @@ const HD2021 = sequelize.define(
   }
 );
 
-module.exports = HD2021;
+module.exports = ICDirectory;

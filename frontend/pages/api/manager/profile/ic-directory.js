@@ -1,7 +1,5 @@
-// pages/api/manager/profile/academic-info.js
 const { models } = require("../../../../app/models");
-const { HD2021 } = models;
-const { v4 } = require("uuid");
+const { ICDirectory } = models;
 
 export default async function handler(req, res) {
   if (req.method === "GET") {
@@ -9,7 +7,7 @@ export default async function handler(req, res) {
 
       const { stateID } = req.query;
 
-      let schoolDetails = await HD2021.findAll({
+      let schoolDetails = await ICDirectory.findAll({
         where: {
             STABBR: stateID
         }

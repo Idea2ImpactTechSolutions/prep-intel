@@ -70,7 +70,7 @@ export default function Page() {
     //setIsLoading(true);
     try {
       const response = await fetch(
-        `/api/manager/profile/hd2021?stateID=${stateID}`
+        `/api/manager/profile/ic-directory?stateID=${stateID}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
