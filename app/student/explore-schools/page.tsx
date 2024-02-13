@@ -25,14 +25,14 @@ export default function Page() {
 
   useEffect(() => {
     if (searchParams) {
-      const states = searchParams.get('st')
+      const states = searchParams.get('states')
 
       if (states)
       {
         fetchSchoolData(states);
       }
     }
-  });
+  },[]);
 
   return (
     <div className="container p-0 mt-6">

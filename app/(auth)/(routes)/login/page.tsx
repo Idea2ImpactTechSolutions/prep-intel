@@ -5,13 +5,56 @@ import { EyeIcon, EyeOffIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
+import cookie from "js-cookie";
 
 export default function LoginPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
-
+  function handleLogin(e) {
+    e.preventDefault();
+    const form = document.querySelector("form");
+    const email = form.elements['email'].value;
+    const password = form.elements['password'].value;
+  
+    //call api
+    fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    })
+      .then((r) => {
+        return r.json();
+      })
+      .then((data) => {
+        if (data && data.error) {
+          //setLoginError(data.message);
+        }
+        if (data && data.token) {
+          //set cookie
+          cookie.set('token', data.token, {expires: 2});
+          cookie.set('role', data.role, {expires: 2});
+  
+          switch(data.role) {
+            case 'admin':
+              router.push('/manager/profile/welcome');
+              break;
+            case 'recruiter':
+              router.push('/recruiter/profile/welcome')
+              break;
+            case 'student':
+              router.push('/student/explore')
+              break;
+          }
+        }
+      });
+  }
+  
   return (
     <div>
       <div className=''>
@@ -50,7 +93,7 @@ export default function LoginPage() {
             // loadingText='Submitting...'
             // disabled
             type='button'
-            onClick={() => router.push("/student/onboarding/vitals")}
+            onClick={handleLogin}
           >
             Sign In
           </Button>
