@@ -14,7 +14,7 @@ export default function Page() {
   const bubbleElement = useRef(null);
   const hoveredLocation = useRef(null);
   const router = useRouter();
-
+  const svgElement = useRef(null);
 
   useEffect(() => {
 
@@ -61,7 +61,7 @@ export default function Page() {
     <div className="container p-0 mt-6">
         <h1 className="text-2xl font-bold mb-4">Where Do You Recruit?</h1>
         <div className="ml-20 mb-20">
-          <MySvg id="us-map" onMouseMove={mouseMove} onClick={mapClick} height="450"  />
+          <object ref={svgElement} type="image/svg+xml" data="/images/us-map.svg">Your browser does not support SVG</object>
           <div id="details-box" ref={bubbleElement}></div>
         </div>
         <BottomBar

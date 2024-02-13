@@ -151,7 +151,7 @@ export default function Page() {
       <button
         type="submit"
         className="flex items-center bg-primary hover:bg-primary-500 text-white font-bold py-4 px-4 rounded mr-1 pr-2"
-        onClick={() => router.push(`/student/explore-schools?mb=1&st=${activeSelection.map(s => s.value).join(',') }`)}
+        onClick={() => router.push(`/student/explore-schools?states=${activeSelection.map(s => s.value).join(',') }`)}
 
       ><div className="leading-none inline-block -mt-1">Next</div></button>
       </div>

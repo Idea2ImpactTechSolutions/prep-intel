@@ -1,0 +1,135 @@
+"use client"
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { DASHBOARD_NAVIGATION_DATA } from "@/utils/data";
+import useWindowSize from "@/utils/hooks/useWindowSize";
+import { AlignJustify, Bell, GraduationCap, LayoutGrid, LogOut, Menu, User, UserPlus } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
+
+interface SidebarProps {
+    showSidebar: any;
+    setShowSidebar: (state: any) => any;
+}
+
+
+export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
+    const { width } = useWindowSize()
+
+    const normal = 'relative p-1.5 mb-2 block flex items-center gap-x-2 text-sm'
+    const defaultLink = normal + ' text-grey-500 pl-4 dark:text-slate-400 dark:hover:text-slate-300 hover:text-primary hover:p-1.5 hover:pl-4'
+    const activeLink = normal + ' text-white bg-primary rounded-[4px] pl-4 dark:text-slate-300'
+
+    // const location = useLocation();
+    const router = useRouter()
+    const location = usePathname()
+
+    useEffect(() => {
+        if (width < 768) {
+            setShowSidebar(false)
+        } else {
+            setShowSidebar(true)
+        }
+    }, [width])
+
+    return (
+        <>
+            {showSidebar && width < 768 && <div className='absolute w-screen h-screen left-0 bg-neutral-50/5 z-20 cursor-pointer'
+                onClick={() => setShowSidebar(!showSidebar)}
+            ></div>}
+            <nav className="p-4 bg-[#F0F4F7] flex justify-between items-center md:px-16">
+                <Link
+                    href="/"
+                    className="hidden md:block"
+                >
+                    <Image
+                        src="/images/logo/text-logo.png"
+                        width={100}
+                        height={100}
+                        alt="logo"
+                    />
+                </Link>
+                <section className="md:hidden">
+                    {
+                        location !== '/school/claim' && (
+                            <AlignJustify className="w-6 h-6 cursor-pointer" onClick={() => setShowSidebar(true)} />)
+                    }
+                    <div className={`fixed top-0 left-0 h-screen bg-white w-[12rem] pt-4 z-30 transition-all duration-500 ease-in-out border-r border-r-gray-100 md:relative md:x-7 lg:w-[16rem] ${showSidebar || width >= 768 ? 'translate-x-0' : '-translate-x-full'} dark:bg-gray-800`}>
+                        <div className="flex justify-center border-b border-b-gray-100 pb-4">
+                            <Image
+                                src="/images/logo/text-logo.png"
+                                width={100}
+                                height={100}
+                                alt="logo"
+                            />
+                        </div>
+                        <div className="p-4 mt-5 flex flex-col">
+                            <div className="">
+                                {
+                                    DASHBOARD_NAVIGATION_DATA.map(({ id, title, url, icon }) => (
+                                        <Link
+                                            key={id}
+                                            href={url}
+                                            className={cn(`relative p-2.5 items-center gap-x-2`,
+                                                (location === url) ? activeLink : defaultLink
+                                            )}
+                                            onClick={() => {
+                                                setShowSidebar(!showSidebar)
+                                                router.push(url)
+                                            }}
+                                        >
+                                            <span className="flex items-center">{icon} <span className="pl-2">{title}</span> </span>
+                                        </Link>
+                                    ))
+                                }
+                            </div>
+                            <Button
+                                variant="ghost"
+                                className="h-8 mt-10 text-xs mr-auto hover:bg-transparent hover:text-destructive"
+                            ><LogOut className="w-4 h-4 mr-1" /> Sign Out</Button>
+                        </div>
+                    </div>
+                    {
+                        location === '/school/claim' && (
+                            <Image
+                                src="/images/logo/text-logo.png"
+                                width={100}
+                                height={100}
+                                alt="logo"
+                            />
+                        )
+                    }
+                </section>
+                {
+                    location !== '/school/claim' && (
+                        <div className="flex items-center justify-between gap-x-16">
+                            <div className="hidden md:flex md:justify-between md:items-center">
+                                {
+                                    DASHBOARD_NAVIGATION_DATA.map(({ id, title, url }) => (
+                                        <Link
+                                            key={id}
+                                            href={url}
+                                            className={cn(
+                                                "text-sm pb-1 ml-10 hover:text-primary",
+                                                location === url && 'text-primary border-b-2 border-b-primary'
+                                            )}
+                                        >
+                                            {title}
+                                        </Link>
+                                    ))
+                                }
+                            </div>
+
+                            <div className="flex gap-x-4">
+                                <Bell className="w-4 h-4 cursor-pointer" />
+                                <User className="w-4 h-4 cursor-pointer" />
+                            </div>
+                        </div>
+
+                    )}
+            </nav>
+        </>
+    )
+}

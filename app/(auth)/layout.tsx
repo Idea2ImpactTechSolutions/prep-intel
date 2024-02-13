@@ -1,5 +1,7 @@
 import Image from "next/image";
-import AuthFooter from "./_components/auth-footer";
+import Link from "next/link";
+import { ImageIcon } from "lucide-react";
+import AuthFooter from "./(routes)/_components/auth-footer";
 
 export default function AuthLayout({
   children,
@@ -27,7 +29,7 @@ export default function AuthLayout({
           </div>
         </aside>
         <aside className='hidden bg-accent border-l min-h-screen lg:grid place-content-center'>
-          <div>image</div>
+          <ImageIcon className='text-gray-300 w-[10rem] h-[10rem]' />
         </aside>
       </section>
     </main>
