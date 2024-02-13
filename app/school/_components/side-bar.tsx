@@ -41,7 +41,7 @@ export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
             ></div>}
             <nav className="p-4 bg-[#F0F4F7] flex justify-between items-center md:px-16">
                 <Link
-                    href="#"
+                    href="/"
                     className="hidden md:block"
                 >
                     <Image
