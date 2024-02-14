@@ -6,12 +6,11 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
 
-const links = `/manager/profile/academic-info
-/manager/profile/dashboard
-/manager/profile/recruits
-/manager/profile/school-profile
-/manager/profile/school-welcome
-/manager/profile/welcome
+// Collapse anonymous path steps
+const regex = /\([^)]+\)\//g; 
+
+const links = `/(auth)/(routes)/login
+/(auth)/(routes)/register
 /recruiter/connections
 /recruiter/dashboard
 /recruiter/profile/personal-info
@@ -19,7 +18,23 @@ const links = `/manager/profile/academic-info
 /recruiter/profile/territory
 /recruiter/profile/welcome
 /recruiter/student-profile
-/student/explore`.split('\n').map(p => p.trim())
+/school/(routes)/academic-info
+/school/(routes)/admin
+/school/(routes)/claim
+/school/(routes)/dashboard
+/school/(routes)/my-school
+/school/(routes)/recruits
+/school/(routes)/school-profile
+/school/(routes)/school-welcome
+/school/(routes)/welcome
+/school/_components/stepped-page.tsx
+/student/explore
+/student/explore-schools
+/student/onboarding/(routes)/extracurricular
+/student/onboarding/(routes)/majors
+/student/onboarding/(routes)/schools
+/student/onboarding/(routes)/transcripts
+/student/onboarding/(routes)/vitals`.split('\n').map(p => p.trim().replace(regex, ""))
 
 export default function Home() {
   const router = useRouter()
