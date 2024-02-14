@@ -182,7 +182,7 @@ export default function AcademicInfo() {
 
   const handleBack = () => {
     // Logic for Back button
-    router.push("/manager/profile/school-profile");
+    router.push("school-profile");
   };
 
   const handleSaveForLater = () => {

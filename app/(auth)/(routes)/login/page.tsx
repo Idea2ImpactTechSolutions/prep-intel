@@ -42,7 +42,7 @@ export default function LoginPage() {
   
           switch(data.role) {
             case 'admin':
-              router.push('/manager/profile/welcome');
+              router.push('/school/welcome');
               break;
             case 'recruiter':
               router.push('/recruiter/profile/welcome')
