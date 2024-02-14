@@ -1,38 +1,47 @@
 "use client";
-import React from "react";
-import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
-import { SchoolRecruits as recruits }  from "../../../ui/mock-data/Users"
+import { useState, useEffect } from "react";
+import { SchoolRecruits }  from "@/app/ui/mock-data/Users"
 import { IoMdEye } from "react-icons/io";
 import { FaEdit } from "react-icons/fa";
 import PageTitleContainer from "@/components/page-title";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function Page() {
+  const [filter, setFilter] = useState('');
+  const [recruits, setRecruits] = useState([]);
+
+  const onChangeHandler = (event) => {
+    setFilter(event.target.value);
+  };
+
+  useEffect(() => {
+    setRecruits(SchoolRecruits.filter(r => r['Full Name'].includes(filter)))
+  }, [filter]);
 
   return (
   	<section>
   	<PageTitleContainer title="Recruits" />
   	<hr className="border-t border-gray-300 my-4" />
-    <Formik>
+
      <section className="p-4 items-center justify-between md:px-16 md:mt-4">
-        <div className="w-full mt-5 flex">
+        <div className="w-full mt-5 flex items-end">
           <div className="w-[40%]">
-            <Field
-                name="school_email"
-                type="text"
-                placeholder="Search"
-                className="border-2 py-1 px-2 rounded-md w-full"
-            />
-            <ErrorMessage
-                name="school_email"
-                component="div"
-                className="text-red-500"
+          <Input
+            label="Filter"
+            labelClass="text-xs font-normal text-[#61646B]"
+            type="text"
+            className="w-full"
+            onChange={onChangeHandler}
             />
           </div>
           <div className="flex-grow"></div>
 
-          <button type="submit" className="flex items-center bg-primary hover:bg-primary-500 text-white font-bold py-3 px-4 rounded mr-1">
-              <div className="leading-none inline-block -mt-1">Filters</div>
-          </button>
+          <Button
+              className="text-xs bg-primary hover:bg-primary-500 text-white font-bold"
+            >Filter</Button>
+
+
 
         </div>
 
@@ -66,7 +75,6 @@ export default function Page() {
           </tbody>
         </table>
     </section>
-    </Formik>
     </section>
   );
 }
