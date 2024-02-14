@@ -1,21 +1,60 @@
-"use client"
-import EmptyStateContainer from "@/components/empty-state";
+"use client";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import PageTitleContainer from "@/components/page-title";
 
+export default function Page() {
+  const router = useRouter();
 
-export default function page() {
-    const router = useRouter();
-    return (
-        <section>
-            <>
-                <EmptyStateContainer
-                    show={true}
-                    pageTitle="My Dashboard"
-                    title="Welcome to the “Dashboard” Tab!"
-                    content="Welcome to your Dashboard! This is where you'll get a comprehensive, real-time overview of your school's recruitment activities, from application trends to enrollment metrics. To unlock the full potential of this dashboard and ensure prospective students get a holistic view of your institution, it's essential to create your school's profile. Begin crafting your school's story today and tap into a wealth of insights that this dashboard has to offer."
-                    onClick={() => router.push('/school/my-school')}
-                />
-            </>
+ const dashInfo = {
+    applicationCount: 13.299,
+    admissionsCount: 8339,
+    enrollmentCount: 5399,
+    admissionRate: 60.0,
+    pendingCount: 849,
+    growthRate: 5.7
+ }
+
+  return (
+    <section>
+        <PageTitleContainer title="My Dashboard" />
+        <hr className="border-t border-gray-300 my-4" />
+
+        <section className="p-4 flex items-center justify-between md:px-16 md:mt-4">
+        <div className="grid grid-cols-4 grid-rows-3 gap-4 w-full" style={{gridTemplateColumns: '1fr 1fr 1fr 2fr'}}>
+            <div className="bg-gray-100 p-4 rounded">
+                <label className="font-bold">Total Applications</label>
+                <h2>{ dashInfo.applicationCount }</h2>
+            </div>
+            <div className="bg-gray-100 p-4 rounded">
+                <label className="font-bold">Total Admissions</label>
+                <h2>{ dashInfo.admissionsCount}</h2>
+            </div>
+            <div className="bg-gray-100 p-4 rounded">
+                <label className="font-bold">Total Enrollments</label>
+                <h2>{ dashInfo.enrollmentCount}</h2>
+            </div>
+            <div className="row-span-2 bg-gray-100 p-4 rounded">
+                <label className="font-bold">Student Interest</label>
+                <img src="/images/us-map.svg" alt="US Map" />
+            </div>
+            <div className="bg-gray-100 p-4 rounded">
+                <label className="font-bold">Admission Rate</label>
+                <h2>{ dashInfo.admissionRate }%</h2>
+            </div>
+            <div className="bg-gray-100 p-4 rounded">
+                <label className="font-bold">Pending Applications</label>
+                <h2>{ dashInfo.pendingCount }</h2>
+            </div>
+            <div className="bg-gray-100 p-4 rounded">
+                <label className="font-bold">Application Growth Rate</label>
+                <h2>{ dashInfo.growthRate }%</h2>
+                </div>
+            <div className="bg-gray-100 p-4 rounded col-span-4">
+                <label className="font-bold">Student Funnel</label>
+            </div>
+        </div>
         </section>
-    )
+    </section>
+  );
 }

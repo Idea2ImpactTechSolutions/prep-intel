@@ -20,11 +20,12 @@ export default function Page() {
   };
 
   let isSubmitting = false;
+
   return (
     <Formik
       onSubmit={handleSubmit}
     >
-    <div className="flex flex-col items-center justify-center rows bg-gray-100 p-6 mt-40 self-center rounded-md w-[500px] center">
+    <div className="flex flex-col items-center mx-auto justify-center rows bg-gray-100 p-6 mt-40 self-center rounded-md w-[500px] center">
         <Image
             src="/images/logo/text-logo.png"
             className="mb-4 mt-1"
@@ -66,7 +67,7 @@ export default function Page() {
           type="submit"
           className="flex items-center bg-primary hover:bg-primary-500 text-white font-bold py-3 mt-5 px-4 rounded mr-1"
           disabled={isSubmitting}
-          onClick={() => router.push("/manager/profile/school-welcome")}
+          onClick={() => router.push("/school/school-welcome")}
           >
             <div className="leading-none inline-block -mt-1">Claim My Account</div>
         </button>

@@ -1,20 +1,72 @@
-"use client"
-import EmptyStateContainer from '@/components/empty-state'
-import { useRouter } from 'next/navigation'
+"use client";
+import React from "react";
+import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
+import { SchoolRecruits as recruits }  from "../../../ui/mock-data/Users"
+import { IoMdEye } from "react-icons/io";
+import { FaEdit } from "react-icons/fa";
+import PageTitleContainer from "@/components/page-title";
 
-export default function page() {
-    const router = useRouter()
-    return (
-        <section>
-            <>
-                <EmptyStateContainer    
-                    show
-                    pageTitle='Recruits'
-                    title="Welcome to the “Recruits” Tab!"
-                    content="Welcome to the Recruits tab! This is your go-to place for tracking, managing, and communicating with prospective students who express interest in your institution. A well-constructed school profile not only enriches their understanding of your college or university but also enhances your recruiting efficiency. Set up your school's profile now and make the most out of this recruits system."
-                    onClick={() => router.push('/school/my-school')}
-                />
-            </>
-        </section>
-    )
+export default function Page() {
+
+  return (
+  	<section>
+  	<PageTitleContainer title="Recruits" />
+  	<hr className="border-t border-gray-300 my-4" />
+    <Formik>
+     <section className="p-4 items-center justify-between md:px-16 md:mt-4">
+        <div className="w-full mt-5 flex">
+          <div className="w-[40%]">
+            <Field
+                name="school_email"
+                type="text"
+                placeholder="Search"
+                className="border-2 py-1 px-2 rounded-md w-full"
+            />
+            <ErrorMessage
+                name="school_email"
+                component="div"
+                className="text-red-500"
+            />
+          </div>
+          <div className="flex-grow"></div>
+
+          <button type="submit" className="flex items-center bg-primary hover:bg-primary-500 text-white font-bold py-3 px-4 rounded mr-1">
+              <div className="leading-none inline-block -mt-1">Filters</div>
+          </button>
+
+        </div>
+
+        <table class="table-auto">
+          <thead>
+            <tr>
+              <th>Full Name</th>
+              <th>Application Status</th>
+              <th>Recruitment Source</th>
+              <th>Application Date</th>
+              <th>Recruiter Name</th>
+              <th>Program of Interest</th>
+              <th>Email Address</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+          {
+            recruits.map(user => (
+              <tr>
+                <td>{user['Full Name']}</td>
+                <td>{user['Application Status']}</td>
+                <td>{user['Recruitment Source']}</td>
+                <td>{user['Application Date']}</td>
+                <td>{user['Recruiter Name']}</td>
+                <td>{user['Program of Interest']}</td>
+                <td>{user['Email Address']}</td>
+                <td ><div className="flex "><IoMdEye className="mr-4" /> <FaEdit /></div></td>
+              </tr>))
+          }
+          </tbody>
+        </table>
+    </section>
+    </Formik>
+    </section>
+  );
 }

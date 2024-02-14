@@ -174,7 +174,7 @@ export default function () {
       } else {
         throw new Error(`Error: ${response.status}`);
       }
-      router.push("/manager/profile/academic-info");
+      router.push("academic-info");
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {
