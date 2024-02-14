@@ -16,7 +16,8 @@ export default function Page() {
   };
 
   useEffect(() => {
-    setRecruits(SchoolRecruits.filter(r => r['Full Name'].includes(filter)))
+    const lowerFilter= filter.toLowerCase();
+    setRecruits(SchoolRecruits.filter(r => r['Full Name'].toLowerCase().includes(lowerFilter)))
   }, [filter]);
 
   return (
@@ -45,7 +46,7 @@ export default function Page() {
 
         </div>
 
-        <table class="table-auto">
+        <table className="table-auto">
           <thead>
             <tr>
               <th>Full Name</th>
@@ -60,8 +61,8 @@ export default function Page() {
           </thead>
           <tbody>
           {
-            recruits.map(user => (
-              <tr>
+            recruits.map((user, index) => (
+              <tr key={index}>
                 <td>{user['Full Name']}</td>
                 <td>{user['Application Status']}</td>
                 <td>{user['Recruitment Source']}</td>

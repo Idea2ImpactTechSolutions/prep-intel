@@ -1,43 +1,34 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
 
-// Collapse anonymous path steps
-const regex = /\([^)]+\)\//g; 
 
-const links = `/(auth)/(routes)/login
-/(auth)/(routes)/register
-/recruiter/connections
-/recruiter/dashboard
-/recruiter/profile/personal-info
-/recruiter/profile/setup
-/recruiter/profile/territory
-/recruiter/profile/welcome
-/recruiter/student-profile
-/school/(routes)/academic-info
-/school/(routes)/admin
-/school/(routes)/claim
-/school/(routes)/dashboard
-/school/(routes)/my-school
-/school/(routes)/recruits
-/school/(routes)/school-profile
-/school/(routes)/school-welcome
-/school/(routes)/welcome
-/school/_components/stepped-page.tsx
-/student/explore
-/student/explore-schools
-/student/onboarding/(routes)/extracurricular
-/student/onboarding/(routes)/majors
-/student/onboarding/(routes)/schools
-/student/onboarding/(routes)/transcripts
-/student/onboarding/(routes)/vitals`.split('\n').map(p => p.trim().replace(regex, ""))
+//const links = `.replace(regex, ""))
 
 export default function Home() {
-  const router = useRouter()
+  const router = useRouter();
+  const [links, setLinks] = useState([]);
+
+  useEffect(() => {
+    //call api
+    fetch('/api/pagelist', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((r) => {
+        return r.json();
+      })
+      .then(data => {
+        setLinks(data);
+      });
+  }, []);
 
   return (
     <main className='flex min-h-screen flex-col items-center justify-between p-24 font-sans'>
