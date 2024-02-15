@@ -16,7 +16,7 @@ export default function LoginPage() {
     const form = document.querySelector("form");
     const email = form.elements['email'].value;
     const password = form.elements['password'].value;
-  
+
     //call api
     fetch('/api/login', {
       method: 'POST',
@@ -37,10 +37,10 @@ export default function LoginPage() {
         }
         if (data && data.token) {
           //set cookie
-          cookie.set('token', data.token, {expires: 2});
-          cookie.set('role', data.role, {expires: 2});
-  
-          switch(data.role) {
+          cookie.set('token', data.token, { expires: 2 });
+          cookie.set('role', data.role, { expires: 2 });
+
+          switch (data.role) {
             case 'admin':
               router.push('/school/welcome');
               break;
@@ -54,7 +54,7 @@ export default function LoginPage() {
         }
       });
   }
-  
+
   return (
     <div>
       <div className=''>

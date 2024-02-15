@@ -4,6 +4,7 @@ const SchoolDepartment = require("./SchoolDepartment");
 const SchoolAccreditation = require("./SchoolAccreditation");
 const SchoolResearchProgram = require("./SchoolResearchProgram");
 const SchoolContact = require("./SchoolContact");
+const Managers = require("./Managers");
 const SchoolAddress = require("./SchoolAddress");
 const SchoolSocialMedia = require("./SchoolSocialMedia");
 const ICDirectory = require("./ICDirectory");
@@ -15,6 +16,7 @@ const models = {
   SchoolResearchProgram,
   SchoolContact,
   SchoolAddress,
+  Managers,
   SchoolSocialMedia,
   ICDirectory
 };

@@ -22,6 +22,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "pages/api/auth.js", "app/models/Managers.js", "pages/api/admin/create-manager.ts", "app/models/sequelize.ts", "pages/api/manager/profile/academic-info.js"],
   "exclude": ["node_modules"]
 }
