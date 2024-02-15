@@ -9,7 +9,7 @@ export default async function AuthHandler(
   res: NextApiResponse
 ) {
   try {
-    const { school_name, email } = req.body;
+    const { school_name, email, first_name, last_name } = req.body;
 
     let school = await School.findOne({
       where: {
@@ -57,6 +57,8 @@ export default async function AuthHandler(
       email: email,
       auth_code: v4(),
       account_claimed: false,
+      first_name: first_name,
+      last_name: last_name,
       school_id: schoolId,
       auth_code_expiration: newDate,
     });
