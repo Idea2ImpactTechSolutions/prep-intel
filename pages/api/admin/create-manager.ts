@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { models } from "../../../app/models";
 const { Managers, School } = models;
-import { generateClientId, sendSuccess } from "@/app/config/helpers";
+import { sendSuccess } from "../../../app/config/helpers";
 import { v4 } from "uuid";
 
 export default async function AuthHandler(
@@ -40,6 +40,7 @@ export default async function AuthHandler(
           )
         );
     }
+
     // Create a new Date object representing the current date and time
     const currentDate = new Date();
     // Add 30 minutes to the current date

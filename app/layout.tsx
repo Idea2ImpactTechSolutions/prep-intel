@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Barlow_Semi_Condensed } from "next/font/google";
 import "./globals.css";
 import { Toaster } from 'sonner';
+import AppProvider from "@/components/provider";
 
 const inter = Inter({ subsets: ["latin"] });
 const barlow = Barlow_Semi_Condensed({ subsets: ["latin"], weight: "400" });
@@ -19,8 +20,10 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={`${inter.className} ${barlow.className}`}>
-        {children}
-        <Toaster position="top-right" richColors/>
+        <AppProvider>
+          {children}
+        </AppProvider>
+        <Toaster position="top-right" richColors closeButton/>
       </body>
     </html>
   );
