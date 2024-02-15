@@ -20,7 +20,7 @@ export default async function AuthHandler(
 
     if (!managerChecker) {
       return res
-        .status(409)
+        .status(404)
         .json(
           sendSuccess("no manager with email and auth code found", 409, [])
         );

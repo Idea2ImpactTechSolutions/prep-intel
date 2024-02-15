@@ -5,7 +5,6 @@ export default function AuthHandler(req: NextApiRequest, res: NextApiResponse) {
   try {
     if (req.method === "POST") {
       const { email, password } = req.body;
-      console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
 
       // simple auth
       // if (users.includes(email) && password === "dbpass") {
