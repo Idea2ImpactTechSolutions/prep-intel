@@ -10,6 +10,7 @@ import { useFormik } from "formik";
 import * as yup from "yup"
 import { useLoginMutation } from "@/redux/services/auth/authApi";
 import { useAppSelector } from "@/redux/store";
+import { Dictionary } from "@/types/dictionary";
 
 interface initialValues {
   email: string;
@@ -41,19 +42,9 @@ export default function LoginPage() {
   const handleLogin = async (values: initialValues) => {
     login(values)
       .unwrap()
-      .then((payload) => {
+      .then((payload: Dictionary) => {
         if (payload && payload.token) {
-          switch (payload.role) {
-            case 'admin':
-              router.push('/school/welcome');
-              break;
-            case 'recruiter':
-              router.push('/recruiter/profile/welcome')
-              break;
-            case 'student':
-              router.push('/student/explore')
-              break;
-          }
+          handleRedirect(payload.role)
         }
       })
   }
@@ -78,49 +69,6 @@ export default function LoginPage() {
     }
   },[])
 
-  // function handleLogin(e) {
-  //   e.preventDefault();
-  //   const form = document.querySelector("form");
-  //   const email = form.elements['email'].value;
-  //   const password = form.elements['password'].value;
-
-  //   //call api
-  //   fetch('/api/login', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       email,
-  //       password,
-  //     }),
-  //   })
-  //     .then((r) => {
-  //       return r.json();
-  //     })
-  //     .then((data) => {
-  //       if (data && data.error) {
-  //         //setLoginError(data.message);
-  //       }
-  //       if (data && data.token) {
-  //         //set cookie
-  //         cookie.set('token', data.token, {expires: 2});
-  //         cookie.set('role', data.role, {expires: 2});
-
-  //         switch(data.role) {
-  //           case 'admin':
-  //             router.push('/school/welcome');
-  //             break;
-  //           case 'recruiter':
-  //             router.push('/recruiter/profile/welcome')
-  //             break;
-  //           case 'student':
-  //             router.push('/student/explore')
-  //             break;
-  //         }
-  //       }
-  //     });
-  // }
   return (
     <div>
       <div className=''>
