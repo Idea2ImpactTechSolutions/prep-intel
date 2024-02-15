@@ -20,7 +20,7 @@ interface initialValues {
 export default function LoginPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const { user }: {user: any} = useAppSelector((state) => state.auth)
+  const { user }: { user: any } = useAppSelector((state) => state.auth)
 
   const [login, { isLoading, isSuccess }] = useLoginMutation()
 
@@ -67,7 +67,7 @@ export default function LoginPage() {
     if (token && user?.token) {
       handleRedirect(user.role)
     }
-  },[])
+  }, [])
 
   return (
     <div>

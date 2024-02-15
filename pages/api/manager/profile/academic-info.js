@@ -1,4 +1,3 @@
-// pages/api/manager/profile/academic-info.js
 const { models } = require("../../../../app/models");
 const { School, SchoolDepartment, SchoolAccreditation, SchoolResearchProgram } =
   models;
