@@ -46,7 +46,7 @@ const validationSchema = Yup.object().shape({
   ),
 });
 
-export default function () {
+export default function Page () {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const school_id = "b14e03a9-656a-4726-9d38-6f09c912a543";
@@ -227,11 +227,12 @@ export default function () {
                         />
                       </svg>
                     </div>
+                    <label>
                     <input
                       id="school_details.school_logo"
                       type="file"
                       className="hidden"
-                    />
+                    /></label>
                   </label>
                 </div>
               </div>
