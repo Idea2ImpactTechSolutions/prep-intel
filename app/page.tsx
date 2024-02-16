@@ -7,9 +7,6 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
 
-
-//const links = `.replace(regex, ""))
-
 export default function Home() {
   const router = useRouter();
   const [links, setLinks] = useState([]);
@@ -54,18 +51,12 @@ export default function Home() {
 
       <div className="flex flex-wrap gap-4 justify-center">
         <Button
-          onClick={() => router.push('/login')}
+          onClick={() => router.push('/student/onboarding/vitals')}
           type="button"
           variant="outline"
         >Student Portal</Button>
         <Button
-          onClick={() => {
-            new Promise((resolve) => {
-              setTimeout(() => {
-                toast.info("Coming soon!");
-              },100)
-            })
-          }}
+          onClick={() => router.push('/recruiter/profile/welcome')}
           type="button"
           variant="outline"
         >Recruiter Portal</Button>
