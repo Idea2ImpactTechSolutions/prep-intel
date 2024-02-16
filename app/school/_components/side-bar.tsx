@@ -1,4 +1,5 @@
 "use client"
+import CustomProfilePopover from "@/components/custom-profile-popover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { DASHBOARD_NAVIGATION_DATA } from "@/utils/data";
@@ -7,7 +8,7 @@ import { AlignJustify, Bell, GraduationCap, LayoutGrid, LogOut, Menu, User, User
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface SidebarProps {
     showSidebar: any;
@@ -16,6 +17,8 @@ interface SidebarProps {
 
 
 export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
+    const [showProfilePopover, setShowProfilePopover] = useState(false)
+
     const { width } = useWindowSize()
 
     const normal = 'relative p-1.5 mb-2 block flex items-center gap-x-2 text-sm'
@@ -124,7 +127,11 @@ export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
 
                             <div className="flex gap-x-4">
                                 <Bell className="w-4 h-4 cursor-pointer" />
-                                <User className="w-4 h-4 cursor-pointer" />
+                                <User className="w-4 h-4 cursor-pointer" onClick={() => setShowProfilePopover(!showProfilePopover)}/>
+                                <CustomProfilePopover 
+                                    show={showProfilePopover}
+                                    handleClose={() => setShowProfilePopover(false)}
+                                />
                             </div>
                         </div>
 
