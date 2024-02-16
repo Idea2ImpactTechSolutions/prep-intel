@@ -18,13 +18,11 @@ export default function BasicInformationForm() {
                 <div className="flex gap-x-8">
                   <div>
                     <label htmlFor="logo" className="text-sm font-bold">Upload Your Logo</label>
-                    <CustomFileInput
-                      children={
+                    <CustomFileInput>
                         <div className="border border-dashed border-gray-400 w-32 h-32 grid place-content-center rounded-[5px]">
                           <ImagePlus className="w-10 h-10 text-gray-400" />
                         </div>
-                      }
-                    />
+                    </CustomFileInput>
                   </div>
                   <div className="flex-1">
                     <label htmlFor="school_details" className="text-sm font-bold">School Details</label>

@@ -26,7 +26,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                         />
                     </Link>
                     <div className=" flex flex-grow-1"></div>
-                    {pathname.includes('/profile/') ? <div className="flex mt-4 md:mt-0 px-6"></div> : <div className="flex mt-4 md:mt-0 px-6">
+                    {pathname?.includes('/profile/') ? <div className="flex mt-4 md:mt-0 px-6"></div> : <div className="flex mt-4 md:mt-0 px-6">
                       <RecruiterTabs />
                       <IoPersonCircle size="1.5em" className="mx-4 w-8" />
                       <FaBell  size="1.2em" className="w-4 mt-[2px]" />

@@ -59,33 +59,63 @@ const options = [
 
 export default function Page() {
   const router = useRouter();
-  const bubbleElement = useRef(null);
-  const svgElement = useRef(null);
+  const bubbleElement = useRef<HTMLDivElement>(null);
+  const objectRef = useRef<HTMLObjectElement | null>(null);
+  const svgRef = useRef<SVGSVGElement | null>(null);
   const hoveredLocation = useRef(null);
-  const [activeSelection, setActiveSelection] = useState([]);
+  const [activeSelection, setActiveSelection] = useState<any[]>([]);
   const svgOffset = useRef([0, 0]);
 
   useEffect(() => {
+    if (objectRef.current) {
+      var rect = objectRef.current.getBoundingClientRect();
+      svgOffset.current = [rect.left, rect.top];
 
-    var rect = document.querySelectorAll('object')[0].getBoundingClientRect();
-    svgOffset.current = [rect.left, rect.top];
+        const setObjectSVGRef = () => {
+          if (objectRef.current) {
+              const svgDocument = objectRef.current.contentDocument;
+              if (svgDocument) {
+                // @ts-ignore
+                const svgElement = svgDocument.documentElement as SVGSVGElement;
+                svgElement.onclick = mapClick;
+                svgElement.onmousemove = mouseMove;
 
-    // Select the child svg and assign events and store a reference in svgElement
-    const svg = document.querySelectorAll('object')[0].contentDocument;
-    svg.onclick = mapClick;
-    svg.onmousemove = mouseMove;
-    svgElement.current = svg;
-  });
+                svgRef.current = svgElement;
+                console.log('SVG Element:', svgRef.current);
+              }
+          }
+      };
+
+      if (objectRef.current) {
+          // Check if SVG is already loaded
+          if (objectRef.current.contentDocument) {
+              setObjectSVGRef();
+          } else {
+              // Attach load event listener
+              objectRef.current.addEventListener('load', setObjectSVGRef);
+          }
+      }
+
+      return () => {
+          // Cleanup: Remove event listeners
+          if (objectRef.current) {
+              objectRef.current.removeEventListener('load', setObjectSVGRef);
+              objectRef.current.onclick = null;
+              objectRef.current.onmousemove = null;
+          }
+      };
+    }
+  }, []);
 
   // useEffect hook
   useEffect(() => {
-    if (activeSelection) {
+    if (activeSelection && svgRef?.current) {
       // Clear active states
-      svgElement.current.querySelector('.active')?.classList.remove('active');
+      svgRef.current.querySelector('.active')?.classList.remove('active');
 
       // Set current selection to .active
       activeSelection.forEach(option => {
-        svgElement.current.getElementById(option.value).classList.add('active');
+        svgRef.current?.getElementById(option.value).classList.add('active');
       })
     }
   }, [activeSelection]);
@@ -94,13 +124,16 @@ export default function Page() {
     if (e.target.tagName == 'path') {
       const stateID = e.target.dataset.id;
       const existingSelection = activeSelection.findIndex(opt => opt.value === stateID);
-
+      debugger;
       if (existingSelection > -1) {
         activeSelection.splice(existingSelection, 1);
-        setActiveSelection(activeSelection.filter(opt => opt.value !== stateID));
+
+        let items = [...activeSelection];
+        setActiveSelection(items);
       } else {
         const listOption = options.find(opt => opt.value === stateID);
-        setActiveSelection([...activeSelection, listOption]);
+        let items = [...activeSelection, listOption];
+        setActiveSelection(items);
       }
     }
   }
@@ -132,9 +165,8 @@ export default function Page() {
   return (
     <div className="container p-0 mt-6">
       <h1 className="text-2xl font-bold mb-4">Select the states you would like to explore</h1>
-
-      <object ref={svgElement} type="image/svg+xml" data="/images/us-map.svg">Your browser does not support SVG</object>
-
+      [{activeSelection.length}]
+      <object ref={objectRef} type="image/svg+xml" data="/images/us-map.svg">Your browser does not support SVG</object>
       <div id="details-box" ref={bubbleElement}></div>
 
       <h2>Select State</h2>
@@ -144,7 +176,6 @@ export default function Page() {
         options={options}
         isMulti
         value={activeSelection}
-        onChange={setActiveSelection}
         className="w-[400px]" />
       <div className="flex-grow"></div>
 
