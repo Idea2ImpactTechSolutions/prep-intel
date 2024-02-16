@@ -27,11 +27,12 @@ export default function CampusInformation() {
                   CAMPUS_AMENITIES.map(({ id, name, isChecked }) => (
                     <div
                       id={id}
+                      key={id}
                       className="mt-4 flex flex-col gap-y-1">
                       <CustomCheckbox
                         label={name}
                         labelClass="text-xs font-normal text-[#61646B]"
-                        key={2}
+                        key={id}
                       />
                     </div>
                   ))
@@ -42,15 +43,14 @@ export default function CampusInformation() {
               <label htmlFor="school_details" className="text-sm font-bold block mb-2">Upload Campus Images (0/8)</label>
               <div className="grid grid-cols-3 gap-4 md:grid-cols-6 md:gap-x-8 md:gap-y-5">
                 {
-                  Array.from(({ length: 8 }), function () {
+                  Array.from(({ length: 8 }), function (index) {
                     return (
-                      <CustomFileInput
-                        children={
+                      // @ts-ignore
+                      <CustomFileInput key={Date.now}>
                           <div className="border border-dashed border-gray-400 h-32 grid place-content-center rounded-[5px]">
                             <ImagePlus className="w-10 h-10 text-gray-400" />
                           </div>
-                        }
-                      />
+                      </CustomFileInput>
                     )
                   })
                 }

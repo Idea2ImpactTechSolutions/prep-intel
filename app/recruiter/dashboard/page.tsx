@@ -13,7 +13,7 @@ export default function Page() {
         <h1 className="text-xl font-bold mb-4">Welcome, {recruiter.name} </h1>
         <h2 className="">Here are students that match your profile</h2>
 
-        <table class="table-auto">
+        <table className="table-auto">
           <thead>
             <tr>
               <th>Match</th>
@@ -30,8 +30,8 @@ export default function Page() {
           </thead>
           <tbody>
           {
-            users.map(user => (
-              <tr>
+            users.map((user, index) => (
+              <tr key={index}>
                 <td>{user.Match}</td>
                 <td>{user.ACT}</td>
                 <td>{user.GPA}</td>

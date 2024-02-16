@@ -20,7 +20,7 @@ export function CompletionPanel({ title, className, titleClass, percentCompleted
             <div className="ml-5" style={{ width: 35, height: 35 }}>
                 <CircularProgressbar
                     text={title}
-                    strokeWidth="14"
+                    strokeWidth={14}
                     value={percentCompleted}
                     styles={ buildStyles({
                         pathColor: `${primaryColor}`,

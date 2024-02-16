@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Page() {
   const [filter, setFilter] = useState('');
-  const [recruits, setRecruits] = useState([]);
+  const [recruits, setRecruits] = useState<any[]>([]);
 
   const onChangeHandler = (event) => {
     setFilter(event.target.value);

@@ -19,9 +19,7 @@ const SERVICES = [
     },
 ]
 
-
-
-export default function page() {
+export default function Page() {
     const router = useRouter()
 
     return (

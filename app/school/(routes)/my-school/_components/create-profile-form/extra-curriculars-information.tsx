@@ -19,11 +19,11 @@ export default function ExtraCurricularsForm() {
                   EXTRA_CURRICULARS.ACADEMIC_PROFESSIONAL.map(({ id, name, isChecked }) => (
                     <div
                       id={id}
+                      key={id}
                       className="mt-4 flex flex-col gap-y-1">
                       <CustomCheckbox
                         label={name}
                         labelClass="text-xs font-normal text-[#61646B]"
-                        key={2}
                       />
                     </div>
                   ))
@@ -37,6 +37,7 @@ export default function ExtraCurricularsForm() {
                   EXTRA_CURRICULARS.ARTS_PERFOMANCE.map(({ id, name, isChecked }) => (
                     <div
                       id={id}
+                      key={id}
                       className="mt-4 flex flex-col gap-y-1">
                       <CustomCheckbox
                         label={name}
@@ -55,6 +56,7 @@ export default function ExtraCurricularsForm() {
                   EXTRA_CURRICULARS.ATHLETICS_PHYSICAL_ACTIVITIES.map(({ id, name, isChecked }) => (
                     <div
                       id={id}
+                      key={id}
                       className="mt-4 flex flex-col gap-y-1">
                       <CustomCheckbox
                         label={name}
@@ -73,6 +75,7 @@ export default function ExtraCurricularsForm() {
                   EXTRA_CURRICULARS.SOCIAL_CULTURAL.map(({ id, name, isChecked }) => (
                     <div
                       id={id}
+                      key={id}
                       className="mt-4 flex flex-col gap-y-1">
                       <CustomCheckbox
                         label={name}
@@ -91,6 +94,7 @@ export default function ExtraCurricularsForm() {
                   EXTRA_CURRICULARS.SERVICE_COMMUNITY.map(({ id, name, isChecked }) => (
                     <div
                       id={id}
+                      key={id}
                       className="mt-4 flex flex-col gap-y-1">
                       <CustomCheckbox
                         label={name}
@@ -109,6 +113,7 @@ export default function ExtraCurricularsForm() {
                   EXTRA_CURRICULARS.SPECIAL_INTEREST_HOBBIES.map(({ id, name, isChecked }) => (
                     <div
                       id={id}
+                      key={id}
                       className="mt-4 flex flex-col gap-y-1">
                       <CustomCheckbox
                         label={name}
@@ -127,6 +132,7 @@ export default function ExtraCurricularsForm() {
                   EXTRA_CURRICULARS.RELIGIOUS_FAITH_BASED.map(({ id, name, isChecked }) => (
                     <div
                       id={id}
+                      key={id}
                       className="mt-4 flex flex-col gap-y-1">
                       <CustomCheckbox
                         label={name}
@@ -145,6 +151,7 @@ export default function ExtraCurricularsForm() {
                   EXTRA_CURRICULARS.LEADERSHIP_ADVOCACY.map(({ id, name, isChecked }) => (
                     <div
                       id={id}
+                      key={id}
                       className="mt-4 flex flex-col gap-y-1">
                       <CustomCheckbox
                         label={name}
@@ -163,6 +170,7 @@ export default function ExtraCurricularsForm() {
                   EXTRA_CURRICULARS.TECHNOLOGY_DIGITAL_MEDIA.map(({ id, name, isChecked }) => (
                     <div
                       id={id}
+                      key={id}
                       className="mt-4 flex flex-col gap-y-1">
                       <CustomCheckbox
                         label={name}
