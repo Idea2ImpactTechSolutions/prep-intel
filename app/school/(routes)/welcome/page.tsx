@@ -1,30 +1,13 @@
 "use client";
 import React, { useEffect } from "react";
-import { Formik, Field, ErrorMessage } from "formik";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { Input } from "@/components/ui/input";
 
 export default function Page() {
   const router = useRouter();
-
-  useEffect(() => {});
-
-  const handleSubmit = async (values, { setSubmitting }) => {
-    setSubmitting(true);
-    try {
-      // Placeholder
-      setSubmitting(false);
-    }
-    catch {
-    }
-  };
-
   let isSubmitting = false;
-
   return (
-    <Formik
-      onSubmit={handleSubmit}
-    >
     <div className="flex flex-col items-center mx-auto justify-center rows bg-gray-100 p-6 mt-40 self-center rounded-md w-[500px] center">
         <Image
             src="/images/logo/text-logo.png"
@@ -44,22 +27,10 @@ export default function Page() {
         </ul>
 
         <div className="w-full mt-5">
-            <label
-                htmlFor="school_email"
-                className="p-1 block text-sm font-medium text-gray-700"
-            >
-                School Email Address
-            </label>
-            <Field
-                name="school_email"
-                type="text"
-                placeholder="School State"
-                className="border-2 w-full p-2 rounded-md"
-            />
-            <ErrorMessage
-                name="school_email"
-                component="div"
-                className="text-red-500"
+            <Input
+                label="School Email Address"
+                placeholder="Enter email address"
+                className="w-full placeholder:text-gray-300 placeholder:font-light"
             />
         </div>
 
@@ -72,6 +43,5 @@ export default function Page() {
             <div className="leading-none inline-block -mt-1">Claim My Account</div>
         </button>
     </div>
-    </Formik>
   );
 }

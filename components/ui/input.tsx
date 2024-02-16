@@ -7,11 +7,11 @@ export interface InputProps
     label?: string,
     labelClass?: string,
     isRequired?: boolean,
-    id: string,
-    name: string,
+    id?: string,
+    name?: string,
     value?: string,
     handleBlur?: (event: any) => void,
-    onChange: (event: any) => void,
+    onChange?: (event: any) => void,
     touched?: any,
     error?: any
   }
