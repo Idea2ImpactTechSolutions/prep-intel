@@ -10,6 +10,24 @@ export default function SchoolAdminRegisterPage() {
             <p className="py-3 text-sm">Please fill the form below to get started creating your school profile. </p>
             <div className="mt-4">
                 <form>
+                    <div className="flex gap-3">
+                        <div>
+                            <Input
+                                id=""
+                                name=""
+                                onChange={() => null}
+                                placeholder="Enter First Name"
+                            />
+                        </div>
+                        <div>
+                        <Input
+                            id=""
+                            name=""
+                            onChange={() => null}
+                            placeholder="Enter Last Name"
+                        />
+                    </div>
+                    </div>
                     <div>
                         <Input
                             id=""
