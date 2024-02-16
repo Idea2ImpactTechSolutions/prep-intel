@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-let cachedFiles: String[] | null = null;
+let cachedFiles: string[] | null = null;
 
 export default async function Handler(
   req: NextApiRequest,
@@ -12,7 +12,7 @@ export default async function Handler(
   // Collapse anonymous nextjs route/path steps
   const hiddenStep = /\([^)]+\)\//g;
 
-  async function findFiles(dir: String, fileList:String[] = []) {
+  async function findFiles(dir: string, fileList:string[] = []) {
     const files = await fs.readdir(dir, { withFileTypes: true });
     for (const file of files) {
       const filePath = path.join(dir, file.name);

@@ -124,7 +124,6 @@ export default function Page() {
     if (e.target.tagName == 'path') {
       const stateID = e.target.dataset.id;
       const existingSelection = activeSelection.findIndex(opt => opt.value === stateID);
-      debugger;
       if (existingSelection > -1) {
         activeSelection.splice(existingSelection, 1);
 
@@ -165,7 +164,6 @@ export default function Page() {
   return (
     <div className="container p-0 mt-6">
       <h1 className="text-2xl font-bold mb-4">Select the states you would like to explore</h1>
-      [{activeSelection.length}]
       <object ref={objectRef} type="image/svg+xml" data="/images/us-map.svg">Your browser does not support SVG</object>
       <div id="details-box" ref={bubbleElement}></div>
 
