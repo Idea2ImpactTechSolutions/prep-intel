@@ -1,13 +1,17 @@
 "use client"
+import CustomProfilePopover from "@/components/custom-profile-popover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { reset } from "@/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/redux/store";
 import { DASHBOARD_NAVIGATION_DATA } from "@/utils/data";
 import useWindowSize from "@/utils/hooks/useWindowSize";
 import { AlignJustify, Bell, GraduationCap, LayoutGrid, LogOut, Menu, User, UserPlus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Cookies from 'js-cookie';
 
 interface SidebarProps {
     showSidebar: any;
@@ -16,6 +20,8 @@ interface SidebarProps {
 
 
 export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
+    const [showProfilePopover, setShowProfilePopover] = useState(false)
+
     const { width } = useWindowSize()
 
     const normal = 'relative p-1.5 mb-2 block flex items-center gap-x-2 text-sm'
@@ -25,6 +31,14 @@ export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
     // const location = useLocation();
     const router = useRouter()
     const location = usePathname()
+
+    const dispatch = useAppDispatch()
+
+    const handleLogout = () => {
+        Cookies.remove("token");
+        dispatch(reset());
+        window.location.href = "/login";
+    }
 
     useEffect(() => {
         if (width < 768) {
@@ -88,6 +102,7 @@ export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
                             <Button
                                 variant="ghost"
                                 className="h-8 mt-10 text-xs mr-auto hover:bg-transparent hover:text-destructive"
+                                onClick={handleLogout}
                             ><LogOut className="w-4 h-4 mr-1" /> Sign Out</Button>
                         </div>
                     </div>
@@ -124,7 +139,11 @@ export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
 
                             <div className="flex gap-x-4">
                                 <Bell className="w-4 h-4 cursor-pointer" />
-                                <User className="w-4 h-4 cursor-pointer" />
+                                <User className="w-4 h-4 cursor-pointer" onClick={() => setShowProfilePopover(!showProfilePopover)}/>
+                                <CustomProfilePopover 
+                                    show={showProfilePopover}
+                                    handleClose={() => setShowProfilePopover(false)}
+                                />
                             </div>
                         </div>
 
