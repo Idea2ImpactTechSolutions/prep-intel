@@ -1,9 +1,9 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("./sequelize");
+const elephantsql = require("./ElephantSQL");
 
 // Datsource: https://nces.ed.gov/ipeds/datacenter/DataFiles.aspx
 // HD2021 = "Institutional Characteristics ->	Directory information"
-const ICDirectory = sequelize.define(
+const ICDirectory = elephantsql.define(
   "hd_2021",
   {
     // Define model attributes
