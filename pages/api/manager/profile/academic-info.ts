@@ -112,8 +112,8 @@ export default async function handler(req, res) {
   } catch (error) {
     // Handle any errors
     console.log("error", error);
-    res
+    return res
       .status(400)
-      .json(sendSuccess("error occurred", 400, [{ school: error.message }]));
+      .json(sendSuccess("error occurred", 400, [{ error: error.message }]));
   }
 }
