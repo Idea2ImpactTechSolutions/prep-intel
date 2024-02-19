@@ -43,11 +43,9 @@ export default async function handler(req, res) {
       }
     }
     // Respond with the school details or null if no school_id is provided
-    return res
-      .status(200)
-      .json(sendSuccess("success", 201, [{ school: schoolDetails }]));
+    return res.status(200).json(schoolDetails);
   } catch (error: any) {
     console.log("error", error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json(error.message);
   }
 }

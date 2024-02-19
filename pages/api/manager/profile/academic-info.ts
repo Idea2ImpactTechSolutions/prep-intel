@@ -102,18 +102,10 @@ export default async function handler(req, res) {
     }
 
     // Send a successful response
-    return res
-      .status(201)
-      .json(
-        sendSuccess("school info added successfully", 201, [
-          { school: school.dataValues },
-        ])
-      );
+    return res.status(201).json(school.dataValues);
   } catch (error: any) {
     // Handle any errors
     console.log("error", error);
-    return res
-      .status(400)
-      .json(sendSuccess("error occurred", 400, [{ error: error.message }]));
+    return res.status(400).json(error.message);
   }
 }

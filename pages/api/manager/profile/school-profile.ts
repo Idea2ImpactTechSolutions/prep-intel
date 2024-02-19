@@ -97,18 +97,10 @@ export default async function handler(req, res) {
     }
 
     console.log("school.dataValues", school.dataValues);
-    res
-      .status(201)
-      .json(
-        sendSuccess("manager account claimed successfully", 201, [
-          { school: school.dataValues },
-        ])
-      );
+    res.status(201).json(school.dataValues);
   } catch (error: any) {
     // Handle any errors
     console.log("error", error);
-    res
-      .status(400)
-      .json(sendSuccess("Error occured", 400, [{ school: error.message }]));
+    res.status(400).json(error.message);
   }
 }
