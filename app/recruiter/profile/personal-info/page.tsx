@@ -15,9 +15,14 @@ export default function Page() {
   // Placeholder
   let isSubmitting = false;
 
+  const initialValues = {
+    school_email: '',
+  };
+
   return (
     <Formik
       onSubmit={handleSubmit}
+      initialValues={initialValues}
     >
     <div className="container p-0 mt-6">
         <h1 className="text-2xl font-bold mb-4">Recruiter</h1>
@@ -103,6 +108,7 @@ export default function Page() {
         <BottomBar
             isBackDisabled={true}
             isSubmitting={isSubmitting}
+            onBack={() => console.log('Back Clicked')}
             onNext={() => router.push("/recruiter/profile/territory")}
           />
     </div>

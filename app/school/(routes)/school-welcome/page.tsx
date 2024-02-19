@@ -20,13 +20,13 @@ export default function Page() {
                     height={0}
                     alt="logo"
                 />
-                <h1 className="text-2xl font-bold mt-0 m-6">Welcome to the "My School" Tab!</h1>
+                <h1 className="text-2xl font-bold mt-0 m-6">Welcome to the &quot;My School&quot; Tab!</h1>
 
                 <div>
-                    Creating your school's profile is the key to unlocking the potential of this platform. Not only does it allow
+                    Creating your school&apos;s profile is the key to unlocking the potential of this platform. Not only does it allow
                     eager students to discover and learn about the unique offerings of your institution, but it also empowers
                     them to gauge their chances of acceptance and visualize their academic future with you. By curating a
-                    compelling and informative profile, you're taking a significant step toward broadening your reach,
+                    compelling and informative profile, you&apos;re taking a significant step toward broadening your reach,
                     attracting the right talent, and streamlining the admissions process.
                 </div>
                 <button
@@ -35,7 +35,7 @@ export default function Page() {
                     disabled={isSubmitting}
                     onClick={() => router.push("/school/school-profile")}
                     >
-                    <div className="leading-none inline-block -mt-1">Create Your School's Profile</div>
+                    <div className="leading-none inline-block -mt-1">Create Your School&apos;s Profile</div>
                 </button>
             </div>
         </div>

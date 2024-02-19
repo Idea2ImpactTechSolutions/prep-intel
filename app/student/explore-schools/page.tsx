@@ -3,10 +3,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSearchParams } from 'next/navigation'
 
 export default function Page() {
-  const [schools, setSchools] = useState([]);
+  const [schools, setSchools] = useState<any[]>([]);
   const searchParams = useSearchParams()
 
-  const fetchSchoolData = async (states: String) => {
+  const fetchSchoolData = async (states: string) => {
     //setIsLoading(true);
     try {
       const response = await fetch(
