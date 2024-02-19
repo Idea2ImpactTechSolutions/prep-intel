@@ -1,7 +1,9 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import Select from 'react-select'
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Select from 'react-select'
+import UsMap from "@/components/UsMap"
+import { Button } from "@/components/ui/button";
 
 const options = [
   { "value": "AL", "label": "Alabama" },
@@ -59,129 +61,51 @@ const options = [
 
 export default function Page() {
   const router = useRouter();
-  const bubbleElement = useRef<HTMLDivElement>(null);
-  const objectRef = useRef<HTMLObjectElement | null>(null);
-  const svgRef = useRef<SVGSVGElement | null>(null);
-  const hoveredLocation = useRef(null);
   const [activeSelection, setActiveSelection] = useState<any[]>([]);
-  const svgOffset = useRef([0, 0]);
+  const [activeStates, setActiveStates] = useState<string[]>([]);
 
-  useEffect(() => {
-    if (objectRef.current) {
-      var rect = objectRef.current.getBoundingClientRect();
-      svgOffset.current = [rect.left, rect.top];
+  useEffect(()=> {
+    const activeItems = options.filter(opt => activeStates.includes(opt.value));
+    setActiveSelection(activeItems);
+  },[activeStates]);
 
-        const setObjectSVGRef = () => {
-          if (objectRef.current) {
-              const svgDocument = objectRef.current.contentDocument;
-              if (svgDocument) {
-                // @ts-ignore
-                const svgElement = svgDocument.documentElement as SVGSVGElement;
-                svgElement.onclick = mapClick;
-                svgElement.onmousemove = mouseMove;
-
-                svgRef.current = svgElement;
-              }
-          }
-      };
-
-      if (objectRef.current) {
-          // Check if SVG is already loaded
-          if (objectRef.current.contentDocument) {
-              setObjectSVGRef();
-          } else {
-              // Attach load event listener
-              objectRef.current.addEventListener('load', setObjectSVGRef);
-          }
+  function selectChanged(selected, e: any) {
+    switch(e.action) {
+      case 'remove-value':
+        setActiveStates([...activeStates.filter(st => st !== e.removedValue.value)]);
+        break;
+      case 'select-option':
+        setActiveStates([...activeStates, e.option.value]);
+        break;
       }
-
-      return () => {
-          // Cleanup: Remove event listeners
-          if (objectRef.current) {
-              objectRef.current.removeEventListener('load', setObjectSVGRef);
-              objectRef.current.onclick = null;
-              objectRef.current.onmousemove = null;
-          }
-      };
-    }
-  }, []);
-
-  // useEffect hook
-  useEffect(() => {
-    if (activeSelection && svgRef?.current) {
-      // Clear active states
-      svgRef.current.querySelector('.active')?.classList.remove('active');
-
-      // Set current selection to .active
-      activeSelection.forEach(option => {
-        svgRef.current?.getElementById(option.value).classList.add('active');
-      })
-    }
-  }, [activeSelection]);
-
-  function mapClick(e) {
-    if (e.target.tagName == 'path') {
-      const stateID = e.target.dataset.id;
-      const existingSelection = activeSelection.findIndex(opt => opt.value === stateID);
-      if (existingSelection > -1) {
-        activeSelection.splice(existingSelection, 1);
-
-        let items = [...activeSelection];
-        setActiveSelection(items);
-      } else {
-        const listOption = options.find(opt => opt.value === stateID);
-        let items = [...activeSelection, listOption];
-        setActiveSelection(items);
-      }
-    }
-  }
-
-  function mouseMove(e) {
-
-    var x = e.clientX,
-      y = e.clientY;
-
-    if (!bubbleElement || !bubbleElement.current)
-      return;
-
-    //console.log(x, y);
-    bubbleElement.current.style.top = (y + 20 + svgOffset.current[1]) + 'px';
-    bubbleElement.current.style.left = (x + svgOffset.current[0]) + 'px';
-
-    if (e.target.tagName == 'path') {
-      var content = e.target.dataset;
-      hoveredLocation.current = content;
-
-      bubbleElement.current.innerHTML = content.name;
-      bubbleElement.current.style.opacity = "100%";
-    }
-    else {
-      bubbleElement.current.style.opacity = "0%";
-    }
   }
 
   return (
-    <div className="container p-0 mt-6">
+    <div className="container p-6 mt-6">
       <h1 className="text-2xl font-bold mb-4">Select the states you would like to explore</h1>
-      <object ref={objectRef} type="image/svg+xml" data="/images/us-map.svg">Your browser does not support SVG</object>
-      <div id="details-box" ref={bubbleElement}></div>
+
+      <UsMap activeStates={activeStates} setActiveStates={setActiveStates} ></UsMap>
 
       <h2>Select State</h2>
       <div className="flex">
 
-      <Select instanceId="state-select"
-        options={options}
-        isMulti
-        value={activeSelection}
-        className="w-[400px]" />
-      <div className="flex-grow"></div>
+        <Select instanceId="state-select"
+          options={options}
+          isMulti
+          value={activeSelection}
+          onChange={selectChanged}
+          className="w-[400px]" />
 
-      <button
-        type="submit"
-        className="flex items-center bg-primary hover:bg-primary-500 text-white font-bold py-4 px-4 rounded mr-1 pr-2"
-        onClick={() => router.push(`/student/explore-schools?states=${activeSelection.map(s => s.value).join(',') }`)}
+        <div className="flex-grow"></div>
 
-      ><div className="leading-none inline-block -mt-1">Next</div></button>
+        <Button
+          type="button"
+          variant="default"
+          onClick={() => router.push(`/student/explore-schools?states=${activeSelection.map(s => s.value).join(',')}`)}
+        >
+          Next
+        </Button>
+
       </div>
     </div>
   );

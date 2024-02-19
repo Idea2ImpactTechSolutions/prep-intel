@@ -6,8 +6,7 @@ import Image from "next/image";
 
 export default function Page() {
   const router = useRouter();
-
- const dashInfo = {
+  const dashInfo = {
     applicationCount: 13.299,
     admissionsCount: 8339,
     enrollmentCount: 5399,
