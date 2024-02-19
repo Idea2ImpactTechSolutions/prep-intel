@@ -15,7 +15,7 @@ export default async function handler(req, res) {
       .json(
         sendSuccess("school info added successfully", 201, [{ data: "Hello" }])
       );
-  } catch (error) {
+  } catch (error: any) {
     // Handle any errors
     res
       .status(400)

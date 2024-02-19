@@ -104,7 +104,7 @@ export default async function handler(req, res) {
           { school: school.dataValues },
         ])
       );
-  } catch (error) {
+  } catch (error: any) {
     // Handle any errors
     console.log("error", error);
     res

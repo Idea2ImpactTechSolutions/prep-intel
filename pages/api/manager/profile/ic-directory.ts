@@ -23,7 +23,7 @@ export default async function handler(req, res) {
             { school: schoolDetails },
           ])
         );
-    } catch (error) {
+    } catch (error: any) {
       console.log("error", error);
       res
         .status(500)
