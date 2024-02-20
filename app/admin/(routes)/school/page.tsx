@@ -2,51 +2,113 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useAddSchoolManagerMutation } from "@/redux/services/admin/adminApi";
+import { useAppDispatch } from "@/redux/store";
+import { useFormik } from "formik";
+import { toast } from "sonner";
+import * as yup from "yup";
+
+interface initialState {
+    email: string,
+    first_name: string,
+    last_name: string,
+    school_name: string
+}
 
 export default function SchoolAdminRegisterPage() {
+
+    const dispatch = useAppDispatch()
+    const [addSchoolManager, {isLoading, isSuccess}] = useAddSchoolManagerMutation()
+
+    const handleFormSubmit = async (values: initialState) => {
+        console.log(values)
+        addSchoolManager(values)
+        .unwrap()
+        .then((payload) => {
+            if (payload.status === 200) {
+                toast.success(payload.message)
+                resetForm()
+            }
+            // console.log(payload)
+            
+        })
+    }
+
+    const { values, errors, handleSubmit, handleChange, touched, resetForm } = useFormik({
+        initialValues: {
+            email: '',
+            first_name: '',
+            last_name: '',
+            school_name: ''
+        },
+        validationSchema: yup.object().shape({
+            email: yup.string().email().required('email is required'),
+            first_name: yup.string().required('first name is required'),
+            last_name: yup.string().required('last name is required'),
+            school_name: yup.string().required('school name is required')
+        }),
+        onSubmit: handleFormSubmit
+    })
+
     return (
         <section>
             <h1 className="text-xl font-bold">School Onboarding</h1>
             <p className="py-3 text-sm">Please fill the form below to get started creating your school profile. </p>
             <div className="mt-4">
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div className="flex gap-3">
                         <div>
                             <Input
                                 id=""
-                                name=""
-                                onChange={() => null}
+                                name="first_name"
+                                value={values.first_name}
+                                onChange={handleChange}
+                                touched={touched.first_name}
+                                error={errors.first_name}
                                 placeholder="Enter First Name"
                             />
                         </div>
                         <div>
-                        <Input
-                            id=""
-                            name=""
-                            onChange={() => null}
-                            placeholder="Enter Last Name"
-                        />
-                    </div>
+                            <Input
+                                id=""
+                                name="last_name"
+                                value={values.last_name}
+                                onChange={handleChange}
+                                touched={touched.last_name}
+                                error={errors.last_name}
+                                placeholder="Enter Last Name"
+                            />
+                        </div>
                     </div>
                     <div>
                         <Input
                             id=""
-                            name=""
-                            onChange={() => null}
+                            name="school_name"
+                            value={values.school_name}
+                            onChange={handleChange}
+                            touched={touched.school_name}
+                            error={errors.school_name}
                             placeholder="Enter School Name"
                         />
                     </div>
                     <div className="mt-6">
                         <Input
                             id=""
-                            name=""
-                            type="email"
-                            onChange={() => null}
+                            name="email"
+                            value={values.email}
+                            onChange={handleChange}
+                            touched={touched.email}
+                            error={errors.email}
                             placeholder="Enter School Email"
                         />
                     </div>
                     <div className="mt-6">
-                        <Button>Create School</Button>
+                        <Button
+                            type="submit"
+                            loading={isLoading}
+                            loadingText="Create School"
+                            disabled={isLoading}
+                        >Create School</Button>
                     </div>
                 </form>
             </div>
