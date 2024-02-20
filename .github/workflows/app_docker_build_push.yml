@@ -2,7 +2,7 @@ name: App Docker Build and Push
 
 on:
   push:
-    branches: [ PREP-67-gha-app-build ]
+    branches: [ main ]
 
 env:
   AWS_REGION : "us-east-1"
@@ -22,9 +22,6 @@ jobs:
 
     - name: Checkout app code
       uses: actions/checkout@v4
-      with:
-        ref: "main"
- 
 
     - name: configure aws credentials
       uses: aws-actions/configure-aws-credentials@v2
