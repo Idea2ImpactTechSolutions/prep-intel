@@ -17,8 +17,7 @@ export default async function handler(req, res) {
       // Respond with the school details or null if no school_id is provided
       res.status(200).json(schoolDetails);
     } catch (error) {
-      console.log("error", error);
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ error: error });
     }
   } else {
     res.status(405).end(`Method ${req.method} Not Allowed`);
