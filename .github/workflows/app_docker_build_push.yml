@@ -6,17 +6,18 @@ on:
 
 env:
   AWS_REGION : "us-east-1"
-  ECR_REPO: "533267153582.dkr.ecr.us-east-2.amazonaws.com/prep-intel-app"
+  ECR_REPO: "533267153582.dkr.ecr.us-east-1.amazonaws.com/prep-intel-app"
     
-# Permission can be added at job level or workflow level    
-permissions:
-  id-token: write   # This is required for requesting the JWT
-  contents: read    # This is required for actions/checkout
 
 jobs:
   docker-build-and-push:
     runs-on: ubuntu-latest
 
+    # Permission can be added at job level or workflow level    
+    permissions:
+      id-token: write   # This is required for requesting the JWT
+      contents: read    # This is required for actions/checkout
+    
     steps:
 
     - name: Checkout app code
@@ -26,21 +27,25 @@ jobs:
  
 
     - name: configure aws credentials
-      uses: aws-actions/configure-aws-credentials@v1.7.0
+      uses: aws-actions/configure-aws-credentials@v2
       with:
         role-to-assume: arn:aws:iam::533267153582:role/AWS_PrepIntel_GHA_Role
-        role-session-name: AWS_PrepIntel_GHA_Role
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Login to Amazon ECR
-      id: login-prep-intel-aws-ecr
+      id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
+    - name: build tagged docker image
+      env:
+        IMAGE_VERSION: latest
+      run: |
+        docker build -t ${{env.ECR_REPO}}:${{env.IMAGE_VERSION}} .
+    
     - name: push tagged docker image to ECR
       env:
-        # IMAGE_VERSION: "latest"
-        IMAGE_TAG: latest
+        IMAGE_VERSION: latest
       run: |
-        docker build -t ${{env.ECR_REPO}}:${{env.IMAGE_TAG}} .
-        docker push ${{env.ECR_REPO}}:${{env.IMAGE_TAG}}
+        docker push ${{env.ECR_REPO}}:${{env.IMAGE_VERSION}}
+  
 
