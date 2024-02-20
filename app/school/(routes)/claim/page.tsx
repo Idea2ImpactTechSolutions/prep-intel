@@ -1,8 +1,12 @@
 "use client"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useSchoolManagerClaimAccountMutation } from "@/redux/services/school/managerApi";
+import { useFormik } from "formik";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
+import * as yup from "yup";
 
 const SERVICES = [
     {
@@ -19,8 +23,37 @@ const SERVICES = [
     },
 ]
 
+interface initialValue {
+    email: string
+}
+
 export default function Page() {
+    const [schoolManagerClaimAccount, {isLoading}] = useSchoolManagerClaimAccountMutation()
     const router = useRouter()
+    const searchParam = useSearchParams()
+
+    const handleSubmitForm = async (values: initialValue) => {
+        const auth_code = searchParam?.get('auth_code')
+        const payload = {...values, auth_code}
+        schoolManagerClaimAccount(payload)
+        .unwrap()
+        .then((payload)=>{
+            if (payload.status === 200) {
+                toast.success(payload.message)
+                router.push('/school/set-password')
+            }
+        })
+    }
+
+    const {values, errors, handleChange, handleSubmit, touched} = useFormik({
+        initialValues: {
+            email: ''
+        },
+        validationSchema: yup.object().shape({
+            email: yup.string().email().required('enter your school email address')
+        }),
+        onSubmit: handleSubmitForm
+    })
 
     return (
         <main className="font-sans">
@@ -57,20 +90,24 @@ export default function Page() {
                     }
                 </div>
                 <div className="mt-4">
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <Input
                             label="School Email Address"
+                            name="email"
+                            value={values.email}
+                            onChange={handleChange}
+                            touched={touched.email}
+                            error={errors.email}
                             placeholder="Enter email address"
                             className="w-full placeholder:text-gray-300 placeholder:font-light"
                         />
                         <div className="mt-4 flex justify-center">
                             <Button
                                 className="font-light h-9"
-                                onClick={() => router.push('/school/my-school')}
-                                type="button"
-                                // loading
-                                // loadingText="Claim My Account"
-                                // disabled
+                                type="submit"
+                                loading={isLoading}
+                                loadingText="Claim My Account"
+                                disabled={isLoading}
                             >Claim My Account</Button>
                         </div>
                     </form>
