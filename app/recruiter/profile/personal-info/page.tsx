@@ -7,7 +7,6 @@ import { FaUser } from "react-icons/fa";
 
 const handleSubmit = async (values, { setSubmitting }) => {
   // Placeholder
-  console.log("submitting form");
 }
 
 export default function Page() {
@@ -108,7 +107,7 @@ export default function Page() {
         <BottomBar
             isBackDisabled={true}
             isSubmitting={isSubmitting}
-            onBack={() => console.log('Back Clicked')}
+            onBack={() => {}}
             onNext={() => router.push("/recruiter/profile/territory")}
           />
     </div>

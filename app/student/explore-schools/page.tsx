@@ -19,7 +19,7 @@ export default function Page() {
       setSchools(data);
       //setIsLoading(false);
     } catch (error) {
-      console.error("There was a problem fetching school data:", error);
+      //console.error("There was a problem fetching school data:", error);
     }
   };
 

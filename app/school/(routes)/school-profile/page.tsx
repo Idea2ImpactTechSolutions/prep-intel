@@ -77,12 +77,10 @@ export default function Page () {
 
   const handleBack = () => {
     // Logic for Back button
-    console.log("Back button");
   };
 
   const handleSaveForLater = () => {
     // Logic for Save for Later button
-    console.log("Save for Later");
   };
 
   const setSchoolData = (data) => {
@@ -138,11 +136,9 @@ export default function Page () {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        console.log("data", data);
         setSchoolData(data);
         setIsLoading(false);
       } catch (error) {
-        console.error("There was a problem fetching school data:", error);
       }
     };
 
@@ -157,7 +153,6 @@ export default function Page () {
     try {
       // API call to submit form data
       values.school_id = "b14e03a9-656a-4726-9d38-6f09c912a543";
-      console.log("values", values);
       const url = "/api/manager/profile/school-profile";
       // Send a POST request to the server
       const response = await fetch(url, {
@@ -176,7 +171,6 @@ export default function Page () {
       }
       router.push("academic-info");
     } catch (error) {
-      console.error("Error submitting form:", error);
     } finally {
       setSubmitting(false);
     }

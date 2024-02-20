@@ -35,7 +35,7 @@ export default function Page() {
             isBackDisabled={true}
             isSubmitting={isSubmitting}
             nextTitle="Claim My Account"
-            onBack={() => console.log('Back Clicked')}
+            onBack={() => {}}
             onNext={() => router.push("/recruiter/profile/personal-info")}
           />
     </div>

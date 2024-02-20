@@ -21,7 +21,6 @@ export default function SchoolAdminRegisterPage() {
     const [addSchoolManager, {isLoading, isSuccess}] = useAddSchoolManagerMutation()
 
     const handleFormSubmit = async (values: initialState) => {
-        console.log(values)
         addSchoolManager(values)
         .unwrap()
         .then((payload) => {
