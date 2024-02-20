@@ -59,7 +59,7 @@ export default function Page() {
         <BottomBar
             isBackDisabled={true}
             isSubmitting={isSubmitting}
-            onBack={() => console.log('Back Clicked')}
+            onBack={() => {}}
             onNext={() => router.push("/recruiter/dashboard")}
           />
     </div>

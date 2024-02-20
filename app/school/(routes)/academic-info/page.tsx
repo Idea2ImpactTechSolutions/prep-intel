@@ -171,7 +171,7 @@ export default function AcademicInfo() {
         setSchoolData(data);
         setIsLoading(false);
       } catch (error) {
-        console.error("There was a problem fetching school data:", error);
+        //console.error("There was a problem fetching school data:", error);
       }
     };
 
@@ -187,14 +187,13 @@ export default function AcademicInfo() {
 
   const handleSaveForLater = () => {
     // Logic for Save for Later button
-    console.log("Save for Later");
   };
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setSubmitting(true);
     try {
       values.schoolId = "b14e03a9-656a-4726-9d38-6f09c912a543";
-      console.log("TEST VALUES", values);
+      //console.log("TEST VALUES", values);
       const url = "/api/manager/profile/academic-info";
       // Send a POST request to the server
       const response = await fetch(url, {
@@ -212,7 +211,7 @@ export default function AcademicInfo() {
         throw new Error(`Error: ${response.status}`);
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      //console.error("Error submitting form:", error);
       // Handle errors - show error message to the user, etc.
     } finally {
       setSubmitting(false);

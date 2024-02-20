@@ -16,7 +16,7 @@ export default async function handler(req, res) {
       school_research_programs,
       schoolId,
     } = req.body;
-    console.log({ schoolId });
+    //console.log({ schoolId });
     const id = v4();
     const {
       inStateTuition,
@@ -56,7 +56,7 @@ export default async function handler(req, res) {
       school = await School.create(schoolData);
     }
 
-    console.log({ school1: school });
+    // console.log({ school1: school });
 
     if (school && school.dataValues) {
       // Assuming `SchoolDepartment` is a model that relates to `School` via a foreign key `schoolId`
@@ -110,8 +110,6 @@ export default async function handler(req, res) {
         ])
       );
   } catch (error: any) {
-    // Handle any errors
-    console.log("error", error);
     return res
       .status(400)
       .json(sendSuccess("error occurred", 400, [{ error: error.message }]));

@@ -5,7 +5,6 @@ export default async function Handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  console.log("Handler");
   const fs = require("fs").promises;
   const path = require("path");
 

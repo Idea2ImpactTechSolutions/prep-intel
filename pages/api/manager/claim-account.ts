@@ -63,9 +63,9 @@ export default async function AuthHandler(
       .status(200)
       .json(sendSuccess("manager account claimed successfully", 200, []));
   } catch (error: any) {
-    console.log({
-      error: error.message,
-    });
+    // console.log({
+    //   error: error.message,
+    // });
     res.status(500).json({ error: error.message });
   }
 }

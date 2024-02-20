@@ -70,9 +70,6 @@ export default async function AuthHandler(
         ])
       );
   } catch (error: any) {
-    console.log({
-      error: error.message,
-    });
     res.status(500).json({ error: error.message });
   }
 }

@@ -46,7 +46,7 @@ export default async function handler(req, res) {
       school = await School.create(schoolData);
     }
 
-    console.log({ school });
+    //console.log({ school });
 
     if (school && school.dataValues) {
       // Assuming `SchoolDepartment` is a model that relates to `School` via a foreign key `school_id`
@@ -96,7 +96,7 @@ export default async function handler(req, res) {
       school.dataValues.school_social_medias = newSchoolSocialMedias;
     }
 
-    console.log("school.dataValues", school.dataValues);
+    //console.log("school.dataValues", school.dataValues);
     res
       .status(201)
       .json(
@@ -106,9 +106,9 @@ export default async function handler(req, res) {
       );
   } catch (error: any) {
     // Handle any errors
-    console.log("error", error);
+    //console.log("error", error);
     res
       .status(400)
-      .json(sendSuccess("Error occured", 400, [{ school: error.message }]));
+      .json(sendSuccess("Error occurred", 400, [{ school: error.message }]));
   }
 }

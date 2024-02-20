@@ -81,7 +81,6 @@ export default function Page() {
                 svgElement.onmousemove = mouseMove;
 
                 svgRef.current = svgElement;
-                console.log('SVG Element:', svgRef.current);
               }
           }
       };
