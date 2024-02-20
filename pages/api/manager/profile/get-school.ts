@@ -47,7 +47,6 @@ export default async function handler(req, res) {
       .status(200)
       .json(sendSuccess("success", 201, [{ school: schoolDetails }]));
   } catch (error: any) {
-    // console.log("error", error);
     res.status(500).json({ error: error.message });
   }
 }

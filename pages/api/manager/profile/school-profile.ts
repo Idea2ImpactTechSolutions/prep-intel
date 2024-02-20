@@ -106,7 +106,6 @@ export default async function handler(req, res) {
       );
   } catch (error: any) {
     // Handle any errors
-    //console.log("error", error);
     res
       .status(400)
       .json(sendSuccess("Error occurred", 400, [{ school: error.message }]));
