@@ -1,7 +1,9 @@
 "use client"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { setManagerInfo } from "@/redux/features/school/managerSlice";
 import { useSchoolManagerClaimAccountMutation } from "@/redux/services/school/managerApi";
+import { useAppDispatch } from "@/redux/store";
 import { useFormik } from "formik";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -31,6 +33,7 @@ export default function Page() {
     const [schoolManagerClaimAccount, {isLoading}] = useSchoolManagerClaimAccountMutation()
     const router = useRouter()
     const searchParam = useSearchParams()
+    const dispatch = useAppDispatch()
 
     const handleSubmitForm = async (values: initialValue) => {
         const auth_code = searchParam?.get('auth_code')
@@ -39,6 +42,8 @@ export default function Page() {
         .unwrap()
         .then((payload)=>{
             if (payload.status === 200) {
+                let claim_info = {school_email: values.email}
+                dispatch(setManagerInfo({slug: 'claim_info', data: claim_info}))
                 toast.success(payload.message)
                 router.push('/school/set-password')
             }
