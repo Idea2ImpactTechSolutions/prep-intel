@@ -1,0 +1,39 @@
+name: App Docker Build and Push
+
+on:
+  push:
+    branches: [ PREP-67-gha-app-build ]
+  
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout app code
+      uses: actions/checkout@v2
+  
+    # - name: ECR Login
+    #   uses: aws-actions/configure-aws-credentials@v1
+    #   with:
+    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     aws-region: ${{secrets.AWS_REGION}}
+
+    # - name: Login to Amazon ECR
+    #   id: login-prep-intel-aws-ecr
+    #   uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build tagged docker image
+      run: |
+        docker build -t test-image-build .
+
+    # - name: push tagged docker image to ECR
+    #   env:
+    #     # ECR_REGISTRY: ${{ steps.login-pf-aws-ecr.outputs.registry }}
+    #     # ECR_REPOSITORY: ${{secrets.AWS_ECR_REPO}}
+    #     IMAGE_TAG: latest
+    #   run: |
+    #     docker build -t test-image-build .
+
