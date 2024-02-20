@@ -12,6 +12,21 @@ const managerApi = baseApi.injectEndpoints({
             async onQueryStarted(_, {queryFulfilled, dispatch}){
                 try {
                     const result = await queryFulfilled
+                    // console.log(result)
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+        }),
+        schoolManagerSetPassword: builder.mutation({
+            query: (payload) => ({
+                url: `/manager/set-password`,
+                method: 'POST',
+                body: payload
+            }),
+            async onQueryStarted(_, {queryFulfilled, dispatch}){
+                try {
+                    const result = await queryFulfilled
                     console.log(result)
                 } catch (error) {
                     console.log(error)
@@ -21,4 +36,7 @@ const managerApi = baseApi.injectEndpoints({
     })
 })
 
-export const { useSchoolManagerClaimAccountMutation} = managerApi
+export const { 
+    useSchoolManagerClaimAccountMutation,
+    useSchoolManagerSetPasswordMutation 
+} = managerApi
