@@ -1,18 +1,18 @@
-const { models } = require("../../../../app/models");
+import { models } from "../../../../app/models";
 const { ICDirectory } = models;
-const { Op } = require('sequelize');
+const { Op } = require("sequelize");
 
 export default async function handler(req, res) {
   if (req.method === "GET") {
     try {
-      const states = req.query.states.split(',');
+      const states = req.query.states.split(",");
 
       let schoolDetails = await ICDirectory.findAll({
         where: {
-            STABBR: {
-              [Op.in]: states
-            }
-        }
+          STABBR: {
+            [Op.in]: states,
+          },
+        },
       });
       // Respond with the school details or null if no school_id is provided
       res.status(200).json(schoolDetails);
