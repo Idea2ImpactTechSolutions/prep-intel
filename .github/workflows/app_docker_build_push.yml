@@ -6,6 +6,7 @@ on:
 
 env:
   AWS_REGION : "us-east-1"
+  ECR_REPO: "533267153582.dkr.ecr.us-east-2.amazonaws.com/prep-intel-app"
     
 # Permission can be added at job level or workflow level    
 permissions:
@@ -19,7 +20,10 @@ jobs:
     steps:
 
     - name: Checkout app code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
+      with:
+        ref: "main"
+ 
 
     - name: configure aws credentials
       uses: aws-actions/configure-aws-credentials@v1.7.0
@@ -32,15 +36,11 @@ jobs:
       id: login-prep-intel-aws-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    # - name: Build tagged docker image
-    #   run: |
-    #     docker build -t test-image-build .
-
-    # - name: push tagged docker image to ECR
-    #   env:
-    #     # ECR_REGISTRY: ${{ steps.login-pf-aws-ecr.outputs.registry }}
-    #     # ECR_REPOSITORY: ${{secrets.AWS_ECR_REPO}}
-    #     IMAGE_TAG: latest
-    #   run: |
-    #     docker build -t test-image-build .
+    - name: push tagged docker image to ECR
+      env:
+        # IMAGE_VERSION: "latest"
+        IMAGE_TAG: latest
+      run: |
+        docker build -t ${{env.AWS_REGION}}:$IMAGE_TAG .
+        docker push ${{env.AWS_REGION}}:$IMAGE_TAG
 
