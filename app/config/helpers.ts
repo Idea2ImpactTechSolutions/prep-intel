@@ -1,3 +1,4 @@
+require("dotenv").config();
 export const generateClientId = (length: number) => {
   var result = "";
   var characters = "123456789123456789123456789";
