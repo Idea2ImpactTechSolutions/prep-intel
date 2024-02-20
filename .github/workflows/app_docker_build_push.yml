@@ -1,0 +1,48 @@
+name: App Docker Build and Push
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  AWS_REGION : "us-east-1"
+  ECR_REPO: "533267153582.dkr.ecr.us-east-1.amazonaws.com/prep-intel-app"
+    
+
+jobs:
+  docker-build-and-push:
+    runs-on: ubuntu-latest
+
+    # Permission can be added at job level or workflow level    
+    permissions:
+      id-token: write   # This is required for requesting the JWT
+      contents: read    # This is required for actions/checkout
+    
+    steps:
+
+    - name: Checkout app code
+      uses: actions/checkout@v4
+
+    - name: configure aws credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::533267153582:role/AWS_PrepIntel_GHA_Role
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: build tagged docker image
+      env:
+        IMAGE_VERSION: latest
+      run: |
+        docker build -t ${{env.ECR_REPO}}:${{env.IMAGE_VERSION}} .
+    
+    - name: push tagged docker image to ECR
+      env:
+        IMAGE_VERSION: latest
+      run: |
+        docker push ${{env.ECR_REPO}}:${{env.IMAGE_VERSION}}
+  
+
