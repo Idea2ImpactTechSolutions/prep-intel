@@ -1,0 +1,37 @@
+import { sendSuccess } from "../../../../app/config/helpers";
+
+const { models } = require("../../../../app/models");
+const { School, Recruiters } = models;
+const { v4 } = require("uuid");
+
+export default async function handler(req, res) {
+  try {
+    // Extract data from request body
+
+    const { school_id } = req.query;
+
+    let school = await School.findOne({ where: { id: school_id } });
+
+    if (!school) {
+      return res
+        .status(201)
+        .json(sendSuccess("school does not exist", 404, []));
+    }
+
+    let recruiters = await Recruiters.findAll({
+      where: { school_id: school_id },
+    });
+
+    if (!recruiters) {
+      return res.status(404).json(sendSuccess("no recruiter found", 404, []));
+    }
+
+    // Send a successful response
+    return res.status(201).json(sendSuccess("success", 200, [recruiters]));
+  } catch (error: any) {
+    // Handle any errors
+    return res
+      .status(400)
+      .json(sendSuccess("error occurred", 400, [{ school: error.message }]));
+  }
+}
