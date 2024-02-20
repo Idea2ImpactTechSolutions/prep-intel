@@ -16,7 +16,6 @@ export default async function handler(req, res) {
       school_research_programs,
       schoolId,
     } = req.body;
-    //console.log({ schoolId });
     const id = v4();
     const {
       inStateTuition,
@@ -55,8 +54,6 @@ export default async function handler(req, res) {
     } else {
       school = await School.create(schoolData);
     }
-
-    // console.log({ school1: school });
 
     if (school && school.dataValues) {
       // Assuming `SchoolDepartment` is a model that relates to `School` via a foreign key `schoolId`
