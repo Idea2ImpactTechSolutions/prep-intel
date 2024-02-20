@@ -28,6 +28,11 @@ export const baseQueryInterceptor: BaseQueryFn<
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
   const result: any = await baseQuery(args, api, extraOptions);
+
+  // if (result.status === 200) {
+  //   let message =result.message
+  //         toast.error(message)
+  // }
   
   if (result.error) {
       let res: any = result.error
@@ -74,6 +79,10 @@ export const baseQueryInterceptor: BaseQueryFn<
           toast.error(message)
       }
       if (res.status === 429) {
+          let message = res.data.message
+          toast.error(message)
+      }
+      if (res.status === 409) {
           let message = res.data.message
           toast.error(message)
       }
