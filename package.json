@@ -19,7 +19,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@reduxjs/toolkit": "^2.2.0",
     "@types/js-cookie": "^3.0.6",
-    "aws-sdk": "^2.1562.0",
+    "aws-sdk": "^2.1561.0",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
