@@ -49,11 +49,10 @@ export default async function handler(
   try {
     const fData = await parseFormData(req);
 
-    console.log({ fData });
+    //onsole.log({ fData });
 
     const imageFile = fData.files.image as any;
 
-    console.log({ imageFile });
     // Respond with the school details or null if no school_id is provided
     const params = {
       Bucket: "prep-bucket-upload",
@@ -64,14 +63,12 @@ export default async function handler(
 
     try {
       const data = await uploadFileToS3(params);
-      console.log({ data });
       res.status(200).json({ imageUrl: data });
     } catch (error) {
-      console.error("Error uploading file to S3:", error);
       res.status(500).json({ error: "Failed to upload file to S3" });
     }
   } catch (error: any) {
-    console.log("error", error);
+    // onsole.log("error", error);
     res.status(500).json(error.message);
   }
 }
