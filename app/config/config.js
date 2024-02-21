@@ -1,4 +1,5 @@
 require("dotenv").config();
+import * as pg from "pg";
 
 // config/config.js
 
