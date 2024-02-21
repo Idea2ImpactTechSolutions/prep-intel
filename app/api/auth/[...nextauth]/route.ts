@@ -11,35 +11,33 @@ const handler = NextAuth({
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        email: { label: "Email", type: "text", placeholder: "admin@x" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials, req) {
-        // Add logic here to look up the user from the credentials supplied
-        const res = await fetch("http://localhost:3000/api/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: credentials?.username,
-            password: credentials?.password,
-          }),
-        });
+      authorize(credentials, req) {
+        if (!credentials) {
+          return null;
+        }
+        
+        const email = credentials.email;
+        const password = credentials.password;
+        const users = ['student@x', 'admin@x', 'recruiter@x'];
 
-        if (res.status === 401) return null;
-        const user = await res.json();
-
-        if (user) {
+        // simple auth
+        if (users.includes(email) && password === "dbpass") {
           // Any object returned will be saved in `user` property of the JWT
-          return user;
+          return {
+            userId: email,
+            email: email,
+            role: email.split('@')[0],
+            schoolID: "b14e03a9-656a-4726-9d38-6f09c912a543"
+          };
         } else {
           // If you return null then an error will be displayed advising the user to check their details.
           return null;
-
           // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
         }
-      },
+      }
     }),
   ],
   callbacks: {
@@ -51,12 +49,12 @@ const handler = NextAuth({
     },
 
     async session({ session, token }) {
-      session.user = token as any;
+      session.user = token;
       return session;
     },
   },
   pages: {
-    signIn: "/api/auth/login",
+    
   },
 });
 
