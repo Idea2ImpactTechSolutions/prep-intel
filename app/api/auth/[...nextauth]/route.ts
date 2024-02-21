@@ -27,7 +27,7 @@ const handler = NextAuth({
         if (users.includes(email) && password === "dbpass") {
           // Any object returned will be saved in `user` property of the JWT
           return {
-            userId: email,
+            id: email, // Required field in return type definition
             email: email,
             role: email.split('@')[0],
             schoolID: "b14e03a9-656a-4726-9d38-6f09c912a543"
