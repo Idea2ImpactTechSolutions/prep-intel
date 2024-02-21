@@ -1,5 +1,6 @@
 import { sendSuccess } from "../../../../app/config/helpers";
 import { NextApiRequest, NextApiResponse } from "next";
+const fs = require("fs");
 import { IncomingForm, Fields, Files } from "formidable";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
@@ -19,10 +20,10 @@ const { v4 } = require("uuid");
 export const config = { api: { bodyParser: false } };
 
 const s3Client = new S3Client({
-  region: "us-east-1",
+  region: process.env.AWS_REGION,
   credentials: {
-    accessKeyId: "",
-    secretAccessKey: "",
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
   },
 });
 
@@ -49,26 +50,38 @@ export default async function handler(
   try {
     const fData = await parseFormData(req);
 
-    //onsole.log({ fData });
-
     const imageFile = fData.files.image as any;
 
+    const buffer = Buffer.from(
+      await fs.promises.readFile(imageFile[0].filepath)
+    ); // Read file contents
     // Respond with the school details or null if no school_id is provided
     const params = {
-      Bucket: "prep-bucket-upload",
+      Bucket: process.env.BUCKET_NAME,
       Key: imageFile[0].newFilename,
-      Body: imageFile[0].filepath,
+      Body: buffer,
       conntentType: "image/jpg",
     };
 
     try {
       const data = await uploadFileToS3(params);
-      res.status(200).json({ imageUrl: data });
-    } catch (error) {
-      res.status(500).json({ error: "Failed to upload file to S3" });
+      if (data.$metadata.httpStatusCode == 200) {
+        return res
+          .status(200)
+          .json(
+            sendSuccess("image uploaded successfully", 201, [{ data: "" }])
+          );
+      } else {
+        return res
+          .status(200)
+          .json(
+            sendSuccess("upload error kkindly try again", 400, [{ data: "" }])
+          );
+      }
+    } catch (error: any) {
+      res.status(500).json(sendSuccess(error.message, 400, [{ data: "" }]));
     }
   } catch (error: any) {
-    // onsole.log("error", error);
     res.status(500).json(error.message);
   }
 }
