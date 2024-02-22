@@ -1,5 +1,7 @@
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
+const models = require("@/app/models");
+const { Managers } = models.models;
 
 const handler = NextAuth({
   providers: [
@@ -14,29 +16,40 @@ const handler = NextAuth({
         email: { label: "Email", type: "text", placeholder: "admin@x" },
         password: { label: "Password", type: "password" },
       },
-      authorize(credentials, req) {
+      async authorize(credentials, req) {
         if (!credentials) {
           return null;
         }
-        
-        const email = credentials.email;
-        const password = credentials.password;
-        const users = ['student@x', 'admin@x', 'recruiter@x'];
+
+        try
+        {
+          let user = await Managers.findOne({
+            where: {
+              email: credentials.email,
+            },
+          });
 
         // simple auth
-        if (users.includes(email) && password === "dbpass") {
+        if (user) {
           // Any object returned will be saved in `user` property of the JWT
           return {
-            id: email, // Required field in return type definition
-            email: email,
-            role: email.split('@')[0],
-            schoolID: "b14e03a9-656a-4726-9d38-6f09c912a543"
+            id: user.email,
+            // role: user.role, We should authenticate against a common table, and 
+            // pull the roll from said table
+            role: "manager", // Hard-coding due to missing data
+            schoolID: user.schoolID
           };
         } else {
           // If you return null then an error will be displayed advising the user to check their details.
           return null;
           // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
         }
+      }
+      catch(err) {
+        console.log(err);
+        return null;
+      }
+
       }
     }),
   ],
@@ -54,7 +67,6 @@ const handler = NextAuth({
     },
   },
   pages: {
-    
   },
 });
 
