@@ -46,7 +46,7 @@ const handler = NextAuth({
         }
       }
       catch(err) {
-        console.log(err);
+        //console.log(err);
         return null;
       }
 
@@ -67,6 +67,7 @@ const handler = NextAuth({
     },
   },
   pages: {
+    // signIn : '/login'
   },
 });
 
