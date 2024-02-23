@@ -40,7 +40,7 @@ const Recruiters = sequelize.define(
         },
         phone: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true
         },
         account_claimed: {
             type: DataTypes.BOOLEAN,

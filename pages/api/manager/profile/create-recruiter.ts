@@ -8,8 +8,7 @@ export default async function handler(req, res) {
   try {
     // Extract data from request body
 
-    const { full_name, email, school_id, phone, department, invitation_info } =
-      req.body;
+    const { first_name, last_name, email, school_id } = req.body;
     // const { invitation_subject, invitation_message } = invitation_info;
 
     let recruiterCheck = await Recruiters.findOne({ where: { email: email } });
@@ -35,15 +34,14 @@ export default async function handler(req, res) {
     await Recruiters.create({
       id: v4(),
       school_id: school.id,
-      first_name: full_name,
-      last_name: full_name,
+      first_name: first_name,
+      last_name: last_name,
       email: email,
       notification_method: '{"email"}',
       account_claimed: false,
       create_date: new Date(),
       auth_code_expiration: newDate,
       is_active: false,
-      phone: phone,
       auth_code: v4(),
       status: "pending",
     });
