@@ -12,6 +12,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Cookies from 'js-cookie';
+import { signOut } from "next-auth/react";
 
 interface SidebarProps {
     showSidebar: any;
@@ -34,10 +35,10 @@ export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
 
     const dispatch = useAppDispatch()
 
-    const handleLogout = () => {
-        Cookies.remove("token");
-        dispatch(reset());
-        window.location.href = "/login";
+    const handleLogout = async () => {
+        await signOut()
+        // dispatch(reset());
+        // window.location.href = "/login";
     }
 
     useEffect(() => {
