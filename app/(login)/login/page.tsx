@@ -70,7 +70,6 @@ export default function LoginPage() {
         redirect: false
       });
       if (res?.status == 200) {
-        console.log(session?.user)
         handleRedirect(session?.user?.role)
       } else {
         setLoading(false)
