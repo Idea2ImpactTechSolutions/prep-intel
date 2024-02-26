@@ -5,19 +5,6 @@ import fs from "fs";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 const { Upload } = require("@aws-sdk/lib-storage");
 
-// pages/api/manager/profile/academic-info.js
-const { models } = require("../../../../app/models");
-const {
-  School,
-  SchoolAddress,
-  SchoolContact,
-  SchoolSocialMedia,
-  SchoolDepartment,
-  SchoolAccreditation,
-  SchoolResearchProgram,
-} = models;
-const { v4 } = require("uuid");
-
 export const config = { api: { bodyParser: false } };
 
 // const s3Client = new S3Client({
@@ -42,8 +29,6 @@ const parseFormData = (
 async function uploadFileToS3(params: any) {
   const client = new Upload({ client: new S3Client({}), params: params });
   const res = await client.done();
-
-  console.log({ res });
   return res;
 }
 
