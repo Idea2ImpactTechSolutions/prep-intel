@@ -1,7 +1,9 @@
 import { sendSuccess } from "../../../../app/config/helpers";
 import { NextApiRequest, NextApiResponse } from "next";
 import { IncomingForm, Fields, Files } from "formidable";
+import fs from "fs";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+const { Upload } = require("@aws-sdk/lib-storage");
 
 // pages/api/manager/profile/academic-info.js
 const { models } = require("../../../../app/models");
@@ -18,13 +20,13 @@ const { v4 } = require("uuid");
 
 export const config = { api: { bodyParser: false } };
 
-const s3Client = new S3Client({
-  region: "us-east-1",
-  credentials: {
-    accessKeyId: "",
-    secretAccessKey: "",
-  },
-});
+// const s3Client = new S3Client({
+//   region: "us-east-1",
+//   credentials: {
+//     accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
+//     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
+//   },
+// });
 
 const parseFormData = (
   req: NextApiRequest
@@ -38,8 +40,11 @@ const parseFormData = (
   });
 
 async function uploadFileToS3(params: any) {
-  const command = new PutObjectCommand(params);
-  return await s3Client.send(command);
+  const client = new Upload({ client: new S3Client({}), params: params });
+  const res = await client.done();
+
+  console.log({ res });
+  return res;
 }
 
 export default async function handler(
@@ -49,16 +54,16 @@ export default async function handler(
   try {
     const fData = await parseFormData(req);
 
-    //onsole.log({ fData });
-
     const imageFile = fData.files.image as any;
+
+    let buffer = Buffer.from(fs.readFileSync(imageFile[0].filepath));
 
     // Respond with the school details or null if no school_id is provided
     const params = {
       Bucket: "prep-bucket-upload",
       Key: imageFile[0].newFilename,
-      Body: imageFile[0].filepath,
-      conntentType: "image/jpg",
+      Body: buffer,
+      conntentType: "image/png",
     };
 
     try {

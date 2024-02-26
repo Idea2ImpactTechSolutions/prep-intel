@@ -12,12 +12,13 @@ export default async function handler(req, res) {
     // 2) Sync with Joey with figure out how to make loading screen better and the sticky footer
     // 3) Check with Marvin how to do page numbers and skipping to a page number using the route. Add these page numbers to the route
     // 4) How to add jwt token
+    // console.log({ user: req.user });
 
     const {
       school_image,
       school_details,
       school_address,
-      school_social_medias,
+      // school_social_medias,
       school_id,
     } = req.body;
     const school_contacts = school_address.contact_types;
@@ -46,8 +47,6 @@ export default async function handler(req, res) {
       school = await School.create(schoolData);
     }
 
-    //console.log({ school });
-
     if (school && school.dataValues) {
       // Assuming `SchoolDepartment` is a model that relates to `School` via a foreign key `school_id`
       // Step 1: Delete existing school departments for this school
@@ -59,32 +58,32 @@ export default async function handler(req, res) {
       // Step 2: Create new school departments using the department names
       const school_contacts_data = school_contacts.map((school_contact) => ({
         school_id: school.id,
-        department_name: school_contact.department_name,
+        department_name: "",
         phone: school_contact.phone,
         contact_type: school_contact.contact_type,
-        street_address: school_contact.street_address,
+        street_address: school_address.street_address,
         email: school_contact.email,
       }));
 
-      const school_social_media_data = school_social_medias.map(
-        (school_social_media) => ({
-          school_id: school.id,
-          social_media: school_social_media.social_media,
-          url: school_social_media.url,
-        })
-      );
+      // const school_social_media_data = school_social_medias.map(
+      //   (school_social_media) => ({
+      //     school_id: school.id,
+      //     social_media: school_social_media.social_media,
+      //     url: school_social_media.url,
+      //   })
+      // );
 
       const newSchoolContacts = await SchoolContact.bulkCreate(
         school_contacts_data
       );
 
-      const newSchoolSocialMedias = await SchoolSocialMedia.bulkCreate(
-        school_social_media_data
-      );
+      // const newSchoolSocialMedias = await SchoolSocialMedia.bulkCreate(
+      //   school_social_media_data
+      // );
 
       const school_address_data = {
         school_id: school.id,
-        name: school_address.school_name,
+        name: school_details.name,
         state: school_address.school_state,
         postal: school_address.school_zip,
       };
@@ -93,11 +92,11 @@ export default async function handler(req, res) {
 
       school.dataValues.school_address = newSchoolAddress;
       school.dataValues.school_contacts = newSchoolContacts;
-      school.dataValues.school_social_medias = newSchoolSocialMedias;
+      // school.dataValues.school_social_medias = newSchoolSocialMedias;
     }
 
     //console.log("school.dataValues", school.dataValues);
-    res
+    return res
       .status(201)
       .json(
         sendSuccess("manager account claimed successfully", 201, [
