@@ -1,7 +1,6 @@
 import { sendSuccess } from "../../../../app/config/helpers";
-
-// pages/api/manager/profile/academic-info.js
 const { models } = require("../../../../app/models");
+
 const {
   School,
   SchoolAddress,
@@ -11,7 +10,6 @@ const {
   SchoolAccreditation,
   SchoolResearchProgram,
 } = models;
-const { v4 } = require("uuid");
 
 export default async function handler(req, res) {
   try {
@@ -45,7 +43,7 @@ export default async function handler(req, res) {
     // Respond with the school details or null if no school_id is provided
     return res
       .status(200)
-      .json(sendSuccess("success", 201, [{ school: schoolDetails }]));
+      .json(sendSuccess("success", 200, [{ school: schoolDetails }]));
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }

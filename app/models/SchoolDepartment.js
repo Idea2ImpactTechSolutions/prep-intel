@@ -33,9 +33,6 @@ const SchoolDepartment = sequelize.define(
     description: {
       type: DataTypes.STRING,
     },
-    name: {
-      type: DataTypes.STRING,
-    },
   },
   {
     timestamps: false,
