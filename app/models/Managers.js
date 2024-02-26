@@ -24,7 +24,7 @@ const Managers = sequelize.define(
             allowNull: true,
         },
         school_id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: false,
         },
         email: {
