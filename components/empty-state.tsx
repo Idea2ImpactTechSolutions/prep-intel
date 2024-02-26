@@ -1,4 +1,4 @@
-import { Image } from 'lucide-react'
+import { Image as LucidImage } from 'lucide-react'
 import React from 'react'
 import { Button } from './ui/button'
 import PageTitleContainer from './page-title'
@@ -23,7 +23,7 @@ export default function EmptyStateContainer({ show, pageTitle, pageTitleRightCon
             <section className='p-4 m-4 h-[calc(100vh_-_10rem)] bg-[#F0F4F7] rounded-[6px] flex justify-center items-center text-center'>
                 <div className='w-[30rem] md:mx-auto'>
                     <div className='p-5 px-10 w-fit mx-auto flex flex-col items-center border-2 border-primary rounded-[6px] bg-white'>
-                        <Image className='w-4 h-4 text-primary' />
+                        <LucidImage className='w-4 h-4 text-primary' />
                         <span className='text-xs pt-3 text-primary'>Welcome Icon</span>
                     </div>
                     <h2 className='font-bold py-2.5 md:text-lg'>{title}</h2>

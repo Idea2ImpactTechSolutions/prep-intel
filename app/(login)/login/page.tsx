@@ -11,6 +11,7 @@ import * as yup from "yup"
 import { useLoginMutation } from "@/redux/services/auth/authApi";
 import { useAppSelector } from "@/redux/store";
 import { Dictionary } from "@/types/dictionary";
+import { signIn, useSession } from "next-auth/react";
 
 interface initialValues {
   email: string;
@@ -20,14 +21,24 @@ interface initialValues {
 export default function LoginPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { user }: { user: any } = useAppSelector((state) => state.auth)
+  const {data: session, status}: any = useSession()
 
   const [login, { isLoading, isSuccess }] = useLoginMutation()
+
+  // if (status == "authenticated") {
+  //   router.push("school/welcome");
+  // }
+ 
 
   const handleRedirect = (role: string) => {
     switch (role) {
       case 'admin':
-        router.push('/school/welcome');
+        router.push('/admin/school');
+        break;
+      case 'manager':
+        router.push("school/welcome");
         break;
       case 'recruiter':
         router.push('/recruiter/profile/welcome')
@@ -39,15 +50,35 @@ export default function LoginPage() {
   }
 
   // handle login request
+  // const handleLogin = async (values: initialValues) => {
+  //   login(values)
+  //     .unwrap()
+  //     .then((payload: Dictionary) => {
+  //       if (payload && payload.token) {
+  //         handleRedirect(payload.role)
+  //       }
+  //     })
+  // }
+
+  // handle login request
   const handleLogin = async (values: initialValues) => {
-    login(values)
-      .unwrap()
-      .then((payload: Dictionary) => {
-        if (payload && payload.token) {
-          handleRedirect(payload.role)
-        }
-      })
-  }
+    try {
+      setLoading(true)
+      const res: any  = await signIn("credentials", { 
+        email: values.email, 
+        password: values.password,
+        redirect: false
+      });
+      if (res?.status == 200) {
+        handleRedirect(session?.user?.role)
+      } else {
+        setLoading(false)
+        throw new Error(res?.error)
+      }
+    } catch (error) {
+      setLoading(false)
+    }
+  };
 
   // handle input change
   const { values, errors, handleSubmit, handleChange, touched, resetForm } = useFormik({
@@ -63,10 +94,10 @@ export default function LoginPage() {
   })
 
   useEffect(() => {
-    const token = cookie.get('token') || null
-    if (token && user?.token) {
-      handleRedirect(user.role)
-    }
+    // const token = cookie.get('token') || null
+    // if (token && user?.token) {
+    //   handleRedirect(user.role)
+    // }
   }, [])
 
   return (
@@ -117,9 +148,9 @@ export default function LoginPage() {
 
           <Button
             className='block my-3'
-            loading={isLoading}
+            loading={loading}
             loadingText='Sign In'
-            disabled={isLoading}
+            disabled={loading}
             type='submit'
           >
             Sign In
