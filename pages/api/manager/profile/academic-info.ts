@@ -38,7 +38,6 @@ async function handleGetRequest(req, res) {
 }
 
 async function createSchoolDetails(req: any){
-    console.log('We are in academic info')
     // Extract data from request body
     const {
       admissionRequirements,
