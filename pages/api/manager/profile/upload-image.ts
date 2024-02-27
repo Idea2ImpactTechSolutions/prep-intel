@@ -38,9 +38,6 @@ export default async function handler(
 
     let buffer = Buffer.from(fs.readFileSync(imageFile[0].filepath));
 
-    console.log({ fData: schoolId[0] });
-
-    // Respond with the school details or null if no school_id is provided
     const params = {
       Bucket: "prep-bucket-upload",
       Key: imageFile[0].newFilename,
@@ -49,17 +46,24 @@ export default async function handler(
     };
 
     try {
-      // let school = await School.findByPk();
-      const data = await uploadFileToS3(params);
-      console.log({ data });
-      let createAsset = await Assets.create({
-        name: "logo",
-        school_id: schoolId[0],
-        description: data.Location,
-      });
+      let school = await School.findByPk(schoolId[0]);
+      if (school) {
+        const data = await uploadFileToS3(params);
+        let createAsset = await Assets.create({
+          name: "logo",
+          school_id: schoolId[0],
+          description: data.Location,
+        });
+
+        return res.status(200).json(
+          responseBody("image uplooaded successfully", 201, {
+            image_url: data.Location,
+          })
+        );
+      }
       return res.status(200).json(
-        responseBody("image uplooaded successfully", 201, {
-          image_url: data.Location,
+        responseBody("school with id not found", 201, {
+          image_url: "",
         })
       );
     } catch (error: any) {
