@@ -25,6 +25,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "pages/api/auth.js", "app/models/Managers.js", "pages/api/admin/create-manager.ts", "app/models/sequelize.ts", "pages/api/manager/profile/academic-info.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "pages/api/auth.js", "app/models/Managers.js", "pages/api/admin/create-manager.ts", "app/models/sequelize.ts", "pages/api/manager/profile/academic-info.js", "pages/api/manager/profile/upload-image.ts"],
   "exclude": ["node_modules"]
 }
