@@ -11,12 +11,11 @@ export const generateClientId = (length: number) => {
   return result;
 };
 
-export const sendSuccess = (message: string, code: number, data: any) => {
+export const responseBody = (message: string, code: number, data: any) => {
   var success = {
     status: code,
     message,
     data,
   };
-
   return success;
 };

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { models } from "../../../app/models";
 const { Managers, School } = models;
-import { sendSuccess } from "../../../app/config/helpers";
+import { responseBody } from "../../../app/config/helpers";
 import { v4 } from "uuid";
 
 export default async function AuthHandler(
@@ -20,7 +20,7 @@ export default async function AuthHandler(
     if (school) {
       return res
         .status(409)
-        .json(sendSuccess("school account already exists", 409, []));
+        .json(responseBody("school account already exists", 409, []));
     }
 
     let managerChecker = await Managers.findOne({
@@ -33,7 +33,7 @@ export default async function AuthHandler(
       return res
         .status(409)
         .json(
-          sendSuccess(
+          responseBody(
             "manager account with email already created for this school",
             409,
             []
@@ -65,7 +65,7 @@ export default async function AuthHandler(
     return res
       .status(200)
       .json(
-        sendSuccess("manager account created successfully", 200, [
+        responseBody("manager account created successfully", 200, [
           { auth_code: managers.auth_code },
         ])
       );

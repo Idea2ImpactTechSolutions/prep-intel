@@ -1,4 +1,4 @@
-import { sendSuccess } from "../../../../app/config/helpers";
+import { responseBody } from "../../../../app/config/helpers";
 
 const { models } = require("../../../../app/models");
 const { School, SchoolDepartment, SchoolAccreditation, SchoolResearchProgram } =
@@ -13,12 +13,12 @@ export default async function handler(req, res) {
     return res
       .status(201)
       .json(
-        sendSuccess("school info added successfully", 201, [{ data: "Hello" }])
+        responseBody("school info added successfully", 201, [{ data: "Hello" }])
       );
   } catch (error: any) {
     // Handle any errors
     res
       .status(400)
-      .json(sendSuccess("error occurred", 400, [{ school: error.message }]));
+      .json(responseBody("error occurred", 400, [{ school: error.message }]));
   }
 }
