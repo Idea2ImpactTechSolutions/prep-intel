@@ -10,9 +10,6 @@ const SchoolAccreditation = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    name: {
-      type: DataTypes.STRING,
-    },
     school_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
