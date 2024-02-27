@@ -41,7 +41,6 @@ const managerApi = baseApi.injectEndpoints({
             async onQueryStarted(_, {queryFulfilled, dispatch}) {
                 try {
                     const result = await queryFulfilled
-                    console.log(result)
                 } catch (error) {
                     console.log(error)
                 }
@@ -52,7 +51,7 @@ const managerApi = baseApi.injectEndpoints({
                 url: `/manager/profile/upload-image`,
                 method: 'POST',
                 body: school_image,
-                formData: true,
+                // formData: true,
             }),
             async onQueryStarted(_, {queryFulfilled, dispatch}) {
                 try {

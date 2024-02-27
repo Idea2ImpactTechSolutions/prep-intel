@@ -37,7 +37,11 @@ export default function Page() {
             </div>
             <div className="row-span-2 bg-gray-100 p-4 rounded">
                 <label className="font-bold">Student Interest</label>
-                <Image src="/images/us-map.svg" alt="US Map" />
+                <Image 
+                    src="/images/us-map.svg" alt="US Map" 
+                    width={400}
+                    height={400}
+                />
             </div>
             <div className="bg-gray-100 p-4 rounded">
                 <label className="font-bold">Admission Rate</label>

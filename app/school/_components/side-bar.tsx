@@ -13,6 +13,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Cookies from 'js-cookie';
 import { signOut } from "next-auth/react";
+import { managerReset } from "@/redux/features/school/managerSlice";
 
 interface SidebarProps {
     showSidebar: any;
@@ -37,7 +38,7 @@ export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
 
     const handleLogout = async () => {
         await signOut()
-        // dispatch(reset());
+        dispatch(managerReset());
         // window.location.href = "/login";
     }
 

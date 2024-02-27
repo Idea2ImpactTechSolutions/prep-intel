@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { useLazyGetSchoolProfileQuery, useUploadSchoolImageMutation } from "@/redux/services/school/managerApi";
+import { useAppSelector } from "@/redux/store";
+import { Dictionary } from "@/types/dictionary";
 import { STATE_CITY_DATA } from "@/utils/data";
 import { formatRMDatePicker } from "@/utils/helpers/date-format";
 import { Formik, Form, FieldArray, Field } from "formik";
@@ -42,29 +44,15 @@ export default function BasicInformationForm() {
   const { data: userData }: any = useSession()
   const [getSchoolProfile] = useLazyGetSchoolProfileQuery()
   const [uploadSchoolImage, {isLoading, isSuccess}] = useUploadSchoolImageMutation()
-
-  const handleUploadSchoolImage = async (school_image) => {
-    uploadSchoolImage(school_image)
-      .unwrap()
-      .then((payload) => {
-        console.log(payload)
-      })
-  }
-  const handleGetSchoolInformation = async (schoolId) => {
-    getSchoolProfile(schoolId)
-      .unwrap()
-      .then((payload) => {
-        console.log(payload)
-      })
-  }
-
-  const initialValues: initialValues = {
-    school_id: '',
+  
+  const { manager: { school_information: { school_data } } }: Dictionary = useAppSelector((state) => state.manager)
+  const [initialSchoolData, setInitialSchoolData] = useState<initialValues>({
+    school_id: school_data?.id || '',
     school_image: '',
     school_details: {
-      name: '',
+      name: school_data?.name || '',
       institution_type: '',
-      tagline: '',
+      tagline: school_data?.tagline || '',
       founded_date: '',
       affiliations: ''
     },
@@ -80,6 +68,16 @@ export default function BasicInformationForm() {
         }
       ],
     }
+  })
+
+  console.log(school_data)
+
+  const handleUploadSchoolImage = async (school_image) => {
+    uploadSchoolImage(school_image)
+      .unwrap()
+      .then((payload) => {
+        console.log(payload)
+      })
   }
 
   const schema = yup.object().shape({
@@ -109,13 +107,13 @@ export default function BasicInformationForm() {
     console.log(values)
   }
 
-  useEffect(() => {
-    if (userData) {
-      console.log(userData)
-      const { user } = userData
-      handleGetSchoolInformation(user.jti)
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (userData) {
+  //     console.log(userData)
+  //     const { user } = userData
+  //     handleGetSchoolInformation(user.schoolID)
+  //   }
+  // }, [])
 
   useEffect(() => {
     if (selectedImage) {
@@ -129,7 +127,7 @@ export default function BasicInformationForm() {
     <>
       <div className="">
         <Formik
-          initialValues={initialValues}
+          initialValues={initialSchoolData}
           onSubmit={handleFormSubmit}
           validationSchema={schema}
         >
@@ -169,10 +167,11 @@ export default function BasicInformationForm() {
                               name="school_details.name"
                               value={values.school_details.name}
                               touched={touched.school_details?.name}
-                              onChange={handleChange}
+                              // onChange={handleChange}
                               error={errors.school_details?.name}
                               labelClass="text-xs font-normal text-[#61646B]"
                               className="w-full md:w-[22rem]"
+                              readOnly
                             />
                             <Textarea
                               label="School Tagline"

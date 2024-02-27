@@ -1,9 +1,42 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Sidebar from '../_components/side-bar'
+import { useLazyGetSchoolProfileQuery } from '@/redux/services/school/managerApi'
+import { useSession } from 'next-auth/react'
+import { useAppDispatch } from '@/redux/store'
+import { setSchoolInformation } from '@/redux/features/school/managerSlice'
+import EmptyStateContainer from '@/components/empty-state'
+import { usePathname, useRouter } from 'next/navigation'
+import { LucideLoader2 } from 'lucide-react'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const [showSidebar, setShowSidebar] = useState<boolean>(true)
+    const [isProfileCompleted, setIsProfileCompleted] = useState<boolean>(false)
+    const [getSchoolProfile, { isLoading, isSuccess }] = useLazyGetSchoolProfileQuery()
+
+    const { data: userData }: any = useSession()
+    const router = useRouter()
+    const location = usePathname()
+    const dispatch = useAppDispatch()
+
+    const handleGetSchoolInformation = async (schoolId) => {
+        getSchoolProfile(schoolId)
+            .unwrap()
+            .then((payload) => {
+                const { data } = payload
+                dispatch(setSchoolInformation({ slug: 'school_data', data: data[0]?.school }))
+                !data[0]?.school?.publish_date ? setIsProfileCompleted(false) : setIsProfileCompleted(true)
+            })
+    }
+
+    useEffect(() => {
+        if (userData) {
+            const { user } = userData
+            handleGetSchoolInformation(user.schoolID)
+        }
+    }, [])
+
+
     return (
         <main className="overflow-y-hidden font-sans">
             <section className="">
@@ -12,7 +45,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     setShowSidebar={setShowSidebar}
                 />
                 <section>
-                    {children}
+                    {
+                        isLoading ? 
+                            <div className="h-[calc(100vh_-_2rem)] grid place-content-center">
+                                <LucideLoader2 width={50} height={50} className="text-primary animate-spin"/>
+                            </div> 
+                            : isProfileCompleted ? children :
+                                location === "/school/my-school" ?
+                                    children
+                                    :
+                                    <EmptyStateContainer
+                                        show={true}
+                                        pageTitle="Complete Profile Setup"
+                                        title="Welcome to the Dashboard Tab!"
+                                        content="Welcome to the Dashboard panel! This space is dedicated to helping you manage user permissions, oversee recruiter activities, and fine-tune platform settings tailored for your institution. Before diving into these functionalities, ensure your school's profile is set up. A complete profile strengthens your institution's presence on the platform and empowers you to make informed administrative decisions."
+                                        onClick={() => router.push('/school/my-school')}
+                                    />
+                    }
+                    {/* {children} */}
                 </section>
             </section>
         </main>
