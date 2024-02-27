@@ -11,8 +11,12 @@ import EmptyStateContainer from "@/components/empty-state";
 import PreviewSchoolInformation from "./_components/create-profile-form/preview-school-information";
 
 
+type PROGRESS_TYPE = 'BASIC_INFORMATION' | 'ACADEMIC_INFORMATION' | 'CAMPUS_INFORMATION' | 'EXTRA_CURRICULAR_INFORMATION' | 'NEWS_FEED_EVENT' | 'PREVIEW_INFORMATION'
+
+
 export default function MySchool() {
-    const [currentProgress, setCurrentProgress] = useState('BASIC_INFORMATION')
+    const [currentProgress, setCurrentProgress] = useState<PROGRESS_TYPE>('BASIC_INFORMATION')
+
     return (
         <>
             <EmptyStateContainer

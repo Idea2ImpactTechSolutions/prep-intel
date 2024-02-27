@@ -32,11 +32,59 @@ const managerApi = baseApi.injectEndpoints({
                     console.log(error)
                 }
             }
+        }),
+        getSchoolProfile: builder.query({
+            query: (schoolId) => ({
+                url: `/manager/profile/get-school?school_id=${schoolId}`,
+                method: 'GET',
+            }),
+            async onQueryStarted(_, {queryFulfilled, dispatch}) {
+                try {
+                    const result = await queryFulfilled
+                    console.log(result)
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+        }),
+        uploadSchoolImage: builder.mutation({
+            query: (school_image) => ({
+                url: `/manager/profile/upload-image`,
+                method: 'POST',
+                body: school_image,
+                formData: true,
+            }),
+            async onQueryStarted(_, {queryFulfilled, dispatch}) {
+                try {
+                    const result = await queryFulfilled
+                    console.log(result)
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+        }),
+        managerCreateSchoolProfile: builder.mutation({
+            query: (payload) => ({
+                url: `/manager/profile/school-profile`,
+                method: 'POST',
+                body: payload
+            }),
+            async onQueryStarted(_, {queryFulfilled, dispatch}) {
+                try {
+                    const result = await queryFulfilled
+                    console.log(result)
+                } catch (error) {
+                    console.log(error)
+                }
+            }
         })
     })
 })
 
 export const { 
     useSchoolManagerClaimAccountMutation,
-    useSchoolManagerSetPasswordMutation 
+    useSchoolManagerSetPasswordMutation,
+    useLazyGetSchoolProfileQuery,
+    useManagerCreateSchoolProfileMutation, 
+    useUploadSchoolImageMutation
 } = managerApi
