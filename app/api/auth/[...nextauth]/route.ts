@@ -37,7 +37,7 @@ const handler = NextAuth({
             // role: user.role, We should authenticate against a common table, and 
             // pull the roll from said table
             role: "manager", // Hard-coding due to missing data
-            schoolID: user.schoolID
+            schoolID: user.school_id
           };
         } else {
           // If you return null then an error will be displayed advising the user to check their details.
