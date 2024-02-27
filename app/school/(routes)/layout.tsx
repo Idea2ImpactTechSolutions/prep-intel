@@ -8,6 +8,7 @@ import { setSchoolInformation } from '@/redux/features/school/managerSlice'
 import EmptyStateContainer from '@/components/empty-state'
 import { usePathname, useRouter } from 'next/navigation'
 import { LucideLoader2 } from 'lucide-react'
+import LoadingSpinner from './shared/loading-spinner'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const [showSidebar, setShowSidebar] = useState<boolean>(true)
@@ -45,11 +46,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     setShowSidebar={setShowSidebar}
                 />
                 <section>
-                    {
+                    {/* {
                         isLoading ? 
-                            <div className="h-[calc(100vh_-_2rem)] grid place-content-center">
-                                <LucideLoader2 width={50} height={50} className="text-primary animate-spin"/>
-                            </div> 
+                            <LoadingSpinner/>
                             : isProfileCompleted ? children :
                                 location === "/school/my-school" ?
                                     children
@@ -61,8 +60,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                         content="Welcome to the Dashboard panel! This space is dedicated to helping you manage user permissions, oversee recruiter activities, and fine-tune platform settings tailored for your institution. Before diving into these functionalities, ensure your school's profile is set up. A complete profile strengthens your institution's presence on the platform and empowers you to make informed administrative decisions."
                                         onClick={() => router.push('/school/my-school')}
                                     />
-                    }
-                    {/* {children} */}
+                    } */}
+                    {children}
                 </section>
             </section>
         </main>

@@ -202,9 +202,8 @@ export default function BasicInformationForm() {
                             touched={touched.school_details?.institution_type}
                             error={errors.school_details?.institution_type}
                             options={[
-                              { label: 'Institution A', value: 'Institution A' },
-                              { label: 'Institution B', value: 'Institution B' },
-                              { label: 'Institution C', value: 'Institution C' },
+                              { label: 'University', value: 'University' },
+                              { label: 'Community College', value: 'Community College' },
                             ]}
                             selected={values.school_details.institution_type}
                             setSelected={(selected) => setFieldValue('school_details.institution_type', selected)}
@@ -300,9 +299,8 @@ export default function BasicInformationForm() {
                                             touched={touched?.school_address?.contact_types[index]?.contact_type}
                                             error={errors?.school_address?.contact_types[index]?.contact_type}
                                             options={[
-                                              { label: 'Califonia', value: 'Califonia' },
-                                              { label: 'Texas', value: 'Texas' },
-                                              { label: 'Dallas', value: 'Dallas' },
+                                              { label: 'Admissions', value: 'Admissions' },
+                                              { label: 'Financial Aid', value: 'Financial Aid' },
                                             ]}
                                             selected={values?.school_address?.contact_types[index]?.contact_type}
                                             setSelected={(selected) => setFieldValue(`school_address.contact_types.${index}.contact_type`, selected)}
