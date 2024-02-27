@@ -1,4 +1,4 @@
-import { sendSuccess } from "../../../../app/config/helpers";
+import { responseBody } from "../../../../app/config/helpers";
 
 const { models } = require("../../../../app/models");
 const { School, Recruiters } = models;
@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     if (!school) {
       return res
         .status(201)
-        .json(sendSuccess("school does not exist", 404, []));
+        .json(responseBody("school does not exist", 404, []));
     }
 
     let recruiters = await Recruiters.findAll({
@@ -23,15 +23,15 @@ export default async function handler(req, res) {
     });
 
     if (!recruiters) {
-      return res.status(404).json(sendSuccess("no recruiter found", 404, []));
+      return res.status(404).json(responseBody("no recruiter found", 404, []));
     }
 
     // Send a successful response
-    return res.status(201).json(sendSuccess("success", 200, [recruiters]));
+    return res.status(201).json(responseBody("success", 200, [recruiters]));
   } catch (error: any) {
     // Handle any errors
     return res
       .status(400)
-      .json(sendSuccess("error occurred", 400, [{ school: error.message }]));
+      .json(responseBody("error occurred", 400, [{ school: error.message }]));
   }
 }

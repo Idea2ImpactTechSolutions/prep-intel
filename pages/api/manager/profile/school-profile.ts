@@ -1,13 +1,45 @@
-import { sendSuccess } from "../../../../app/config/helpers";
+import { responseBody } from "../../../../app/config/helpers";
 
 // pages/api/manager/profile/academic-info.js
 const { models } = require("../../../../app/models");
 const { School, SchoolAddress, SchoolContact, SchoolSocialMedia } = models;
 const { v4 } = require("uuid");
 
+
 export default async function handler(req, res) {
+  switch (req.method) {
+    case "POST":
+      return handlePostRequest(req, res);
+    case "GET":
+      return handleGetRequest(req, res);
+    default:
+      return res.status(405).json(responseBody("Method Not Allowed", 405, null));
+  }
+}
+
+async function handlePostRequest(req, res) {
   try {
-    // Extract data from request body
+    const newSchool : any = await createSchool(req);
+    return res.status(201).json(responseBody("Manager account claimed successfully", 201, { school: newSchool.dataValues }));
+  } catch (error : any) {
+    return res.status(400).json(responseBody("Error occurred", 400, { error: error.message }));
+  }
+}
+
+async function handleGetRequest(req, res) {
+  try {
+    const schoolDetails: any = await getSchool(req);
+    if (!schoolDetails) {
+      return res.status(404).json(responseBody("School not found", 404, null));
+    }
+    return res.status(200).json(responseBody("School retrieved successfully", 200, schoolDetails));
+  } catch (error: any) {
+    return res.status(400).json(responseBody("Error occurred", 400, { error: error.message }));
+  }
+}
+
+async function createSchool(req:any) {
+   // Extract data from request body
     // 1) Figure out how to do S3 on the backend with Marvin so we can save images
     // 2) Sync with Joey with figure out how to make loading screen better and the sticky footer
     // 3) Check with Marvin how to do page numbers and skipping to a page number using the route. Add these page numbers to the route
@@ -20,8 +52,10 @@ export default async function handler(req, res) {
       school_social_medias,
       school_id,
     } = req.body;
+    
     const school_contacts = school_address.contact_types;
     const id = v4();
+    
     // Create a new school entry
     const schoolData = {
       id,
@@ -46,7 +80,6 @@ export default async function handler(req, res) {
       school = await School.create(schoolData);
     }
 
-    //console.log({ school });
 
     if (school && school.dataValues) {
       // Assuming `SchoolDepartment` is a model that relates to `School` via a foreign key `school_id`
@@ -95,19 +128,31 @@ export default async function handler(req, res) {
       school.dataValues.school_contacts = newSchoolContacts;
       school.dataValues.school_social_medias = newSchoolSocialMedias;
     }
-
-    //console.log("school.dataValues", school.dataValues);
-    res
-      .status(201)
-      .json(
-        sendSuccess("manager account claimed successfully", 201, [
-          { school: school.dataValues },
-        ])
-      );
-  } catch (error: any) {
-    // Handle any errors
-    res
-      .status(400)
-      .json(sendSuccess("Error occurred", 400, [{ school: error.message }]));
+    return school;
   }
+
+async function getSchool(req: any) {
+  let schoolDetails: any = null;
+  const { school_id } = req.query;
+  if (school_id) {
+    schoolDetails = await School.findByPk(school_id, {
+      include: [
+        { model: SchoolAddress, as: "school_address" },
+        { model: SchoolContact, as: "school_contacts" },
+        { model: SchoolSocialMedia, as: "school_social_medias" },
+      ],
+    });
+
+    // If schoolDetails is not null, format the response object
+    if (schoolDetails) {
+      schoolDetails = {
+        ...schoolDetails.toJSON(),
+        school_address: schoolDetails.school_address || [],
+        school_contacts: schoolDetails.school_contacts || [],
+        school_social_medias: schoolDetails.school_social_medias || [],
+      };
+    }
+  }
+  return schoolDetails;
 }
+

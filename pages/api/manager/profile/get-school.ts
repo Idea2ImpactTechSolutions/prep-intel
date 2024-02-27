@@ -1,4 +1,4 @@
-import { sendSuccess } from "../../../../app/config/helpers";
+import { responseBody } from "../../../../app/config/helpers";
 const { models } = require("../../../../app/models");
 
 const {
@@ -43,7 +43,7 @@ export default async function handler(req, res) {
     // Respond with the school details or null if no school_id is provided
     return res
       .status(200)
-      .json(sendSuccess("success", 200, [{ school: schoolDetails }]));
+      .json(responseBody("success", 200, [{ school: schoolDetails }]));
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }

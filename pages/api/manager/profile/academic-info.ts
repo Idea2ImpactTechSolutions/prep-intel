@@ -1,4 +1,4 @@
-import { sendSuccess } from "../../../../app/config/helpers";
+import { responseBody } from "../../../../app/config/helpers";
 
 const { models } = require("../../../../app/models");
 const { School, SchoolDepartment, SchoolAccreditation, SchoolResearchProgram } =
@@ -6,7 +6,39 @@ const { School, SchoolDepartment, SchoolAccreditation, SchoolResearchProgram } =
 const { v4 } = require("uuid");
 
 export default async function handler(req, res) {
+  switch (req.method) {
+    case "POST":
+      return handlePostRequest(req, res);
+    case "GET":
+      return handleGetRequest(req, res);
+    default:
+      return res.status(405).json(responseBody("Method Not Allowed", 405, null));
+  }
+}
+
+async function handlePostRequest(req, res) {
   try {
+    const newSchool : any = await createSchoolDetails(req);
+    return res.status(201).json(responseBody("Manager account claimed successfully", 201, { school: newSchool.dataValues }));
+  } catch (error : any) {
+    return res.status(400).json(responseBody("Error occurred", 400, { error: error.message }));
+  }
+}
+
+async function handleGetRequest(req, res) {
+  try {
+    const schoolDetails: any = await getSchoolDetails(req);
+    if (!schoolDetails) {
+      return res.status(404).json(responseBody("School not found", 404, null));
+    }
+    return res.status(200).json(responseBody("School retrieved successfully", 200, schoolDetails));
+  } catch (error: any) {
+    return res.status(400).json(responseBody("Error occurred", 400, { error: error.message }));
+  }
+}
+
+async function createSchoolDetails(req: any){
+    console.log('We are in academic info')
     // Extract data from request body
     const {
       admissionRequirements,
@@ -97,18 +129,34 @@ export default async function handler(req, res) {
       school.dataValues.schoolDepartments = newSchoolDepartments;
       school.dataValues.schoolResearchPrograms = newSchoolResearchPrograms;
     }
-
     // Send a successful response
-    return res
-      .status(201)
-      .json(
-        sendSuccess("school info added successfully", 201, [
-          { school: school.dataValues },
-        ])
-      );
-  } catch (error: any) {
-    return res
-      .status(400)
-      .json(sendSuccess("error occurred", 400, [{ error: error.message }]));
+    return school;
+}
+
+
+async function getSchoolDetails(req: any){
+  let schoolDetails : any = null;
+  const { schoolId } = req.query;
+  if (schoolId) {
+    schoolDetails = await School.findByPk(schoolId, {
+      include: [
+        { model: SchoolDepartment, as: "school_departments" },
+        { model: SchoolAccreditation, as: "school_accreditations" },
+        { model: SchoolResearchProgram, as: "school_research_programs" },
+      ],
+    });
+
+    // If schoolDetails is not null, format the response object
+    if (schoolDetails) {
+      schoolDetails = {
+        ...schoolDetails.toJSON(),
+        school_departments: schoolDetails.school_departments || [],
+        school_accreditations: schoolDetails.school_accreditations || [],
+        researchPrograms: schoolDetails.researchPrograms || [],
+      };
+    }
   }
+
+  // Respond with the school details or null if no schoolId is provided
+  return schoolDetails;
 }

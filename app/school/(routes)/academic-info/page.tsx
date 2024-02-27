@@ -138,12 +138,12 @@ export default function AcademicInfo() {
             )
           : [{ name: "" }],
       admissionRequirements: {
-        act_required: data.act_required ?? "",
-        sat_required: data.sat_required ?? "",
-        diploma_required: data.diploma_required ?? "",
-        min_act_score: data.min_act_score ?? "",
-        min_sat_score: data.min_sat_score ?? "",
-        gpa_requirement: data.gpa_requirement ?? "",
+        act_required: data.act_required ?? false,
+        sat_required: data.sat_required ?? false,
+        diploma_required: data.diploma_required ?? false,
+        min_act_score: data.min_act_score ?? "", // Shouldn't pass empty string. Remove from request payload if no value
+        min_sat_score: data.min_sat_score ?? "",  //Shouldn't pass empty string. Remove from request payload if no value
+        gpa_requirement: data.gpa_requirement ?? "", //Shouldn't pass empty string. Remove from request payload if no value
       },
 
       financials: {
@@ -167,8 +167,8 @@ export default function AcademicInfo() {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        const data = await response.json();
-        setSchoolData(data);
+        const school = await response.json();
+        setSchoolData(school.data);
         setIsLoading(false);
       } catch (error) {
         //console.error("There was a problem fetching school data:", error);
