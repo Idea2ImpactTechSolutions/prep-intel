@@ -135,8 +135,8 @@ export default function Page () {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        const data = await response.json();
-        setSchoolData(data);
+        const school = await response.json();
+        setSchoolData(school.data);
         setIsLoading(false);
       } catch (error) {
       }

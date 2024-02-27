@@ -1,4 +1,4 @@
-import { sendSuccess } from "../../../../app/config/helpers";
+import { responseBody } from "../../../../app/config/helpers";
 
 const { models } = require("../../../../app/models");
 const { School, Recruiters } = models;
@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     if (recruiterCheck) {
       return res
         .status(201)
-        .json(sendSuccess("recruiter already added", 400, []));
+        .json(responseBody("recruiter already added", 400, []));
     }
 
     let school = await School.findOne({ where: { id: school_id } });
@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     if (!school) {
       return res
         .status(201)
-        .json(sendSuccess("school does not exist", 404, []));
+        .json(responseBody("school does not exist", 404, []));
     }
 
     const currentDate = new Date();
@@ -49,11 +49,11 @@ export default async function handler(req, res) {
     // Send a successful response
     return res
       .status(201)
-      .json(sendSuccess("recruiter created successfully", 201, []));
+      .json(responseBody("recruiter created successfully", 201, []));
   } catch (error: any) {
     // Handle any errors
     return res
       .status(400)
-      .json(sendSuccess("error occurred", 400, [{ school: error.message }]));
+      .json(responseBody("error occurred", 400, [{ school: error.message }]));
   }
 }

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { models } from "../../../app/models";
 const { Managers, School } = models;
-import { sendSuccess } from "../../../app/config/helpers";
+import { responseBody } from "../../../app/config/helpers";
 import { v4 } from "uuid";
 
 export default async function AuthHandler(
@@ -22,14 +22,14 @@ export default async function AuthHandler(
       return res
         .status(404)
         .json(
-          sendSuccess("no manager with email and auth code found", 409, [])
+          responseBody("no manager with email and auth code found", 409, [])
         );
     }
 
     if (managerChecker.account_claimed) {
       return res
         .status(200)
-        .json(sendSuccess("manager account already claimed", 200, []));
+        .json(responseBody("manager account already claimed", 200, []));
     }
     // Create a new Date object representing the current date and time
     const currentDate = new Date();
@@ -45,7 +45,7 @@ export default async function AuthHandler(
       return res
         .status(409)
         .json(
-          sendSuccess(
+          responseBody(
             "Otp expired kindly check your mail for another otp",
             409,
             [{ auth_code: managers.auth_code }]
@@ -61,7 +61,7 @@ export default async function AuthHandler(
     );
     return res
       .status(200)
-      .json(sendSuccess("manager account claimed successfully", 200, []));
+      .json(responseBody("manager account claimed successfully", 200, []));
   } catch (error: any) {
     // console.log({
     //   error: error.message,

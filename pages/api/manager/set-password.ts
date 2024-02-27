@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { models } from "../../../app/models";
 const { Managers, School } = models;
-import { sendSuccess } from "../../../app/config/helpers";
+import { responseBody } from "../../../app/config/helpers";
 import bcrypt from "bcryptjs";
 
 export default async function AuthHandler(
@@ -20,13 +20,13 @@ export default async function AuthHandler(
     if (!managerChecker) {
       return res
         .status(409)
-        .json(sendSuccess("manager account with email does not exit", 409, []));
+        .json(responseBody("manager account with email does not exit", 409, []));
     }
 
     if (managerChecker.password) {
       return res
         .status(409)
-        .json(sendSuccess("manager password already added", 409, []));
+        .json(responseBody("manager password already added", 409, []));
     }
 
     const harsh = bcrypt.hashSync(password);
@@ -38,7 +38,7 @@ export default async function AuthHandler(
 
     return res
       .status(200)
-      .json(sendSuccess("manager password added successfully", 200, []));
+      .json(responseBody("manager password added successfully", 200, []));
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
