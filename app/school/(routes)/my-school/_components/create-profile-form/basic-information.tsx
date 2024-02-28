@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { useLazyGetSchoolProfileQuery, useUploadSchoolImageMutation } from "@/redux/services/school/managerApi";
+import { useLazyGetSchoolProfileQuery, useManagerCreateSchoolProfileMutation, useUploadSchoolImageMutation } from "@/redux/services/school/managerApi";
 import { useAppSelector } from "@/redux/store";
 import { Dictionary } from "@/types/dictionary";
 import { STATE_CITY_DATA } from "@/utils/data";
@@ -14,6 +14,7 @@ import { formatRMDatePicker } from "@/utils/helpers/date-format";
 import { Formik, Form, FieldArray, Field } from "formik";
 import { ChevronLeft, ChevronRight, File, Image, ImagePlus, LucideLoader, MinusCircle, PlusSquare, Save, X } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import * as yup from "yup"
 
@@ -41,9 +42,11 @@ interface initialValues {
 
 export default function BasicInformationForm() {
   const [selectedImage, setSelectedImage] = useState<File>()
+  const [schoolImgUrl, setSchoolImgUrl] = useState('')
   const { data: userData }: any = useSession()
   const [getSchoolProfile] = useLazyGetSchoolProfileQuery()
   const [uploadSchoolImage, {isLoading, isSuccess}] = useUploadSchoolImageMutation()
+  const [managerCreateSchoolProfile, {isLoading: isCreatingSchoolProfile, isSuccess: isSuccessCreateSchoolProfile}] = useManagerCreateSchoolProfileMutation()
   
   const { manager: { school_information: { school_data } } }: Dictionary = useAppSelector((state) => state.manager)
   const [initialSchoolData, setInitialSchoolData] = useState<initialValues>({
@@ -70,13 +73,27 @@ export default function BasicInformationForm() {
     }
   })
 
-  console.log(school_data)
+  const router = useRouter()
 
-  const handleUploadSchoolImage = async (school_image) => {
-    uploadSchoolImage(school_image)
+  const handleUploadSchoolImage = async (payload) => {
+    uploadSchoolImage(payload)
+      .unwrap()
+      .then((payload) => {
+        if (payload?.data?.image_url) {
+          setInitialSchoolData({...initialSchoolData, school_image: payload.data.image_url})
+          setSchoolImgUrl(payload.data.image_url)
+        }
+      })
+  }
+  
+  const handleCreateSchoolProfile = async (payload: Dictionary) => {
+    let schoolData = {...payload}
+    schoolData.school_image = schoolImgUrl
+    managerCreateSchoolProfile(schoolData)
       .unwrap()
       .then((payload) => {
         console.log(payload)
+        // router.push("/school/academic-info");
       })
   }
 
@@ -104,7 +121,9 @@ export default function BasicInformationForm() {
   })
 
   const handleFormSubmit = (values: initialValues) => {
-    console.log(values)
+    let payload = {...values}
+    payload = {...payload, school_image: schoolImgUrl}
+
   }
 
   // useEffect(() => {
@@ -119,6 +138,7 @@ export default function BasicInformationForm() {
     if (selectedImage) {
       const payload = new FormData()
       payload.append('image', selectedImage)
+      payload.append('school_id', school_data.id)
       handleUploadSchoolImage(payload)
     }
   },[selectedImage])
@@ -132,7 +152,7 @@ export default function BasicInformationForm() {
           validationSchema={schema}
         >
           {({ values, errors, touched, handleChange, setFieldValue }) => {
-            // console.log(values)
+            // console.log(errors)
             return (
               <Form>
                 <div className="p-4 md:px-16 flex flex-col h-[calc(100vh_-_14rem)] overflow-y-scroll">
@@ -191,7 +211,7 @@ export default function BasicInformationForm() {
                           <CustomDatePicker
                             label="Founded Date"
                             labelClass="text-xs font-normal text-[#61646B]"
-                            handleChange={(date) => console.log(formatRMDatePicker(date))}
+                            handleChange={(date) => setFieldValue(`school_details.founded_date`, formatRMDatePicker(date))}
                             touched={touched?.school_details?.founded_date}
                             error={errors?.school_details?.founded_date}
                           />
@@ -404,7 +424,7 @@ export default function BasicInformationForm() {
                     <Button
                       variant="outline"
                       className="text-xs h-7 rounded-sm px-3"
-                      type="submit"
+                      type="button"
                     ><Save className="w-3 h-3 mr-1" /> Save for Later</Button>
                   </div>
                   <div className="flex gap-x-4 items-center">
@@ -412,11 +432,14 @@ export default function BasicInformationForm() {
                       variant="outline"
                       className="text-xs h-7 rounded-sm px-6"
                       type="button"
+                      onClick={() => router.push('/school/dashboard')}
                     ><ChevronLeft className="w-3 h-3 mr-1" /> Back</Button>
                     <Button
                       className="text-xs h-7 rounded-sm px-6"
                       type="submit"
-                    // onClick={() => setCurrentProgress('')}
+                      loading={isCreatingSchoolProfile}
+                      disabled={isCreatingSchoolProfile || isLoading}
+                      onClick={() => handleCreateSchoolProfile(values)}
                     >Next <ChevronRight className="w-3 h-3 ml-1" /></Button>
                   </div>
                 </div>

@@ -36,7 +36,7 @@ export default function CustomFileInput({ handleFileChange, handleFileDrop, sele
                 disabled={disabled}
             />
             {children}
-            {uploading && <span className="flex items-center mt-1"> <span className="mr-1 animate-spin"><LucideLoader width={15} height={15} /></span> <span className="text-sm"> uploading</span></span>}
+            {uploading && <span className="flex items-center mt-1 text-blue-600"> <span className="mr-1 animate-spin"><LucideLoader width={15} height={15} /></span> <span className="text-sm"> uploading</span></span>}
         </label>
     )
 }
