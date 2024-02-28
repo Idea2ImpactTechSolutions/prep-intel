@@ -40,6 +40,7 @@ export default function VitalsPage() {
                 <CustomDatePicker
                   label="Birth Date"
                   className="mb-4"
+                  handleChange={() => null}
                 />
                 <Input
                   label="Expected Graduation Year"
@@ -52,6 +53,7 @@ export default function VitalsPage() {
                     options={STATES}
                     selected={state}
                     setSelected={setState}
+                    error={""}
                   />
                 </div>
                 <div className="mb-4 md:mb-6">
@@ -61,6 +63,7 @@ export default function VitalsPage() {
                     selected={city}
                     setSelected={setCity}
                     disabled={state === ''}
+                    error={""}
                   />
                 </div>
               </div>
