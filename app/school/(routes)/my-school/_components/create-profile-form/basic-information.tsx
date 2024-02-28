@@ -54,7 +54,7 @@ export default function BasicInformationForm() {
     school_image: '',
     school_details: {
       name: school_data?.name || '',
-      institution_type: '',
+      institution_type: school_data?.institution_type ||'',
       tagline: school_data?.tagline || '',
       founded_date: '',
       affiliations: ''
@@ -85,15 +85,16 @@ export default function BasicInformationForm() {
         }
       })
   }
-  
+
   const handleCreateSchoolProfile = async (payload: Dictionary) => {
     let schoolData = {...payload}
     schoolData.school_image = schoolImgUrl
     managerCreateSchoolProfile(schoolData)
       .unwrap()
       .then((payload) => {
-        console.log(payload)
-        // router.push("/school/academic-info");
+        if (payload.status === 201) {
+          router.push("/school/academic-info");
+        }
       })
   }
 
@@ -123,16 +124,8 @@ export default function BasicInformationForm() {
   const handleFormSubmit = (values: initialValues) => {
     let payload = {...values}
     payload = {...payload, school_image: schoolImgUrl}
-
+    handleCreateSchoolProfile(payload)
   }
-
-  // useEffect(() => {
-  //   if (userData) {
-  //     console.log(userData)
-  //     const { user } = userData
-  //     handleGetSchoolInformation(user.schoolID)
-  //   }
-  // }, [])
 
   useEffect(() => {
     if (selectedImage) {
@@ -152,7 +145,6 @@ export default function BasicInformationForm() {
           validationSchema={schema}
         >
           {({ values, errors, touched, handleChange, setFieldValue }) => {
-            // console.log(errors)
             return (
               <Form>
                 <div className="p-4 md:px-16 flex flex-col h-[calc(100vh_-_14rem)] overflow-y-scroll">
@@ -225,7 +217,7 @@ export default function BasicInformationForm() {
                               { label: 'University', value: 'University' },
                               { label: 'Community College', value: 'Community College' },
                             ]}
-                            selected={values.school_details.institution_type}
+                            selected={school_data?.institution_type || values.school_details.institution_type}
                             setSelected={(selected) => setFieldValue('school_details.institution_type', selected)}
                           />
                         </div>
@@ -393,34 +385,10 @@ export default function BasicInformationForm() {
                       </FieldArray>
 
                     </div>
-
-                    {/* <div className="mt-4">
-                  <div className="flex flex-col gap-y-4 gap-x-4 md:items-center md:flex-row">
-                    <div className="md:w-[20rem]">
-                      <CustomSelect
-                        label="School Social Media Platform"
-                        labelClass="text-xs font-normal text-[#61646B]"
-                        options={[]}
-                        selected=""
-                        setSelected={() => null}
-                      />
-                    </div>
-                    <div className="md:flex-1">
-                      <Input
-                        label="Social Media URL"
-                        labelClass="text-xs font-normal text-[#61646B]"
-                      />
-                    </div>
-                  </div>
-                </div> */}
                   </div>
                 </div>
                 <div className="border-t-2 border-t-[#880505] bg-[#F0F4F7] p-4 flex justify-between items-center md:px-16">
                   <div className="flex gap-x-4 items-center">
-                    {/* <Button
-                    variant="outline"
-                    className="text-xs h-7 rounded-sm px-3"
-                  ><X className="w-3 h-3 mr-1" /> Discard</Button> */}
                     <Button
                       variant="outline"
                       className="text-xs h-7 rounded-sm px-3"
@@ -433,13 +401,14 @@ export default function BasicInformationForm() {
                       className="text-xs h-7 rounded-sm px-6"
                       type="button"
                       onClick={() => router.push('/school/dashboard')}
+                      disabled={isCreatingSchoolProfile || isLoading}
                     ><ChevronLeft className="w-3 h-3 mr-1" /> Back</Button>
                     <Button
                       className="text-xs h-7 rounded-sm px-6"
                       type="submit"
                       loading={isCreatingSchoolProfile}
                       disabled={isCreatingSchoolProfile || isLoading}
-                      onClick={() => handleCreateSchoolProfile(values)}
+                      // onClick={() => handleCreateSchoolProfile(values)}
                     >Next <ChevronRight className="w-3 h-3 ml-1" /></Button>
                   </div>
                 </div>
