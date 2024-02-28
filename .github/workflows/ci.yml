@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-lint:
+  build-lint-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,3 +23,7 @@ jobs:
 
     - name: Build
       run: npm run build
+
+    - name: Run test
+      run: npm run test
+
