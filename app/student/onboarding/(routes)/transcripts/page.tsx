@@ -50,6 +50,7 @@ export default function TranscriptsPage() {
                   ]}
                   selected={documentType}
                   setSelected={setDocumentType}
+                  error={""}
                 />
                 <CustomFileInput
                   className="grid place-content-center mt-6 border border-gray-400 border-dashed p-8 bg-gray-50"
