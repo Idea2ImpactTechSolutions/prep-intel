@@ -52,10 +52,10 @@ async function createSchool(req:any) {
       school_social_medias,
       school_id,
     } = req.body;
-    
+
     const school_contacts = school_address.contact_types;
     const id = v4();
-    
+
     // Create a new school entry
     const schoolData = {
       id,
@@ -99,7 +99,7 @@ async function createSchool(req:any) {
         email: school_contact.email,
       }));
 
-      const school_social_media_data = school_social_medias.map(
+      const school_social_media_data = school_social_medias?.map(
         (school_social_media) => ({
           school_id: school.id,
           social_media: school_social_media.social_media,
@@ -112,7 +112,7 @@ async function createSchool(req:any) {
       );
 
       const newSchoolSocialMedias = await SchoolSocialMedia.bulkCreate(
-        school_social_media_data
+        school_social_media_data || []
       );
 
       const school_address_data = {
@@ -129,7 +129,7 @@ async function createSchool(req:any) {
       school.dataValues.school_social_medias = newSchoolSocialMedias;
     }
     return school;
-  }
+}
 
 async function getSchool(req: any) {
   let schoolDetails: any = null;
