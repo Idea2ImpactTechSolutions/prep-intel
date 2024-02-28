@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import PageTitleContainer from "@/components/page-title";
-import Image from "next/image";
 
 export default function Page() {
   const router = useRouter();
@@ -36,7 +35,7 @@ export default function Page() {
             </div>
             <div className="row-span-2 bg-gray-100 p-4 rounded">
                 <label className="font-bold">Student Interest</label>
-                <Image src="/images/us-map.svg" alt="US Map" />
+                <img src="/images/us-map.svg" alt="US Map" />
             </div>
             <div className="bg-gray-100 p-4 rounded">
                 <label className="font-bold">Admission Rate</label>
