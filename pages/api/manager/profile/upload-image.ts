@@ -35,6 +35,7 @@ export default async function handler(
 
     const imageFile = fData.files.image as any;
     const schoolId: any = fData.fields.school_id;
+    const category: any = fData.fields.category;
 
     let buffer = Buffer.from(fs.readFileSync(imageFile[0].filepath));
 
@@ -52,7 +53,7 @@ export default async function handler(
         let createAsset = await Assets.create({
           description: "logo",
           school_id: schoolId[0],
-          category: "logo",
+          category: category[0],
           location: data.Location,
           is_active: true,
         });
