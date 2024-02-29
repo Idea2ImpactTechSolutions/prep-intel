@@ -50,9 +50,11 @@ export default async function handler(
       if (school) {
         const data = await uploadFileToS3(params);
         let createAsset = await Assets.create({
-          name: "logo",
+          description: "logo",
           school_id: schoolId[0],
-          description: data.Location,
+          category: "logo",
+          location: data.Location,
+          is_active: true,
         });
 
         return res.status(200).json(

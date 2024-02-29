@@ -10,16 +10,24 @@ const Assets = sequelize.define(
             primaryKey: true,
             autoIncrement: true,
         },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
         school_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        category: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         description: {
             type: DataTypes.STRING,
+            allowNull: false,
+        },
+        location: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        is_active: {
+            type: DataTypes.BOOLEAN,
             allowNull: false,
         },
     },
