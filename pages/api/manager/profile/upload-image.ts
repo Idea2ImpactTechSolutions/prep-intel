@@ -35,6 +35,7 @@ export default async function handler(
 
     const imageFile = fData.files.image as any;
     const schoolId: any = fData.fields.school_id;
+    const category: any = fData.fields.category;
 
     let buffer = Buffer.from(fs.readFileSync(imageFile[0].filepath));
 
@@ -50,9 +51,11 @@ export default async function handler(
       if (school) {
         const data = await uploadFileToS3(params);
         let createAsset = await Assets.create({
-          name: "logo",
+          description: "logo",
           school_id: schoolId[0],
-          description: data.Location,
+          category: category[0],
+          location: data.Location,
+          is_active: true,
         });
 
         return res.status(200).json(

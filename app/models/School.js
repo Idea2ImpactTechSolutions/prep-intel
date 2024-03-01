@@ -4,6 +4,7 @@ const SchoolDepartment = require("./SchoolDepartment");
 const SchoolAccreditation = require("./SchoolAccreditation");
 const SchoolResearchProgram = require("./SchoolResearchProgram");
 const SchoolSocialMedia = require("./SchoolSocialMedia");
+const Assets = require("./Assets");
 const SchoolContact = require("./SchoolContact");
 const SchoolAddress = require("./SchoolAddress");
 
@@ -88,6 +89,7 @@ const School = sequelize.define(
   }
 );
 
+School.hasMany(Assets, { foreignKey: "school_id", as: "assets" })
 // School.hasMany(SchoolDepartment, { foreignKey: "schoolId", as: "departments" });
 School.hasMany(SchoolDepartment, {
   foreignKey: "school_id",
