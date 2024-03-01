@@ -49,7 +49,7 @@ export default function Page() {
   const [isFetchedProfile, setIsFetechProfile] = useState<boolean>(false)
   const [selectedImage, setSelectedImage] = useState<File>()
   const [schoolImgUrl, setSchoolImgUrl] = useState('')
-  const [getSchoolProfile, {isLoading: isLoadingGetProfile, isSuccess:isSuccessGetProfile}] = useLazyGetSchoolProfileQuery()
+  const [getSchoolProfile, {isLoading: isLoadingGetProfile, isFetching: isFetchingSchoolProfile, isSuccess:isSuccessGetProfile}] = useLazyGetSchoolProfileQuery()
   const [uploadSchoolImage, { isLoading, isSuccess }] = useUploadSchoolImageMutation()
   const [managerCreateSchoolProfile, { isLoading: isCreatingSchoolProfile, isSuccess: isSuccessCreateSchoolProfile }] = useManagerCreateSchoolProfileMutation()
 
@@ -107,6 +107,7 @@ export default function Page() {
       .unwrap()
       .then((payload) => {
         if (payload.status === 201) {
+          setIsFetechProfile(false)
           toast.success("School Profile Submitted Successfully ")
           router.push("/school/academic-info");
         }
@@ -170,7 +171,39 @@ export default function Page() {
       
   }, [userData])
 
-  if (isLoadingGetProfile) {
+  useEffect(() => {
+    setInitialSchoolData({
+      school_id: school_data?.id || '',
+      school_image: '',
+      school_details: {
+        name: school_data?.name || '',
+        institution_type: school_data?.institution_type || '',
+        tagline: school_data?.tagline || '',
+        founded_date: school_data?.found_date || '',
+        affiliations: ''
+      },
+      school_address: {
+        street_address: '',
+        school_state: school_data?.school_address?.state || '',
+        school_zip: school_data?.school_address?.postal || '',
+        contact_types: school_data?.school_contacts?.map((contact: Dictionary) => {
+          return {
+            contact_type: contact?.contact_type,
+            phone: contact?.phone,
+            email: contact?.email
+          }
+        }) || [
+            {
+              contact_type: '',
+              phone: '',
+              email: ''
+            }
+          ],
+      }
+    })
+  },[isSuccessGetProfile, school_data,])
+
+  if (isLoadingGetProfile || isFetchingSchoolProfile) {
     return <LoadingSpinner />;
   }
 
@@ -187,6 +220,7 @@ export default function Page() {
           initialValues={initialSchoolData}
           onSubmit={handleFormSubmit}
           validationSchema={schema}
+          enableReinitialize={true}
         >
           {({ values, errors, touched, handleChange, setFieldValue }) => {
             return (
@@ -354,7 +388,7 @@ export default function Page() {
                                             labelClass="text-xs font-normal text-[#61646B] mt-0"
                                             name={`school_address.contact_types.${index}.contact_type`}
                                             touched={touched?.school_address?.contact_types[index]?.contact_type}
-                                            error={errors?.school_address?.contact_types[index]?.contact_type}
+                                            error={errors?.school_address?.contact_types?.[index]?.contact_type}
                                             options={[
                                               { label: 'Admissions', value: 'Admissions' },
                                               { label: 'Financial Aid', value: 'Financial Aid' },
@@ -381,7 +415,7 @@ export default function Page() {
                                             value={values?.school_address?.contact_types[index]?.phone}
                                             onChange={(e) => setFieldValue(`school_address.contact_types.${index}.phone`, e.target.value)}
                                             touched={touched?.school_address?.contact_types[index]?.phone}
-                                            error={errors?.school_address?.contact_types[index]?.phone}
+                                            error={errors?.school_address?.contact_types?.[index]?.phone}
                                           />
                                         </div>
                                       )}
@@ -404,7 +438,7 @@ export default function Page() {
                                           value={values?.school_address?.contact_types[index]?.email}
                                           onChange={(e) => setFieldValue(`school_address.contact_types.${index}.email`, e.target.value)}
                                           touched={touched?.school_address?.contact_types[index]?.email}
-                                          error={errors?.school_address?.contact_types[index]?.email}
+                                          error={errors?.school_address?.contact_types?.[index]?.email}
                                         />
                                       </div>
                                     )}
