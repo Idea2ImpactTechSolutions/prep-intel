@@ -25,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             .unwrap()
             .then((payload) => {
                 const { data } = payload
+                console.log(data[0]?.school)
                 dispatch(setSchoolInformation({ slug: 'school_data', data: data[0]?.school }))
                 !data[0]?.school?.publish_date ? setIsProfileCompleted(false) : setIsProfileCompleted(true)
             })
@@ -46,7 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     setShowSidebar={setShowSidebar}
                 />
                 <section>
-                    {
+                    {/* {
                         isLoading ? 
                             <LoadingSpinner/>
                             : isProfileCompleted ? children :
@@ -62,8 +63,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                         content="Welcome to the Dashboard panel! This space is dedicated to helping you manage user permissions, oversee recruiter activities, and fine-tune platform settings tailored for your institution. Before diving into these functionalities, ensure your school's profile is set up. A complete profile strengthens your institution's presence on the platform and empowers you to make informed administrative decisions."
                                         onClick={() => router.push('/school/my-school')}
                                     />
-                    }
-                    {/* {children} */}
+                    } */}
+                    {children}
                 </section>
             </section>
         </main>

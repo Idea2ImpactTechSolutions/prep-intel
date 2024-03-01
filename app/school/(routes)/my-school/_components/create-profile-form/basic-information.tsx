@@ -56,14 +56,20 @@ export default function BasicInformationForm() {
       name: school_data?.name || '',
       institution_type: school_data?.institution_type ||'',
       tagline: school_data?.tagline || '',
-      founded_date: '',
+      founded_date: school_data?.found_date || '',
       affiliations: ''
     },
     school_address: {
       street_address: '',
-      school_state: '',
-      school_zip: '',
-      contact_types: [
+      school_state: school_data?.school_address?.state || '',
+      school_zip: school_data?.school_address?.postal || '',
+      contact_types: school_data?.school_contacts?.map((contact: Dictionary) => {
+        return {
+          contact_type: contact?.contact_type,
+          phone: contact?.phone,
+          email: contact?.email
+        }
+      }) || [
         {
           contact_type: '',
           phone: '',
@@ -132,6 +138,7 @@ export default function BasicInformationForm() {
       const payload = new FormData()
       payload.append('image', selectedImage)
       payload.append('school_id', school_data.id)
+      payload.append('category', 'logo')
       handleUploadSchoolImage(payload)
     }
   },[selectedImage])
