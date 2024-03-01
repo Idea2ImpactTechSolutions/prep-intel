@@ -2,6 +2,8 @@
 import { GoChevronRight, GoChevronLeft } from "react-icons/go";
 import { FaSave } from "react-icons/fa";
 import { IoCloseOutline } from "react-icons/io5";
+import { Button } from "@/components/ui/button";
+import { ChevronRight } from "lucide-react";
 
 const BottomBar = ({
   onBack,
@@ -32,11 +34,20 @@ const BottomBar = ({
           onClick={onBack}
           disabled={isBackDisabled}><GoChevronLeft />&nbsp;Back</button>
 
-        <button
+          <Button
+              className="text-xs h-9 rounded-sm font-bold px-6 py-1"
+              type="submit"
+              loading={isSubmitting}
+              disabled={isSubmitting}
+            // onClick={() => handleCreateSchoolProfile(values)}
+            >Next <ChevronRight className="w-4 h-4 ml-" />
+          </Button>
+
+        {/* <button
           type="submit"
           className="flex items-center bg-primary hover:bg-primary-500 text-white font-bold py-1 px-4 rounded mr-1 pr-2"
           disabled={isSubmitting}
-        ><div className="leading-none inline-block -mt-1">Next</div>&nbsp;<GoChevronRight /></button>
+        ><div className="leading-none inline-block -mt-1">Next</div>&nbsp;<GoChevronRight /></button> */}
       </div>
       </div>
     </div>

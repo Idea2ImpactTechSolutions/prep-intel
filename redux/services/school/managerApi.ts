@@ -51,7 +51,7 @@ const managerApi = baseApi.injectEndpoints({
                 url: `/manager/profile/upload-image`,
                 method: 'POST',
                 body: school_image,
-                // formData: true,
+                formData: true,
             }),
             async onQueryStarted(_, {queryFulfilled, dispatch}) {
                 try {

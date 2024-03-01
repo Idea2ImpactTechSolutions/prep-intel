@@ -17,6 +17,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import * as yup from "yup"
+import { toast } from "sonner"
 
 interface initialValues {
   school_id: string,
@@ -99,6 +100,7 @@ export default function BasicInformationForm() {
       .unwrap()
       .then((payload) => {
         if (payload.status === 201) {
+          toast.success("School Profile Submitted Successfully ")
           router.push("/school/academic-info");
         }
       })
@@ -210,6 +212,7 @@ export default function BasicInformationForm() {
                           <CustomDatePicker
                             label="Founded Date"
                             labelClass="text-xs font-normal text-[#61646B]"
+                            value={values?.school_details?.founded_date || ""}
                             handleChange={(date) => setFieldValue(`school_details.founded_date`, formatRMDatePicker(date))}
                             touched={touched?.school_details?.founded_date}
                             error={errors?.school_details?.founded_date}
@@ -407,8 +410,8 @@ export default function BasicInformationForm() {
                       variant="outline"
                       className="text-xs h-7 rounded-sm px-6"
                       type="button"
-                      onClick={() => router.push('/school/dashboard')}
-                      disabled={isCreatingSchoolProfile || isLoading}
+                      // onClick={() => router.push('/school/dashboard')}
+                      disabled
                     ><ChevronLeft className="w-3 h-3 mr-1" /> Back</Button>
                     <Button
                       className="text-xs h-7 rounded-sm px-6"
