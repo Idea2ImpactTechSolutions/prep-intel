@@ -8,6 +8,10 @@ import { useRouter } from "next/navigation";
 import LoadingSpinner from "../shared/loading-spinner";
 import { CompletionPanel } from "@/components/completion-panel";
 import { FormSection } from "@/components/form-section";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
+import { useAppDispatch } from "@/redux/store";
+import { setSchoolInformation } from "@/redux/features/school/managerSlice";
 
 // Define the validation schema using Yup
 const validationSchema = Yup.object().shape({
@@ -75,6 +79,7 @@ const validationSchema = Yup.object().shape({
 
 export default function AcademicInfo() {
   const router = useRouter();
+  const [isFetchedAcademiInfo, setIsFetchedAcademiInfo] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(true);
   const schoolId = "b14e03a9-656a-4726-9d38-6f09c912a543";
   const [initialValues, setInitialValues] = useState({
@@ -97,6 +102,9 @@ export default function AcademicInfo() {
       financialAidInfoURL: "",
     },
   });
+
+  const { data: userData }: any = useSession()
+  const dispatch = useAppDispatch()
 
   const setSchoolData = (data: {
     school_departments: { name: string }[];
@@ -157,9 +165,10 @@ export default function AcademicInfo() {
   };
 
   useEffect(() => {
+
     const fetchSchoolData = async () => {
       setIsLoading(true);
-      const schoolId = "b14e03a9-656a-4726-9d38-6f09c912a543";
+      const schoolId = userData?.user?.schoolID;
       try {
         const response = await fetch(
           `/api/manager/profile/academic-info?schoolId=${schoolId}`
@@ -168,21 +177,27 @@ export default function AcademicInfo() {
           throw new Error("Network response was not ok");
         }
         const school = await response.json();
+        dispatch(setSchoolInformation({ slug: 'school_data', data: school.data }))
         setSchoolData(school.data);
         setIsLoading(false);
+        setIsFetchedAcademiInfo(true)
       } catch (error) {
         //console.error("There was a problem fetching school data:", error);
       }
     };
 
-    if (schoolId) {
-      fetchSchoolData();
+    if(userData && userData?.user){
+      !isFetchedAcademiInfo && fetchSchoolData()
     }
-  }, [schoolId]);
+
+    // if (schoolId) {
+    //   fetchSchoolData();
+    // }
+  }, [userData]);
 
   const handleBack = () => {
     // Logic for Back button
-    router.push("/school/my-school");
+    router.push("/school/school-profile");
   };
 
   const handleSaveForLater = () => {
@@ -190,10 +205,28 @@ export default function AcademicInfo() {
   };
 
   const handleSubmit = async (values, { setSubmitting }) => {
+    let admissionRequirements = values.admissionRequirements
+
+    const filterProperties = ({ act_required, sat_required, diploma_required, ...rest }) => {
+      if (!act_required) {
+        delete rest.min_act_score;
+      }
+      if (!sat_required) {
+        delete rest.min_sat_score;
+      }
+      if (!diploma_required) {
+        delete rest.gpa_requirement;
+      }
+      return { act_required, sat_required, diploma_required, ...rest };
+    };
+
+    const filteredPayload = filterProperties(admissionRequirements);
+
     setSubmitting(true);
     try {
-      values.schoolId = "b14e03a9-656a-4726-9d38-6f09c912a543";
-      //console.log("TEST VALUES", values);
+      let payload = {...values, admissionRequirements: filteredPayload}
+      values.schoolId = userData?.user?.schoolID;
+      // console.log("TEST VALUES", payload);
       const url = "/api/manager/profile/academic-info";
       // Send a POST request to the server
       const response = await fetch(url, {
@@ -206,6 +239,8 @@ export default function AcademicInfo() {
       });
       if (response.ok) {
         const responseData = await response.json();
+        toast.success("Academic Record Submitted Successfully")
+        router.push("/school/my-school")
         // Handle success - you can redirect to another page or show a success message
       } else {
         throw new Error(`Error: ${response.status}`);
