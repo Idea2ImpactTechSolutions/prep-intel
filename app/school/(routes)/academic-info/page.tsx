@@ -239,6 +239,7 @@ export default function AcademicInfo() {
       });
       if (response.ok) {
         const responseData = await response.json();
+          dispatch(setSchoolInformation({ slug: 'school_data', data: {...responseData.data.school, create_count: 2} }))
         toast.success("Academic Record Submitted Successfully")
         router.push("/school/my-school")
         // Handle success - you can redirect to another page or show a success message
