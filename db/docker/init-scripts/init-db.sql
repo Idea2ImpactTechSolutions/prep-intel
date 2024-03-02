@@ -1,2 +1,2 @@
-CREATE SCHEMA IF NOT EXISTS schools;
-ALTER USER prepmcintelly SET search_path TO schools;
+-- CREATE SCHEMA IF NOT EXISTS schools;
+-- ALTER USER prepmcintelly SET search_path TO schools;
