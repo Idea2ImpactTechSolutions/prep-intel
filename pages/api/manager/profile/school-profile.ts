@@ -131,6 +131,7 @@ async function createSchool(req: any) {
       school_id: school.id,
       name: school_address.school_name,
       state: school_address.school_state,
+      street_address_1: school_address.street_address,
       postal: school_address.school_zip,
     };
 

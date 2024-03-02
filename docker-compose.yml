@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  # nextjs:
+  #   build:
+  #     context: . # Assuming your Dockerfile for Next.js is in the current directory
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - DATABASE_URL=postgres://postgres:postgres@postgres:5432/prep-intel
+  #   depends_on:
+  #     - postgres
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: md5
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./db/docker/init-scripts:/docker-entrypoint-initdb.d
+
+volumes:
+  postgres-data:
