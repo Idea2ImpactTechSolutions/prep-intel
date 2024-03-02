@@ -13,17 +13,17 @@ services:
   #     - postgres
 
   postgres:
-    image: postgres
+    image: postgres:15
     environment:
       POSTGRES_HOST_AUTH_METHOD: md5
       POSTGRES_USER: prepmcintelly
-      POSTGRES_PASSWORD: axiomMaximus12
+      POSTGRES_PASSWORD: plaidMode99
       POSTGRES_DB: postgres
     ports:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ./docker/init-scripts:/docker-entrypoint-initdb.d
+      - ./db/docker/init-scripts:/docker-entrypoint-initdb.d
 
 volumes:
   postgres-data:
