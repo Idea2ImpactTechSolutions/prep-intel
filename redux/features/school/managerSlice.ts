@@ -28,7 +28,7 @@ const managerSlice = createSlice({
         },
         setSchoolInformation: (state, action) => {
             const {slug, data} = action.payload;
-            state.manager.school_information[slug] = data
+            state.manager.school_information[slug] = {...state.manager.school_information[slug], ...data}
         },
         resetSchoolInformation: (state) => state.manager.school_information = Object.assign({})
     }

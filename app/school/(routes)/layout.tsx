@@ -3,17 +3,19 @@ import React, { useEffect, useState } from 'react'
 import Sidebar from '../_components/side-bar'
 import { useLazyGetSchoolProfileQuery } from '@/redux/services/school/managerApi'
 import { useSession } from 'next-auth/react'
-import { useAppDispatch } from '@/redux/store'
+import { useAppDispatch, useAppSelector } from '@/redux/store'
 import { setSchoolInformation } from '@/redux/features/school/managerSlice'
 import EmptyStateContainer from '@/components/empty-state'
 import { usePathname, useRouter } from 'next/navigation'
 import { LucideLoader2 } from 'lucide-react'
 import LoadingSpinner from './shared/loading-spinner'
+import { Dictionary } from '@/types/dictionary'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const [showSidebar, setShowSidebar] = useState<boolean>(true)
     const [isProfileCompleted, setIsProfileCompleted] = useState<boolean>(false)
     const [getSchoolProfile, { isLoading, isSuccess }] = useLazyGetSchoolProfileQuery()
+    const { manager: { school_information: { school_data } } }: Dictionary = useAppSelector((state) => state.manager)
 
     const { data: userData }: any = useSession()
     const router = useRouter()
@@ -25,7 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             .unwrap()
             .then((payload) => {
                 const { data } = payload
-                dispatch(setSchoolInformation({ slug: 'school_data', data: data[0]?.school }))
+                dispatch(setSchoolInformation({ slug: 'school_data', data: {...data[0]?.school, create_count: 0} }))
                 !data[0]?.school?.publish_date ? setIsProfileCompleted(false) : setIsProfileCompleted(true)
             })
     }
@@ -36,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             handleGetSchoolInformation(user.schoolID)
         }
     }, [])
-
+    // console.log(school_data?.create_count)
     return (
         <main className="overflow-y-hidden font-sans">
             <section className="">
@@ -49,8 +51,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         isLoading ? 
                             <LoadingSpinner/>
                             : isProfileCompleted ? children :
-                                (location === "/school/school-profile" || location ===
-                                "/school/my-school" ||
+                                (location === "/school/school-profile" || (location ===
+                                "/school/my-school" && school_data?.create_count === 2) ||
                                 location === "/school/academic-info"
                                 ) ?
                                     children
