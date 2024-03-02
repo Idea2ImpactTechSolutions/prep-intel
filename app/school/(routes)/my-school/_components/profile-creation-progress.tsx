@@ -17,7 +17,7 @@ export default function ProfileCreationProgress({ progressValue, step }: Profile
                 <h1 className="font-bold text-primary italic md:text-2xl">{progressValue}<span className="font-medium md:text-xl">%</span></h1>
                 <div className={cn(
                     "w-7 h-7 border-[3px] border-gray-200 rounded-full grid place-content-center relative after:w-7 after:h-7 after:absolute after:rounded-full after:-top-1 after:-left-1 after:border-[3px] after:border-t-primary",
-                    1 === 1 && "after:rotate-[125deg]"
+                    step === 1 && "after:rotate-[125deg]"
                 )}>
                     <span className="text-primary font-medium text-[0.6rem]">{`${step}/5`}</span>
                 </div>

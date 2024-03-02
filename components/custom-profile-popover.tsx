@@ -9,6 +9,7 @@ import  Cookies from 'js-cookie';
 import { useAppDispatch } from "@/redux/store";
 import { reset } from "@/redux/features/auth/authSlice";
 import { signOut } from "next-auth/react";
+import { managerReset } from "@/redux/features/school/managerSlice";
 
 interface CustomProfilePopoverProps {
     show: boolean;
@@ -21,6 +22,7 @@ export default function CustomProfilePopover({ show, handleClose }: CustomProfil
 
     const handleLogout = () => {
         signOut()
+        dispatch(managerReset());
         // Cookies.remove("token");
         // dispatch(reset());
         // window.location.href = "/login";

@@ -27,11 +27,6 @@ export default function LoginPage() {
 
   const [login, { isLoading, isSuccess }] = useLoginMutation()
 
-  // if (status == "authenticated") {
-  //   router.push("school/welcome");
-  // }
- 
-
   const handleRedirect = (role: string) => {
     switch (role) {
       case 'admin':
@@ -48,17 +43,6 @@ export default function LoginPage() {
         break;
     }
   }
-
-  // handle login request
-  // const handleLogin = async (values: initialValues) => {
-  //   login(values)
-  //     .unwrap()
-  //     .then((payload: Dictionary) => {
-  //       if (payload && payload.token) {
-  //         handleRedirect(payload.role)
-  //       }
-  //     })
-  // }
 
   // handle login request
   const handleLogin = async (values: initialValues) => {
@@ -92,13 +76,6 @@ export default function LoginPage() {
     }),
     onSubmit: handleLogin
   })
-
-  useEffect(() => {
-    // const token = cookie.get('token') || null
-    // if (token && user?.token) {
-    //   handleRedirect(user.role)
-    // }
-  }, [])
 
   return (
     <div>

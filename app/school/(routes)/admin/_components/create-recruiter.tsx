@@ -40,6 +40,7 @@ export default function CreateRecruiter() {
                                         options={[]}
                                         selected=""
                                         setSelected={() => null}
+                                        error={""}
                                     />
                                     <CustomSelect
                                         label="Permission Level"
@@ -47,6 +48,7 @@ export default function CreateRecruiter() {
                                         options={[]}
                                         selected=""
                                         setSelected={() => null}
+                                        error={""}
                                     />
                                     <CustomSelect
                                         label="Department"
@@ -54,6 +56,7 @@ export default function CreateRecruiter() {
                                         options={[]}
                                         selected=""
                                         setSelected={() => null}
+                                        error={""}
                                     />
                                 </div>
                             </div>

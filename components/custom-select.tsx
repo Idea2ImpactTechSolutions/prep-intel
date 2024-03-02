@@ -11,17 +11,18 @@ import { SelectGroup } from "./ui/select"
 type CustomSelectType = {
     options: Record<string, any>[],
     selected: string,
+    name?: string,
     label?: string,
     labelClass?: string,
     disabled?: boolean,
     setSelected: (event: any) => void,
+    touched?: any,
+    error: any
 }
 
-export default function CustomSelect({ options, selected, disabled, label, labelClass, setSelected }: CustomSelectType) {
+export default function CustomSelect({ options, selected, disabled, label, name, labelClass, setSelected, error, touched }: CustomSelectType) {
     const [open, setOpen] = useState(false)
     const buttonRef = useRef<HTMLButtonElement>(null)
-
-    // console.log(selected, options)
 
     return (
         <div
@@ -39,10 +40,15 @@ export default function CustomSelect({ options, selected, disabled, label, label
                     <Button
                         variant="outline"
                         role="combobox"
+                        name={name}
                         aria-expanded={open}
-                        className="w-full justify-between border-gray-300 text-gray-600 bg-background hover:bg-white hover:text-gray-600 focus:border-primary"
+                        className={cn(
+                            "w-full justify-between border-gray-300 text-gray-600 bg-background hover:bg-white hover:text-gray-600 focus:border-primary",
+                            error && touched && "border-red-500"
+                        )}
                         ref={buttonRef}
                         disabled={disabled}
+
                     >
                         {
                             selected ? options?.filter((option) => option?.value?.toString().toLowerCase() === selected?.toString().toLowerCase())[0]?.label : "Select..."
@@ -81,6 +87,10 @@ export default function CustomSelect({ options, selected, disabled, label, label
                         </CommandGroup>
                     </Command>
                 </PopoverContent>
+                <span className={cn(
+                        "text-xs text-red-500 hidden",
+                        error && 'block'
+                    )}>{error && touched && error}</span>
             </Popover>
         </div>
     )
