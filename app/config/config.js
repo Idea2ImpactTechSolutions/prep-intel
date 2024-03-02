@@ -3,10 +3,10 @@ require("dotenv").config();
 // config/config.js
 
 module.exports = {
-  username: process.env.DB_USERNAME || "dev_username",
-  password: process.env.DB_PASSWORD || "dev_password",
-  database: process.env.DB_NAME || "my_database_dev",
-  host: process.env.DB_HOST || "localhost",
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  host: process.env.DB_HOST,
   dialect: "postgres",
   dialectOptions: {
     ssl: {
