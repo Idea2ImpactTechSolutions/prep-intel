@@ -81,6 +81,15 @@ ENV NEXTAUTH_URL ${NEXTAUTH_URL}
 ARG NEXTAUTH_SECRET
 ENV NEXTAUTH_SECRET ${NEXTAUTH_SECRET}
 
+# Test with hardcoded values
+ENV DB_USERNAME "prepmcintelly"
+ENV DB_PASSWORD  "axiomMaximus12!"
+ENV DB_NAME "postgres"
+ENV DB_HOST "prep-intel.ckfetrtfzl2r.us-west-2.rds.amazonaws.com"
+ENV TOKEN_SECRET "XX--SECRETE20220--XX"
+ENV NEXTAUTH_URL "http://localhost:3000"
+ENV NEXTAUTH_SECRET "test"
+
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
 CMD ["node", "server.js"]
