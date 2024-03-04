@@ -8,9 +8,14 @@ on:
 env:
   AWS_REGION : "us-east-1"
   ECR_REPO: "533267153582.dkr.ecr.us-east-1.amazonaws.com/prep-intel-app"
+  DB_USERNAME: ${{vars.DB_USERNAME}}
+  DB_PASSWORD: ${{vars.DB_PASSWORD}}
   DB_HOST: ${{vars.DB_HOST}}
+  DB_NAME: ${{vars.DB_NAME}}
+  TOKEN_SECRET: ${{vars.TOKEN_SECRET}}
+  NEXTAUTH_URL: ${{vars.NEXTAUTH_URL}}
+  NEXTAUTH_SECRET: ${{vars.NEXTAUTH_SECRET}}
     
-
 jobs:
   docker-build-and-push:
     runs-on: ubuntu-latest
@@ -19,13 +24,6 @@ jobs:
     permissions:
       id-token: write   # This is required for requesting the JWT
       contents: read    # This is required for actions/checkout
-
-# ENV DB_PASSWORD  "axiomMaximus12!"
-# ENV DB_NAME "postgres"
-# ENV DB_HOST "prep-intel.ckfetrtfzl2r.us-west-2.rds.amazonaws.com"
-# ENV TOKEN_SECRET "XX--SECRETE20220--XX"
-# ENV NEXTAUTH_URL "http://localhost:3000"
-# ENV NEXTAUTH_SECRET "test"
     
     steps:
 
