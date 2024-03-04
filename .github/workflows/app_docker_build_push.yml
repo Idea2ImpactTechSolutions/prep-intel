@@ -8,6 +8,7 @@ on:
 env:
   AWS_REGION : "us-east-1"
   ECR_REPO: "533267153582.dkr.ecr.us-east-1.amazonaws.com/prep-intel-app"
+  DB_HOST: ${{vars.DB_HOST}}
     
 
 jobs:
