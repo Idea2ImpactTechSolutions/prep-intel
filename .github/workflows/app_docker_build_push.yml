@@ -2,7 +2,7 @@ name: App Docker Build and Push
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, update_docker_build ]
   workflow_dispatch:
 
 env:
@@ -18,8 +18,19 @@ jobs:
     permissions:
       id-token: write   # This is required for requesting the JWT
       contents: read    # This is required for actions/checkout
+
+# ENV DB_PASSWORD  "axiomMaximus12!"
+# ENV DB_NAME "postgres"
+# ENV DB_HOST "prep-intel.ckfetrtfzl2r.us-west-2.rds.amazonaws.com"
+# ENV TOKEN_SECRET "XX--SECRETE20220--XX"
+# ENV NEXTAUTH_URL "http://localhost:3000"
+# ENV NEXTAUTH_SECRET "test"
     
     steps:
+
+    - name: run env
+      run: |
+        env
 
     - name: Checkout app code
       uses: actions/checkout@v4

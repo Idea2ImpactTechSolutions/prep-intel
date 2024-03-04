@@ -1,4 +1,4 @@
-FROM node:18-alpine AS base
+FROM node:21-alpine3.18 AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -33,12 +33,13 @@ RUN \
   elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
   else echo "Lockfile not found." && exit 1; \
   fi
+RUN npm install --force @img/sharp-linuxmusl-arm64
 
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
-
-ENV NODE_ENV production
+RUN npm install --force @img/sharp-linuxmusl-arm64
+ENV NODE_ENV development
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
@@ -63,6 +64,22 @@ EXPOSE 80
 ENV PORT 80
 # set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
+# test with env vars for running app
+# ENV DB_USERNAME "prepmcintelly"
+# ENV DB_PASSWORD  "axiomMaximus12!"
+# ENV DB_NAME "postgres"
+# ENV DB_HOST "prep-intel.ckfetrtfzl2r.us-west-2.rds.amazonaws.com"
+# ENV TOKEN_SECRET "XX--SECRETE20220--XX"
+# ENV NEXTAUTH_URL "http://localhost:3000"
+# ENV NEXTAUTH_SECRET "test"
+
+ENV DB_USERNAME ${DB_USERNAME}
+ENV DB_PASSWORD  ${DB_PASSWORD}
+ENV DB_NAME ${DB_NAME}
+ENV DB_HOST ${DB_HOST}
+ENV TOKEN_SECRET ${TOKEN_URL}
+ENV NEXTAUTH_URL ${NEXTAUTH_URL}
+ENV NEXTAUTH_SECRET ${NEXTAUTH_SECRET}
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
