@@ -39,7 +39,7 @@ RUN npm install --force @img/sharp-linuxmusl-arm64
 FROM base AS runner
 WORKDIR /app
 RUN npm install --force @img/sharp-linuxmusl-arm64
-ENV NODE_ENV development
+ENV NODE_ENV production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
@@ -64,14 +64,8 @@ EXPOSE 80
 ENV PORT 80
 # set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
+
 # test with env vars for running app
-# ENV DB_USERNAME "prepmcintelly"
-# ENV DB_PASSWORD  "axiomMaximus12!"
-# ENV DB_NAME "postgres"
-# ENV DB_HOST "prep-intel.ckfetrtfzl2r.us-west-2.rds.amazonaws.com"
-# ENV TOKEN_SECRET "XX--SECRETE20220--XX"
-# ENV NEXTAUTH_URL "http://localhost:3000"
-# ENV NEXTAUTH_SECRET "test"
 
 ENV DB_USERNAME ${DB_USERNAME}
 ENV DB_PASSWORD  ${DB_PASSWORD}
