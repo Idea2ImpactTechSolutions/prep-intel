@@ -47,8 +47,6 @@ export default async function handler(
 
     let name = school.name.replace(/ /g, "_");
 
-    console.log({ name });
-
     const params = {
       Bucket: "prep-bucket-upload",
       Key: `${name}/${imageFile[0].newFilename}`,
