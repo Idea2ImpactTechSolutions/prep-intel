@@ -87,7 +87,7 @@ ENV DB_PASSWORD  "axiomMaximus12!"
 ENV DB_NAME "postgres"
 ENV DB_HOST "prep-intel.ckfetrtfzl2r.us-west-2.rds.amazonaws.com"
 ENV TOKEN_SECRET "XX--SECRETE20220--XX"
-ENV NEXTAUTH_URL "http://localhost:3000"
+ENV NEXTAUTH_URL "http://prep-intel-dev-alb-1208390994.us-east-1.elb.amazonaws.com"
 ENV NEXTAUTH_SECRET "test"
 
 # server.js is created by next build from the standalone output
