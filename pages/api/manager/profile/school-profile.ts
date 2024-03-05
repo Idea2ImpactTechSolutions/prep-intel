@@ -82,7 +82,7 @@ async function createSchool(req: any) {
 
   let school: any = null;
 
-  //Do a get and check school for other tables
+  //Do a get and check school for other
   if (school_id) {
     //create a put
     school = await School.findByPk(school_id);
