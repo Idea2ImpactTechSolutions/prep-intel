@@ -5,7 +5,6 @@ import { responseBody } from "../../../../app/config/helpers";
 const { models } = require("../../../../app/models");
 const { School, SchoolAddress, Assets, SchoolContact, SchoolSocialMedia } =
   models;
-const { v4 } = require("uuid");
 
 export default async function handler(req, res) {
   switch (req.method) {
@@ -67,11 +66,9 @@ async function createSchool(req: any) {
   } = req.body;
 
   const school_contacts = school_address.contact_types;
-  const id = v4();
 
   // Create a new school entry
   const schoolData = {
-    id,
     name: school_details.name,
     found_date: new Date(school_details.founded_date),
     tagline: school_details.tagline,
@@ -86,7 +83,6 @@ async function createSchool(req: any) {
     //create a put
     school = await School.findByPk(school_id);
     if (school) {
-      delete schoolData.id;
       school = await school.update(schoolData);
     }
   } else {
