@@ -9,18 +9,19 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import * as yup from "yup";
+import { v4 as uuid } from 'uuid';
 
 const SERVICES = [
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         text: "Greater Transparency into Your Student Funnel"
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         text: "Reports and Trends with Your School"
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         text: "Increase Your Outreach to Prospects"
     },
 ]

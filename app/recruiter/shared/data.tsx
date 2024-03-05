@@ -1,12 +1,14 @@
+import { v4 as uuid } from 'uuid';
+
 export const TAB_LINKS = [
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         title: 'Dashboard',
         url: '/recruiter/dashboard',
         isActive: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         title: 'Connections',
         url: '/recruiter/connections',
         isActive: false
