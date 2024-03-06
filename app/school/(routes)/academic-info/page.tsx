@@ -30,6 +30,7 @@ const validationSchema = Yup.object().shape({
       name: Yup.string().required("Research opportunity name is required"),
     })
   ),
+  application_url: Yup.string().required("Application url is required"),
 
   admissionRequirements: Yup.object().shape({
     min_act_score: Yup.number().when("act_required", {
@@ -86,6 +87,7 @@ export default function AcademicInfo() {
     school_departments: [{ name: "" }],
     school_accreditations: [{ name: "" }],
     school_research_programs: [{ name: "" }],
+    application_url: "",
     admissionRequirements: {
       act_required: false,
       sat_required: false,
@@ -161,6 +163,7 @@ export default function AcademicInfo() {
         scholarshipInfoURL: data.scholarship_url ?? "",
         financialAidInfoURL: data.financial_aid_url ?? "",
       },
+      application_url: data.application_url ?? "",
     });
   };
 
@@ -617,6 +620,27 @@ export default function AcademicInfo() {
                   />
                   <ErrorMessage
                     name="financials.financialAidInfoURL"
+                    component="div"
+                    className="text-red-500"
+                  />
+                </div>
+              </div>
+              <div className="space-y-4">
+                <label
+                  htmlFor="application_url"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Application URL
+                </label>
+                <div className="space-y-4">
+                  <Field
+                    name="application_url"
+                    type="text"
+                    placeholder="Application URL"
+                    className="border-2 w-full p-2 rounded-md"
+                  />
+                  <ErrorMessage
+                    name="application_url"
                     component="div"
                     className="text-red-500"
                   />
