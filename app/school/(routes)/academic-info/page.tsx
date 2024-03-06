@@ -123,6 +123,7 @@ export default function AcademicInfo() {
     fees_per_semester: number;
     scholarship_url: string;
     financial_aid_url: string;
+    application_url: string;
   }) => {
     setInitialValues({
       school_departments:
