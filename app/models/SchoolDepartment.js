@@ -10,9 +10,8 @@ const SchoolDepartment = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    major_type_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+    name: {
+      type: DataTypes.STRING,
     },
     school_id: {
       type: DataTypes.INTEGER,

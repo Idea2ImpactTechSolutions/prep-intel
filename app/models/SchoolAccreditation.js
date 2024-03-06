@@ -14,6 +14,9 @@ const SchoolAccreditation = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    name: {
+      type: DataTypes.STRING,
+    },
     accreditation_id: {
       type: DataTypes.INTEGER,
     },
