@@ -14,8 +14,8 @@ const SchoolContact = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    department_name: {
-      type: DataTypes.INTEGER,
+    contact_type: {
+      type: DataTypes.STRING,
     },
     email: {
       type: DataTypes.STRING,

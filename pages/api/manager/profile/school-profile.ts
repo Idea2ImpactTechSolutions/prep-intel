@@ -104,9 +104,8 @@ async function createSchool(req: any) {
     // Step 2: Create new school departments using the department names
     const school_contacts_data = school_contacts.map((school_contact) => ({
       school_id: school.id,
-      department_name: school_contact.department_name,
-      phone: school_contact.phone,
       contact_type: school_contact.contact_type,
+      phone: school_contact.phone,
       street_address: school_contact.street_address,
       email: school_contact.email,
     }));
