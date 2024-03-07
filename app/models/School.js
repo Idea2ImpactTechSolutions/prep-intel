@@ -27,7 +27,7 @@ const School = sequelize.define(
       type: DataTypes.STRING,
     },
     intro_paragraph: {
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.STRING,
     },
     primary_color: {
       type: DataTypes.INTEGER,

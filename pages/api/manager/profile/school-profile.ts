@@ -77,6 +77,7 @@ async function createSchool(req: any) {
     tagline: school_details.tagline,
     institution_type: school_details.institution_type,
     affiliations: school_details.affiliations,
+    intro_paragraph: school_details.intro_paragraph,
   };
 
   let school: any = null;
@@ -130,6 +131,7 @@ async function createSchool(req: any) {
       school_id: school.id,
       name: school_address.school_name,
       state: school_address.school_state,
+      city: school_address.city,
       street_address_1: school_address.street_address,
       postal: school_address.school_zip,
     };
