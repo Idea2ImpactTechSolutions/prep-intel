@@ -184,12 +184,12 @@ export default function Page() {
         affiliations: ''
       },
       school_address: {
-        street_address: school_data?.school_address?.street_address_1 || '',
+        street_address: '',
         school_state: school_data?.school_address?.state || '',
         school_zip: school_data?.school_address?.postal || '',
         contact_types: school_data?.school_contacts?.map((contact: Dictionary) => {
           return {
-            contact_type: contact?.department_name,
+            contact_type: contact?.contact_type,
             phone: contact?.phone,
             email: contact?.email
           }
