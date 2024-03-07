@@ -51,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         isLoading ? 
                             <LoadingSpinner/>
                             : isProfileCompleted ? children :
-                                (location === "/school/school-profile" || (location ===
+                                (location === "/school/school-profile" || location === "/school/claim" || location === "/school/set-password" || (location ===
                                 "/school/my-school" && school_data?.create_count === 2) ||
                                 location === "/school/academic-info"
                                 ) ?
