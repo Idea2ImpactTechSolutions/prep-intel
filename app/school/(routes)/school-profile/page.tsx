@@ -31,18 +31,23 @@ interface initialValues {
     institution_type: string,
     tagline: string,
     founded_date: string,
-    affiliations: string
+    intro_paragraph: string
   },
   school_address: {
     street_address: string,
     school_state: string,
     school_zip: string,
+    city: string,
     contact_types: {
       contact_type: string,
       phone: string,
       email: string
     }[],
-  }
+  },
+  school_social_medias: {
+      social_media: string,
+      url: string
+    }[],
 }
 
 export default function Page() {
@@ -65,26 +70,40 @@ export default function Page() {
       institution_type: school_data?.institution_type || '',
       tagline: school_data?.tagline || '',
       founded_date: school_data?.found_date || '',
-      affiliations: ''
+      intro_paragraph: school_data?.intro_paragraph || ''
     },
     school_address: {
-      street_address: '',
+      street_address: school_data?.school_address?.street_address_1 || '',
       school_state: school_data?.school_address?.state || '',
+      city: school_data?.school_address?.city || '',
       school_zip: school_data?.school_address?.postal || '',
       contact_types: school_data?.school_contacts?.map((contact: Dictionary) => {
         return {
           contact_type: contact?.contact_type,
           phone: contact?.phone,
-          email: contact?.email
+          email: contact?.email,
+          department_name: contact?.department_name
         }
       }) || [
           {
             contact_type: '',
             phone: '',
-            email: ''
+            email: '',
+            department_name: ""
           }
         ],
-    }
+    },
+    school_social_medias: school_data?.school_social_medias?.map((media: Dictionary) => {
+      return {
+        social_media: media?.social_media,
+        url: media?.url
+      }
+    }) || [
+      {
+        social_media: '',
+        url: ''
+      }
+    ],
   })
 
   const router = useRouter()
@@ -132,11 +151,12 @@ export default function Page() {
       founded_date: yup.string().required("founded date is required"),
       institution_type: yup.string().required("institution type is required"),
       tagline: yup.string().required("school tagline is required"),
-      affiliations: yup.string().required("school affiliations is required"),
+      intro_paragraph: yup.string().required("school intro paragraph is required"),
     }),
     school_address: yup.object().shape({
       street_address: yup.string().required("street address is required"),
       school_state: yup.string().required("school state is required"),
+      city: yup.string().required("school city is required"),
       school_zip: yup.string().required("school zip is required"),
       contact_types: yup.array().of(
         yup.object().shape({
@@ -145,7 +165,13 @@ export default function Page() {
           email: yup.string().email('email must be valid').required("email is required"),
         })
       )
-    })
+    }),
+    school_social_medias: yup.array().of(
+      yup.object().shape({
+        social_media: yup.string().required("social media name is required"),
+        url: yup.string().required("social media url is required"),
+      })
+    )
   })
 
   const handleFormSubmit = (values: initialValues) => {
@@ -181,13 +207,14 @@ export default function Page() {
         institution_type: school_data?.institution_type || '',
         tagline: school_data?.tagline || '',
         founded_date: school_data?.found_date || '',
-        affiliations: ''
+        intro_paragraph: school_data?.intro_paragraph || ''
       },
       school_address: {
-        street_address: '',
+        street_address: school_data?.school_address?.street_address_1 || '',
         school_state: school_data?.school_address?.state || '',
+        city: school_data?.school_address?.city || '',
         school_zip: school_data?.school_address?.postal || '',
-        contact_types: school_data?.school_contacts?.map((contact: Dictionary) => {
+        contact_types: school_data?.school_contacts?.length > 0 && school_data?.school_contacts?.map((contact: Dictionary) => {
           return {
             contact_type: contact?.contact_type,
             phone: contact?.phone,
@@ -200,7 +227,18 @@ export default function Page() {
               email: ''
             }
           ],
-      }
+      },
+      school_social_medias: school_data?.school_social_medias?.length > 0 && school_data?.school_social_medias?.map((media: Dictionary) => {
+        return {
+          social_media: media?.social_media,
+          url: media?.url
+        }
+      }) || [
+        {
+          social_media: '',
+          url: ''
+        }
+      ],
     })
   },[isSuccessGetProfile, school_data,])
 
@@ -303,14 +341,14 @@ export default function Page() {
                         </div>
                         <div className="mt-2">
                           <Textarea
-                            label="School Affiliations, Separated by Comma"
+                            label="Campus Introductory Paragraph"
                             labelClass="text-xs font-normal text-[#61646B]"
                             rows={1}
-                            name="school_details.affiliations"
-                            value={values.school_details.affiliations}
-                            touched={touched.school_details?.affiliations}
+                            name="school_details.intro_paragraph"
+                            value={values.school_details.intro_paragraph}
+                            touched={touched.school_details?.intro_paragraph}
                             onChange={handleChange}
-                            error={errors.school_details?.affiliations}
+                            error={errors.school_details?.intro_paragraph}
                           />
                         </div>
                       </div>
@@ -319,7 +357,8 @@ export default function Page() {
                     <div className="mt-8">
                       <h3 className="text-sm font-bold mb-2">Contact Information</h3>
                       <div className="flex flex-col gap-y-4 gap-x-4 md:items-center md:flex-row">
-                        <div className="flex-1">
+                        <div className="flex-1 flex gap-4">
+                          <div className="w-full">
                           <Input
                             label="School Street Address"
                             labelClass="text-xs font-normal text-[#61646B]"
@@ -329,6 +368,19 @@ export default function Page() {
                             onChange={handleChange}
                             error={errors.school_address?.street_address}
                           />
+                          </div>
+                          <div className="w-full">
+                          <Input
+                            label="City"
+                            labelClass="text-xs font-normal text-[#61646B]"
+                            name="school_address.city"
+                            value={values?.school_address.city}
+                            touched={touched?.school_address?.city}
+                            onChange={handleChange}
+                            error={errors.school_address?.city}
+                            className="w-full"
+                          />
+                          </div>
                         </div>
                         <div className="flex gap-x-4 items-cente">
                           <div className="flex-1 md:w-[20rem]">
@@ -395,7 +447,10 @@ export default function Page() {
                                               { label: 'Financial Aid', value: 'Financial Aid' },
                                             ]}
                                             selected={values?.school_address?.contact_types[index]?.contact_type}
-                                            setSelected={(selected) => setFieldValue(`school_address.contact_types.${index}.contact_type`, selected)}
+                                            setSelected={(selected) => {
+                                              setFieldValue(`school_address.contact_types.${index}.contact_type`, selected)
+                                              setFieldValue(`school_address.contact_types.${index}.department_name`, selected)
+                                            }}
                                           />
                                         </div>
                                       )}
@@ -456,15 +511,98 @@ export default function Page() {
                               onClick={() => push({
                                 contact_type: '',
                                 phone: '',
-                                email: ''
+                                email: '',
+                                department_name: ''
                               })}
                             > <PlusSquare width="15" height="15" /> Add Additional</Button>
                           </>
 
                         )}
                       </FieldArray>
-
                     </div>
+                    
+                    <div className="mt-4">
+                      <FieldArray
+                        name="school_social_medias"
+                      >
+                        {({ push, remove }: { push: any, remove: any }) => (
+                          <>
+                            {
+                              values.school_social_medias.length > 0 &&
+                              values.school_social_medias.map((item, index) => (
+                                <div key={index} className="relative mb-2 flex flex-col gap-y-4 gap-x-4 md:flex-row md:items-start ">
+                                  <div className="flex gap-x-4 md:flex-1">
+                                    <Field
+                                      as="select"
+                                      name={`school_social_medias.${index}.social_media`}
+                                    >
+                                      {({
+                                        field,
+                                        form: { touched, errors },
+                                        meta
+                                      }) => (
+                                        <div className="w-1/2 md:w-[16rem] lg:w-[26rem]">
+                                          <CustomSelect
+                                            label="School Social Media Platform"
+                                            labelClass="text-xs font-normal text-[#61646B] mt-0"
+                                            name={`school_social_medias.${index}.social_media`}
+                                            touched={touched?.school_social_medias?.[index]?.social_media}
+                                            error={errors?.school_social_medias?.[index]?.social_media}
+                                            options={[
+                                              { label: 'Facebook', value: 'Facebook' },
+                                              { label: 'Twitter', value: 'Twitter' },
+                                              { label: 'Instagram', value: 'Instagram' },
+                                            ]}
+                                            selected={values?.school_social_medias?.[index]?.social_media}
+                                            setSelected={(selected) => {
+                                              setFieldValue(`school_social_medias.${index}.social_media`, selected)
+                                            }}
+                                          />
+                                        </div>
+                                      )}
+                                    </Field>
+                                    <Field
+                                      name={`school_social_medias.${index}.url`}
+                                    >
+                                      {({
+                                        field,
+                                        form: { touched, errors },
+                                        meta
+                                      }) => (
+                                        <div className="flex-1">
+                                          <Input
+                                            label="Social Media Url"
+                                            labelClass="text-xs font-normal text-[#61646B]"
+                                            name={`school_social_medias.${index}.url`}
+                                            value={values?.school_social_medias?.[index]?.url}
+                                            onChange={(e) => setFieldValue(`school_social_medias.${index}.url`, e.target.value)}
+                                            touched={touched?.school_social_medias?.[index]?.url}
+                                            error={errors?.school_social_medias?.[index]?.url}
+                                          />
+                                        </div>
+                                      )}
+                                    </Field>
+                                  </div>
+                                  {values.school_social_medias.length > 1 && <span className="absolute -right-4 top-1 text-red-500 cursor-pointer"
+                                    onClick={() => remove(index)}
+                                  > <MinusCircle /> </span>}
+                                </div>
+                              ))
+                            }
+                            <Button
+                              className="bg-[#F0F4F7] rounded-[8px] px-8 text-[#880505] font-normal gap-1 hover:bg-[#F0F4F7]/90 text-xs"
+                              type="button"
+                              onClick={() => push({
+                                social_media: '',
+                                url: '',
+                              })}
+                            > <PlusSquare width="15" height="15" /> Add Additional</Button>
+                          </>
+
+                        )}
+                      </FieldArray>
+                    </div>
+
                   </div>
                 </div>
                 <BottomBar
