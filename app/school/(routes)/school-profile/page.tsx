@@ -82,14 +82,12 @@ export default function Page() {
           contact_type: contact?.contact_type,
           phone: contact?.phone,
           email: contact?.email,
-          department_name: contact?.department_name
         }
       }) || [
           {
             contact_type: '',
             phone: '',
             email: '',
-            department_name: ""
           }
         ],
     },
@@ -449,7 +447,6 @@ export default function Page() {
                                             selected={values?.school_address?.contact_types[index]?.contact_type}
                                             setSelected={(selected) => {
                                               setFieldValue(`school_address.contact_types.${index}.contact_type`, selected)
-                                              setFieldValue(`school_address.contact_types.${index}.department_name`, selected)
                                             }}
                                           />
                                         </div>
@@ -511,8 +508,7 @@ export default function Page() {
                               onClick={() => push({
                                 contact_type: '',
                                 phone: '',
-                                email: '',
-                                department_name: ''
+                                email: ''
                               })}
                             > <PlusSquare width="15" height="15" /> Add Additional</Button>
                           </>
