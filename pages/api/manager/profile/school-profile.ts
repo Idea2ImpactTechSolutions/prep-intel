@@ -118,7 +118,6 @@ async function createSchool(req: any) {
     intro_paragraph: school_details.intro_paragraph,
     institution_type: school_details.institution_type,
     affiliations: school_details.affiliations,
-    intro_paragraph: school_details.intro_paragraph,
   };
 
   let school: any = null;
