@@ -115,6 +115,7 @@ async function createSchool(req: any) {
     name: school_details.name,
     found_date: new Date(school_details.founded_date),
     tagline: school_details.tagline,
+    intro_paragraph: school_details.intro_paragraph,
     institution_type: school_details.institution_type,
     affiliations: school_details.affiliations,
     intro_paragraph: school_details.intro_paragraph,
@@ -122,7 +123,7 @@ async function createSchool(req: any) {
 
   let school: any = null;
 
-  //Do a get and check school for other tables
+  //Do a get and check school for other
   if (school_id) {
     //create a put
     school = await School.findByPk(school_id);

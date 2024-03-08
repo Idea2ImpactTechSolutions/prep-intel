@@ -37,11 +37,19 @@ export default async function handler(
     const schoolId: any = fData.fields.school_id;
     const category: any = fData.fields.category;
 
+    const school = await School.findOne({ where: { id: schoolId } });
+
+    if (!school) {
+      responseBody("school with id not found", 404, {});
+    }
+
     let buffer = Buffer.from(fs.readFileSync(imageFile[0].filepath));
+
+    let name = school.name.replace(/ /g, "_");
 
     const params = {
       Bucket: "prep-bucket-upload",
-      Key: imageFile[0].newFilename,
+      Key: `${name}/${imageFile[0].newFilename}`,
       Body: buffer,
       conntentType: "image/png",
     };
