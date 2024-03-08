@@ -2,12 +2,13 @@ name: App Docker Build and Push
 
 on:
   push:
-    branches: [main]
+    branches: [main, update_gha_docker-issue]
   workflow_dispatch:
 
 env:
   AWS_REGION: "us-east-1"
   ECR_REPO: "533267153582.dkr.ecr.us-east-1.amazonaws.com/prep-intel-app"
+  IMAGE_VERSION: latest
 
 jobs:
   docker-build-and-push:
@@ -27,11 +28,9 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build tagged Docker image
-        env:
-          IMAGE_VERSION: latest
         run: |
           docker build -t ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }} .
 
