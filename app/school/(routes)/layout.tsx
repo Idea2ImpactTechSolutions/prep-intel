@@ -27,8 +27,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             .unwrap()
             .then((payload) => {
                 const { data } = payload
-                dispatch(setSchoolInformation({ slug: 'school_data', data: {...data[0]?.school, create_count: 0} }))
-                !data[0]?.school?.publish_date ? setIsProfileCompleted(false) : setIsProfileCompleted(true)
+                dispatch(setSchoolInformation({ slug: 'school_data', data: {...data, create_count: 0} }))
+                !data?.publish_date ? setIsProfileCompleted(false) : setIsProfileCompleted(true)
             })
     }
 
@@ -52,7 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             <LoadingSpinner/>
                             : isProfileCompleted ? children :
                                 (location === "/school/school-profile" || location === "/school/claim" || location === "/school/set-password" || (location ===
-                                "/school/my-school" && school_data?.create_count === 2) ||
+                                "/school/preview-school" && school_data?.create_count === 2) ||
                                 location === "/school/academic-info"
                                 ) ?
                                     children

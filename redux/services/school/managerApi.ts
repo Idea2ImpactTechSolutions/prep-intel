@@ -35,7 +35,7 @@ const managerApi = baseApi.injectEndpoints({
         }),
         getSchoolProfile: builder.query({
             query: (schoolId) => ({
-                url: `/manager/profile/get-school?school_id=${schoolId}`,
+                url: `/manager/profile/school-profile?school_id=${schoolId}`,
                 method: 'GET',
             }),
             async onQueryStarted(_, {queryFulfilled, dispatch}) {

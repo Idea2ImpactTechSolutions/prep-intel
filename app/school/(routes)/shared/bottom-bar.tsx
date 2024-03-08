@@ -3,7 +3,8 @@ import { GoChevronRight, GoChevronLeft } from "react-icons/go";
 import { FaSave } from "react-icons/fa";
 import { IoCloseOutline } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Upload } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const BottomBar = ({
   onBack,
@@ -12,6 +13,8 @@ const BottomBar = ({
   isSubmitting,
 }) => {
   const handleDiscard = () => window.location.reload()
+  const location = usePathname()
+
   return (
     <div className="sticky bottom-0 bg-gray-200 py-3 w-full flex justify-between px-4 border-t-2 border-t-solid border-t-primary">
         <div className="container flex px-6">
@@ -41,7 +44,9 @@ const BottomBar = ({
               loading={isSubmitting}
               disabled={isSubmitting}
             // onClick={() => handleCreateSchoolProfile(values)}
-            >Next <ChevronRight className="w-4 h-4 ml-" />
+            >
+            {location === "/school/my-school"  && <span className="flex items-center gap-1">Save & Publish <Upload className="w-4 h-4" /></span>}
+            {location !== "/school/my-school" && <span className="flex items-center gap-1">Next <ChevronRight className="w-4 h-4" /></span>}
           </Button>
 
         {/* <button
