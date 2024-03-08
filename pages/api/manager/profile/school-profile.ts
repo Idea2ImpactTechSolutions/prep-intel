@@ -13,8 +13,8 @@ export default async function handler(req, res) {
       return handlePostRequest(req, res);
     case "GET":
       return handleGetRequest(req, res);
-    case "PUT":
-      return handlePutRequest(req, res);
+    case "PATCH":
+      return handlePatchRequest(req, res);
     default:
       return res
         .status(405)
@@ -37,9 +37,16 @@ async function handlePostRequest(req, res) {
   }
 }
 
-async function handlePutRequest(req: any, res: any) {
+async function handlePatchRequest(req: any, res: any) {
   try {
     const newSchool: any = await addSchoolPublishDate(req);
+    if (newSchool === "not found") {
+      return res.status(404).json(
+        responseBody("school not found", 404, {
+          school: "",
+        })
+      );
+    }
     return res.status(201).json(
       responseBody("school profile published successfully", 201, {
         school: newSchool.dataValues,
