@@ -75,13 +75,14 @@ async function createSchool(req: any) {
     name: school_details.name,
     found_date: new Date(school_details.founded_date),
     tagline: school_details.tagline,
+    intro_paragraph: school_details.intro_paragraph,
     institution_type: school_details.institution_type,
     affiliations: school_details.affiliations,
   };
 
   let school: any = null;
 
-  //Do a get and check school for other tables
+  //Do a get and check school for other
   if (school_id) {
     //create a put
     school = await School.findByPk(school_id);
@@ -130,6 +131,7 @@ async function createSchool(req: any) {
       school_id: school.id,
       name: school_address.school_name,
       state: school_address.school_state,
+      city: school_address.city,
       street_address_1: school_address.street_address,
       postal: school_address.school_zip,
     };
