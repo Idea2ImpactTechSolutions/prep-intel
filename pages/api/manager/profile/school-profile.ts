@@ -40,7 +40,7 @@ async function handlePostRequest(req, res) {
 async function handlePatchRequest(req: any, res: any) {
   try {
     const newSchool: any = await addSchoolPublishDate(req);
-    if (newSchool === "not found") {
+    if (!newSchool) {
       return res.status(404).json(
         responseBody("school not found", 404, {
           school: "",
@@ -80,7 +80,7 @@ async function addSchoolPublishDate(req: any) {
 
   let school = await School.findOne({ where: { id: school_id } });
   if (!school) {
-    return "not found";
+    return false;
   }
 
   let update = await School.update(
