@@ -13,6 +13,8 @@ export default async function handler(req, res) {
       return handlePostRequest(req, res);
     case "GET":
       return handleGetRequest(req, res);
+    case "PATCH":
+      return handlePatchRequest(req, res);
     default:
       return res
         .status(405)
@@ -25,6 +27,28 @@ async function handlePostRequest(req, res) {
     const newSchool: any = await createSchool(req);
     return res.status(201).json(
       responseBody("Manager account claimed successfully", 201, {
+        school: newSchool.dataValues,
+      })
+    );
+  } catch (error: any) {
+    return res
+      .status(400)
+      .json(responseBody("Error occurred", 400, { error: error.message }));
+  }
+}
+
+async function handlePatchRequest(req: any, res: any) {
+  try {
+    const newSchool: any = await addSchoolPublishDate(req);
+    if (!newSchool) {
+      return res.status(404).json(
+        responseBody("school not found", 404, {
+          school: "",
+        })
+      );
+    }
+    return res.status(201).json(
+      responseBody("school profile published successfully", 201, {
         school: newSchool.dataValues,
       })
     );
@@ -49,6 +73,22 @@ async function handleGetRequest(req, res) {
       .status(400)
       .json(responseBody("Error occurred", 400, { error: error.message }));
   }
+}
+
+async function addSchoolPublishDate(req: any) {
+  const { publish_date, school_id } = req.body;
+
+  let school = await School.findOne({ where: { id: school_id } });
+  if (!school) {
+    return false;
+  }
+
+  let update = await School.update(
+    { publish_date: publish_date },
+    { where: { id: school_id } }
+  );
+
+  return update;
 }
 
 async function createSchool(req: any) {
