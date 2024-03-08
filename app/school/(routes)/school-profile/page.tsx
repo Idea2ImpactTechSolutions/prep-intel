@@ -341,7 +341,7 @@ export default function Page() {
                           <Textarea
                             label="Campus Introductory Paragraph"
                             labelClass="text-xs font-normal text-[#61646B]"
-                            rows={1}
+                            rows={3}
                             name="school_details.intro_paragraph"
                             value={values.school_details.intro_paragraph}
                             touched={touched.school_details?.intro_paragraph}

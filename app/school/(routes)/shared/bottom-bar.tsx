@@ -45,8 +45,8 @@ const BottomBar = ({
               disabled={isSubmitting}
             // onClick={() => handleCreateSchoolProfile(values)}
             >
-            {location === "/school/my-school"  && <span className="flex items-center gap-1">Save & Publish <Upload className="w-4 h-4" /></span>}
-            {location !== "/school/my-school" && <span className="flex items-center gap-1">Next <ChevronRight className="w-4 h-4" /></span>}
+            {location === "/school/preview-school"  && <span className="flex items-center gap-1">Save & Publish <Upload className="w-4 h-4" /></span>}
+            {location !== "/school/preview-school" && <span className="flex items-center gap-1">Next <ChevronRight className="w-4 h-4" /></span>}
           </Button>
 
         {/* <button

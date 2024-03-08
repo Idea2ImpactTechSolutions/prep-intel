@@ -15,7 +15,7 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
             <div className="rounded-lg shadow-md">
                 <div className="relative bg-gray-200 h-32 rounded-ss-lg rounded-se-lg lg:h-44 xl:h-52">
                     <div className="absolute left-8 -bottom-10 w-24 h-24 bg-white rounded-full border grid place-content-center md:w-28 md:h-28 md:-bottom-12 lg:w-32 lg:h-32">
-                        <Image src="/images/logo/logo-saturn.png"
+                        <Image src={schoolData?.assets?.filter((f) => f.category === 'logo')?.[0]?.location || ''}
                             alt="logo"
                             width={0}
                             height={0}
@@ -31,13 +31,13 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
                         <div className="mt-2 my-1 mb-6 text-gray-500 flex">
                             <span className="border-r-2 border-gray-400 pr-2 flex gap-2 capitalize">
                                 <Image
-                                    src="/images/logo/usa-icon.png"
+                                    src={"/images/logo/usa-icon.png"}
                                     alt="logo"
                                     width={20}
                                     height={20}
                                 /> {schoolData?.school_address?.state || "Gorgia"}</span>
                             <span className="border-r-2 border-gray-400 pr-2 pl-2"> {`${schoolData?.school_address?.city} ${schoolData?.school_address?.postal}` || 'Athens, GA 3060'} </span>
-                            <span className="pl-2"> (706) 542-3000 </span>
+                            <span className="pl-2"> { schoolData?.school_contacts?.[0]?.phone || "(706) 542-3000"} </span>
                         </div>
                     </div>
                 </div>
@@ -47,7 +47,7 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
                     <div>
                         <h2 className="text-[#030712] font-bold text-sm md:text-lg">School Overview</h2>
                         <div className="text-xs text-[#312B2B] md:text-sm lg:w-4/5">
-                            {schoolData?.intro_paragraph || "Welcome to the University of Saturn, a pioneering institution nestled amidst the ethereal rings of the sixth planet from the Sun. Renowned for its celestial engineering programs and interstellar humanities courses, our university offers a truly unique academic experience, blending cutting-edge research with unparalleled cosmic views. Here, students embark on an educational journey that transcends the bounds of Earthly knowledge, cultivating intellects ready to shape the galaxies of tomorrow."}</div>
+                            {schoolData?.intro_paragraph || "Welcome to the University of ABC"}</div>
                     </div>
                     <div className="mt-4">
                         <h2 className="text-[#030712] font-bold text-sm md:text-lg">Contact Information</h2>
@@ -92,7 +92,7 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
                         <div className="mt-2 grid grid-cols-2 gap-4 md:grid-cols-3">
                             <SingleStat title="ACT Required" value={schoolData?.min_act_score || 'Nil'} />
                             <SingleStat title="SAT Required" value={schoolData?.min_sat_score || 'Nil'} />
-                            <SingleStat title="Diploma/GED Required" value={schoolData?.gpa_requirement || "Nil"} />
+                            <SingleStat title="High School GPA Required" value={schoolData?.gpa_requirement || "Nil"} />
                             <SingleStat title="In-State Tuition" value={`$${schoolData?.in_state_tuition}` || 'Nil'} />
                             <SingleStat title="Out-of-State Tuition" value={`$${schoolData?.out_state_tuition}` || 'Nil'} />
                             <SingleStat title="Fees" value={`$${schoolData?.fees_per_semester}` || 'Nil'} />
