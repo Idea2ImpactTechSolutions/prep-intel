@@ -42,7 +42,6 @@ export default function SchoolPreview() {
         publishSchoolProfileMutation(values)
         .unwrap()
         .then((payload) => {
-            console.log(payload)
             if (payload.status === 201) {
                 // dispatch(setSchoolInformation({ slug: 'school_data', data: {...payload.data.school, create_count: 1} }))
                 handleGetSchoolInformation(school_data?.id)

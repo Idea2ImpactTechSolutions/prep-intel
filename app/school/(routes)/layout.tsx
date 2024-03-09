@@ -37,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             const { user } = userData
             handleGetSchoolInformation(user.schoolID)
         }
-    }, [])
+    }, []) 
     
     useEffect(() => {
         !school_data?.publish_date ? setIsProfileCompleted(false) : setIsProfileCompleted(true)
