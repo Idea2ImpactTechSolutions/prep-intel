@@ -80,7 +80,7 @@ const managerApi = baseApi.injectEndpoints({
         publishSchoolProfile: builder.mutation({
             query: (payload) => ({
                 url: `/manager/profile/school-profile`,
-                method: 'PUT',
+                method: 'PATCH',
                 body: payload
             }),
             async onQueryStarted(_, {queryFulfilled, dispatch}) {

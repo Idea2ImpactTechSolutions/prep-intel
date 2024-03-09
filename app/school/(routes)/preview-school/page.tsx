@@ -27,14 +27,25 @@ export default function SchoolPreview() {
     const dispatch = useAppDispatch()
     const [publishSchoolProfileMutation, {isLoading: isPublishingSchool, isSuccess: isSuccessSchoolPublished}] = usePublishSchoolProfileMutation()
 
+    const handleGetSchoolInformation = async (schoolId) => {
+        getSchoolProfile(schoolId)
+            .unwrap()
+            .then((payload) => {
+                const { data } = payload
+                setIsFetechProfile(true)
+                setFieldValue('school_id', data.id)
+                dispatch(setSchoolInformation({ slug: 'school_data', data: data }))
+            })
+      }
+
     const handlePublishSchool = async (values: Dictionary) => {
-        console.log(values)
         publishSchoolProfileMutation(values)
         .unwrap()
         .then((payload) => {
             console.log(payload)
             if (payload.status === 201) {
                 // dispatch(setSchoolInformation({ slug: 'school_data', data: {...payload.data.school, create_count: 1} }))
+                handleGetSchoolInformation(school_data?.id)
                 toast.success("School Published Successfully ")
                 router.push("/school/my-school");
               }
@@ -50,16 +61,7 @@ export default function SchoolPreview() {
         onSubmit: handlePublishSchool
     })
 
-    const handleGetSchoolInformation = async (schoolId) => {
-        getSchoolProfile(schoolId)
-            .unwrap()
-            .then((payload) => {
-                const { data } = payload
-                setIsFetechProfile(true)
-                setFieldValue('school_id', data.id)
-                dispatch(setSchoolInformation({ slug: 'school_data', data: data }))
-            })
-      }
+    
 
       useEffect(() => {
         if(userData && userData?.user){

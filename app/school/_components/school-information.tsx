@@ -43,7 +43,7 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
                 </div>
             </div>
             <div className="mt-8 flex flex-col gap-4 lg:flex-row">
-                <div>
+                <div className="xl:w-[calc(100vw_-_30rem)]">
                     <div>
                         <h2 className="text-[#030712] font-bold text-sm md:text-lg">School Overview</h2>
                         <div className="text-xs text-[#312B2B] md:text-sm lg:w-4/5">
@@ -51,7 +51,7 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
                     </div>
                     <div className="mt-4">
                         <h2 className="text-[#030712] font-bold text-sm md:text-lg">Contact Information</h2>
-                        <div className="mt-1 overflow-auto xl:w-3/4">
+                        <div className="mt-1 overflow-auto xl:w-[90%]">
                             <table className="whitespace-nowrap border-separate border-spacing-y-2" style={{ boxShadow: "none", margin: "0" }}>
                                 <tbody>
                                     <tr className="bg-transparent">
@@ -99,7 +99,7 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
                         </div>
                     </div>
                 </div>
-                <div className="bg-gray-200 p-4 lg:w-[60rem]">
+                <div className="bg-gray-200 p-4 lg:w-[60rem] xl:w-[30rem]">
 
                 </div>
             </div>

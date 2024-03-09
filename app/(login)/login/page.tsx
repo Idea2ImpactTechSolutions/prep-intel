@@ -33,7 +33,7 @@ export default function LoginPage() {
         router.push('/admin/school');
         break;
       case 'manager':
-        router.push("school/welcome");
+        router.push("school/dashboard");
         break;
       case 'recruiter':
         router.push('/recruiter/profile/welcome')

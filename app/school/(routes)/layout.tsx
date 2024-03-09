@@ -38,7 +38,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             handleGetSchoolInformation(user.schoolID)
         }
     }, [])
-    // console.log(school_data?.create_count)
+    
+    useEffect(() => {
+        !school_data?.publish_date ? setIsProfileCompleted(false) : setIsProfileCompleted(true)
+    }, [school_data])
+    
     return (
         <main className="overflow-y-hidden font-sans">
             <section className="">
