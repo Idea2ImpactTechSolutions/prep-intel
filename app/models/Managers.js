@@ -1,6 +1,4 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("./sequelize");
-
+import { DataTypes} from "./sequelize";import { sequelize} from "./sequelize";
 // console.log({ DataTypes })
 const Managers = sequelize.define(
     "managers",

@@ -1103,11 +1103,6 @@ const migrationCommands = (transaction) => [
           allowNull: false,
           autoIncrement: true,
         },
-        major_type_id: {
-          type: Sequelize.INTEGER,
-          field: "major_type_id",
-          allowNull: true,
-        },
         school_id: {
           type: Sequelize.UUID,
           field: "school_id",

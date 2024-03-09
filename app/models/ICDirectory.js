@@ -1,5 +1,4 @@
-const { DataTypes } = require("sequelize");
-const elephantsql = require("./ElephantSQL");
+import { DataTypes} from "./sequelize";const elephantsql = require("./ElephantSQL");
 
 // Datsource: https://nces.ed.gov/ipeds/datacenter/DataFiles.aspx
 // HD2021 = "Institutional Characteristics ->	Directory information"

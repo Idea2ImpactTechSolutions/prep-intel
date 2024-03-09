@@ -1,8 +1,8 @@
-import { Asset } from "next/font/google";
+// import { Asset } from "next/font/google";
 import { responseBody } from "../../../../app/config/helpers";
 
 // pages/api/manager/profile/academic-info.js
-const { models } = require("../../../../app/models");
+import { models } from "../../../../app/models";
 const { School, SchoolAddress, Assets, SchoolContact, SchoolSocialMedia } =
   models;
 const { v4 } = require("uuid");

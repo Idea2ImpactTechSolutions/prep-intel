@@ -811,11 +811,6 @@
                     "field": "id",
                     "seqType": "Sequelize.INTEGER"
                 },
-                "major_type_id": {
-                    "allowNull": true,
-                    "field": "major_type_id",
-                    "seqType": "Sequelize.INTEGER"
-                },
                 "school_id": {
                     "allowNull": true,
                     "references": {

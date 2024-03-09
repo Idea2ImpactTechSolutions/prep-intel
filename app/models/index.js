@@ -1,5 +1,4 @@
-const sequelize = require("./sequelize");
-const School = require("./School");
+import { sequelize} from "./sequelize";const School = require("./School");
 const SchoolDepartment = require("./SchoolDepartment");
 const SchoolAccreditation = require("./SchoolAccreditation");
 const SchoolResearchProgram = require("./SchoolResearchProgram");

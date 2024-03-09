@@ -7,10 +7,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
-    major_type_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
     school_id: {
       type: DataTypes.UUID,
       allowNull: true,
