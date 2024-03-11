@@ -38,12 +38,6 @@ export default async function AuthHandler(
       { where: { email: email } }
     );
 
-    await Users.create({
-      email: email,
-      password: password,
-      role: "manager",
-    });
-
     return res
       .status(200)
       .json(responseBody("manager password added successfully", 200, []));
