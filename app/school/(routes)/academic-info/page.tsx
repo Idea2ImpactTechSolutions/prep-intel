@@ -228,8 +228,7 @@ export default function AcademicInfo() {
 
     setSubmitting(true);
     try {
-      let payload = {...values, admissionRequirements: filteredPayload}
-      values.schoolId = userData?.user?.schoolID;
+      let payload = {...values, admissionRequirements: filteredPayload, schoolId: userData?.user?.schoolID}
       // console.log("TEST VALUES", payload);
       const url = "/api/manager/profile/academic-info";
       // Send a POST request to the server
@@ -239,13 +238,13 @@ export default function AcademicInfo() {
           "Content-Type": "application/json",
         },
 
-        body: JSON.stringify(values), // Convert form values to JSON
+        body: JSON.stringify(payload),
       });
       if (response.ok) {
         const responseData = await response.json();
           dispatch(setSchoolInformation({ slug: 'school_data', data: {...responseData.data.school, create_count: 2} }))
         toast.success("Academic Record Submitted Successfully")
-        router.push("/school/my-school")
+        router.push("/school/preview-school")
         // Handle success - you can redirect to another page or show a success message
       } else {
         throw new Error(`Error: ${response.status}`);
@@ -273,7 +272,7 @@ export default function AcademicInfo() {
         <Form className="flex-grow">
 
           <div className="container mx-auto p-6">
-            <CompletionPanel percentCompleted={20} title={"1/5"}></CompletionPanel>
+            <CompletionPanel percentCompleted={40} title={"2/3"}></CompletionPanel>
             <h1 className="text-2xl my-3 font-bold text-gray-800 mb-6">
               Create your School's Profile
             </h1>
