@@ -19,7 +19,14 @@ const Users = sequelize.define(
         },
         role: {
             type: DataTypes.STRING,
-        }
+        },
+        create_date: {
+            type: DataTypes.DATE
+        },
+        is_active: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+        },
     },
     {
         timestamps: false,
