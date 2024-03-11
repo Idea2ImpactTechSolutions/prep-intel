@@ -96,33 +96,7 @@ async function createSchool(req: any) {
   if (school && school.dataValues) {
     // Assuming `SchoolDepartment` is a model that relates to `School` via a foreign key `school_id`
     // Step 1: Delete existing school departments for this school
-
-    const school_address_data = {
-      school_id: school_id,
-      street_address_1: school_address.street_address,
-      city: school_address.city,
-      state: school_address.school_state,
-      postal: school_address.school_zip,
-    };
-
-    let [saved_school_address, created] = await SchoolAddress.findOrCreate({ where: { school_id: school_id },
-    defaults: school_address_data});
-
-    school.dataValues.school_address = saved_school_address;
-
-    const school_address_db_values = {
-      school_id: saved_school_address.school_id,
-      street_address_1: saved_school_address.street_address_1,
-      city: saved_school_address.city,
-      state: saved_school_address.state,
-      postal: saved_school_address.postal
-    };
-
-    if (JSON.stringify(school_address_db_values) != JSON.stringify(school_address_data)) {
-      const newSchoolAddress = await saved_school_address.update(school_address_data);
-      school.dataValues.school_address = newSchoolAddress;
-    }
-
+    await SchoolAddress.destroy({ where: { school_id: school.id } });
     await SchoolContact.destroy({ where: { school_id: school.id } });
     await SchoolSocialMedia.destroy({
       where: { school_id: school.id },
@@ -152,6 +126,17 @@ async function createSchool(req: any) {
       school_social_media_data || []
     );
 
+    const school_address_data = {
+      school_id: school.id,
+      name: school_address.school_name,
+      state: school_address.school_state,
+      street_address_1: school_address.street_address,
+      postal: school_address.school_zip,
+    };
+
+    const newSchoolAddress = await SchoolAddress.create(school_address_data);
+
+    school.dataValues.school_address = newSchoolAddress;
     school.dataValues.school_contacts = newSchoolContacts;
     school.dataValues.school_social_medias = newSchoolSocialMedias;
   }
