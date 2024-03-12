@@ -60,11 +60,11 @@ export default function Page() {
 
   const { data: userData }: any = useSession()
   const dispatch = useAppDispatch()
-
+  
   const { manager: { school_information: { school_data } } }: Dictionary = useAppSelector((state) => state.manager)
   const [initialSchoolData, setInitialSchoolData] = useState<initialValues>({
     school_id: school_data?.id || '',
-    school_image: '',
+    school_image: school_data?.assets?.filter((f) => f.category === 'logo')?.[0]?.location || '',
     school_details: {
       name: school_data?.name || '',
       institution_type: school_data?.institution_type || '',
@@ -199,7 +199,7 @@ export default function Page() {
   useEffect(() => {
     setInitialSchoolData({
       school_id: school_data?.id || '',
-      school_image: '',
+      school_image: school_data?.assets?.filter((f) => f.category === 'logo')?.[0]?.location || '',
       school_details: {
         name: school_data?.name || '',
         institution_type: school_data?.institution_type || '',
@@ -281,6 +281,7 @@ export default function Page() {
                             >
                               {selectedImage ? <img src={selectedImage && URL.createObjectURL(selectedImage)} />
                                 :
+                                values.school_image ? <img src={values.school_image}/> :
                                 <ImagePlus className="w-10 h-10 text-gray-400" />
                               }
                             </div>
