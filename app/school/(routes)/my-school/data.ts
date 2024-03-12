@@ -1,146 +1,148 @@
+import { v4 as uuid } from 'uuid';
+
 export const CAMPUS_AMENITIES = [
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Athletic Fields/Courts',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Bank ATMs',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Bike Sharing',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Bookstores',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Cafeterias',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Campus Security',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Career Centers',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Childcare Centers',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Common Areas',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Computer Labs',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Climbing Walls',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Dormitories',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Fitness Center',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Health Center',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Internet',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Laundry Facilities',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Libraries',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Lecture Halls',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Movie Theaters',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Multicultural Centers',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Package Pickup Points',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Postal Services',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Quiet Rooms',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Recycling Centers',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Research Centers',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Shuttle Services',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Specialty Dining',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Swimming Pool',
         isChecked: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         name: 'Well-lit Paths',
         isChecked: false
     },
@@ -149,248 +151,248 @@ export const CAMPUS_AMENITIES = [
 export const EXTRA_CURRICULARS = {
     ACADEMIC_PROFESSIONAL: [
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Debate Club',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Science Club',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Robotics Team',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'History Club',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Language Club',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Business Club',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Mock Trial Team',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Journalism',
             isChecked: false
         },
     ],
     ARTS_PERFOMANCE: [
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Art Club',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Dance Team',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Drama Club',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Film',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Literary Magazine',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Music Band',
             isChecked: false
         }
     ],
     ATHLETICS_PHYSICAL_ACTIVITIES: [
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Soccer Team',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Basketball Team',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Baseball/Softball Team',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Track and Field',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Swimming Team',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Gymnastics Team',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Cheerleading Squad',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Cross Country Team',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Football Team',
             isChecked: false
         },
     ],
     SOCIAL_CULTURAL: [
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Student Government',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Model United Nations',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Cultural Clubs',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'LGBTQ+ Alliance',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Green Club',
             isChecked: false
         },
     ],
     SERVICE_COMMUNITY: [
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Community Service',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Red Cross Club',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Habitat for Humanity',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Tutoring or Mentorship',
             isChecked: false
         },
     ],
     SPECIAL_INTEREST_HOBBIES: [
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Chess Club',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Gaming Club',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Book Club',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Astronomy Club',
             isChecked: false
         },
     ],
     RELIGIOUS_FAITH_BASED: [
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Fellowship Groups',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Bible Study Groups',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Interfaith Dialogue Group',
             isChecked: false
         },
     ],
     LEADERSHIP_ADVOCACY: [
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Peer Leadership',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Peer Leadership',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Human Rights Club',
             isChecked: false
         },
     ],
     TECHNOLOGY_DIGITAL_MEDIA: [
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Programming Club',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Web Design Club',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Graphic Design Club',
             isChecked: false
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             name: 'Social Media Club',
             isChecked: false
         },
