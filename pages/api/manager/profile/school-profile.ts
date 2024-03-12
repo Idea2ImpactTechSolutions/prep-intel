@@ -1,9 +1,6 @@
-import { Asset } from "next/font/google";
 import { responseBody } from "../../../../app/config/helpers";
-
 const { models } = require("../../../../app/models");
-const { School, SchoolAddress, Assets, SchoolContact, SchoolSocialMedia } =
-  models;
+const { School, SchoolAddress, Assets, SchoolContact, SchoolSocialMedia } = models;
 const { v4 } = require("uuid");
 
 export default async function handler(req, res) {
