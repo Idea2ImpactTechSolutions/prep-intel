@@ -58,6 +58,16 @@ export default async function handler(
       let school = await School.findByPk(schoolId[0]);
       if (school) {
         const data = await uploadFileToS3(params);
+        let assetChecker = await Assets.findOne({
+          where: { school_id: schoolId[0] },
+        });
+
+        if (assetChecker) {
+          await Assets.update(
+            { is_active: false },
+            { where: { school_id: schoolId[0], category: category[0] } }
+          );
+        }
         let createAsset = await Assets.create({
           description: "logo",
           school_id: schoolId[0],
