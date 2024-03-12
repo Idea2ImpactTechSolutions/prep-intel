@@ -1,4 +1,6 @@
 "use client"
+
+import { v4 as uuid } from 'uuid';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { setManagerInfo } from "@/redux/features/school/managerSlice";
@@ -12,7 +14,7 @@ import * as yup from "yup";
 
 const SERVICES = [
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),   
         text: "Greater Transparency into Your Student Funnel"
     },
     {
@@ -20,7 +22,7 @@ const SERVICES = [
         text: "Reports and Trends with Your School"
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),   
         text: "Increase Your Outreach to Prospects"
     },
 ]
