@@ -1,25 +1,24 @@
 {
-    "family": "intel-prep-app-task",
-    "executionRoleArn": "  arn:aws:iam::533267153582:role/intel-prep-ecs-cluster",
-    "taskRoleArn": "arn:aws:iam::533267153582:role/ecsTaskExecutionRole",
-    "networkMode": "awsvpc",
-    "containerDefinitions": [
-      {
-        "name": "intel-prep",
-        "image": "533267153582.dkr.ecr.us-east-1.amazonaws.com/prep-intel-app",
-        "essential": true,
-        "memoryReservation": 512,
-        "cpu": 256,
-        "portMappings": [
-          {
-            "containerPort": 80,
-            "hostPort": 80
-          }
-        ]
-      }
-    ],
-    "requiresCompatibilities": ["EC2"],
-    "cpu": "512",
-    "memory": "1024"
-  }
-  
+  "family": "prep-intel-dev",
+  "executionRoleArn": "arn:aws:iam::533267153582:role/intel-prep-ecs-cluster",
+  "taskRoleArn": "arn:aws:iam::533267153582:role/ecsTaskExecutionRole",
+  "networkMode": "awsvpc",
+  "containerDefinitions": [
+    {
+      "name": "prep-intel-dev",
+      "image": "533267153582.dkr.ecr.us-east-1.amazonaws.com/prep-intel-app",
+      "essential": true,
+      "memory": 512, 
+      "cpu": 256,
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "hostPort": 80
+        }
+      ]
+    }
+  ],
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024"
+}
