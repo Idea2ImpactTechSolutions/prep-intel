@@ -35,7 +35,7 @@ const managerApi = baseApi.injectEndpoints({
         }),
         getSchoolProfile: builder.query({
             query: (schoolId) => ({
-                url: `/manager/profile/get-school?school_id=${schoolId}`,
+                url: `/manager/profile/school-profile?school_id=${schoolId}`,
                 method: 'GET',
             }),
             async onQueryStarted(_, {queryFulfilled, dispatch}) {
@@ -76,6 +76,21 @@ const managerApi = baseApi.injectEndpoints({
                     console.log(error)
                 }
             }
+        }),
+        publishSchoolProfile: builder.mutation({
+            query: (payload) => ({
+                url: `/manager/profile/school-profile`,
+                method: 'PATCH',
+                body: payload
+            }),
+            async onQueryStarted(_, {queryFulfilled, dispatch}) {
+                try {
+                    const result = await queryFulfilled
+                    console.log(result)
+                } catch (error) {
+                    console.log(error)
+                }
+            }
         })
     })
 })
@@ -85,5 +100,6 @@ export const {
     useSchoolManagerSetPasswordMutation,
     useLazyGetSchoolProfileQuery,
     useManagerCreateSchoolProfileMutation, 
-    useUploadSchoolImageMutation
+    useUploadSchoolImageMutation,
+    usePublishSchoolProfileMutation
 } = managerApi
