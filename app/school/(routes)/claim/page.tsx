@@ -18,7 +18,7 @@ const SERVICES = [
         text: "Greater Transparency into Your Student Funnel"
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         text: "Reports and Trends with Your School"
     },
     {
