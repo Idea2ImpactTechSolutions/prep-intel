@@ -1,4 +1,4 @@
-FROM node:18-alpine AS base
+FROM node:21-alpine3.18 AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -63,6 +63,14 @@ EXPOSE 80
 ENV PORT 80
 # set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
+# Test with hardcoded values
+ENV DB_USERNAME "prepmcintelly"
+ENV DB_PASSWORD  "axiomMaximus12!"
+ENV DB_NAME "postgres"
+ENV DB_HOST "prep-intel.ckfetrtfzl2r.us-west-2.rds.amazonaws.com"
+ENV TOKEN_SECRET "XX--SECRETE20220--XX"
+ENV NEXTAUTH_URL "http://prep-intel-dev-alb-1208390994.us-east-1.elb.amazonaws.com"
+ENV NEXTAUTH_SECRET "test"
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
