@@ -9,12 +9,12 @@ env:
   AWS_REGION: "us-east-1"
   ECR_REPO: "533267153582.dkr.ecr.us-east-1.amazonaws.com/prep-intel-app"
   IMAGE_VERSION: latest
-  DB_USERNAME: ${{secrets.DB_USERNAME}}
-  DB_PASSWORD: ${{secrets.DB_PASSWORD}}
-  DB_NAME: ${{secrets.DB_NAME}}
-  DB_HOST: ${{secrets.DB_HOST}}
-  TOKEN_SECRET: ${{secrets.TOKEN_SECRET}}
-  NEXTAUTH_URL: "http://prep-intel-dev-alb-1208390994.us-east-1.elb.amazonaws.com"
+  DB_USERNAME: ${{vars.DB_USERNAME}}
+  DB_PASSWORD: ${{vars.DB_PASSWORD}}
+  DB_NAME: ${{vars.DB_NAME}}
+  DB_HOST: ${{vars.DB_HOST}}
+  TOKEN_SECRET: ${{vars.TOKEN_SECRET}}
+  NEXTAUTH_URL: ${{vars.NEXTAUTH_URL}}
   NEXTAUTH_SECRET: "test"
 
 
