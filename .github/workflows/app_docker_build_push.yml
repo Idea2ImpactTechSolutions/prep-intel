@@ -15,6 +15,9 @@ env:
   DB_HOST: ${{vars.DB_HOST}}
   TOKEN_SECRET: ${{vars.TOKEN_SECRET}}
   NEXTAUTH_URL: ${{vars.NEXTAUTH_URL}}
+  AWS_ACCESS_KEY_ID: ${{vars.AWS_ACCESS_KEY_ID}}
+  AWS_SECRET_ACCESS_KEY: ${{vars.AWS_SECRET_ACCESS_KEY}}
+  BUCKET_NAME: ${{vars.BUCKET_NAME}}
   NEXTAUTH_SECRET: "test"
 
 
@@ -47,7 +50,11 @@ jobs:
           --build-arg DB_HOST=${{env.DB_HOST}} \
           --build-arg TOKEN_SECRET=${{env.TOKEN_SECRET}} \
           --build-arg NEXTAUTH_URL=${{env.NEXTAUTH_URL}} \
-          --build-arg NEXTAUTH_SECRET=${{env.NEXTAUTH_SECRET}} .
+          --build-arg NEXTAUTH_SECRET=${{env.NEXTAUTH_SECRET}} \
+          --build-arg AWS_ACCESS_KEY_ID=${{env.AWS_ACCESS_KEY_ID}} \
+          --build-arg AWS_REGION=${{env.AWS_REGION}} \
+          --build-arg AWS_SECRET_ACCESS_KEY=${{env.AWS_SECRET_ACCESS_KEY}} \
+          --build-arg BUCKET_NAME=${{env.BUCKET_NAME}} .
 
       - name: Push tagged Docker image to ECR
         run: |
