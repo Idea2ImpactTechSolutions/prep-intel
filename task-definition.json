@@ -1,11 +1,11 @@
 {
     "family": "intel-prep-app-task",
-    "executionRoleArn": "arn:aws:ecs:us-east-1:271365062139:cluster/intel-prep-ecs-cluster",
-    "taskRoleArn": "arn:aws:iam::271365062139:role/intelPrepEcsTaskExecutionRole",
+    "executionRoleArn": "  arn:aws:iam::533267153582:role/intel-prep-ecs-cluster",
+    "taskRoleArn": "arn:aws:iam::533267153582:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
     "containerDefinitions": [
       {
-        "name": "my-app",
+        "name": "intel-prep",
         "image": "533267153582.dkr.ecr.us-east-1.amazonaws.com/prep-intel-app",
         "essential": true,
         "memoryReservation": 512,
