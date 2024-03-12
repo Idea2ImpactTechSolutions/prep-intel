@@ -63,14 +63,30 @@ EXPOSE 80
 ENV PORT 80
 # set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
+
+ARG DB_USERNAME
+ENV DB_USERNAME ${DB_USERNAME}
+ARG DB_PASSWORD
+ENV DB_PASSWORD  ${DB_PASSWORD}
+ARG DB_NAME
+ENV DB_NAME ${DB_NAME}
+ARG DB_HOST
+ENV DB_HOST ${DB_HOST}
+ARG TOKEN_SECRET
+ENV TOKEN_SECRET ${TOKEN_URL}
+ARG NEXTAUTH_URL
+ENV NEXTAUTH_URL ${NEXTAUTH_URL}
+ARG NEXTAUTH_SECRET
+ENV NEXTAUTH_SECRET ${NEXTAUTH_SECRET}
+
 # Test with hardcoded values
-ENV DB_USERNAME "prepmcintelly"
-ENV DB_PASSWORD  "axiomMaximus12!"
-ENV DB_NAME "postgres"
-ENV DB_HOST "prep-intel.ckfetrtfzl2r.us-west-2.rds.amazonaws.com"
-ENV TOKEN_SECRET "XX--SECRETE20220--XX"
-ENV NEXTAUTH_URL "http://prep-intel-dev-alb-1208390994.us-east-1.elb.amazonaws.com"
-ENV NEXTAUTH_SECRET "test"
+# ENV DB_USERNAME "prepmcintelly"
+# ENV DB_PASSWORD  "axiomMaximus12!"
+# ENV DB_NAME "postgres"
+# ENV DB_HOST "prep-intel.ckfetrtfzl2r.us-west-2.rds.amazonaws.com"
+# ENV TOKEN_SECRET "XX--SECRETE20220--XX"
+# ENV NEXTAUTH_URL "http://prep-intel-dev-alb-1208390994.us-east-1.elb.amazonaws.com"
+# ENV NEXTAUTH_SECRET "test"
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
