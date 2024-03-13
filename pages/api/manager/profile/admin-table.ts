@@ -14,7 +14,7 @@ const { v4 } = require("uuid");
 export default async function handler(req, res) {
   try {
     // Extract data from request body
-    const { school_id } = req.body;
+    const { school_id } = req.query;
 
     let isSchoolExist = await School.findOne({ where: { id: school_id } });
 
@@ -38,6 +38,8 @@ export default async function handler(req, res) {
       const status = managers[i].is_active === 1 ? "Active" : "Inactive";
       admin.push({
         full_name: managers[i].first_name + " " + managers[i].last_name,
+        first_name: managers[i].first_name,
+        last_name: managers[i].last_name,
         email: managers[i].email,
         role: "Admin",
         is_active: status,
@@ -49,6 +51,8 @@ export default async function handler(req, res) {
       admin.push({
         full_name: recruiters[i].first_name + " " + recruiters[i].last_name,
         email: recruiters[i].email,
+        first_name: recruiters[i].first_name,
+        last_name: recruiters[i].last_name,
         role: "Recruiter",
         is_active: status,
       });
@@ -56,7 +60,7 @@ export default async function handler(req, res) {
 
     // Send a successful response
     return res
-      .status(201)
+      .status(200)
       .json(responseBody("success", 200, [{ data: admin }]));
   } catch (error: any) {
     // Handle any errors
