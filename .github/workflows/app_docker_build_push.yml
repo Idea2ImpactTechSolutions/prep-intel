@@ -77,7 +77,7 @@ jobs:
       - name: Refresh ASG for testing infrastructure
         run: |
           aws autoscaling start-instance-refresh \
-          --auto-scaling-group-name my-asg \
+          --auto-scaling-group-name Infra-ECS-Cluster-prep-intel-test-cluster-5782ea1b-ECSAutoScalingGroup-rF6sAHZRw0lv \
           --preferences '{"InstanceWarmup": 60, "MinHealthyPercentage": 50}'
 
 
