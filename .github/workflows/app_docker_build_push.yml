@@ -2,7 +2,7 @@ name: App Docker Build and Push
 
 on:
   push:
-    branches: [main, update_gha_docker-issue]
+    branches: [main, update_docker_token_secret]
   workflow_dispatch:
 
 env:
