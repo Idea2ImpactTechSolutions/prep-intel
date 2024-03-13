@@ -85,18 +85,9 @@ ENV AWS_SECRET_ACCESS_KEY ${AWS_SECRET_ACCESS_KEY}
 ARG BUCKET_NAME
 ENV BUCKET_NAME ${BUCKET_NAME}
 
-# Test with hardcoded values
-# ENV DB_USERNAME "prepmcintelly"
-# ENV DB_PASSWORD  "axiomMaximus12!"
-# ENV DB_NAME "postgres"
-# ENV DB_HOST "prep-intel.ckfetrtfzl2r.us-west-2.rds.amazonaws.com"
-# ENV TOKEN_SECRET "XX--SECRETE20220--XX"
+# NEXTAUTH_URL Hardcoded for functionality
 ENV NEXTAUTH_URL "http://prep-intel-dev-alb-1208390994.us-east-1.elb.amazonaws.com"
-# ENV NEXTAUTH_SECRET "test"
-# ENV AWS_REGION "us-east-1"
-# ENV AWS_ACCESS_KEY_ID "ASIAXYKJTAKXEJPWEH7O"
-# ENV AWS_SECRET_ACCESS_KEY "fJY0ViKl5tVIhpdJhBsviSNz9UXQO+qYWst2uSSf"
-# ENV BUCKET_NAME "prep-bucket-upload"
+
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
