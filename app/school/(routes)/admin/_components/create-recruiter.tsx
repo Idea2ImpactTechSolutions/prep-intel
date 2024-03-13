@@ -2,7 +2,7 @@ import CustomSelect from "@/components/custom-select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ChevronLeft, ChevronRight, Save } from "lucide-react";
+import { ChevronLeft, ChevronRight, Save, X } from "lucide-react";
 
 export default function CreateRecruiter() {
     return (
@@ -12,10 +12,15 @@ export default function CreateRecruiter() {
                     <form>
                         <div className="flex-1">
                             <div>
-                                <label htmlFor="school_details" className="text-sm font-bold">User Information</label>
+                                <label htmlFor="school_details" className="block mb-2 text-sm font-bold">User Information</label>
                                 <div className="grid grid-cols-1 gap-y-2 md:grid-cols-3 md:gap-x-8">
                                     <Input
-                                        label="Full Name"
+                                        label="First Name"
+                                        labelClass="text-xs font-normal text-[#61646B]"
+                                        className="w-full"
+                                    />
+                                    <Input
+                                        label="Last Name"
                                         labelClass="text-xs font-normal text-[#61646B]"
                                         className="w-full"
                                     />
@@ -25,24 +30,22 @@ export default function CreateRecruiter() {
                                         labelClass="text-xs font-normal text-[#61646B]"
                                         className="w-full"
                                     />
-                                    <Input
-                                        label="Phone Number"
-                                        labelClass="text-xs font-normal text-[#61646B]"
-                                        className="w-full"
-                                    />
                                 </div>
                             </div>
                             <div className="mt-4">
-                                <div className="grid grid-cols-1 gap-y-2 md:grid-cols-3 md:gap-x-8">
+                                <div className="grid grid-cols-1 gap-y-2 md:grid-cols- md:gap-x-8">
                                     <CustomSelect
                                         label="Role Type"
                                         labelClass="text-xs font-normal text-[#61646B]"
-                                        options={[]}
+                                        options={[
+                                            {label: 'admin', value: 'admin'},
+                                            {label: 'recruiter', value: 'recruiter'}
+                                        ]}
                                         selected=""
                                         setSelected={() => null}
                                         error={""}
                                     />
-                                    <CustomSelect
+                                    {/* <CustomSelect
                                         label="Permission Level"
                                         labelClass="text-xs font-normal text-[#61646B]"
                                         options={[]}
@@ -57,10 +60,10 @@ export default function CreateRecruiter() {
                                         selected=""
                                         setSelected={() => null}
                                         error={""}
-                                    />
+                                    /> */}
                                 </div>
                             </div>
-                            <div className="mt-4">
+                            <div className="mt-4 hidden">
                                 <label htmlFor="school_details" className="text-sm font-bold">Temporary Information</label>
                                 <div className="grid grid-cols-1 gap-y-2 md:grid-cols-2 md:gap-x-8">
                                     <Input
@@ -76,7 +79,7 @@ export default function CreateRecruiter() {
                                     />
                                 </div>
                             </div>
-                            <div className="mt-4">
+                            <div className="mt-4 hidden">
                                 <label htmlFor="school_details" className="text-sm font-bold">Invitation</label>
                                 <div className="grid grid-cols-2 gap-y-2 md:grid-cols-1 md:gap-y-4">
                                     <Input
@@ -99,24 +102,26 @@ export default function CreateRecruiter() {
                 </div>
                 <div className="border-t-2 border-t-[#880505] bg-[#F0F4F7] p-4 flex justify-between items-center md:px-16">
                     <div className="flex gap-x-4 items-center">
-                        {/* <Button
-                variant="outline"
-                className="text-xs h-7 rounded-sm px-3"
-              ><X className="w-3 h-3 mr-1" /> Discard</Button> */}
                         <Button
                             variant="outline"
-                            className="text-xs h-7 rounded-sm px-3"
-                        ><Save className="w-3 h-3 mr-1" /> Save for Later</Button>
+                            className="text-xs h-8 rounded-sm px-3"
+                            onClick={() => {
+                                window.location.reload()
+                            }}
+                        ><X className="w-3 h-3 mr-1" /> Discard</Button>
                     </div>
                     <div className="flex gap-x-4 items-center">
-                        <Button
+                        {/* <Button
                             variant="outline"
                             className="text-xs h-7 rounded-sm px-6"
-                        ><ChevronLeft className="w-3 h-3 mr-1" /> Back</Button>
+                        ><ChevronLeft className="w-3 h-3 mr-1" /> Back</Button> */}
                         <Button
-                            className="text-xs h-7 rounded-sm px-6"
+                            className="text-xs h-8 rounded-sm px-6"
+                            // loading
+                            // loadingText="Create User"
+                            // disabled
                         // onClick={() => setCurrentProgress('')}
-                        >Send Invitation <ChevronRight className="w-3 h-3 ml-1" /></Button>
+                        >Create User </Button>
                     </div>
                 </div>
             </div>

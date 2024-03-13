@@ -1,9 +1,7 @@
-import { Asset } from "next/font/google";
 import { responseBody } from "../../../../app/config/helpers";
-
 const { models } = require("../../../../app/models");
-const { School, SchoolAddress, Assets, SchoolContact, SchoolSocialMedia } =
-  models;
+const { School, SchoolAddress, Assets, SchoolContact, SchoolSocialMedia } = models;
+
 
 export default async function handler(req, res) {
   switch (req.method) {
@@ -210,6 +208,7 @@ async function updateSchoolAddress(schoolId : string, schoolAddressFormData) {
 }
 
 async function reconcileRecordsLists(schoolId: string, formRecords, dbModel) {
+
   let savedRecords = await dbModel.findAll({ where: { school_id: schoolId } });
   const formRecordsIds = formRecords.map(formRecord => formRecord.id);
 

@@ -25,5 +25,9 @@ jobs:
       run: npm run build
 
     - name: Run test
-      run: npm run test
-
+      run: npm run test:ci
+      env:
+        DB_USERNAME: ${{vars.DB_USERNAME}}
+        DB_PASSWORD: ${{vars.DB_PASSWORD}}
+        DB_NAME: ${{vars.DB_NAME}}
+        DB_HOST: ${{vars.DB_HOST}}
