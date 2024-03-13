@@ -56,7 +56,7 @@ export default async function handler(req, res) {
 
     // Send a successful response
     return res
-      .status(201)
+      .status(200)
       .json(responseBody("success", 200, [{ data: admin }]));
   } catch (error: any) {
     // Handle any errors
