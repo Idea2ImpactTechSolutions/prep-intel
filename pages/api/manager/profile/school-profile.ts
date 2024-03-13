@@ -23,10 +23,10 @@ export default async function handler(req, res) {
 
 async function handlePostRequest(req, res) {
   try {
-    const newSchool: any = await updateSchoolProfile(req);
+    const updatedSchool: any = await updateSchoolProfile(req);
     return res.status(201).json(
-      responseBody("Manager account claimed successfully", 201, {
-        school: newSchool.dataValues,
+      responseBody("School profile updated successfully", 201, {
+        school: updatedSchool.dataValues,
       })
     );
   } catch (error: any) {
