@@ -46,7 +46,6 @@ jobs:
           --build-arg DB_PASSWORD=${{env.DB_PASSWORD}} \
           --build-arg DB_NAME=${{env.DB_NAME}} \
           --build-arg DB_HOST=${{env.DB_HOST}} \
-          --build-arg NEXTAUTH_URL=${{env.NEXTAUTH_URL}} \
           --build-arg NEXTAUTH_SECRET=${{env.NEXTAUTH_SECRET}} \
           --build-arg AWS_ACCESS_KEY_ID=${{env.AWS_ACCESS_KEY_ID}} \
           --build-arg AWS_REGION=${{env.AWS_REGION}} \
