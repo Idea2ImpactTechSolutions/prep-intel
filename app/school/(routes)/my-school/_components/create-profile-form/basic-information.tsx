@@ -30,15 +30,22 @@ interface initialValues {
     affiliations: string
   },
   school_address: {
+    address_id: string,
     street_address: string,
     school_state: string,
     school_zip: string,
     contact_types: {
+      contact_id: number,
       contact_type: string,
       phone: string,
       email: string
     }[],
-  }
+  },
+  school_social_medias: {
+    social_media_id: number,
+    social_media: string,
+    url: string
+  }[],
 }
 
 export default function BasicInformationForm() {
@@ -61,23 +68,39 @@ export default function BasicInformationForm() {
       affiliations: ''
     },
     school_address: {
-      street_address: '',
+      address_id: school_data?.school_address?.id || '',
+      street_address: school_data?.school_address?.street_address_1 || '',
       school_state: school_data?.school_address?.state || '',
       school_zip: school_data?.school_address?.postal || '',
       contact_types: school_data?.school_contacts?.map((contact: Dictionary) => {
         return {
+          contact_id: contact?.id,
           contact_type: contact?.contact_type,
           phone: contact?.phone,
           email: contact?.email
         }
       }) || [
         {
+          contact_id: undefined,
           contact_type: '',
           phone: '',
           email: ''
         }
       ],
-    }
+    },
+    school_social_medias: school_data?.school_social_medias?.map((media: Dictionary) => {
+      return {
+        social_media_id: media?.id,
+        social_media: media?.social_media,
+        url: media?.url
+      }
+    }) || [
+      {
+        social_media_id: undefined,
+        social_media: '',
+        url: ''
+      }
+    ],
   })
 
   const router = useRouter()
