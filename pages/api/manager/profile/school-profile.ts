@@ -131,52 +131,41 @@ async function createSchool(req: any) {
   }
 
   if (school && school.dataValues) {
-    // Assuming `SchoolDepartment` is a model that relates to `School` via a foreign key `school_id`
-    // Step 1: Delete existing school departments for this school
-    await SchoolAddress.destroy({ where: { school_id: school.id } });
-    await SchoolContact.destroy({ where: { school_id: school.id } });
-    await SchoolSocialMedia.destroy({
-      where: { school_id: school.id },
-    });
-    // Step 2: Create new school departments using the department names
-    const school_contacts_data = school_contacts.map((school_contact) => ({
-      school_id: school.id,
-      contact_type: school_contact.contact_type,
-      phone: school_contact.phone,
-      street_address: school_contact.street_address,
-      email: school_contact.email,
-    }));
-
-    const school_social_media_data = school_social_medias?.map(
-      (school_social_media) => ({
-        school_id: school.id,
-        social_media: school_social_media.social_media,
-        url: school_social_media.url,
-      })
-    );
-
-    const newSchoolContacts = await SchoolContact.bulkCreate(
-      school_contacts_data
-    );
-
-    const newSchoolSocialMedias = await SchoolSocialMedia.bulkCreate(
-      school_social_media_data || []
-    );
-
+    // Check if a school address record needs to be created or updated
     const school_address_data = {
       school_id: school.id,
-      name: school_address.school_name,
-      state: school_address.school_state,
-      city: school_address.city,
+      id: school_address.address_id,
       street_address_1: school_address.street_address,
+      city: school_address.city,
+      state: school_address.school_state,
       postal: school_address.school_zip,
     };
 
-    const newSchoolAddress = await SchoolAddress.create(school_address_data);
+    const savedAddress = await updateSchoolAddress(school_address.address_id, school_address_data);
+    school.dataValues.school_address = savedAddress;
 
-    school.dataValues.school_address = newSchoolAddress;
-    school.dataValues.school_contacts = newSchoolContacts;
-    school.dataValues.school_social_medias = newSchoolSocialMedias;
+    // Check if school contact records need to be created, removed, or updated
+    const school_contacts_data = school_contacts.map((school_contact) => ({
+      school_id: school.id,
+      id: school_contact.contact_id,
+      contact_type: school_contact.contact_type,
+      phone: school_contact.phone,
+      email: school_contact.email,
+    }));
+
+    const savedContacts = await updateContactsOrSocialMediaRecords(school_id, school_contacts_data, SchoolContact);
+    school.dataValues.school_contacts = savedContacts;
+
+    // Check if school social media records need to be created, removed, or updated
+    const school_social_media_data = school_social_medias?.map((school_social_media) => ({
+        school_id: school.id,
+        id: school_social_media.social_media_id,
+        social_media: school_social_media.social_media,
+        url: school_social_media.url,
+    }));
+
+    const savedSocialMedias = await updateContactsOrSocialMediaRecords(school_id, school_social_media_data, SchoolSocialMedia);
+    school.dataValues.school_social_medias = savedSocialMedias;
   }
   return school;
 }
@@ -206,4 +195,60 @@ async function getSchool(req: any) {
     }
   }
   return schoolDetails;
+}
+
+async function updateSchoolAddress(addressId : string, schoolAddressData) {
+  let [savedAddress, newAddressCreated] = await SchoolAddress.findOrCreate({ where: { id: addressId }, 
+    defaults: schoolAddressData });
+    
+  if (! newAddressCreated) {
+    const addressNeedsUpdate = await checkForChangedAttributes(schoolAddressData, savedAddress.dataValues);
+    if (addressNeedsUpdate) {
+      await savedAddress.update(schoolAddressData);
+    }
+  }
+  return savedAddress;
+}
+
+async function checkForChangedAttributes(formData, savedDataValues) {
+  let needsUpdate: boolean = false;
+  for (const [key, value] of Object.entries(formData)) {
+    if (value != savedDataValues[key]) {
+      needsUpdate = true;
+      break;
+    }
+  }
+  return needsUpdate;
+}
+
+async function updateContactsOrSocialMediaRecords(schoolId: string, formRecords, dbModel) {
+  let savedRecords = await dbModel.findAll({ where: { school_id: schoolId } });
+  const formRecordsIds = formRecords.map(formRecord => formRecord.id);
+
+  for (let i = savedRecords.length - 1; i >= 0; i--) {
+    if (! formRecordsIds.includes(savedRecords[i].id)) {
+      await savedRecords[i].destroy();
+      savedRecords.splice(i, 1);
+    }
+  }
+
+  for (let i = 0; i < formRecords.length; i++) {
+    if (formRecords[i].id == undefined) {
+      const newRecord = await dbModel.create(formRecords[i]);
+      savedRecords.push(newRecord);
+    }
+    else {
+      for (let j = 0; j < savedRecords.length; j++) {
+        if (savedRecords[j].id == formRecords[i].id) {
+          const recordNeedsUpdate = await checkForChangedAttributes(formRecords[i], 
+            savedRecords[j].dataValues);
+          if (recordNeedsUpdate) {
+            await savedRecords[j].update(formRecords[i]);
+          }
+          break;
+        }
+      }
+    }
+  }
+  return savedRecords;
 }
