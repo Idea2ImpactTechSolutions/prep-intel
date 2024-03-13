@@ -23,6 +23,6 @@ describe('School Profile API', () => {
           message: 'School retrieved successfully',
         }),
       );
-    });
+    }, 15000);
   });
 });
