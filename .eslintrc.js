@@ -13,6 +13,7 @@ module.exports = {
     "react/no-unescaped-entities": "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "warn",
     "no-console": process.env.NODE_ENV === "production" ? "error" : "warn",
+    "@next/next/no-img-element": "off",
   },
   plugins: ["jest"],
 };

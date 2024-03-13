@@ -1,7 +1,6 @@
 import { Asset } from "next/font/google";
 import { responseBody } from "../../../../app/config/helpers";
 
-// pages/api/manager/profile/academic-info.js
 const { models } = require("../../../../app/models");
 const { School, SchoolAddress, Assets, SchoolContact, SchoolSocialMedia } =
   models;
@@ -13,6 +12,8 @@ export default async function handler(req, res) {
       return handlePostRequest(req, res);
     case "GET":
       return handleGetRequest(req, res);
+    case "PATCH":
+      return handlePatchRequest(req, res);
     default:
       return res
         .status(405)
@@ -25,6 +26,28 @@ async function handlePostRequest(req, res) {
     const newSchool: any = await createSchool(req);
     return res.status(201).json(
       responseBody("Manager account claimed successfully", 201, {
+        school: newSchool.dataValues,
+      })
+    );
+  } catch (error: any) {
+    return res
+      .status(400)
+      .json(responseBody("Error occurred", 400, { error: error.message }));
+  }
+}
+
+async function handlePatchRequest(req: any, res: any) {
+  try {
+    const newSchool: any = await addSchoolPublishDate(req);
+    if (!newSchool) {
+      return res.status(404).json(
+        responseBody("school not found", 404, {
+          school: "",
+        })
+      );
+    }
+    return res.status(201).json(
+      responseBody("school profile published successfully", 201, {
         school: newSchool.dataValues,
       })
     );
@@ -51,6 +74,22 @@ async function handleGetRequest(req, res) {
   }
 }
 
+async function addSchoolPublishDate(req: any) {
+  const { publish_date, school_id } = req.body;
+
+  let school = await School.findOne({ where: { id: school_id } });
+  if (!school) {
+    return false;
+  }
+
+  let update = await School.update(
+    { publish_date: publish_date },
+    { where: { id: school_id } }
+  );
+
+  return update;
+}
+
 async function createSchool(req: any) {
   // Extract data from request body
   // 1) Figure out how to do S3 on the backend with Marvin so we can save images
@@ -75,13 +114,14 @@ async function createSchool(req: any) {
     name: school_details.name,
     found_date: new Date(school_details.founded_date),
     tagline: school_details.tagline,
+    intro_paragraph: school_details.intro_paragraph,
     institution_type: school_details.institution_type,
     affiliations: school_details.affiliations,
   };
 
   let school: any = null;
 
-  //Do a get and check school for other tables
+  //Do a get and check school for other
   if (school_id) {
     //create a put
     school = await School.findByPk(school_id);
@@ -130,6 +170,7 @@ async function createSchool(req: any) {
       school_id: school.id,
       name: school_address.school_name,
       state: school_address.school_state,
+      city: school_address.city,
       street_address_1: school_address.street_address,
       postal: school_address.school_zip,
     };
@@ -151,7 +192,7 @@ async function getSchool(req: any) {
       include: [
         { model: SchoolAddress, as: "school_address" },
         { model: SchoolContact, as: "school_contacts" },
-        { model: Assets, as: "assets" },
+        { model: Assets, as: "assets", where: { is_active: true } },
         { model: SchoolSocialMedia, as: "school_social_medias" },
       ],
     });

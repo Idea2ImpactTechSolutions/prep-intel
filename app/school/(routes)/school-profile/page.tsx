@@ -63,11 +63,11 @@ export default function Page() {
 
   const { data: userData }: any = useSession()
   const dispatch = useAppDispatch()
-
+  
   const { manager: { school_information: { school_data } } }: Dictionary = useAppSelector((state) => state.manager)
   const [initialSchoolData, setInitialSchoolData] = useState<initialValues>({
     school_id: school_data?.id || '',
-    school_image: '',
+    school_image: school_data?.assets?.filter((f) => f.category === 'logo')?.[0]?.location || '',
     school_details: {
       name: school_data?.name || '',
       institution_type: school_data?.institution_type || '',
@@ -146,7 +146,7 @@ export default function Page() {
         .then((payload) => {
             const { data } = payload
             setIsFetechProfile(true)
-            dispatch(setSchoolInformation({ slug: 'school_data', data: data[0]?.school }))
+            dispatch(setSchoolInformation({ slug: 'school_data', data: data }))
         })
   }
 
@@ -207,7 +207,7 @@ export default function Page() {
   useEffect(() => {
     setInitialSchoolData({
       school_id: school_data?.id || '',
-      school_image: '',
+      school_image: school_data?.assets?.filter((f) => f.category === 'logo')?.[0]?.location || '',
       school_details: {
         name: school_data?.name || '',
         institution_type: school_data?.institution_type || '',
@@ -261,7 +261,7 @@ export default function Page() {
     <>
       <div className="">
         <div className="container mx-auto p-6">
-          <CompletionPanel percentCompleted={0} title={"0/5"}></CompletionPanel>
+          <CompletionPanel percentCompleted={0} title={"0/3"}></CompletionPanel>
           <h1 className="text-2xl font-bold text-gray-800 mb-6">
             Create Your School's Profile
           </h1>
@@ -294,6 +294,7 @@ export default function Page() {
                             >
                               {selectedImage ? <img src={selectedImage && URL.createObjectURL(selectedImage)} />
                                 :
+                                values.school_image ? <img src={values.school_image}/> :
                                 <ImagePlus className="w-10 h-10 text-gray-400" />
                               }
                             </div>
@@ -354,7 +355,7 @@ export default function Page() {
                           <Textarea
                             label="Campus Introductory Paragraph"
                             labelClass="text-xs font-normal text-[#61646B]"
-                            rows={1}
+                            rows={3}
                             name="school_details.intro_paragraph"
                             value={values.school_details.intro_paragraph}
                             touched={touched.school_details?.intro_paragraph}

@@ -1,18 +1,20 @@
+import { v4 as uuid } from 'uuid';
+
 export const TAB_LINKS = [
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         title: 'Dashboard',
         url: '/student/dashboard',
         isActive: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         title: 'Explore',
         url: '/student/explore',
         isActive: false
     },
     {
-        id: crypto.randomUUID().toString(),
+        id: uuid(),
         title: 'Connections',
         url: '/student/connections',
         isActive: false

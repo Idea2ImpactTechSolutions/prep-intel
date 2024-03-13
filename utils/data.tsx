@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid';
+
 import { GraduationCap, LayoutGrid, Lock, UserPlus } from "lucide-react"
 
     export const STATE_CITY_DATA =  [
@@ -1260,25 +1262,25 @@ import { GraduationCap, LayoutGrid, Lock, UserPlus } from "lucide-react"
 
     export const DASHBOARD_NAVIGATION_DATA = [
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             title: 'Dashboard',
             url: '/school/dashboard',
             icon: <LayoutGrid className="w-4 h-4" />
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             title: 'Recruits',
             url: '/school/recruits',
             icon: <UserPlus className="w-4 h-4" />
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             title: 'My School',
             url: '/school/my-school',
             icon: <GraduationCap className="w-4 h-4" />
         },
         {
-            id: crypto.randomUUID().toString(),
+            id: uuid(),
             title: 'Admin',
             url: '/school/admin',
             icon: <Lock className="w-4 h-4" />
