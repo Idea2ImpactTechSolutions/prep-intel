@@ -1,10 +1,6 @@
-import { Asset } from "next/font/google";
 import { responseBody } from "../../../../app/config/helpers";
-
-// pages/api/manager/profile/academic-info.js
 const { models } = require("../../../../app/models");
-const { School, SchoolAddress, Assets, SchoolContact, SchoolSocialMedia } =
-  models;
+const { School, SchoolAddress, Assets, SchoolContact, SchoolSocialMedia } = models;
 const { v4 } = require("uuid");
 
 export default async function handler(req, res) {
@@ -193,7 +189,7 @@ async function getSchool(req: any) {
       include: [
         { model: SchoolAddress, as: "school_address" },
         { model: SchoolContact, as: "school_contacts" },
-        { model: Assets, as: "assets" },
+        { model: Assets, as: "assets", where: { is_active: true } },
         { model: SchoolSocialMedia, as: "school_social_medias" },
       ],
     });
