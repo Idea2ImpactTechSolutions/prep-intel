@@ -47,10 +47,9 @@ const managerApi = baseApi.injectEndpoints({
             }
         }),
         getAllAdmin: builder.query({
-            query: (payload) => ({
-                url: `/manager/profile/admin-table`,
-                method: 'POST',
-                body: payload
+            query: ({school_id}) => ({
+                url: `/manager/profile/admin-table?school_id=${school_id}`,
+                method: 'GET',
             }),
             async onQueryStarted(_, {queryFulfilled, dispatch}) {
                 try {

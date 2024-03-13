@@ -33,16 +33,10 @@ export default function AdminPage() {
             setAdmin(payload?.data?.[0]?.data)
         })
     }
-    console.log(admin)
 
     const onChangeHandler = (event) => {
         setFilter(event.target.value);
       };
-    
-    //   useEffect(() => {
-    //     const lowerFilter= filter.toLowerCase();
-    //     setAdmin(SchoolRecruits.filter(r => r['Full Name'].toLowerCase().includes(lowerFilter)))
-    //   }, [filter]);
 
       useEffect(() => {
         if(userData && userData?.user){
