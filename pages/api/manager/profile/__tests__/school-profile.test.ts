@@ -1,7 +1,6 @@
-import supertest from 'supertest';
 import handler from '../school-profile';
 import { models } from "@/app/models";
-const { School } = models; 
+const { School } = models;
 
 import { createMocks } from 'node-mocks-http';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -17,6 +16,10 @@ getSchoolSpy.mockImplementation((id) => {
         data: 'Mocked Data',
     }));
 });
+
+afterAll(() => {
+  getSchoolSpy.mockRestore();
+})
 
 describe('School Profile API', () => {
   describe('GET request', () => {
@@ -34,32 +37,8 @@ describe('School Profile API', () => {
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({
           message: 'School retrieved successfully',
-          // Add more expectations here
         }),
       );
     });
   });
-
-//   describe('POST request', () => {
-//     it('should create or update school details', async () => {
-//       const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
-//         method: 'POST',
-//         body: {
-//           // Your request body here
-//         },
-//       });
-
-//       await handler(req, res);
-
-//       expect(res._getStatusCode()).toBe(201);
-//       expect(JSON.parse(res._getData())).toEqual(
-//         expect.objectContaining({
-//           message: 'Manager account claimed successfully',
-//           // Add more expectations here
-//         }),
-//       );
-//     });
-
-//     // Include more tests to cover other scenarios, such as invalid input or server errors
-//   });
 });
