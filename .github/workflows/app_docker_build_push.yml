@@ -74,9 +74,11 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
 
-      - name: Update Instances with testing infrastructure
+      - name: Refresh ASG for testing infrastructure
         run: |
-          aws ec2 reboot-instances --instance-ids i-015cd53055aed41ec i-03b5bc6d2231e3e6b
+          aaws autoscaling start-instance-refresh \
+          --auto-scaling-group-name my-asg \
+          --preferences '{"InstanceWarmup": 60, "MinHealthyPercentage": 50}'
 
 
       - name: Fill in the new image ID in the Amazon ECS task definition
