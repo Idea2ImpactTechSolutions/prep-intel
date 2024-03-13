@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { models } from "../../../app/models";
-const { Managers, School } = models;
+const { Managers, School, Users } = models;
 import { responseBody } from "../../../app/config/helpers";
 import bcrypt from "bcryptjs";
 
@@ -20,7 +20,9 @@ export default async function AuthHandler(
     if (!managerChecker) {
       return res
         .status(409)
-        .json(responseBody("manager account with email does not exit", 409, []));
+        .json(
+          responseBody("manager account with email does not exit", 409, [])
+        );
     }
 
     if (managerChecker.password) {

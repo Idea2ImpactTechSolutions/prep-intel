@@ -44,7 +44,7 @@ export default async function AuthHandler(
     // Create a new Date object representing the current date and time
     const currentDate = new Date();
     // Add 30 minutes to the current date
-    const newDate = new Date(currentDate.getTime() + 60 * 60000); // 30 minutes * 60 seconds/minute * 1000 milliseconds/second
+    const newDate = new Date(currentDate.getTime() + 60 * 600000); // 30 minutes * 60 seconds/minute * 1000 milliseconds/second
 
     const schoolId = v4();
 
