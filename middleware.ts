@@ -5,7 +5,8 @@ export async function middleware(req) {
   // Redirect to login if there is no session and the request is for a protected route
   const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
   if (!session && !req.nextUrl.pathname.startsWith('/api/auth')) {
-    return NextResponse.redirect(new URL(`/login?callbackUrl=${req.url}`, req.url));
+    const formUrl = process.env.NEXTAUTH_FORM === 'default' ? '/api/auth/signin' : '/login'
+    return NextResponse.redirect(new URL(`${formUrl}?callbackUrl=${req.url}`, req.url));
   }
 
   return NextResponse.next();
@@ -13,5 +14,4 @@ export async function middleware(req) {
 
 export const config = {
   matcher: ["/((?!_next/static|login/*|api/auth/*|_next/image|favicon.ico|public|.*\\.png$).*)"],
-
 };
