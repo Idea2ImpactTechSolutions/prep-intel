@@ -76,7 +76,7 @@ jobs:
 
       - name: Refresh ASG for testing infrastructure
         run: |
-          aaws autoscaling start-instance-refresh \
+          aws autoscaling start-instance-refresh \
           --auto-scaling-group-name my-asg \
           --preferences '{"InstanceWarmup": 60, "MinHealthyPercentage": 50}'
 
