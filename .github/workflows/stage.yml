@@ -1,4 +1,4 @@
-name: App Docker Build and Push
+name: Stage App Build and Push
 
 on:
   push:
