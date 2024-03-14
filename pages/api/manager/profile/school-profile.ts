@@ -158,7 +158,7 @@ async function getSchool(req: any) {
         { model: SchoolSocialMedia, as: "school_social_medias" },
       ],
     });
-
+  
     // If schoolDetails is not null, format the response object
     if (schoolDetails) {
       schoolDetails = {
@@ -195,11 +195,17 @@ async function updateSchoolAddress(schoolId : string, schoolAddressFormData) {
     postal: schoolAddressFormData.school_zip,
   };
 
-  let [savedAddress, newAddressCreated] = await SchoolAddress.findOrCreate({ 
-    where: { id: schoolAddressData.id }, 
-    defaults: schoolAddressData 
+
+  if (!schoolAddressData.id || schoolAddressData.id.trim() === '') {
+    delete schoolAddressData.id; // Remove the id key if it's empty or invalid
+  }
+  
+  // Now schoolAddressData no longer has the 'id' key if it was invalid
+  let [savedAddress, newAddressCreated] = await SchoolAddress.findOrCreate({
+    where: schoolAddressData.id ? { id: schoolAddressData.id } : {},
+    defaults: schoolAddressData
   });
-    
+
   if (! newAddressCreated) {
     const addressNeedsUpdate = await checkForChangedAttributes(
       schoolAddressData, 
