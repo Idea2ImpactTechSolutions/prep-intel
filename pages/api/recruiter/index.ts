@@ -8,7 +8,6 @@ export default async function handler(req, res) {
     // Extract data from request body
 
     const { first_name, last_name, email, school_id } = req.body;
-    console.log({ first_name, last_name, email, school_id });
     // const { invitation_subject, invitation_message } = invitation_info;
 
     let checkUserExists = await Users.findOne({
