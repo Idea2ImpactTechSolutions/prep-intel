@@ -1,6 +1,6 @@
 {
   "family": "prep-intel-dev",
-  "executionRoleArn": "arn:aws:iam::533267153582:role/intel-prep-ecs-cluster",
+  "executionRoleArn": "arn:aws:iam::533267153582:role/ecsTaskExecutionRole",
   "taskRoleArn": "arn:aws:iam::533267153582:role/ecsTaskExecutionRole",
   "networkMode": "awsvpc",
   "containerDefinitions": [
