@@ -219,10 +219,11 @@ async function reconcileRecordsLists(schoolId: string, formRecords, dbModel) {
     }
   }
 
+  let newRecords: Object[] = [];
   for (let i = 0; i < formRecords.length; i++) {
     if (formRecords[i].id == undefined) {
       const newRecord = await dbModel.create(formRecords[i]);
-      savedRecords.push(newRecord);
+      newRecords.push(newRecord);
     }
     else {
       for (let j = 0; j < savedRecords.length; j++) {
@@ -237,6 +238,9 @@ async function reconcileRecordsLists(schoolId: string, formRecords, dbModel) {
       }
     }
   }
+  newRecords.forEach((newRecord) => {
+    savedRecords.push(newRecord);
+  })
   return savedRecords;
 }
 
