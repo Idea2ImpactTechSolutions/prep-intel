@@ -1,4 +1,4 @@
-name: Stage App Build and Push
+name: Dev App Build and Push
 
 on:
   push:
