@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import SchoolInformation from "../../_components/school-information";
 import BottomBar from "../shared/bottom-bar";
 import LoadingSpinner from "../shared/loading-spinner";
+import Link from "next/link";
 
 
 // type PROGRESS_TYPE = 'BASIC_INFORMATION' | 'ACADEMIC_INFORMATION' | 'CAMPUS_INFORMATION' | 'EXTRA_CURRICULAR_INFORMATION' | 'NEWS_FEED_EVENT' | 'PREVIEW_INFORMATION'
@@ -71,6 +72,15 @@ export default function MySchool() {
                         }
                         titleClass="text-sm"
                         className="md:px-16"
+                        rightContent={
+                            <Button
+                                    variant={"outline"}
+                                    className="text-xs h-8 rounded-sm px-3"
+                                    onClick={() => router.push('/school/school-profile')}
+                                >
+                                    Edit School
+                                </Button>
+                        }
                     />
                     <SchoolInformation schoolData={school_data}/>
                 </div>
