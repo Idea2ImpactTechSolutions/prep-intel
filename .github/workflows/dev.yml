@@ -2,7 +2,7 @@ name: Dev App Build and Push
 
 on:
   push:
-    branches: [develop, test_develop_pipeline]
+    branches: [develop, main]
   workflow_dispatch:
 
 env:
@@ -73,6 +73,14 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::533267153582:role/AWS_PrepIntel_GHA_Role
           aws-region: us-east-1
+
+      #INTERIM ENV REFRESH
+      - name: Refresh ASG for testing infrastructure
+        run: |
+          aws autoscaling start-instance-refresh \
+          --auto-scaling-group-name Infra-ECS-Cluster-prep-intel-test-cluster-5782ea1b-ECSAutoScalingGroup-rF6sAHZRw0lv \
+          --preferences '{"InstanceWarmup": 60, "MinHealthyPercentage": 50}'
+      #INTERIM ENV REFRESH
 
       - name: Render Amazon ECS task definition
         id: render-task-def
