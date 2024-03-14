@@ -2,9 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import { useAddSchoolManagerMutation } from "@/redux/services/admin/adminApi";
 import { useAppDispatch } from "@/redux/store";
 import { useFormik } from "formik";
+import { useState } from "react";
 import { toast } from "sonner";
 import * as yup from "yup";
 
@@ -19,12 +21,14 @@ export default function SchoolAdminRegisterPage() {
 
     const dispatch = useAppDispatch()
     const [addSchoolManager, {isLoading, isSuccess}] = useAddSchoolManagerMutation()
+    const [authCode, setAuthCode] = useState("")
 
     const handleFormSubmit = async (values: initialState) => {
         addSchoolManager(values)
         .unwrap()
         .then((payload) => {
             if (payload.status === 200) {
+                setAuthCode(payload?.data?.[0]?.auth_code)
                 toast.success(payload.message)
                 resetForm()
             }
@@ -109,6 +113,15 @@ export default function SchoolAdminRegisterPage() {
                             disabled={isLoading}
                         >Create School</Button>
                     </div>
+                   <div className={cn(
+                    "hidden",
+                    authCode && "block"
+                   )}>
+                    <p className="mt-4 text-blue-600 text-sm">{process?.env?.NEXT_PUBLIC_BASE_URL}/school/claim?auth_code={authCode}
+                    </p>
+
+                    <span className="text-sm mt-3">Use this link to claim account</span>
+                   </div>
                 </form>
             </div>
         </section>

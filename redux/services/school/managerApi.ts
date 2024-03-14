@@ -46,6 +46,19 @@ const managerApi = baseApi.injectEndpoints({
                 }
             }
         }),
+        getAllAdmin: builder.query({
+            query: ({school_id}) => ({
+                url: `/manager/profile/admin-table?school_id=${school_id}`,
+                method: 'GET',
+            }),
+            async onQueryStarted(_, {queryFulfilled, dispatch}) {
+                try {
+                    const result = await queryFulfilled
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+        }),
         uploadSchoolImage: builder.mutation({
             query: (school_image) => ({
                 url: `/manager/profile/upload-image`,
@@ -91,7 +104,22 @@ const managerApi = baseApi.injectEndpoints({
                     console.log(error)
                 }
             }
-        })
+        }),
+        createRecruiter: builder.mutation({
+            query: (payload) => ({
+                url: `/manager/profile/create-recruiter`,
+                method: 'POST',
+                body: payload
+            }),
+            async onQueryStarted(_, {queryFulfilled, dispatch}) {
+                try {
+                    const result = await queryFulfilled
+                    // console.log(result)
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+        }),
     })
 })
 
@@ -101,5 +129,7 @@ export const {
     useLazyGetSchoolProfileQuery,
     useManagerCreateSchoolProfileMutation, 
     useUploadSchoolImageMutation,
-    usePublishSchoolProfileMutation
+    usePublishSchoolProfileMutation,
+    useLazyGetAllAdminQuery,
+    useCreateRecruiterMutation
 } = managerApi
