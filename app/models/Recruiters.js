@@ -14,56 +14,13 @@ const Recruiters = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        first_name: {
+        user_id: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        last_name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        auth_code: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        status: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        notification_method: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        phone: {
-            type: DataTypes.STRING,
-            allowNull: true
-        },
-        account_claimed: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-        },
-        create_date: {
-            type: DataTypes.DATE,
-        },
-        claim_date: {
-            type: DataTypes.DATE,
-        },
-        auth_code_expiration: {
-            type: DataTypes.DATE,
-        },
-        deactivation_date: {
-            type: DataTypes.DATE,
-        },
-        last_login_date: {
-            type: DataTypes.DATE,
-        },
-        is_active: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
+        territories: {
+            type: DataTypes.TEXT,
+            allowNull: true,
         },
     },
     {
