@@ -149,7 +149,12 @@ async function getSchool(req: any) {
       include: [
         { model: SchoolAddress, as: "school_address" },
         { model: SchoolContact, as: "school_contacts" },
-        { model: Assets, as: "assets", where: { is_active: true } },
+        {
+          model: Assets,
+          as: "assets",
+          where: { is_active: true },
+          required: false, // Make the inclusion of assets optional
+        },
         { model: SchoolSocialMedia, as: "school_social_medias" },
       ],
     });
