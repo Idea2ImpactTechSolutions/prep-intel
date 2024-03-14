@@ -3,14 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import cookie from "js-cookie";
 import { useFormik } from "formik";
 import * as yup from "yup"
-import { useLoginMutation } from "@/redux/services/auth/authApi";
-import { useAppSelector } from "@/redux/store";
-import { Dictionary } from "@/types/dictionary";
 import { signIn, useSession } from "next-auth/react";
 
 interface initialValues {
@@ -22,42 +18,61 @@ export default function LoginPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { user }: { user: any } = useAppSelector((state) => state.auth)
-  const {data: session, status}: any = useSession()
+  const [authCompleted, setAuthCompleted] = useState(false);
+  const {data: session}: any = useSession()
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams?.get("callbackUrl");
 
-  const [login, { isLoading, isSuccess }] = useLoginMutation()
-
-  const handleRedirect = (role: string) => {
-    switch (role) {
-      case 'admin':
-        router.push('/admin/school');
-        break;
-      case 'manager':
-        router.push("school/dashboard");
-        break;
-      case 'recruiter':
-        router.push('/recruiter/profile/welcome')
-        break;
-      case 'student':
-        router.push('/student/explore')
-        break;
+  useEffect(() => {
+    // If by chance we load session data, simply redirect to the default role page
+    if (session?.user?.role && authCompleted) {
+      switch (session.user.role) {
+        case 'admin':
+          router.push('/admin/school');
+          break;
+        case 'manager':
+          router.push("school/dashboard");
+          break;
+        case 'recruiter':
+          router.push('/recruiter/profile/welcome')
+          break;
+        case 'student':
+          router.push('/student/explore')
+          break;
+      }
     }
-  }
+  }, [session, authCompleted]);
 
   // handle login request
   const handleLogin = async (values: initialValues) => {
     try {
       setLoading(true)
-      const res: any  = await signIn("credentials", { 
-        email: values.email, 
+      const res: any  = await signIn("credentials", {
+        email: values.email,
         password: values.password,
         redirect: false
       });
+
       if (res?.status == 200) {
-        handleRedirect(session?.user?.role)
+        if (callbackUrl) {
+          setLoading(false);
+
+          // Without some delay, router.push calls below fail, possibly due to session
+          // or jwt not being ready
+          window.setTimeout(function(){
+            const url = new URL(callbackUrl);
+            router.push(url.pathname);
+          }, 1000);
+        }
+        else
+        {
+          // Trigger rerender, and session loaded consideration
+          setAuthCompleted(true);
+        }
       } else {
-        setLoading(false)
-        throw new Error(res?.error)
+          setLoading(false)
+          // TODO: What effect does throwing have here?
+          throw new Error(res?.error)
       }
     } catch (error) {
       setLoading(false)
