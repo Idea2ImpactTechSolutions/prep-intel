@@ -67,8 +67,8 @@ const handler = NextAuth({
     },
   },
   pages: {
-    signIn : '/login',
-    error: '/login'
+    signIn: process.env.NEXTAUTH_FORM !== 'default' ? '/login' : '',
+    error: process.env.NEXTAUTH_FORM !== 'default' ? '/login' : '',
   },
 });
 

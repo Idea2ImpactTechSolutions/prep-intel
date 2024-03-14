@@ -32,7 +32,7 @@ export default function Home() {
           variant="outline"
         >Recruiter Portal</Button>
         <Button
-          onClick={() => router.push('/school/claim')}
+          onClick={() => router.push('/school/dashboard')}
           type="button"
           variant="outline"
         >Manager Portal</Button>

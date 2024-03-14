@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Link, UserPlus } from "lucide-react"
-import { SchoolRecruits }  from "@/app/ui/mock-data/Users"
+import { SchoolRecruits } from "@/app/ui/mock-data/Users"
 import LoadingSpinner from "../shared/loading-spinner"
 import { useSession } from "next-auth/react"
 import { useLazyGetAllAdminQuery } from "@/redux/services/school/managerApi"
@@ -21,33 +21,33 @@ export default function AdminPage() {
 
     const { data: userData }: any = useSession()
 
-    const [getAllAdmin, {isLoading, isFetching, isSuccess}] = useLazyGetAllAdminQuery()
+    const [getAllAdmin, { isLoading, isFetching, isSuccess }] = useLazyGetAllAdminQuery()
 
     const router = useRouter()
 
     const handleGetAllAdmin = async (payload) => {
         getAllAdmin(payload)
-        .unwrap()
-        .then((payload) => {
-            setIsFetechProfile(true)
-            setAdmin(payload?.data?.[0]?.data)
-        })
+            .unwrap()
+            .then((payload) => {
+                setIsFetechProfile(true)
+                setAdmin(payload?.data?.[0]?.data)
+            })
     }
 
     const onChangeHandler = (event) => {
         setFilter(event.target.value);
-      };
+    };
 
-      useEffect(() => {
-        if(userData && userData?.user){
-          !isFetchedProfile && handleGetAllAdmin({school_id: userData?.user?.schoolID})
+    useEffect(() => {
+        if (userData && userData?.user) {
+            !isFetchedProfile && handleGetAllAdmin({ school_id: userData?.user?.schoolID })
         }
-        
+
     }, [userData])
 
-      if (isLoading || isFetching) {
-        return <LoadingSpinner/>
-      }
+    if (isLoading || isFetching) {
+        return <LoadingSpinner />
+    }
 
     return (
         <section>
@@ -104,7 +104,11 @@ export default function AdminPage() {
                     />
                     <section className="">
 
-                        {currentProgress === 'CREATE_RECRUITER' && <CreateRecruiter />}
+                        {currentProgress === 'CREATE_RECRUITER' && 
+                        <CreateRecruiter 
+                            setCurrentProgress={setCurrentProgress} 
+                            setAdmin={setAdmin}
+                        />}
 
                     </section>
                 </section>

@@ -1,7 +1,8 @@
 const Sequelize = require("sequelize");
 const config = require("../config/config.js");
 
-//dialectModule: require('pg') - seemingly unneeded
+// Required for pg support in production, verify in production before any future removal
+dialectModule: require('pg');
 
 const sequelize = new Sequelize(
   config.database,
