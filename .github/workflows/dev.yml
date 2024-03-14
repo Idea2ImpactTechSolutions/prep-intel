@@ -34,7 +34,16 @@ jobs:
         env:
           IMAGE_VERSION: latest
         run: |
-          docker build -t ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }} .
+          docker build -t ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }} \
+          --build-arg DB_USERNAME=${{env.DB_USERNAME}} \
+          --build-arg DB_PASSWORD=${{env.DB_PASSWORD}} \
+          --build-arg DB_NAME=${{env.DB_NAME}} \
+          --build-arg DB_HOST=${{env.DB_HOST}} \
+          --build-arg NEXTAUTH_SECRET=${{env.NEXTAUTH_SECRET}} \
+          --build-arg AWS_ACCESS_KEY_ID=${{env.AWS_ACCESS_KEY_ID}} \
+          --build-arg AWS_REGION=${{env.AWS_REGION}} \
+          --build-arg AWS_SECRET_ACCESS_KEY=${{env.AWS_SECRET_ACCESS_KEY}} \
+          --build-arg BUCKET_NAME=${{env.BUCKET_NAME}} .
 
       - name: Push tagged Docker image to ECR
         run: |
