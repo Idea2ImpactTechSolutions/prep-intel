@@ -2,27 +2,45 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('Users', {
     id: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true
-    },
-    name: {
-      type: DataTypes.TEXT,
-      allowNull: true
+      primaryKey: true,
+      autoIncrement: true,
     },
     email: {
       type: DataTypes.TEXT,
       allowNull: false,
       unique: "users_email_key"
     },
-    emailVerified: {
-      type: DataTypes.DATE,
-      allowNull: true
+    role: {
+      type: DataTypes.TEXT,
+      allowNull: false,
     },
-    image: {
+    first_name: {
       type: DataTypes.TEXT,
       allowNull: true
+    },
+    last_name: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    school_id: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    account_claimed: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
+    date_claimed : {
+      type: sequelize.literal("TIMESTAMP"),
+      allowNull: true
+    },
+    is_active: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
     }
   }, {
     sequelize,
