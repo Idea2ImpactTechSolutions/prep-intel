@@ -90,12 +90,12 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
                     <div className="lg:w-4/5">
                         <h2 className="mt-2 text-[#030712] font-bold text-sm md:text-lg">Admissions Information</h2>
                         <div className="mt-2 grid grid-cols-2 gap-4 md:grid-cols-3">
-                            <SingleStat title="ACT Required" value={schoolData?.min_act_score || 'Nil'} />
-                            <SingleStat title="SAT Required" value={schoolData?.min_sat_score || 'Nil'} />
-                            <SingleStat title="High School GPA Required" value={schoolData?.gpa_requirement || "Nil"} />
-                            <SingleStat title="In-State Tuition" value={`$${schoolData?.in_state_tuition}` || 'Nil'} />
-                            <SingleStat title="Out-of-State Tuition" value={`$${schoolData?.out_state_tuition}` || 'Nil'} />
-                            <SingleStat title="Fees" value={`$${schoolData?.fees_per_semester}` || 'Nil'} />
+                            <SingleStat title="ACT Required" value={schoolData?.min_act_score || 'NA'} />
+                            <SingleStat title="SAT Required" value={schoolData?.min_sat_score || 'NA'} />
+                            <SingleStat title="High School GPA Required" value={schoolData?.gpa_requirement || "NA"} />
+                            <SingleStat title="In-State Tuition" value={`$${schoolData?.in_state_tuition}` || 'NA'} />
+                            <SingleStat title="Out-of-State Tuition" value={`$${schoolData?.out_state_tuition}` || 'NA'} />
+                            <SingleStat title="Fees" value={`$${schoolData?.fees_per_semester}` || 'NA'} />
                         </div>
                     </div>
                 </div>
