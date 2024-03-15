@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { useAddSchoolManagerMutation } from "@/redux/services/admin/adminApi";
 import { useAppDispatch } from "@/redux/store";
 import { useFormik } from "formik";
+import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 import * as yup from "yup";
@@ -117,10 +118,9 @@ export default function SchoolAdminRegisterPage() {
                     "hidden",
                     authCode && "block"
                    )}>
-                    <p className="mt-4 text-blue-600 text-sm">{process?.env?.NEXT_PUBLIC_BASE_URL}/school/claim?auth_code={authCode}
-                    </p>
 
-                    <span className="text-sm mt-3">Use this link to claim account</span>
+                    <Link href={`${process?.env?.NEXT_PUBLIC_BASE_URL}/school/claim?auth_code=${authCode}`} className="block mt-8 text-blue-600 text-sm">Claim Account
+                    </Link>
                    </div>
                 </form>
             </div>
