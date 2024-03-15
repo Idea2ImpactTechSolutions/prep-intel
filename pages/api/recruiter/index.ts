@@ -4,6 +4,42 @@ const { School, Recruiters, Users } = models;
 const { v4 } = require("uuid");
 
 export default async function handler(req, res) {
+  switch (req.method) {
+    case "POST":
+      console.log({ body: req.body });
+      return handlePostRequest(req, res);
+    case "GET":
+      return res
+        .status(405)
+        .json(responseBody("Method Not Allowed", 405, null));
+    case "PATCH":
+      return res
+        .status(405)
+        .json(responseBody("Method Not Allowed", 405, null));
+    default:
+      return res
+        .status(405)
+        .json(responseBody("Method Not Allowed", 405, null));
+  }
+}
+
+async function handlePostRequest(req, res) {
+  try {
+    console.log("POST request");
+    const createRecruiter: any = await createRecruiterProfile(req);
+    return res.status(201).json(
+      responseBody(createRecruiter.message, createRecruiter.code, {
+        school: createRecruiter.data,
+      })
+    );
+  } catch (error: any) {
+    return res
+      .status(400)
+      .json(responseBody("Error occurred", 400, { error: error.message }));
+  }
+}
+
+async function createRecruiterProfile(req: any) {
   try {
     // Extract data from request body
 
@@ -18,23 +54,21 @@ export default async function handler(req, res) {
     });
 
     if (checkUserExists) {
-      return res
-        .status(409)
-        .json(
-          responseBody(
-            "recruiter with first name and last name already exists",
-            409,
-            []
-          )
-        );
+      return {
+        message: "recruiter with first name and last name already exists",
+        code: 409,
+        data: [],
+      };
     }
 
     let school = await School.findOne({ where: { id: school_id } });
 
     if (!school) {
-      return res
-        .status(201)
-        .json(responseBody("school does not exist", 404, []));
+      return {
+        message: "school does not exist",
+        code: 404,
+        data: [],
+      };
     }
 
     const currentDate = new Date();
@@ -63,17 +97,17 @@ export default async function handler(req, res) {
     });
 
     // Send a successful response
-    return res
-      .status(201)
-      .json(
-        responseBody("recruiter created successfully", 201, [
-          { auth_code: user.auth_code },
-        ])
-      );
+    return {
+      message: "recruiter created successfully",
+      code: 201,
+      data: [{ auth_code: user.auth_code }],
+    };
   } catch (error: any) {
     // Handle any errors
-    return res
-      .status(400)
-      .json(responseBody("error occurred", 400, [{ message: error.message }]));
+    return {
+      message: error.message,
+      code: 400,
+      data: [],
+    };
   }
 }
