@@ -6,7 +6,6 @@ const { v4 } = require("uuid");
 export default async function handler(req, res) {
   switch (req.method) {
     case "POST":
-      console.log({ body: req.body });
       return handlePostRequest(req, res);
     case "GET":
       return res
@@ -25,7 +24,6 @@ export default async function handler(req, res) {
 
 async function handlePostRequest(req, res) {
   try {
-    console.log("POST request");
     const createRecruiter: any = await createRecruiterProfile(req);
     return res.status(201).json(
       responseBody(createRecruiter.message, createRecruiter.code, {
