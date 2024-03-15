@@ -24,7 +24,7 @@ export default function CreateRecruiter({setCurrentProgress, setAdmin}: CreateRe
         getAllAdmin(payload)
             .unwrap()
             .then((payload) => {
-                setAdmin(payload?.data?.[0]?.data)
+                setAdmin(payload?.data)
             })
     }
 
