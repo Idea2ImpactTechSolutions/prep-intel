@@ -33,7 +33,7 @@ export default async function handler(req, res) {
   async function getUsers(req) {
     let responseCode : number = 404;
     let responseMessage : string = '';
-    let responseData : any;
+    let responseData = [];
 
     const {
         school_id
@@ -50,7 +50,8 @@ export default async function handler(req, res) {
         responseMessage = "Personnel not found";
       }
       else {
-        responseData = users;
+        const personnelData = await finalizePersonnelData(users);
+        responseData = personnelData;
         responseCode = 200;
         responseMessage = "Personnel retrieved successfully";
       }
@@ -69,4 +70,15 @@ export default async function handler(req, res) {
     else {
       return true;
     }
+  }
+
+  async function finalizePersonnelData(userRecords) {
+    const finalizedRecords = userRecords.map((userRecord) => ({
+      first_name: userRecord.first_name,
+      last_name: userRecord.last_name,
+      email: userRecord.email,
+      role: userRecord.role,
+      is_active: userRecord.is_active === 1 ? "Active" : "Inactive"
+    }));
+    return finalizedRecords;
   }
