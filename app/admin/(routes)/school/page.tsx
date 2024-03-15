@@ -9,6 +9,9 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import { toast } from "sonner";
 import * as yup from "yup";
+import { LuCopy } from "react-icons/lu";
+import { LuCopyCheck } from "react-icons/lu";
+import copy from 'copy-to-clipboard';
 
 interface initialState {
     email: string,
@@ -18,22 +21,29 @@ interface initialState {
 }
 
 export default function SchoolAdminRegisterPage() {
-
     const dispatch = useAppDispatch()
     const [addSchoolManager, {isLoading, isSuccess}] = useAddSchoolManagerMutation()
-    const [authCode, setAuthCode] = useState("")
+    const [isCopied, setIsCopied] = useState(false)
+    const [claimUrl, setClaimUrl] = useState("")
+
+    function copyToClipboard() {
+      copy(claimUrl);
+      setIsCopied(true);
+    }
 
     const handleFormSubmit = async (values: initialState) => {
         addSchoolManager(values)
         .unwrap()
         .then((payload) => {
             if (payload.status === 200) {
-                setAuthCode(payload?.data?.[0]?.auth_code)
+                const authCode = payload?.data?.[0]?.auth_code;
+                const pageUrl = new URL(window.location.href);
+                setClaimUrl(`${pageUrl.origin}/school/claim?auth_code=${authCode}`);
+
                 toast.success(payload.message)
                 resetForm()
             }
             // console.log(payload)
-            
         })
     }
 
@@ -55,6 +65,36 @@ export default function SchoolAdminRegisterPage() {
 
     return (
         <section>
+            <div className={cn(
+                      "hidden",
+                      isSuccess && "block")}>
+
+                <h3 className="text-xl font-bold">Invite Sent</h3>
+
+                <pre className="max-h-[650px] absolute w-[800px] overflow-x-auto rounded-lg border bg-zinc-500 text-zinc-50 py-4 pl-4">
+                  <div className="relative flex items-center rounded px-[0.2rem]  font-mono text-sm">
+
+                  <button className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 absolute right-4 top-0 z-10 h-6 w-6 text-zinc-50 hover:bg-zinc-700 hover:text-zinc-50 ">
+
+                    <LuCopy className={cn(
+                      "block",
+                      isCopied && "hidden",
+                      "cursor-pointer")}
+                        onClick={copyToClipboard}  />
+
+                    <LuCopyCheck
+                        className={cn(
+                          !isCopied && "hidden",
+                          isCopied && "block")} />
+                  </button>
+
+                  { claimUrl }
+                  </div>
+                </pre>
+
+            </div>
+
+            <div className={cn(isSuccess && "hidden")}>
             <h1 className="text-xl font-bold">School Onboarding</h1>
             <p className="py-3 text-sm">Please fill the form below to get started creating your school profile. </p>
             <div className="mt-4">
@@ -109,21 +149,13 @@ export default function SchoolAdminRegisterPage() {
                         <Button
                             type="submit"
                             loading={isLoading}
-                            loadingText="Create School"
                             disabled={isLoading}
-                        >Create School</Button>
+                        >Send Invite</Button>
                     </div>
-                   <div className={cn(
-                    "hidden",
-                    authCode && "block"
-                   )}>
-                    <p className="mt-4 text-blue-600 text-sm">{process?.env?.NEXT_PUBLIC_BASE_URL}/school/claim?auth_code={authCode}
-                    </p>
-
-                    <span className="text-sm mt-3">Use this link to claim account</span>
-                   </div>
                 </form>
             </div>
+            </div>
+
         </section>
     )
 }
