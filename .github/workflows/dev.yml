@@ -91,11 +91,11 @@ jobs:
           image: ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }}
           environment-variables: "AWS_SDK_LOAD_CONFIG=1"
 
-      - name: Deploy image to Amazon ECS
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ steps.render-task-def.outputs.task-definition }}
-          service: prep-intel-dev
-          cluster: prep-intel-test-cluster
-          wait-for-service-stability: true
+      # - name: Deploy image to Amazon ECS
+      #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      #   with:
+      #     task-definition: ${{ steps.render-task-def.outputs.task-definition }}
+      #     service: prep-intel-dev
+      #     cluster: prep-intel-test-cluster
+      #     wait-for-service-stability: true
 
