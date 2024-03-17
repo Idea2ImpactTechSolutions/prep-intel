@@ -30,7 +30,7 @@ export default function AdminPage() {
             .unwrap()
             .then((payload) => {
                 setIsFetechProfile(true)
-                setAdmin(payload?.data?.[0]?.data)
+                setAdmin(payload?.data)
             })
     }
 
