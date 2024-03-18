@@ -10,6 +10,12 @@ const Users = sequelize.define(
             primaryKey: true,
             autoIncrement: true,
         },
+        first_name: {
+            type: DataTypes.STRING,
+        },
+        last_name: {
+            type: DataTypes.STRING,
+        },
         email: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -41,7 +47,7 @@ const Users = sequelize.define(
         },
         is_active: {
             type: DataTypes.BOOLEAN,
-            allowNull: true,
+            allowNull: false,
         },
     },
     {

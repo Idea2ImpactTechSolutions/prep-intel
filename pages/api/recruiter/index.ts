@@ -25,14 +25,14 @@ export default async function handler(req, res) {
 async function handlePostRequest(req, res) {
   try {
     const createRecruiter: any = await createRecruiterProfile(req);
-    return res.status(201).json(
+    return res.status(createRecruiter.code).json(
       responseBody(createRecruiter.message, createRecruiter.code, {
         school: createRecruiter.data,
       })
     );
   } catch (error: any) {
     return res
-      .status(400)
+      .status(500)
       .json(responseBody("Error occurred", 400, { error: error.message }));
   }
 }
