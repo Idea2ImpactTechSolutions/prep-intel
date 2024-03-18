@@ -47,6 +47,7 @@ async function createRecruiterProfile(req: any) {
     let checkUserExists = await Users.findOne({
       where: {
         first_name: first_name,
+        email: email,
         last_name: last_name,
       },
     });
