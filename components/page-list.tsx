@@ -33,12 +33,12 @@ export default function PageList() {
       <h1 className='text-2xs font-bold'>Page List</h1>
       <ul>
         {
-          links.map((url, index) => (
-            <li key={index} className="m-2"><Link
-              href={url}
-              className={`pb-1 text-sm transition-all hover:border-b-[4px] hover:border-b-primary md:ml-2 md:text-[1rem] `}
-            >{url}</Link></li>
-          ))
+          // links.map((url, index) => (
+          //   <li key={index} className="m-2"><Link
+          //     href={url}
+          //     className={`pb-1 text-sm transition-all hover:border-b-[4px] hover:border-b-primary md:ml-2 md:text-[1rem] `}
+          //   >{url}</Link></li>
+          // ))
         }
       </ul>
     </div>

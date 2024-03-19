@@ -110,7 +110,7 @@ export default function SchoolPreview() {
                         <SchoolInformation schoolData={school_data}/>
                     </div>
                     <BottomBar
-                        onBack={() => router.push("/school/academic-info")}
+                        onBack={() => router.push("/school/123/academic-info")}
                         onSaveForLater={() => null}
                         isBackDisabled={false}
                         isSubmitting={isPublishingSchool}

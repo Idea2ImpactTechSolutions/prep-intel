@@ -124,7 +124,7 @@ export default function BasicInformationForm() {
       .then((payload) => {
         if (payload.status === 201) {
           toast.success("School Profile Submitted Successfully ")
-          router.push("/school/academic-info");
+          router.push("/school/123/academic-info");
         }
       })
   }
