@@ -13,13 +13,12 @@ import { STATE_CITY_DATA } from "@/utils/data";
 import { formatRMDatePicker } from "@/utils/helpers/date-format";
 import { Formik, Form, FieldArray, Field } from "formik";
 import { ChevronLeft, ChevronRight, File, Image, ImagePlus, LucideLoader, MinusCircle, PlusSquare, Save, X } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import * as yup from "yup"
 import { toast } from "sonner"
 import { CompletionPanel } from "@/components/completion-panel";
-import BottomBar from "../shared/bottom-bar";
+import BottomBar from "../../../_components/bottom-bar";
 import { setSchoolInformation } from "@/redux/features/school/managerSlice";
 import LoadingSpinner from "../shared/loading-spinner";
 
@@ -61,9 +60,11 @@ export default function Page() {
   const [uploadSchoolImage, { isLoading, isSuccess }] = useUploadSchoolImageMutation()
   const [managerCreateSchoolProfile, { isLoading: isCreatingSchoolProfile, isSuccess: isSuccessCreateSchoolProfile }] = useManagerCreateSchoolProfileMutation()
 
-  const { data: userData }: any = useSession()
   const dispatch = useAppDispatch()
-  
+  const router = useRouter()
+  const pageParams = useParams();
+  const schoolId = pageParams?.id;
+
   const { manager: { school_information: { school_data } } }: Dictionary = useAppSelector((state) => state.manager)
   const [initialSchoolData, setInitialSchoolData] = useState<initialValues>({
     school_id: school_data?.id || '',
@@ -111,8 +112,6 @@ export default function Page() {
       }
     ],
   })
-
-  const router = useRouter()
 
   const handleUploadSchoolImage = async (payload) => {
     uploadSchoolImage(payload)
@@ -196,13 +195,11 @@ export default function Page() {
     }
   }, [selectedImage])
 
-
   useEffect(() => {
-      if(userData && userData?.user){
-        !isFetchedProfile && handleGetSchoolInformation(userData?.user?.schoolID)
+      if(schoolId){
+        !isFetchedProfile && handleGetSchoolInformation(schoolId)
       }
-      
-  }, [userData])
+  }, [])
 
   useEffect(() => {
     setInitialSchoolData({
@@ -530,7 +527,7 @@ export default function Page() {
                         )}
                       </FieldArray>
                     </div>
-                    
+
                     <div className="mt-4">
                       <FieldArray
                         name="school_social_medias"

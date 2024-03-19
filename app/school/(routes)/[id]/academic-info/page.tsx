@@ -79,6 +79,7 @@ const validationSchema = Yup.object().shape({
 export default function AcademicInfo() {
   const router = useRouter();
   const pageParams = useParams();
+  const schoolId = pageParams?.id;
 
   const [isFetchedAcademiInfo, setIsFetchedAcademiInfo] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(true);
@@ -172,7 +173,6 @@ export default function AcademicInfo() {
 
     const fetchSchoolData = async () => {
       setIsLoading(true);
-      const schoolId = pageParams?.id;
       try {
         const response = await fetch(
           `/api/manager/profile/academic-info?schoolId=${schoolId}`

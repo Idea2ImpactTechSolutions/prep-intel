@@ -12,15 +12,14 @@ export default function Page() {
   const [filter, setFilter] = useState('');
   const [recruits, setRecruits] = useState<any[]>([]);
   const pageParams = useParams();
+  const schoolId = pageParams?.id;
 
   const onChangeHandler = (event) => {
     setFilter(event.target.value);
   };
 
   useEffect(() => {
-    // TODO: Use schoolId to query for recruits matching the given id
-    const schoolId = pageParams?.id;
-
+    // TODO: Use schoolId to query for data matching the given id
     const lowerFilter= filter.toLowerCase();
     setRecruits(SchoolRecruits.filter(r => r['Full Name'].toLowerCase().includes(lowerFilter)))
   }, [filter, pageParams]);

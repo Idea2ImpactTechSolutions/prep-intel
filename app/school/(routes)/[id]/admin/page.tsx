@@ -16,6 +16,7 @@ export default function AdminPage() {
     const [admin, setAdmin] = useState<any[]>([]);
     const [getAllAdmin, { isLoading, isFetching, isSuccess }] = useLazyGetAllAdminQuery()
     const pageParams = useParams();
+    const schoolId = pageParams?.id;
 
     const handleGetAllAdmin = async (payload) => {
         getAllAdmin(payload)
@@ -27,7 +28,6 @@ export default function AdminPage() {
     }
 
     useEffect(() => {
-        const schoolId = pageParams?.id;
         if (schoolId) {
             !isFetchedProfile && handleGetAllAdmin({ school_id: schoolId })
         }
