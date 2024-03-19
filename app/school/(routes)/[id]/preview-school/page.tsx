@@ -7,23 +7,23 @@ import { useLazyGetSchoolProfileQuery, usePublishSchoolProfileMutation } from "@
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { Dictionary } from "@/types/dictionary";
 import moment from 'moment';
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import SchoolInformation from "../../_components/school-information";
+import SchoolInformation from "../../../_components/school-information";
 import BottomBar from "../shared/bottom-bar";
 import LoadingSpinner from "../shared/loading-spinner";
 import { useFormik } from "formik";
 import { toast } from "sonner";
 
 export default function SchoolPreview() {
-    const [isFetchedProfile, setIsFetechProfile] = useState<boolean>(false)
+    const [isFetchedProfile, setIsFetchedProfile] = useState<boolean>(false)
     const [getSchoolProfile, {isLoading: isLoadingGetProfile, isFetching: isFetchingSchoolProfile, isSuccess:isSuccessGetProfile}] = useLazyGetSchoolProfileQuery()
     const { manager: { school_information: { school_data } } }: Dictionary = useAppSelector((state) => state.manager)
 
     const router = useRouter()
+    const pageParams = useParams();
+    const schoolId = pageParams?.id;
 
-    const { data: userData }: any = useSession()
     const dispatch = useAppDispatch()
     const [publishSchoolProfileMutation, {isLoading: isPublishingSchool, isSuccess: isSuccessSchoolPublished}] = usePublishSchoolProfileMutation()
 
@@ -32,7 +32,7 @@ export default function SchoolPreview() {
             .unwrap()
             .then((payload) => {
                 const { data } = payload
-                setIsFetechProfile(true)
+                setIsFetchedProfile(true)
                 setFieldValue('school_id', data.id)
                 dispatch(setSchoolInformation({ slug: 'school_data', data: data }))
             })
@@ -49,7 +49,6 @@ export default function SchoolPreview() {
                 router.push("/school/my-school");
               }
         })
-        
     }
 
     const {values, errors, handleSubmit, setFieldValue} = useFormik({
@@ -60,18 +59,15 @@ export default function SchoolPreview() {
         onSubmit: handlePublishSchool
     })
 
-    
-
-      useEffect(() => {
-        if(userData && userData?.user){
-          !isFetchedProfile && handleGetSchoolInformation(userData?.user?.schoolID)
+    useEffect(() => {
+        if(schoolId){
+            !isFetchedProfile && handleGetSchoolInformation(schoolId)
         }
-        
-    }, [userData])
+    }, [])
 
     if (isLoadingGetProfile || isFetchingSchoolProfile) {
         return <LoadingSpinner />;
-      }
+    }
 
     return (
         <>

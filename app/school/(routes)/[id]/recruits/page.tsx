@@ -6,19 +6,24 @@ import { FaEdit } from "react-icons/fa";
 import PageTitleContainer from "@/components/page-title";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useParams } from "next/navigation"
 
 export default function Page() {
   const [filter, setFilter] = useState('');
   const [recruits, setRecruits] = useState<any[]>([]);
+  const pageParams = useParams();
 
   const onChangeHandler = (event) => {
     setFilter(event.target.value);
   };
 
   useEffect(() => {
+    // TODO: Use schoolId to query for recruits matching the given id
+    const schoolId = pageParams?.id;
+
     const lowerFilter= filter.toLowerCase();
     setRecruits(SchoolRecruits.filter(r => r['Full Name'].toLowerCase().includes(lowerFilter)))
-  }, [filter]);
+  }, [filter, pageParams]);
 
   return (
   	<section>
