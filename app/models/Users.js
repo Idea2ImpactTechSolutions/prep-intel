@@ -20,11 +20,30 @@ const Users = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        password: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
         role: {
             type: DataTypes.STRING,
         },
+        first_name: {
+            type: DataTypes.STRING,
+        },
+        last_name: {
+            type: DataTypes.STRING,
+        },
+        school_id: {
+            type: DataTypes.STRING,
+        },
+        auth_code: {
+            type: DataTypes.STRING,
+        },
         account_claimed: {
-            type: DataTypes.BOOLEAN
+            type: DataTypes.BOOLEAN,
+        },
+        date_claimed: {
+            type: DataTypes.DATE,
         },
         is_active: {
             type: DataTypes.BOOLEAN,
