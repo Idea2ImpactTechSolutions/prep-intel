@@ -36,6 +36,11 @@ export default function Home() {
           type="button"
           variant="outline"
         >Manager Portal</Button>
+        <Button
+          onClick={() => router.push('/admin/school')}
+          type="button"
+          variant="outline"
+        >Admin</Button>
       </div>
     </main>
   );

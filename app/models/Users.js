@@ -10,22 +10,44 @@ const Users = sequelize.define(
             primaryKey: true,
             autoIncrement: true,
         },
+        first_name: {
+            type: DataTypes.STRING,
+        },
+        last_name: {
+            type: DataTypes.STRING,
+        },
         email: {
             type: DataTypes.STRING,
             allowNull: false,
         },
         password: {
             type: DataTypes.STRING,
+            allowNull: true,
         },
         role: {
             type: DataTypes.STRING,
         },
-        create_date: {
-            type: DataTypes.DATE
+        first_name: {
+            type: DataTypes.STRING,
+        },
+        last_name: {
+            type: DataTypes.STRING,
+        },
+        school_id: {
+            type: DataTypes.STRING,
+        },
+        auth_code: {
+            type: DataTypes.STRING,
+        },
+        account_claimed: {
+            type: DataTypes.BOOLEAN,
+        },
+        date_claimed: {
+            type: DataTypes.DATE,
         },
         is_active: {
             type: DataTypes.BOOLEAN,
-            allowNull: true,
+            allowNull: false,
         },
     },
     {
