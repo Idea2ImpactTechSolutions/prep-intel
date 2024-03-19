@@ -13,8 +13,6 @@ export default async function AuthHandler(
       return handleGetRecruits(req, res);
     case "POST":
       return "INCOMING";
-    case "PATCH":
-      return "INCOMING";
     default:
       return res
         .status(405)
