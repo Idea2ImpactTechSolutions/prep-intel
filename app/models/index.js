@@ -5,6 +5,8 @@ const SchoolAccreditation = require("./SchoolAccreditation");
 const SchoolResearchProgram = require("./SchoolResearchProgram");
 const SchoolContact = require("./SchoolContact");
 const Managers = require("./Managers");
+const Applicants = require("./Applicants");
+const Recruits = require("./Recruits");
 const Recruiters = require("./Recruiters")
 const SchoolAddress = require("./SchoolAddress");
 const Users = require("./Users")
@@ -20,6 +22,8 @@ const models = {
   SchoolResearchProgram,
   SchoolContact,
   SchoolAddress,
+  Applicants,
+  Recruits,
   Users,
   Assets,
   Managers,
