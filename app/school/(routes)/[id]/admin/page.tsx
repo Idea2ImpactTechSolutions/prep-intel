@@ -1,49 +1,37 @@
 "use client"
-import EmptyStateContainer from "@/components/empty-state"
 import PageTitleContainer from "@/components/page-title"
 import CreateRecruiter from "./_components/create-recruiter"
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { Link, UserPlus } from "lucide-react"
-import { SchoolRecruits } from "@/app/ui/mock-data/Users"
+import { UserPlus } from "lucide-react"
 import LoadingSpinner from "../shared/loading-spinner"
-import { useSession } from "next-auth/react"
 import { useLazyGetAllAdminQuery } from "@/redux/services/school/managerApi"
 
 type CURRENT_TAB_TYPES = 'VIEW_ADMIN' | 'CREATE_RECRUITER'
 
 export default function AdminPage() {
-    const [filter, setFilter] = useState('');
-    const [isFetchedProfile, setIsFetechProfile] = useState<boolean>(false)
+    const [isFetchedProfile, setIsFetchedProfile] = useState<boolean>(false)
     const [currentProgress, setCurrentProgress] = useState<CURRENT_TAB_TYPES>("VIEW_ADMIN")
     const [admin, setAdmin] = useState<any[]>([]);
-
-    const { data: userData }: any = useSession()
-
     const [getAllAdmin, { isLoading, isFetching, isSuccess }] = useLazyGetAllAdminQuery()
-
-    const router = useRouter()
+    const pageParams = useParams();
 
     const handleGetAllAdmin = async (payload) => {
         getAllAdmin(payload)
             .unwrap()
             .then((payload) => {
-                setIsFetechProfile(true)
+                setIsFetchedProfile(true)
                 setAdmin(payload?.data)
             })
     }
 
-    const onChangeHandler = (event) => {
-        setFilter(event.target.value);
-    };
-
     useEffect(() => {
-        if (userData && userData?.user) {
-            !isFetchedProfile && handleGetAllAdmin({ school_id: userData?.user?.schoolID })
+        const schoolId = pageParams?.id;
+        if (schoolId) {
+            !isFetchedProfile && handleGetAllAdmin({ school_id: schoolId })
         }
-
-    }, [userData])
+    }, [])
 
     if (isLoading || isFetching) {
         return <LoadingSpinner />

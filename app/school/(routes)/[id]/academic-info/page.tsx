@@ -3,9 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import BottomBar from "../shared/bottom-bar";
-import { useRouter } from "next/navigation";
-import LoadingSpinner from "../shared/loading-spinner";
+import { useRouter, usePathname, useParams } from "next/navigation";
 import { CompletionPanel } from "@/components/completion-panel";
 import { FormSection } from "@/components/form-section";
 import { useSession } from "next-auth/react";
@@ -80,9 +78,11 @@ const validationSchema = Yup.object().shape({
 
 export default function AcademicInfo() {
   const router = useRouter();
+  const pageParams = useParams();
+
   const [isFetchedAcademiInfo, setIsFetchedAcademiInfo] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(true);
-  const schoolId = "b14e03a9-656a-4726-9d38-6f09c912a543";
+
   const [initialValues, setInitialValues] = useState({
     school_departments: [{ name: "" }],
     school_accreditations: [{ name: "" }],
@@ -172,7 +172,7 @@ export default function AcademicInfo() {
 
     const fetchSchoolData = async () => {
       setIsLoading(true);
-      const schoolId = userData?.user?.schoolID;
+      const schoolId = pageParams?.id;
       try {
         const response = await fetch(
           `/api/manager/profile/academic-info?schoolId=${schoolId}`
