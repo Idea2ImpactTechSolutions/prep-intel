@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 export default function PageList() {
   const [links, setLinks] = useState([]);
-
+  const { data: userData }: any = useSession()
   useEffect(() => {
     if (process.env.NODE_ENV !== 'development') {
       return;
@@ -20,7 +21,19 @@ export default function PageList() {
         return r.json();
       })
       .then(data => {
-        setLinks(data);
+
+        const schoolId = userData?.user?.schoolID;
+
+        const urls = data.map(url => {
+          // Replace [id] strings with runtime values
+          if (url.includes('/school/[id]/')) {
+            return url.replace('[id]', schoolId);
+          }
+
+          return url;
+        });
+
+        setLinks(urls);
       });
   }, []);
 
@@ -33,12 +46,12 @@ export default function PageList() {
       <h1 className='text-2xs font-bold'>Page List</h1>
       <ul>
         {
-          // links.map((url, index) => (
-          //   <li key={index} className="m-2"><Link
-          //     href={url}
-          //     className={`pb-1 text-sm transition-all hover:border-b-[4px] hover:border-b-primary md:ml-2 md:text-[1rem] `}
-          //   >{url}</Link></li>
-          // ))
+          links.map((url, index) => (
+            <li key={index} className="m-2"><Link
+              href={url}
+              className={`pb-1 text-sm transition-all hover:border-b-[4px] hover:border-b-primary md:ml-2 md:text-[1rem] `}
+            >{url}</Link></li>
+          ))
         }
       </ul>
     </div>

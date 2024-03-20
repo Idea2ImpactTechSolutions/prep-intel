@@ -108,7 +108,6 @@ export default function AcademicInfo() {
     },
   });
 
-  const { data: userData }: any = useSession()
   const dispatch = useAppDispatch()
 
   const setSchoolData = (data: {
@@ -192,14 +191,11 @@ export default function AcademicInfo() {
       }
     };
 
-    if(userData && userData?.user){
+    if(schoolId){
       !isFetchedAcademiInfo && fetchSchoolData()
     }
 
-    // if (schoolId) {
-    //   fetchSchoolData();
-    // }
-  }, [userData]);
+  }, []);
 
   const handleBack = () => {
     // Logic for Back button
@@ -230,7 +226,7 @@ export default function AcademicInfo() {
 
     setSubmitting(true);
     try {
-      let payload = {...values, admissionRequirements: filteredPayload, schoolId: userData?.user?.schoolID}
+      let payload = {...values, admissionRequirements: filteredPayload, schoolId}
       // console.log("TEST VALUES", payload);
       const url = "/api/manager/profile/academic-info";
       // Send a POST request to the server

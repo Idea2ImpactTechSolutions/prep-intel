@@ -51,7 +51,6 @@ interface initialValues {
 export default function BasicInformationForm() {
   const [selectedImage, setSelectedImage] = useState<File>()
   const [schoolImgUrl, setSchoolImgUrl] = useState('')
-  const { data: userData }: any = useSession()
   const [getSchoolProfile] = useLazyGetSchoolProfileQuery()
   const [uploadSchoolImage, {isLoading, isSuccess}] = useUploadSchoolImageMutation()
   const [managerCreateSchoolProfile, {isLoading: isCreatingSchoolProfile, isSuccess: isSuccessCreateSchoolProfile}] = useManagerCreateSchoolProfileMutation()
