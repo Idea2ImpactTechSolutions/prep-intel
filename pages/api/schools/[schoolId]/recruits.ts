@@ -25,7 +25,7 @@ export default async function AuthHandler(
 async function handleGetRecruits(req, res) {
   try {
     const getRecruitsRequest: any = await getRecruits(req);
-    return res.status(200).json(
+    return res.status(getRecruitsRequest.code).json(
       responseBody(getRecruitsRequest.message, getRecruitsRequest.code, {
         data: getRecruitsRequest,
       })
@@ -38,32 +38,28 @@ async function handleGetRecruits(req, res) {
 }
 
 async function getRecruits(req: any) {
-  try {
-    const { schoolId, include_applicants } = req.query;
+  const { schoolId, include_applicants } = req.query;
 
-    let school = await School.findOne({
-      where: {
-        id: schoolId,
-      },
-      include: [
-        { model: Recruits, where: { is_viewable: true }, as: "new_recruits" },
-        { model: Applicants, as: "new_applicants" },
-        { model: Recruiters, as: "new_recruiters" },
-      ],
-    });
+  let school = await School.findOne({
+    where: {
+      id: schoolId,
+    },
+    include: [
+      { model: Recruits, where: { is_viewable: true }, as: "new_recruits" },
+      { model: Applicants, as: "new_applicants" },
+      { model: Recruiters, as: "new_recruiters" },
+    ],
+  });
 
-    if (!school) {
-      return { code: 404, message: "Recruiters not found", data: [] };
-    }
-
-    const data = {
-      recruiters: school.new_recruiters,
-      applicants: parseInt(include_applicants) ? school.new_applicants : [],
-      recruits: school.new_recruits,
-    };
-
-    return { code: 200, data: data, message: "data fetched successfully" };
-  } catch (error: any) {
-    return { code: 500, message: error.message, data: [] };
+  if (!school) {
+    return { code: 404, message: "Recruiters not found", data: [] };
   }
+
+  const data = {
+    recruiters: school.new_recruiters,
+    applicants: parseInt(include_applicants) ? school.new_applicants : [],
+    recruits: school.new_recruits,
+  };
+
+  return { code: 200, data: data, message: "data fetched successfully" };
 }
