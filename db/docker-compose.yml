@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  pypeds:
+    build: ./docker/python
+    environment:
+      TARGET_POSTGRES_TABLE: HD2021
+      DB_HOST: postgres
+      DB_PORT: 5432
+    env_file:
+      - ./.env.localdb
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: md5
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./docker/init-scripts:/docker-entrypoint-initdb.d
+    env_file:
+      - ./.env.localdb
+
+volumes:
+  postgres-data:

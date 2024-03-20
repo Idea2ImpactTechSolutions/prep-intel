@@ -7,9 +7,10 @@
     "iclevel",
     "lucide",
     "siteadmin",
-    "sonner",
     "unitid"
-  ],
+    "pypeds",
+    "sonner"
+],
 "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
 "editor.formatOnType": false, // required
 "editor.formatOnPaste": false, // optional
