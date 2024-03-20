@@ -10,6 +10,8 @@ import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { useAppDispatch } from "@/redux/store";
 import { setSchoolInformation } from "@/redux/features/school/managerSlice";
+import LoadingSpinner from "../../../_components/loading-spinner";
+import BottomBar from "../../../_components/bottom-bar";
 
 // Define the validation schema using Yup
 const validationSchema = Yup.object().shape({
