@@ -1,6 +1,5 @@
 'use strict';
 
-const { X } = require("lucide-react");
 const ICDirectory = require("../../app/models/ICDirectory");
 const  models = require("../models");
 const { Schools, SchoolAddresses  } = models;

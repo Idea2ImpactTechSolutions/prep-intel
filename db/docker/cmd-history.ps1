@@ -15,6 +15,11 @@ docker-compose down
 
 # Remove volume (critical for db auth issues when postgres backend credentials change)
 docker volume rm recruitment-portal_postgres-data
+docker volume rm prep-intel_postgres-data
+docker volume rm db_postgres-data
+
+#Single line
+docker-compose down; docker volume rm prep-intel_postgres-data
 
 # Build local docker image and push to private ECR (jlewin)
 docker build -t dev_prep_intel .
@@ -35,3 +40,11 @@ docker run -it --rm -v %cd%:/app -w /app node:alpine sh
 # Manually generate migration from template, for new db mutation
 npx sequelize-cli migration:generate --name migration-example
 
+#switch to env for local dev
+mklink .env .env.localdb
+
+# Infer models from latest db
+npx sequelize-auto -o "./models" --caseModel p --caseFile p --useDefine -c .\config\config-prod.js --noIndexes
+
+# Generate migrations from these models
+npx sequelize-mig migration:make --modp models
