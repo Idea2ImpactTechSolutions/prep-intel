@@ -62,7 +62,7 @@ async function getRecruits(req: any) {
       recruits: school.new_recruits,
     };
 
-    return { code: 201, data: data, message: "data fetched successfully" };
+    return { code: 200, data: data, message: "data fetched successfully" };
   } catch (error: any) {
     return { code: 500, message: error.message, data: [] };
   }
