@@ -25,7 +25,7 @@ export default async function AuthHandler(
 async function handleGetRecruits(req, res) {
   try {
     const getRecruitsRequest: any = await getRecruits(req);
-    return res.status(201).json(
+    return res.status(getRecruitsRequest.code).json(
       responseBody(getRecruitsRequest.message, getRecruitsRequest.code, {
         data: getRecruitsRequest,
       })
