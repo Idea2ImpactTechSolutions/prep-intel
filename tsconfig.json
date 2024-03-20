@@ -35,6 +35,6 @@
     "**/*.tsx",
     "types.d.ts",
     ".next/types/**/*.ts"
-  ],
+, "../proto 2/claim.ts"  ],
   "exclude": ["node_modules"]
 }

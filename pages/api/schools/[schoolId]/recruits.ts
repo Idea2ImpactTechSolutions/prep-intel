@@ -39,11 +39,11 @@ async function handleGetRecruits(req, res) {
 
 async function getRecruits(req: any) {
   try {
-    const { schoolid, include_applicants } = req.query;
+    const { schoolId, include_applicants } = req.query;
 
     let school = await School.findOne({
       where: {
-        id: schoolid[0],
+        id: schoolId,
       },
       include: [
         { model: Recruits, where: { is_viewable: true }, as: "new_recruits" },
