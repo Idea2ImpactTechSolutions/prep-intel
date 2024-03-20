@@ -12,7 +12,9 @@ export default async function AuthHandler(
     case "GET":
       return handleGetRecruits(req, res);
     case "POST":
-      return "INCOMING";
+      return res
+        .status(501)
+        .json(responseBody("Method Not Implemented", 501, null));
     default:
       return res
         .status(405)
@@ -37,7 +39,7 @@ async function handleGetRecruits(req, res) {
 
 async function getRecruits(req: any) {
   try {
-    const { school_id } = req.query;
+    const { school_id, include_applicants } = req.query;
 
     let school = await School.findOne({
       where: {
@@ -54,7 +56,13 @@ async function getRecruits(req: any) {
       return { code: 404, message: "Recruiters not found", data: [] };
     }
 
-    return { code: 200, data: school, message: "data fetched successfully" };
+    const data = {
+      recruiters: school.new_recruiters,
+      applicants: parseInt(include_applicants) ? school.new_applicants : [],
+      recruits: school.new_recruits,
+    };
+
+    return { code: 201, data: data, message: "data fetched successfully" };
   } catch (error: any) {
     return { code: 500, message: error.message, data: [] };
   }

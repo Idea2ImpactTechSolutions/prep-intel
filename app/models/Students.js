@@ -10,16 +10,49 @@ const Students = sequelize.define(
             primaryKey: true,
             autoIncrement: true,
         },
-        school_id: {
-            type: DataTypes.INTEGER,
+        dob: {
+            type: DataTypes.DATE,
             allowNull: false,
         },
-        social_media: {
+        city: {
             type: DataTypes.STRING,
         },
-        url: {
+        state: {
             type: DataTypes.STRING,
         },
+        country: {
+            type: DataTypes.STRING,
+        },
+        graduation_year: {
+            type: DataTypes.INTEGER,
+        },
+        high_school: {
+            type: DataTypes.STRING,
+        },
+        guardian_first_name: {
+            type: DataTypes.STRING,
+        },
+        guardian_last_name: {
+            type: DataTypes.STRING,
+        },
+        guardian_email: {
+            type: DataTypes.STRING,
+        },
+        is_active: {
+            type: DataTypes.BOOLEAN,
+        },
+        create_date: {
+            type: DataTypes.DATE,
+        },
+        cancel_date: {
+            type: DataTypes.DATE,
+        },
+        last_login_date: {
+            type: DataTypes.DATE,
+        },
+        user_id: {
+            type: DataTypes.INTEGER,
+        }
     },
     {
         timestamps: false,
