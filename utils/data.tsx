@@ -1264,13 +1264,13 @@ import { GraduationCap, LayoutGrid, Lock, UserPlus } from "lucide-react"
         {
             id: uuid(),
             title: 'Dashboard',
-            url: (schoolId) => `/school/${schoolId}dashboard`,
+            url: (schoolId) => `/school/${schoolId}/dashboard`,
             icon: <LayoutGrid className="w-4 h-4" />
         },
         {
             id: uuid(),
             title: 'Recruits',
-            url: (schoolId) => `/school/${schoolId}recruits`,
+            url: (schoolId) => `/school/${schoolId}/recruits`,
             icon: <UserPlus className="w-4 h-4" />
         },
         {
