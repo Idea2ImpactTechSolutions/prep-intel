@@ -1,10 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import React from "react";
+import { useParams } from "next/navigation";
 import PageTitleContainer from "@/components/page-title";
 
 export default function Page() {
-  const router = useRouter();
   const pageParams = useParams();
   const schoolId = pageParams?.id;
 

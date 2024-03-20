@@ -9,7 +9,7 @@ import moment from 'moment';
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import SchoolInformation from "../../../_components/school-information";
-import LoadingSpinner from "../shared/loading-spinner";
+import LoadingSpinner from "../../../_components/loading-spinner";
 
 
 // type PROGRESS_TYPE = 'BASIC_INFORMATION' | 'ACADEMIC_INFORMATION' | 'CAMPUS_INFORMATION' | 'EXTRA_CURRICULAR_INFORMATION' | 'NEWS_FEED_EVENT' | 'PREVIEW_INFORMATION'

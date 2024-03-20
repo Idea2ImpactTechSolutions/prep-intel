@@ -20,7 +20,7 @@ import { toast } from "sonner"
 import { CompletionPanel } from "@/components/completion-panel";
 import BottomBar from "../../../_components/bottom-bar";
 import { setSchoolInformation } from "@/redux/features/school/managerSlice";
-import LoadingSpinner from "../shared/loading-spinner";
+import LoadingSpinner from "../../../_components/loading-spinner";
 
 interface initialValues {
   school_id: string,
