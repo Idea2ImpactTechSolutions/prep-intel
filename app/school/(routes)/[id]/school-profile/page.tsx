@@ -134,7 +134,7 @@ export default function Page() {
           setIsFetechProfile(false)
           dispatch(setSchoolInformation({ slug: 'school_data', data: {...payload.data.school, create_count: 1} }))
           toast.success("School Profile Submitted Successfully ")
-          router.push("/school/123/academic-info");
+          router.push(`/school/${schoolId}/academic-info`);
         }
       })
   }

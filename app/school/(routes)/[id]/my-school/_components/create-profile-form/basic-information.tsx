@@ -14,7 +14,7 @@ import { formatRMDatePicker } from "@/utils/helpers/date-format";
 import { Formik, Form, FieldArray, Field } from "formik";
 import { ChevronLeft, ChevronRight, File, Image, ImagePlus, LucideLoader, MinusCircle, PlusSquare, Save, X } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import * as yup from "yup"
 import { toast } from "sonner"
@@ -55,7 +55,11 @@ export default function BasicInformationForm() {
   const [getSchoolProfile] = useLazyGetSchoolProfileQuery()
   const [uploadSchoolImage, {isLoading, isSuccess}] = useUploadSchoolImageMutation()
   const [managerCreateSchoolProfile, {isLoading: isCreatingSchoolProfile, isSuccess: isSuccessCreateSchoolProfile}] = useManagerCreateSchoolProfileMutation()
-  
+
+  const router = useRouter();
+  const pageParams = useParams();
+  const schoolId = pageParams?.id;
+
   const { manager: { school_information: { school_data } } }: Dictionary = useAppSelector((state) => state.manager)
   const [initialSchoolData, setInitialSchoolData] = useState<initialValues>({
     school_id: school_data?.id || '',
@@ -103,8 +107,6 @@ export default function BasicInformationForm() {
     ],
   })
 
-  const router = useRouter()
-
   const handleUploadSchoolImage = async (payload) => {
     uploadSchoolImage(payload)
       .unwrap()
@@ -124,7 +126,7 @@ export default function BasicInformationForm() {
       .then((payload) => {
         if (payload.status === 201) {
           toast.success("School Profile Submitted Successfully ")
-          router.push("/school/123/academic-info");
+          router.push(`/school/${schoolId}/academic-info`);
         }
       })
   }
