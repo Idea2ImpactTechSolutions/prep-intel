@@ -73,12 +73,12 @@ async function getRecruits(req: any) {
     data.push({
       first_name: user.first_name,
       last_name: user.last_name,
-      application_status: user.students.applicants.application_status,
+      application_status: user?.students?.applicants?.application_status,
       recruitment_source: "",
-      application_date: user.students.create_date,
-      recruiter_name: user.first_name + user.last_name,
+      application_date: user?.students?.create_date,
+      recruiter_name: user?.first_name + user?.last_name,
       program_of_interest: "",
-      email_address: user.students.email,
+      email_address: user?.students.email,
     });
   }
 
