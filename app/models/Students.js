@@ -1,5 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("./sequelize");
+const Applicants = require("./Applicants");
+const Recruits = require("./Recruits");
 
 const Students = sequelize.define(
     "students",
@@ -44,9 +46,6 @@ const Students = sequelize.define(
         create_date: {
             type: DataTypes.DATE,
         },
-        cancel_reason: {
-            type: DataTypes.STRING,
-        },
         user_id: {
             type: DataTypes.INTEGER,
         }
@@ -55,5 +54,8 @@ const Students = sequelize.define(
         timestamps: false,
     }
 );
+
+Students.hasMany(Recruits, { foreignKey: "student_id", as: "recruits" })
+Students.hasMany(Applicants, { foreignKey: "student_id", as: "applicants" })
 
 module.exports = Students;

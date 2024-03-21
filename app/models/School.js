@@ -93,9 +93,9 @@ const School = sequelize.define(
   }
 );
 
-School.hasMany(Applicants, { foreignKey: "school_id", as: "new_applicants" });
+// School.hasMany(Applicants, { foreignKey: "school_id", as: "new_applicants" });
 School.hasMany(Recruits, { foreignKey: "school_id", as: "new_recruits" });
-School.hasMany(Students, { foreignKey: "school_id", as: "new_students" });
+// School.hasMany(Students, { foreignKey: "school_id", as: "new_students" });
 School.hasMany(Recruiters, { foreignKey: "school_id", as: "new_recruiters" })
 
 School.hasMany(Assets, { foreignKey: "school_id", as: "assets" })

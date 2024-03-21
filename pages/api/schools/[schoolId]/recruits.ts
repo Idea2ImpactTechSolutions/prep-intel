@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { models } from "../../../../app/models";
-const { Managers, School, Recruits, Applicants, Recruiters, Students } = models;
+const { Managers, School, Recruits, Applicants, Recruiters, Students, Users } =
+  models;
 import { responseBody } from "../../../../app/config/helpers";
 import { v4 } from "uuid";
 
@@ -40,27 +41,46 @@ async function handleGetRecruits(req, res) {
 async function getRecruits(req: any) {
   const { schoolId, include_applicants } = req.query;
 
-  let school = await School.findOne({
-    where: {
-      id: schoolId,
-    },
+  // let school = await School.findOne({
+  //   where: {
+  //     id: schoolId,
+  //   },
+  //   include: [
+  //     { model: Recruits, where: { is_viewable: true }, as: "new_recruits" },
+  //     { model: Applicants, as: "new_applicants" },
+  //     { model: Students },
+  //     { model: Recruiters, as: "new_recruiters" },
+  //   ],
+  // })
+
+  let users = await Users.findAll({
+    where: { school_id: schoolId },
     include: [
-      { model: Recruits, where: { is_viewable: true }, as: "new_recruits" },
-      { model: Applicants, as: "new_applicants" },
-      {model: Students}
-      { model: Recruiters, as: "new_recruiters" },
+      {
+        model: Students,
+        as: "students",
+        include: [
+          { model: Recruits, as: "recruits", where: { is_viewable: true } },
+          { model: Applicants, as: "applicants" },
+        ],
+      },
     ],
   });
 
-  if (!school) {
-    return { code: 404, message: "Recruiters not found", data: [] };
-  }
+  let data: any = [];
 
-  const data = {
-    recruiters: school.new_recruiters,
-    applicants: parseInt(include_applicants) ? school.new_applicants : [],
-    recruits: school.new_recruits,
-  };
+  for (let user of users) {
+    data.push({
+      first_name: user.first_name,
+      last_name: user.last_name,
+      application_status: user.students.applicants.application_status,
+      recruitment_source: "",
+      application_date: user.students.create_date,
+      recruiter_name: user.first_name + user.last_name,
+      program_of_interest: "",
+      email_address: user.students.email,
+    });
+  }
 
   return { code: 200, data: data, message: "data fetched successfully" };
 }
