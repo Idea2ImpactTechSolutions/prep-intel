@@ -1,5 +1,5 @@
-import { models } from "../../../../../app/models";
-import { responseBody } from "../../../../../app/config/helpers";
+import { models } from "../../../../app/models";
+import { responseBody } from "../../../../app/config/helpers";
 const { Users, Students } = models;
 
 export default async function handler(req, res) {
