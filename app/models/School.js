@@ -10,6 +10,7 @@ const Applicants = require("./Applicants");
 const Recruits = require("./Recruits");
 const Recruiters = require("./Recruiters");
 const SchoolAddress = require("./SchoolAddress");
+const Students = require("./Students");
 
 const School = sequelize.define(
   "school",
@@ -94,6 +95,7 @@ const School = sequelize.define(
 
 School.hasMany(Applicants, { foreignKey: "school_id", as: "new_applicants" });
 School.hasMany(Recruits, { foreignKey: "school_id", as: "new_recruits" });
+School.hasMany(Students, { foreignKey: "school_id", as: "new_students" });
 School.hasMany(Recruiters, { foreignKey: "school_id", as: "new_recruiters" })
 
 School.hasMany(Assets, { foreignKey: "school_id", as: "assets" })

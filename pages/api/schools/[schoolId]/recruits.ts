@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { models } from "../../../../app/models";
-const { Managers, School, Recruits, Applicants, Recruiters } = models;
+const { Managers, School, Recruits, Applicants, Recruiters, Students } = models;
 import { responseBody } from "../../../../app/config/helpers";
 import { v4 } from "uuid";
 
@@ -47,6 +47,7 @@ async function getRecruits(req: any) {
     include: [
       { model: Recruits, where: { is_viewable: true }, as: "new_recruits" },
       { model: Applicants, as: "new_applicants" },
+      {model: Students}
       { model: Recruiters, as: "new_recruiters" },
     ],
   });

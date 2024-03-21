@@ -12,6 +12,7 @@ const SchoolAddress = require("./SchoolAddress");
 const Users = require("./Users")
 const SchoolSocialMedia = require("./SchoolSocialMedia");
 const Assets = require("./Assets");
+const Students = require("./Students");
 const ICDirectory = require("./ICDirectory");
 
 const models = {
@@ -22,6 +23,7 @@ const models = {
   SchoolResearchProgram,
   SchoolContact,
   SchoolAddress,
+  Students,
   Applicants,
   Recruits,
   Users,
