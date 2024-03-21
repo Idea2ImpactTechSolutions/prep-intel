@@ -3,6 +3,8 @@ import { models } from "../../../app/models";
 const { Managers, School, Recruiters, Users } = models;
 import { responseBody } from "../../../app/config/helpers";
 import { v4 } from "uuid";
+import Students from "../../../app/models/Students";
+import Applicants from "../../../app/models/Applicants";
 
 export default async function AuthHandler(
   req: NextApiRequest,
@@ -55,7 +57,6 @@ async function claimAccount(req: any) {
       data: [],
     };
   }
-
   if (recruiterChecker.account_claimed) {
     return {
       code: 200,
@@ -84,12 +85,15 @@ async function claimAccount(req: any) {
   await Users.update(
     {
       account_claimed: true,
+      date_claimed: new Date(),
     },
     { where: { email: email } }
   );
   return {
     code: 200,
     message: "manager account claimed successfully",
-    data: [],
+    data: [
+      { role: "recruier", email: email, school: recruiterChecker.school_id },
+    ],
   };
 }
