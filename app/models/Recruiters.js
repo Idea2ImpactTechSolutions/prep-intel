@@ -4,7 +4,7 @@ const Recruits = require("./Recruits");
 const Applicants = require("./Applicants");
 
 const Recruiters = sequelize.define(
-    "recruiter",
+    "recruiters",
     {
         // Define model attributes
         id: {

@@ -44,11 +44,8 @@ const Students = sequelize.define(
         create_date: {
             type: DataTypes.DATE,
         },
-        cancel_date: {
-            type: DataTypes.DATE,
-        },
-        last_login_date: {
-            type: DataTypes.DATE,
+        cancel_reason: {
+            type: DataTypes.STRING,
         },
         user_id: {
             type: DataTypes.INTEGER,

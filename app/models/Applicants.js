@@ -26,6 +26,10 @@ const Applicants = sequelize.define(
             type: DataTypes.TEXT,
             allowNull: false,
         },
+        applicant_status: {
+            type: DataTypes.TEXT,
+            allowNull: false,
+        },
     },
     {
         timestamps: false,
