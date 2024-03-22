@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("./sequelize");
+const Students = require("./Students");
 
 const Users = sequelize.define(
     "users",
@@ -45,6 +46,10 @@ const Users = sequelize.define(
         date_claimed: {
             type: DataTypes.DATE,
         },
+        school_id: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
         is_active: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
@@ -54,5 +59,7 @@ const Users = sequelize.define(
         timestamps: false,
     }
 );
+
+Users.hasMany(Students, { foreignKey: "user_id", as: "students" });
 
 module.exports = Users;

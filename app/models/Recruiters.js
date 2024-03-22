@@ -1,5 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("./sequelize");
+const Recruits = require("./Recruits");
+const Applicants = require("./Applicants");
 
 const Recruiters = sequelize.define(
     "recruiters",
@@ -17,6 +19,7 @@ const Recruiters = sequelize.define(
         user_id: {
             type: DataTypes.STRING,
             allowNull: false,
+            type: DataTypes.INTEGER,
         },
         territories: {
             type: DataTypes.TEXT,
@@ -28,5 +31,8 @@ const Recruiters = sequelize.define(
         // Model options (optional)
     }
 );
+
+Recruiters.hasMany(Applicants, { foreignKey: "recruiter_id", as: "applicants" });
+Recruiters.hasMany(Recruits, { foreignKey: "recruiter_id", as: "recruits" });
 
 module.exports = Recruiters;
