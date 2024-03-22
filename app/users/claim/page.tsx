@@ -43,7 +43,7 @@ export default function RecruiterClaimAccountPage() {
     recruiterClaimAccount(payload)
       .unwrap()
       .then((payload) => {
-        console.log(payload);
+        // console.log(payload);
         if (payload.status === 201) {
           // let claim_info = { school_email: values.email };
           dispatch(
