@@ -85,7 +85,7 @@ async function claimAccount(req: any) {
     message: "account claimed successfully",
     data: [
       {
-        role: "recruier",
+        role: userExists.role,
         email: email,
         school: userExists.school_id,
       },
