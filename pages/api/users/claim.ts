@@ -42,21 +42,21 @@ async function handleClaimRequest(req, res) {
 async function claimAccount(req: any) {
   const { auth_code, email } = req.body;
 
-  let recruiterChecker = await Users.findOne({
+  let userExists = await Users.findOne({
     where: {
       email: email,
       auth_code: auth_code,
     },
   });
 
-  if (!recruiterChecker) {
+  if (!userExists) {
     return {
       code: 404,
       message: "no manager with email and auth code found",
       data: [],
     };
   }
-  if (recruiterChecker.account_claimed) {
+  if (userExists.account_claimed) {
     return {
       code: 200,
       message: "manager account already claimed",
@@ -65,7 +65,7 @@ async function claimAccount(req: any) {
   }
   // Create a new Date object representing the current date and time
   const currentDate = new Date();
-  if (recruiterChecker.auth_code_expiration < currentDate) {
+  if (userExists.auth_code_expiration < currentDate) {
     const newDate = new Date(currentDate.getTime() + 30 * 60000); // 30 minutes * 60 seconds/minute * 1000 milliseconds/second
     let recruiter = await Users.update(
       {
@@ -89,13 +89,13 @@ async function claimAccount(req: any) {
     { where: { email: email } }
   );
   return {
-    code: 200,
-    message: "manager account claimed successfully",
+    code: 201,
+    message: "account claimed successfully",
     data: [
       {
         role: "recruier",
         email: email,
-        school: recruiterChecker.school_id,
+        school: userExists.school_id,
       },
     ],
   };
