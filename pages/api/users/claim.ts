@@ -56,28 +56,22 @@ async function claimAccount(req: any) {
   }
   if (userExists.account_claimed) {
     return {
-      code: 200,
+      code: 409,
       message: "manager account already claimed",
       data: [],
     };
   }
   // Create a new Date object representing the current date and time
-  // const currentDate = new Date();
-  // if (userExists.auth_code_expiration < currentDate) {
-  //   const newDate = new Date(currentDate.getTime() + 30 * 60000); // 30 minutes * 60 seconds/minute * 1000 milliseconds/second
-  //   let recruiter = await Users.update(
-  //     {
-  //       auth_code: v4(),
-  //       auth_code_expiration: newDate,
-  //     },
-  //     { where: { email: email } }
-  //   );
-  //   return {
-  //     code: 409,
-  //     message: "Otp expired kindly check your mail for another otp",
-  //     data: [{ auth_code: recruiter.auth_code }],
-  //   };
-  // }
+  const currentDate = new Date();
+  if (userExists.auth_code_expiration < currentDate) {
+    // const newDate = new Date(currentDate.getTime() + 30 * 60000); // 30 minutes * 60 seconds/minute * 1000 milliseconds/second
+
+    return {
+      code: 409,
+      message: "Otp expired kindly check your mail for another otp",
+      data: [{}],
+    };
+  }
 
   await Users.update(
     {
