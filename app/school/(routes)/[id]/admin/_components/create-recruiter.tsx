@@ -2,11 +2,15 @@ import CustomSelect from "@/components/custom-select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 import { useCreateRecruiterMutation, useLazyGetAllAdminQuery } from "@/redux/services/school/managerApi";
 import { Dictionary } from "@/types/dictionary";
+import copy from "copy-to-clipboard";
 import { useFormik } from "formik";
-import { ChevronLeft, ChevronRight, Save, X } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight, Save, X } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { useState } from "react";
+import { LuCopy, LuCopyCheck } from "react-icons/lu";
 import { toast } from "sonner";
 import * as yup from "yup"
 
@@ -15,10 +19,17 @@ interface CreateRecruiterProps {
     setAdmin: (arg: any) => void;
 }
 
-export default function CreateRecruiter({setCurrentProgress, setAdmin}: CreateRecruiterProps) {
+export default function CreateRecruiter({ setCurrentProgress, setAdmin }: CreateRecruiterProps) {
     const { data: userData }: any = useSession()
-    const [createRecruiter, { isLoading: isCreatingRecruiter }] = useCreateRecruiterMutation()
+    const [createRecruiter, { isLoading: isCreatingRecruiter, isSuccess }] = useCreateRecruiterMutation()
     const [getAllAdmin] = useLazyGetAllAdminQuery()
+    const [isCopied, setIsCopied] = useState(false)
+    const [claimUrl, setClaimUrl] = useState("")
+
+    function copyToClipboard() {
+        copy(claimUrl);
+        setIsCopied(true);
+    }
 
     const handleGetAllAdmin = async (payload) => {
         getAllAdmin(payload)
@@ -34,9 +45,13 @@ export default function CreateRecruiter({setCurrentProgress, setAdmin}: CreateRe
             .unwrap()
             .then((payload) => {
                 if (payload?.status === 201) {
+                    const authCode = payload?.data?.school?.[0]?.auth_code;
+                    const pageUrl = new URL(window.location.href);
+                    setClaimUrl(`${pageUrl.origin}/users/claim?auth_code=${authCode}`);
+
                     toast.success(payload?.message)
-                    setCurrentProgress("VIEW_ADMIN")
-                    handleGetAllAdmin({ school_id: userData?.user?.schoolID })
+                    // setCurrentProgress("VIEW_ADMIN")
+                    // handleGetAllAdmin({ school_id: userData?.user?.schoolID })
                 }
             })
     }
@@ -58,7 +73,50 @@ export default function CreateRecruiter({setCurrentProgress, setAdmin}: CreateRe
     })
     return (
         <>
-            <div className="">
+            <div className={cn(
+                "hidden",
+                isSuccess && "block p-4 lg:px-16")}>
+
+                <h3 className="text-xl font-bold">Invite Sent</h3>
+                <div className="pb-28">
+                    <pre className="max-h-[650px] absolute w-[800px] overflow-x-auto rounded-lg border bg-zinc-500 text-zinc-50 py-4 pl-4">
+                        <div className="relative flex items-center rounded px-[0.2rem]  font-mono text-sm">
+
+                            <button className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 absolute right-4 top-0 z-10 h-6 w-6 text-zinc-50 hover:bg-zinc-700 hover:text-zinc-50 ">
+
+                                <LuCopy className={cn(
+                                    "block",
+                                    isCopied && "hidden",
+                                    "cursor-pointer")}
+                                    onClick={copyToClipboard} />
+
+                                <LuCopyCheck
+
+                                    className={cn(
+                                        !isCopied && "hidden",
+                                        isCopied && "block")} />
+                            </button>
+
+                            {claimUrl}
+                        </div>
+                    </pre>
+                </div>
+
+                <Button
+                    variant="outline"
+                    className="text-xs h-8 rounded-sm px-8"
+                    type="button"
+                    onClick={() => {
+                        handleGetAllAdmin({ school_id: userData?.user?.schoolID })
+                        resetForm()
+                        setCurrentProgress("VIEW_ADMIN")
+                    }}
+                ><ArrowLeft  className="w-3 h-3 mr-1" /> Go back</Button>
+            </div>
+
+            <div className={cn(
+                isSuccess && "hidden"
+            )}>
                 <form onSubmit={handleSubmit}>
                     <div className="p-4 md:px-16 flex flex-col h-[calc(100vh_-_18rem)] overflow-y-scroll">
                         <div className="flex-1">
@@ -159,6 +217,7 @@ export default function CreateRecruiter({setCurrentProgress, setAdmin}: CreateRe
                                 className="text-xs h-8 rounded-sm px-3"
                                 type="button"
                                 onClick={() => {
+                                    handleGetAllAdmin({ school_id: userData?.user?.schoolID })
                                     resetForm()
                                     setCurrentProgress("VIEW_ADMIN")
                                 }}
