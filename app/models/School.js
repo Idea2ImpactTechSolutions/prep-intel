@@ -1,16 +1,5 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("./sequelize");
-const SchoolDepartment = require("./SchoolDepartment");
-const SchoolAccreditation = require("./SchoolAccreditation");
-const SchoolResearchProgram = require("./SchoolResearchProgram");
-const SchoolSocialMedia = require("./SchoolSocialMedia");
-const Assets = require("./Assets");
-const SchoolContact = require("./SchoolContact");
-const Applicants = require("./Applicants");
-const Recruits = require("./Recruits");
-const Recruiters = require("./Recruiters");
-const SchoolAddress = require("./SchoolAddress");
-const Students = require("./Students");
 
 const School = sequelize.define(
   "school",
@@ -93,37 +82,6 @@ const School = sequelize.define(
   }
 );
 
-// School.hasMany(Applicants, { foreignKey: "school_id", as: "new_applicants" });
-School.hasMany(Recruits, { foreignKey: "school_id", as: "new_recruits" });
-// School.hasMany(Students, { foreignKey: "school_id", as: "new_students" });
-School.hasMany(Recruiters, { foreignKey: "school_id", as: "new_recruiters" })
-
-School.hasMany(Assets, { foreignKey: "school_id", as: "assets" })
-// School.hasMany(SchoolDepartment, { foreignKey: "schoolId", as: "departments" });
-School.hasMany(SchoolDepartment, {
-  foreignKey: "school_id",
-  as: "school_departments",
-});
-School.hasMany(SchoolAccreditation, {
-  foreignKey: "school_id",
-  as: "school_accreditations",
-});
-School.hasMany(SchoolResearchProgram, {
-  foreignKey: "school_id",
-  as: "school_research_programs",
-});
-
-School.hasOne(SchoolAddress, {
-  foreignKey: "school_id",
-  as: "school_address",
-});
-School.hasMany(SchoolContact, {
-  foreignKey: "school_id",
-  as: "school_contacts",
-});
-School.hasMany(SchoolSocialMedia, {
-  foreignKey: "school_id",
-  as: "school_social_medias",
-});
 
 module.exports = School;
+

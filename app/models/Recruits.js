@@ -1,6 +1,10 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("./sequelize");
 
+const Recruiters = require("./Recruiters");
+const School = require("./School");
+const Students = require("./Students");
+
 const Recruits = sequelize.define(
     "recruits",
     {
@@ -51,5 +55,20 @@ const Recruits = sequelize.define(
         timestamps: false,
     }
 );
+
+Recruits.belongsTo(Students, {
+    foreignKey: 'student_id', // This should match the foreignKey in the hasOne association
+    // as: 'student' // Optional alias
+});
+
+Recruits.belongsTo(Recruiters, {
+    foreignKey: 'recruiter_id', // This should match the foreignKey in the hasOne association
+    //as: 'rec' // Optional alias
+});
+
+Recruits.belongsTo(School, {
+    foreignKey: 'school_id', // This should match the foreignKey in the hasOne association
+    //as: 'sch' // Optional alias
+});
 
 module.exports = Recruits

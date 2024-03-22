@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("./sequelize");
-const Students = require("./Students");
 
 const Users = sequelize.define(
     "users",
@@ -60,6 +59,6 @@ const Users = sequelize.define(
     }
 );
 
-Users.hasMany(Students, { foreignKey: "user_id", as: "students" });
+// Users.hasMany(Students, { foreignKey: "user_id", as: "students" });
 
 module.exports = Users;
