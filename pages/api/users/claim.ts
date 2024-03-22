@@ -3,8 +3,6 @@ import { models } from "../../../app/models";
 const { Managers, School, Recruiters, Users } = models;
 import { responseBody } from "../../../app/config/helpers";
 import { v4 } from "uuid";
-import Students from "../../../app/models/Students";
-import Applicants from "../../../app/models/Applicants";
 
 export default async function AuthHandler(
   req: NextApiRequest,
