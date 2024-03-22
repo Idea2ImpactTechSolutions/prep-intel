@@ -46,7 +46,6 @@ async function claimAccount(req: any) {
     where: {
       email: email,
       auth_code: auth_code,
-      role: "recruiter",
     },
   });
 
@@ -93,7 +92,11 @@ async function claimAccount(req: any) {
     code: 200,
     message: "manager account claimed successfully",
     data: [
-      { role: "recruier", email: email, school: recruiterChecker.school_id },
+      {
+        role: "recruier",
+        email: email,
+        school: recruiterChecker.school_id,
+      },
     ],
   };
 }
