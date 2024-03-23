@@ -46,7 +46,7 @@ export default function SchoolPreview() {
                 // dispatch(setSchoolInformation({ slug: 'school_data', data: {...payload.data.school, create_count: 1} }))
                 handleGetSchoolInformation(school_data?.id)
                 toast.success("School Published Successfully ")
-                router.push("/school/my-school");
+                router.push(`/school/${schoolId}/my-school`);
               }
         })
     }
@@ -97,7 +97,7 @@ export default function SchoolPreview() {
                                 <Button
                                     variant={"outline"}
                                     className="text-xs h-8 rounded-sm px-3"
-                                    onClick={() => router.push('/school/school-profile')}
+                                    onClick={() => router.push(`/school/${schoolId}/school-profile`)}
                                 >
                                     Edit School
                                 </Button>

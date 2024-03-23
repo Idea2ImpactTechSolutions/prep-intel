@@ -72,7 +72,7 @@ export default function MySchool() {
                             <Button
                                     variant={"outline"}
                                     className="text-xs h-8 rounded-sm px-3"
-                                    onClick={() => router.push('/school/school-profile')}
+                                    onClick={() => router.push(`/school/${schoolId}/school-profile`)}
                                 >
                                     Edit School
                                 </Button>

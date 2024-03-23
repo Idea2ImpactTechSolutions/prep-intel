@@ -199,7 +199,7 @@ export default function AcademicInfo() {
 
   const handleBack = () => {
     // Logic for Back button
-    router.push("/school/school-profile");
+    router.push(`/school/${schoolId}/school-profile`);
   };
 
   const handleSaveForLater = () => {
@@ -242,7 +242,7 @@ export default function AcademicInfo() {
         const responseData = await response.json();
           dispatch(setSchoolInformation({ slug: 'school_data', data: {...responseData.data.school, create_count: 2} }))
         toast.success("Academic Record Submitted Successfully")
-        router.push("/school/preview-school")
+        router.push(`/school/${schoolId}/preview-school`)
         // Handle success - you can redirect to another page or show a success message
       } else {
         throw new Error(`Error: ${response.status}`);
