@@ -1,6 +1,6 @@
 import { baseApi } from "../baseApi";
 
-const recruiterApi = baseApi.injectEndpoints({
+const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     claimAccount: builder.mutation({
       query: (payload) => ({
@@ -19,4 +19,4 @@ const recruiterApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useClaimAccountMutation } = recruiterApi;
+export const { useClaimAccountMutation } = userApi;

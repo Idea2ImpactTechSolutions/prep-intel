@@ -9,8 +9,9 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import * as yup from "yup";
-import { useClaimAccountMutation } from "@/redux/services/recruiter/recruiterApi";
-import { setRecruiterInfo } from "@/redux/features/recruiter/recruiterSlice";
+import { useClaimAccountMutation } from "@/redux/services/user/userApi";
+import { setUserInfo } from "@/redux/features/user/userSlice";
+import { useState } from "react";
 
 const SERVICES = [
   {
@@ -31,8 +32,12 @@ interface initialValue {
   email: string;
 }
 
-export default function RecruiterClaimAccountPage() {
-  const [recruiterClaimAccount, { isLoading }] = useClaimAccountMutation();
+export default function UserClaimAccountPage() {
+  const [userClaimAccount, { isLoading }] = useClaimAccountMutation();
+
+  // local states
+  const [error, setError] = useState<any>();
+
   const router = useRouter();
   const searchParam = useSearchParams();
   const dispatch = useAppDispatch();
@@ -40,18 +45,21 @@ export default function RecruiterClaimAccountPage() {
   const handleSubmitForm = async (values: initialValue) => {
     const auth_code = searchParam?.get("auth_code");
     const payload = { email: values.email, auth_code };
-    recruiterClaimAccount(payload)
+    setError("");
+
+    userClaimAccount(payload)
       .unwrap()
       .then((payload) => {
-        // console.log(payload);
         if (payload.status === 201) {
-          // let claim_info = { school_email: values.email };
           dispatch(
-            setRecruiterInfo({ slug: "claim_info", data: payload.data.data[0] })
+            setUserInfo({ slug: "claim_info", data: payload.data.data[0] })
           );
           toast.success(payload.message);
           router.push("/users/set-password");
         }
+      })
+      .catch((errors) => {
+        setError(errors?.data?.message);
       });
   };
 
@@ -107,9 +115,12 @@ export default function RecruiterClaimAccountPage() {
               label='School Email Address'
               name='email'
               value={values.email}
-              onChange={handleChange}
+              onChange={(e) => {
+                setError("");
+                handleChange(e);
+              }}
               touched={touched.email}
-              error={errors.email}
+              error={errors.email || error}
               placeholder='Enter email address'
               className='w-full placeholder:text-gray-300 placeholder:font-light'
             />
