@@ -1,5 +1,4 @@
 "use client"
-import { CompletionPanel } from "@/components/completion-panel";
 import PageTitleContainer from "@/components/page-title";
 import { Button } from "@/components/ui/button";
 import { setSchoolInformation } from "@/redux/features/school/managerSlice";
@@ -7,13 +6,10 @@ import { useLazyGetSchoolProfileQuery } from "@/redux/services/school/managerApi
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { Dictionary } from "@/types/dictionary";
 import moment from 'moment';
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import SchoolInformation from "../../_components/school-information";
-import BottomBar from "../shared/bottom-bar";
-import LoadingSpinner from "../shared/loading-spinner";
-import Link from "next/link";
+import SchoolInformation from "../../../_components/school-information";
+import LoadingSpinner from "../../../_components/loading-spinner";
 
 
 // type PROGRESS_TYPE = 'BASIC_INFORMATION' | 'ACADEMIC_INFORMATION' | 'CAMPUS_INFORMATION' | 'EXTRA_CURRICULAR_INFORMATION' | 'NEWS_FEED_EVENT' | 'PREVIEW_INFORMATION'
@@ -25,8 +21,9 @@ export default function MySchool() {
     const { manager: { school_information: { school_data } } }: Dictionary = useAppSelector((state) => state.manager)
 
     const router = useRouter()
+    const pageParams = useParams();
+    const schoolId = pageParams?.id;
 
-    const { data: userData }: any = useSession()
     const dispatch = useAppDispatch()
 
     const handleGetSchoolInformation = async (schoolId) => {
@@ -40,11 +37,10 @@ export default function MySchool() {
       }
 
       useEffect(() => {
-        if(userData && userData?.user){
-          !isFetchedProfile && handleGetSchoolInformation(userData?.user?.schoolID)
+        if(schoolId){
+          !isFetchedProfile && handleGetSchoolInformation(schoolId)
         }
-        
-    }, [userData])
+    }, [])
 
     if (isLoadingGetProfile || isFetchingSchoolProfile) {
         return <LoadingSpinner />;
@@ -76,7 +72,7 @@ export default function MySchool() {
                             <Button
                                     variant={"outline"}
                                     className="text-xs h-8 rounded-sm px-3"
-                                    onClick={() => router.push('/school/school-profile')}
+                                    onClick={() => router.push(`/school/${schoolId}/school-profile`)}
                                 >
                                     Edit School
                                 </Button>

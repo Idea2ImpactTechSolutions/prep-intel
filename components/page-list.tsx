@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 export default function PageList() {
   const [links, setLinks] = useState([]);
-
+  const { data: userData }: any = useSession()
   useEffect(() => {
     if (process.env.NODE_ENV !== 'development') {
       return;
@@ -20,7 +21,19 @@ export default function PageList() {
         return r.json();
       })
       .then(data => {
-        setLinks(data);
+
+        const schoolId = userData?.user?.schoolID;
+
+        const urls = data.map(url => {
+          // Replace [id] strings with runtime values
+          if (url.includes('/school/[id]/')) {
+            return url.replace('[id]', schoolId);
+          }
+
+          return url;
+        });
+
+        setLinks(urls);
       });
   }, []);
 

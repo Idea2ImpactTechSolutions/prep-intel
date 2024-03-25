@@ -1,10 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import React from "react";
+import { useParams } from "next/navigation";
 import PageTitleContainer from "@/components/page-title";
 
 export default function Page() {
-  const router = useRouter();
+  const pageParams = useParams();
+  const schoolId = pageParams?.id;
+
+  // TODO: Use schoolId to query for data matching the given id
   const dashInfo = {
     applicationCount: 13.299,
     admissionsCount: 8339,

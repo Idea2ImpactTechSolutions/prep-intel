@@ -47,7 +47,7 @@ export default function Page() {
                 let claim_info = {school_email: values.email}
                 dispatch(setManagerInfo({slug: 'claim_info', data: claim_info}))
                 toast.success(payload.message)
-                router.push('/school/set-password')
+                router.push(`/school/set-password`)
             }
         })
     }
