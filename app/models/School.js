@@ -1,5 +1,12 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("./sequelize");
+const SchoolDepartment = require("./SchoolDepartment");
+const SchoolAccreditation = require("./SchoolAccreditation");
+const SchoolResearchProgram = require("./SchoolResearchProgram");
+const SchoolSocialMedia = require("./SchoolSocialMedia");
+const Assets = require("./Assets");
+const SchoolContact = require("./SchoolContact");
+const SchoolAddress = require("./SchoolAddress");
 
 const School = sequelize.define(
   "school",
@@ -82,6 +89,31 @@ const School = sequelize.define(
   }
 );
 
+School.hasMany(Assets, { foreignKey: "school_id", as: "assets" })
+School.hasMany(SchoolDepartment, {
+  foreignKey: "school_id",
+  as: "school_departments",
+});
+School.hasMany(SchoolAccreditation, {
+  foreignKey: "school_id",
+  as: "school_accreditations",
+});
+School.hasMany(SchoolResearchProgram, {
+  foreignKey: "school_id",
+  as: "school_research_programs",
+});
+
+School.hasOne(SchoolAddress, {
+  foreignKey: "school_id",
+  as: "school_address",
+});
+School.hasMany(SchoolContact, {
+  foreignKey: "school_id",
+  as: "school_contacts",
+});
+School.hasMany(SchoolSocialMedia, {
+  foreignKey: "school_id",
+  as: "school_social_medias",
+});
 
 module.exports = School;
-
