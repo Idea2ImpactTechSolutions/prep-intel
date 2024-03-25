@@ -50,25 +50,12 @@ async function getRecruits(req: any) {
     ],
   });
 
-  // Almost certainly not what's desired. I'd expect that include_applicants toggles between
-  // excluding and including recruits who have or haven't applied
-  let applicants = null;
-  if (include_applicants) {
-    applicants = await Applicants.findAll({
-      where: { school_id: schoolId },
-      include: [
-        { model: School },
-        { model: Students, include: {model: Users }  },
-        { model: Recruiters, include: {model: Users } },
-      ],
-    });
-  }
+
 
   return {
      code: 200,
      data: {
       recruits,
-      applicants
      },
      message: "data fetched successfully" };
 
