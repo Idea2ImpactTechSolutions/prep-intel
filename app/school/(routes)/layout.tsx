@@ -8,7 +8,7 @@ import { setSchoolInformation } from '@/redux/features/school/managerSlice'
 import EmptyStateContainer from '@/components/empty-state'
 import { usePathname, useRouter } from 'next/navigation'
 import { LucideLoader2 } from 'lucide-react'
-import LoadingSpinner from './shared/loading-spinner'
+import LoadingSpinner from '../_components/loading-spinner'
 import { Dictionary } from '@/types/dictionary'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -37,12 +37,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             const { user } = userData
             handleGetSchoolInformation(user.schoolID)
         }
-    }, []) 
-    
+    }, [])
+
     useEffect(() => {
         !school_data?.publish_date ? setIsProfileCompleted(false) : setIsProfileCompleted(true)
     }, [school_data])
-    
+
     return (
         <main className="overflow-y-hidden font-sans">
             <section className="">
@@ -52,10 +52,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 />
                 <section>
                     {
-                        isLoading ? 
+                        isLoading ?
                             <LoadingSpinner/>
                             : isProfileCompleted ? children :
-                                (location === "/school/school-profile" || location === "/school/claim" || location === "/school/set-password" || (location ===
+                                (location === `/school/school-profile` || location === "/school/claim" || location === "/school/set-password" || (location ===
                                 "/school/preview-school" && school_data?.create_count === 2) ||
                                 location === "/school/academic-info"
                                 ) ?
