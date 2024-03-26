@@ -45,6 +45,10 @@ const Users = sequelize.define(
         date_claimed: {
             type: DataTypes.DATE,
         },
+        school_id: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
         is_active: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
@@ -54,8 +58,5 @@ const Users = sequelize.define(
         timestamps: false,
     }
 );
-
-
-
 
 module.exports = Users;

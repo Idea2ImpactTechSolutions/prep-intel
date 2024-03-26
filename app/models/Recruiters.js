@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("./sequelize");
+const Users = require("./Users");
 
 const Recruiters = sequelize.define(
     "recruiters",
@@ -17,6 +18,7 @@ const Recruiters = sequelize.define(
         user_id: {
             type: DataTypes.STRING,
             allowNull: false,
+            type: DataTypes.INTEGER,
         },
         territories: {
             type: DataTypes.TEXT,
@@ -29,4 +31,8 @@ const Recruiters = sequelize.define(
     }
 );
 
+Recruiters.belongsTo(Users, {
+    foreignKey: 'user_id', // This should match the foreignKey in the hasOne association
+});
+  
 module.exports = Recruiters;
