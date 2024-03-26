@@ -1,7 +1,8 @@
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 const models = require("@/app/models");
-const { Managers } = models.models;
+const { Users } = models.models;
+import bcrypt from "bcryptjs";
 
 const handler = NextAuth({
   providers: [
@@ -20,10 +21,10 @@ const handler = NextAuth({
         if (!credentials) {
           return null;
         }
-
         try
         {
-          let user = await Managers.findOne({
+          const hash = bcrypt.hashSync(credentials.password);
+          let user = await Users.findOne({
             where: {
               email: credentials.email,
             },
@@ -34,9 +35,8 @@ const handler = NextAuth({
           // Any object returned will be saved in `user` property of the JWT
           return {
             id: user.email,
-            // role: user.role, We should authenticate against a common table, and 
-            // pull the roll from said table
-            role: "manager", // Hard-coding due to missing data
+        
+            role: user.role,
             schoolID: user.school_id
           };
         } else {

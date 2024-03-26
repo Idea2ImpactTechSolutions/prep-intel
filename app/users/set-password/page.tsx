@@ -2,10 +2,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Circle, EyeIcon, EyeOffIcon } from "lucide-react";
-import { useSchoolManagerSetPasswordMutation } from "@/redux/services/school/managerApi";
+import { useSetPasswordMutation } from "@/redux/services/user/userApi";
 import { useFormik } from "formik";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import * as yup from "yup";
@@ -16,18 +16,20 @@ import { Dictionary } from "@/types/dictionary";
 interface initialValue {
     password: string,
     confirm_password: string,
-    email: string
+    email: string,
+    auth_code : any
 }
 
 export default function Page() {
     const [showPassword, setShowPassword] = useState(false);
-    const [schoolManagerSetPassword, { isLoading }] = useSchoolManagerSetPasswordMutation()
+    const [userSetPassword, { isLoading }] = useSetPasswordMutation()
     const router = useRouter()
-
+    const searchParams = useSearchParams();
+    const auth_code = searchParams?.get('auth_code')
     const { manager: { claim_info } }: Dictionary = useAppSelector((state) => state.manager)
 
     const handleSubmitForm = async (values: initialValue) => {
-        schoolManagerSetPassword(values)
+        userSetPassword(values)
             .unwrap()
             .then((payload) => {
                 if (payload.status === 200) {
@@ -41,7 +43,8 @@ export default function Page() {
         initialValues: {
             password: '',
             confirm_password: '',
-            email: claim_info?.school_email
+            email: claim_info?.school_email,
+            auth_code,
         },
         validationSchema: yup.object().shape({
             password: yup.string().required('password is required'),

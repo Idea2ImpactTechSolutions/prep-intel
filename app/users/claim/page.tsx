@@ -55,7 +55,7 @@ export default function UserClaimAccountPage() {
             setUserInfo({ slug: "claim_info", data: payload.data.data[0] })
           );
           toast.success(payload.message);
-          router.push("/users/set-password");
+          router.push(`/users/set-password?auth_code=${auth_code}`);
         }
       })
       .catch((errors) => {

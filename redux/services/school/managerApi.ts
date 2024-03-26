@@ -17,21 +17,6 @@ const managerApi = baseApi.injectEndpoints({
         }
       },
     }),
-    schoolManagerSetPassword: builder.mutation({
-      query: (payload) => ({
-        url: `/manager/set-password`,
-        method: "POST",
-        body: payload,
-      }),
-      async onQueryStarted(_, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled;
-          console.log(result);
-        } catch (error) {
-          console.log(error);
-        }
-      },
-    }),
     getSchoolProfile: builder.query({
       query: (schoolId) => ({
         url: `/manager/profile/school-profile?school_id=${schoolId}`,
@@ -47,7 +32,7 @@ const managerApi = baseApi.injectEndpoints({
     }),
     getAllAdmin: builder.query({
       query: ({ school_id }) => ({
-        url: `/manager/profile/personnel?school_id=${school_id}`,
+        url: `/schools/${school_id}/recruits`,
         method: "GET",
       }),
       async onQueryStarted(_, { queryFulfilled, dispatch }) {
@@ -124,7 +109,6 @@ const managerApi = baseApi.injectEndpoints({
 
 export const {
   useSchoolManagerClaimAccountMutation,
-  useSchoolManagerSetPasswordMutation,
   useLazyGetSchoolProfileQuery,
   useManagerCreateSchoolProfileMutation,
   useUploadSchoolImageMutation,
