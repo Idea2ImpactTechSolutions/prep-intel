@@ -11,7 +11,7 @@ export default async function AuthHandler(
 ) {
   switch (req.method) {
     case "GET":
-      return handleGetRecruits(req, res);
+      return await handleGetRecruits(req, res);
     case "POST":
       return res
         .status(501)
@@ -26,15 +26,15 @@ export default async function AuthHandler(
 async function handleGetRecruits(req, res) {
   try {
     const getRecruitsRequest: any = await getRecruits(req);
-    return res.status(getRecruitsRequest.code).json(
-      responseBody(getRecruitsRequest.message, getRecruitsRequest.code, {
-        data: getRecruitsRequest,
-      })
+    return res
+    .status(200)
+    .json(responseBody("Recruits successfully retrieved", 200, getRecruitsRequest)
     );
   } catch (error: any) {
     return res
       .status(400)
-      .json(responseBody("Error occurred", 400, { error: error.message }));
+      .json(responseBody("Error occurred", 400, { error: error.message })
+      );
   }
 }
 
@@ -44,19 +44,13 @@ async function getRecruits(req: any) {
   let recruits = await Recruits.findAll({
     where: { school_id: schoolId },
     include: [
-      { model: School },
-      { model: Students, include: {model: Users }  },
-      { model: Recruiters, include: {model: Users } },
+      { model: Students,attributes : ['high_school'], include: {model: Users, attributes: ['first_name','last_name'] }  },
+      { model: Recruiters,attributes : [], include: {model: Users, attributes: ['first_name','last_name']  } },
     ],
+    raw: true,
+    nest: true
   });
 
-
-
-  return {
-     code: 200,
-     data: {
-      recruits,
-     },
-     message: "data fetched successfully" };
+  return recruits;
 
 }
