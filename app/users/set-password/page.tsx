@@ -44,7 +44,6 @@ export default function UserSetPasswordPage() {
         }
       });
   };
-  ause;
 
   const { values, errors, handleChange, handleSubmit, touched } = useFormik({
     initialValues: {
