@@ -11,7 +11,7 @@ import * as yup from "yup";
 import { useAppSelector } from "@/redux/store";
 import { Dictionary } from "@/types/dictionary";
 import { useSession } from "next-auth/react";
-import { useUserSetPasswordMutation } from "@/redux/services/user/userApi";
+import { useSetPasswordMutation } from "@/redux/services/user/userApi";
 
 interface initialValue {
   password: string;
@@ -28,7 +28,7 @@ export default function UserSetPasswordPage() {
   const auth_code = params?.get("auth_code");
   const [showPassword, setShowPassword] = useState(false);
 
-  const [userSetPassword, { isLoading }] = useUserSetPasswordMutation();
+  const [userSetPassword, { isLoading }] = useSetPasswordMutation();
 
   const {
     user: { claim_info },

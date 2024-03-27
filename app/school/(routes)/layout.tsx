@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react'
 import { useAppDispatch, useAppSelector } from '@/redux/store'
 import { setSchoolInformation } from '@/redux/features/school/managerSlice'
 import EmptyStateContainer from '@/components/empty-state'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useParams } from 'next/navigation'
 import { LucideLoader2 } from 'lucide-react'
 import LoadingSpinner from '../_components/loading-spinner'
 import { Dictionary } from '@/types/dictionary'
@@ -19,6 +19,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
     const { data: userData }: any = useSession()
     const router = useRouter()
+    
+    const pageParams = useParams();
+    const schoolId = pageParams?.id;
     const location = usePathname()
     const dispatch = useAppDispatch()
 
@@ -34,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
     useEffect(() => {
         if (userData) {
-            const { user } = userData
+            const { user } = userData;
             handleGetSchoolInformation(user.schoolID)
         }
     }, [])
@@ -55,9 +58,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         isLoading ?
                             <LoadingSpinner/>
                             : isProfileCompleted ? children :
-                                (location === `/school/school-profile` || location === "/school/claim" || location === "/school/set-password" || (location ===
-                                "/school/preview-school" && school_data?.create_count === 2) ||
-                                location === "/school/academic-info"
+                                (location === `/school/${schoolId}/school-profile` || location === `/school/${schoolId}/claim` || location === `/school/${schoolId}/set-password` || (location ===
+                                `/school/${schoolId}/preview-school` && school_data?.create_count === 2) ||
+                                location === `/school/${schoolId}/academic-info`
                                 ) ?
                                     children
                                     :
@@ -66,7 +69,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                         pageTitle="Complete Profile Setup"
                                         title="Welcome to the Dashboard Tab!"
                                         content="Welcome to the Dashboard panel! This space is dedicated to helping you manage user permissions, oversee recruiter activities, and fine-tune platform settings tailored for your institution. Before diving into these functionalities, ensure your school's profile is set up. A complete profile strengthens your institution's presence on the platform and empowers you to make informed administrative decisions."
-                                        onClick={() => router.push('/school/school-profile')}
+                                        onClick={() => router.push(`/school/${schoolId}/school-profile`)}
                                     />
                     }
                     {/* {children} */}

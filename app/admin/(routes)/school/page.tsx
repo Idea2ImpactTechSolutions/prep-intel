@@ -38,7 +38,7 @@ export default function SchoolAdminRegisterPage() {
             if (payload.status === 200) {
                 const authCode = payload?.data?.[0]?.auth_code;
                 const pageUrl = new URL(window.location.href);
-                setClaimUrl(`${pageUrl.origin}/school/claim?auth_code=${authCode}`);
+                setClaimUrl(`${pageUrl.origin}/users/claim?auth_code=${authCode}`);
 
                 toast.success(payload.message)
                 resetForm()

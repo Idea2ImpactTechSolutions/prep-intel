@@ -16,15 +16,22 @@ const userApi = baseApi.injectEndpoints({
         }
       },
     }),
-
-    userSetPassword: builder.mutation({
-      query: (data) => ({
+    setPassword: builder.mutation({
+      query: (payload) => ({
         url: `/users/set-password`,
         method: "POST",
-        body: data,
+        body: payload,
       }),
+      async onQueryStarted(_, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+          console.log(result);
+        } catch (error) {
+          console.log(error);
+        }
+      },
     }),
   }),
 });
 
-export const { useClaimAccountMutation, useUserSetPasswordMutation } = userApi;
+export const { useClaimAccountMutation, useSetPasswordMutation } = userApi;
