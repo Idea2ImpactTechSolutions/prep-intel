@@ -1,17 +1,23 @@
-import { models } from "../../../../app/models";
-import { responseBody } from "../../../../app/config/helpers";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { checkForChangedAttributes } from "../../manager/profile/school-profile";
+import { models } from "@/app/models";
+import { responseBody } from "@/app/config/helpers";
 const { Users, Students } = models;
 
-export default async function handler(req, res) {
+const VITALS_FIELDS = ["id", "dob", "state", "country", "graduation_year", 
+                      "high_school", "guardian_first_name", 
+                      "guardian_last_name", "guardian_email"];
+const VITALS_FIELDS_FROM_USERS = ["user.first_name", "user.last_name", "user.email"]
+
+export default async function handler(
+  req: NextApiRequest, 
+  res: NextApiResponse
+) {
   switch (req.method) {
     case "POST":
-      return res
-        .status(501)
-        .json(responseBody("Not implemented", 501, null));
+      return handleRequest(req, res, updateStudentVitals);
     case "GET":
-      return res
-        .status(501)
-        .json(responseBody("Not implemented", 501, null));
+      return handleRequest(req, res, getStudentVitals);
     default:
       return res
         .status(405)
@@ -19,31 +25,14 @@ export default async function handler(req, res) {
   }
 }
 
-async function handleGetRequest(req, res) {
+async function handleRequest(req, res, processingFunction) {
   try {
-    const vitalsData: any = await getStudentVitals(req);
-    if (!vitalsData) {
-      return res.status(404).json(responseBody("Student Vitals data not found", 404, null));
-    }
-    return res
-      .status(200)
-      .json(responseBody("Student Vitals data retrieved successfully", 200, vitalsData));
-  } catch (error: any) {
-    return res
-      .status(500)
-      .json(responseBody("Internal Server Error", 500, { error: error.message }));
-  }
-}
-
-async function handlePostRequest(req, res) {
-  try {
-    const updatedVitals: any = await updateStudentVitals(req);
-    if (!updatedVitals) {
-      return res.status(404).json(responseBody("Student not found", 404, null));
-    }
-    return res.status(201).json(
-      responseBody("Student Vitals updated successfully", 201, null)
-    );
+    const results: any = await processingFunction(req);
+    return res.status(results.responseCode).json(responseBody(
+      results.responseMessage,
+      results.responseCode, 
+      results.responseData
+    ));
   } catch (error: any) {
     return res
       .status(500)
@@ -52,9 +41,62 @@ async function handlePostRequest(req, res) {
 }
 
 async function getStudentVitals(req) {
-  return;
+  let responseCode = 400;
+  let responseMessage = "Bad Request";
+  let responseData : any;
+
+  const { studentId } = req.query;
+  const studentVitals = await Students.findOne({ 
+        where: {id: studentId},
+        attributes: VITALS_FIELDS.concat(VITALS_FIELDS_FROM_USERS),
+        include: [{
+          model: Users,
+          attributes: [],
+          required: true
+        }],
+        raw: true
+    });
+
+  if (studentVitals === null) {
+    responseCode = 404;
+    responseMessage = "Student not found";
+  }
+  else {
+    responseCode = 200;
+    responseMessage = "Student Vitals information retrieved sucessfully.";
+    responseData = studentVitals;
+  }
+
+  return {responseCode, responseMessage, responseData};
 }
 
 async function updateStudentVitals(req) {
-  return;
+  const { studentId } = req.query;
+  const formData = req.body;
+  let responseCode = 400;
+  let responseMessage = "Bad Request";
+  let responseData : any;
+
+  let studentVitals = await Students.findOne({ 
+        where: {id: studentId},
+        attributes: VITALS_FIELDS,
+  });
+
+  if (studentVitals === null) {
+    responseCode = 404;
+    responseMessage = "Student not found";
+  }
+  else {
+    const needsUpdate = await checkForChangedAttributes(
+      formData, 
+      studentVitals.dataValues
+    );
+    if (needsUpdate) {
+      await studentVitals.update(formData);
+    }
+    responseCode = 200;
+    responseMessage = "Student Vitals information saved successfully"
+    responseData = studentVitals;
+  }
+  return {responseCode, responseMessage, responseData};
 }
