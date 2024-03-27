@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { models } from "../../../app/models";
-const { Managers, School } = models;
+const { Managers, School, Users } = models;
 import { responseBody } from "../../../app/config/helpers";
 import { v4 } from "uuid";
 
@@ -23,7 +23,7 @@ export default async function AuthHandler(
         .json(responseBody("school account already exists", 409, []));
     }
 
-    let managerChecker = await Managers.findOne({
+    let managerChecker = await Users.findOne({
       where: {
         email: email,
       },
@@ -53,20 +53,27 @@ export default async function AuthHandler(
       name: school_name,
     });
 
-    let managers = await Managers.create({
+    let user = await Users.create({
       email: email,
       auth_code: v4(),
       account_claimed: false,
       first_name: first_name,
       last_name: last_name,
       school_id: schoolId,
+      role : 'manager',
       auth_code_expiration: newDate,
+      is_active : false
     });
+
+    let manager = await Managers.create({
+      user_id : user.id
+    });
+
     return res
       .status(200)
       .json(
         responseBody("manager account created successfully", 200, [
-          { auth_code: managers.auth_code },
+          { auth_code: user.auth_code },
         ])
       );
   } catch (error: any) {

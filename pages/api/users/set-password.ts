@@ -35,8 +35,7 @@ async function handleSetPassword(req, res) {
 }
 
 async function setPassword(req: any) {
-  const { auth_code, password, repeat_password } = req.body;
-
+  const { auth_code, password, confirm_password } = req.body;
   let userExists = await Users.findOne({
     where: {
       auth_code: auth_code,
@@ -50,7 +49,7 @@ async function setPassword(req: any) {
       data: [],
     };
   }
-  if (password !== repeat_password) {
+  if (password !== confirm_password) {
     return {
       code: 400,
       message: "password mismatch",
