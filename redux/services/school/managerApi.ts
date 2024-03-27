@@ -2,21 +2,6 @@ import { baseApi } from "../baseApi";
 
 const managerApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    schoolManagerClaimAccount: builder.mutation({
-      query: (payload) => ({
-        url: `/manager/claim-account`,
-        method: "POST",
-        body: payload,
-      }),
-      async onQueryStarted(_, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled;
-          // console.log(result)
-        } catch (error) {
-          console.log(error);
-        }
-      },
-    }),
     getSchoolProfile: builder.query({
       query: (schoolId) => ({
         url: `/manager/profile/school-profile?school_id=${schoolId}`,
@@ -108,7 +93,6 @@ const managerApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useSchoolManagerClaimAccountMutation,
   useLazyGetSchoolProfileQuery,
   useManagerCreateSchoolProfileMutation,
   useUploadSchoolImageMutation,
