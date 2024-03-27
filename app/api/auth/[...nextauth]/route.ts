@@ -23,19 +23,17 @@ const handler = NextAuth({
         }
         try
         {
-          const hash = bcrypt.hashSync(credentials.password);
           let user = await Users.findOne({
             where: {
               email: credentials.email,
             },
           });
 
-        // simple auth
-        if (user) {
+        const credentialsMatch = await bcrypt.compare(credentials.password, user.password);
+        if (user && credentialsMatch) {
           // Any object returned will be saved in `user` property of the JWT
           return {
             id: user.email,
-        
             role: user.role,
             schoolID: user.school_id
           };
