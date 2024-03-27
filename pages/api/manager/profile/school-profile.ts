@@ -173,7 +173,7 @@ async function getSchool(req: any) {
   return schoolDetails;
 }
 
-async function checkForChangedAttributes(formData, savedDataValues) {
+export async function checkForChangedAttributes(formData, savedDataValues) {
   let needsUpdate: boolean = false;
   for (const [key, value] of Object.entries(formData)) {
     if (value != savedDataValues[key]) {
