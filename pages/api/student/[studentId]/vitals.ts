@@ -55,7 +55,7 @@ async function getStudentVitals(req) {
           required: true
         }],
         raw: true
-    });
+  });
 
   if (studentVitals === null) {
     responseCode = 404;
@@ -66,16 +66,17 @@ async function getStudentVitals(req) {
     responseMessage = "Student Vitals information retrieved sucessfully.";
     responseData = studentVitals;
   }
-
+  
   return {responseCode, responseMessage, responseData};
 }
 
 async function updateStudentVitals(req) {
-  const { studentId } = req.query;
-  const formData = req.body;
   let responseCode = 400;
   let responseMessage = "Bad Request";
   let responseData : any;
+
+  const { studentId } = req.query;
+  const formData = req.body;
 
   let studentVitals = await Students.findOne({ 
         where: {id: studentId},
@@ -98,5 +99,6 @@ async function updateStudentVitals(req) {
     responseMessage = "Student Vitals information saved successfully"
     responseData = studentVitals;
   }
+
   return {responseCode, responseMessage, responseData};
 }
