@@ -7,7 +7,7 @@ const { Users, Students } = models;
 const VITALS_FIELDS = ["id", "dob", "state", "country", "graduation_year", 
                       "high_school", "guardian_first_name", 
                       "guardian_last_name", "guardian_email"];
-const VITALS_FIELDS_FROM_USERS = ["user.first_name", "user.last_name", "user.email"]
+const VITALS_FIELDS_FROM_USERS = ["user.first_name", "user.last_name"]
 
 export default async function handler(
   req: NextApiRequest, 
