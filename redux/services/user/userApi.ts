@@ -16,7 +16,15 @@ const userApi = baseApi.injectEndpoints({
         }
       },
     }),
+
+    userSetPassword: builder.mutation({
+      query: (data) => ({
+        url: `/users/set-password`,
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useClaimAccountMutation } = userApi;
+export const { useClaimAccountMutation, useUserSetPasswordMutation } = userApi;
