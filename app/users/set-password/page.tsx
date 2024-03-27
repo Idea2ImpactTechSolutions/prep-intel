@@ -15,7 +15,7 @@ import { useSetPasswordMutation } from "@/redux/services/user/userApi";
 
 interface initialValue {
   password: string;
-  repeat_password: string;
+  confirm_password: string;
   // email: string;
 }
 
@@ -44,16 +44,17 @@ export default function UserSetPasswordPage() {
         }
       });
   };
+  ause;
 
   const { values, errors, handleChange, handleSubmit, touched } = useFormik({
     initialValues: {
       password: "",
-      repeat_password: "",
+      confirm_password: "",
       // email: userId,
     },
     validationSchema: yup.object().shape({
       password: yup.string().required("Please enter a password."),
-      repeat_password: yup
+      confirm_password: yup
         .string()
         .oneOf([yup.ref("password")], "Passwords do not match.")
         .required("Please enter a password."),
@@ -112,13 +113,13 @@ export default function UserSetPasswordPage() {
 
             <Input
               type={`${showPassword ? "text" : "password"}`}
-              id='repeat_password'
+              id='confirm_password'
               label='Confirm Password'
-              name='repeat_password'
-              value={values.repeat_password}
+              name='confirm_password'
+              value={values.confirm_password}
               onChange={handleChange}
               touched={touched}
-              error={errors.repeat_password}
+              error={errors.confirm_password}
             />
             <div className='my-4 mt-7 flex justify-en'>
               <Button
