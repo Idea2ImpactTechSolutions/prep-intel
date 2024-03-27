@@ -38,7 +38,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     useEffect(() => {
         if (userData) {
             const { user } = userData;
-            console.log(user);
             handleGetSchoolInformation(user.schoolID)
         }
     }, [])

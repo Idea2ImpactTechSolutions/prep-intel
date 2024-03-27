@@ -32,7 +32,7 @@ const managerApi = baseApi.injectEndpoints({
     }),
     getAllAdmin: builder.query({
       query: ({ school_id }) => ({
-        url: `/schools/${school_id}/recruits`,
+        url: `/manager/profile/personnel?school_id=${school_id}`,
         method: "GET",
       }),
       async onQueryStarted(_, { queryFulfilled, dispatch }) {
