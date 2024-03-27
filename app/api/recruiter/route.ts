@@ -1,37 +1,58 @@
-import { responseBody } from "@/app/config/helpers";
 const { models } = require("../../../app/models");
 const { School, Recruiters, Users } = models;
 const { v4 } = require("uuid");
 
-export default async function handler(req, res) {
-  switch (req.method) {
-    case "POST":
-      return handlePostRequest(req, res);
-    case "GET":
-      return res
-        .status(405)
-        .json(responseBody("Method Not Allowed", 405, null));
-    case "PATCH":
-      return res
-        .status(405)
-        .json(responseBody("Method Not Allowed", 405, null));
-    default:
-      return res
-        .status(405)
-        .json(responseBody("Method Not Allowed", 405, null));
-  }
+/**
+ * @openapi
+ * /api/recruiter:
+ *   get:
+ *       responses:
+ *           '200':
+ *               content:
+ *                    application/json:
+ *                       schema:
+ *                           type: array
+ *                           items: {}
+ *                       examples:
+ *                           One Sample:
+ *                               value: '[{id: 1, first_name: "John"}]'
+ *       summary: Retrieves a list of recruiters or a specific recruiter by ID
+ */
+export async function GET() {
+    return Response.json(await Recruiters.findAll());
 }
 
-async function handlePostRequest(req, res) {
+/**
+ * @swagger
+ * /api/recruiter:
+ *   post:
+ *     description: Returns the hello world
+ *     responses:
+ *       200:
+ *         description: Hello World!
+ */
+async function POST(req: Request) {
   try {
-    const {code, message, data} = await createRecruiterProfile(req);
-    return res.status(code).json(
-      responseBody(message, code, { school: data })
-    );
+    const { message, code, data } = await createRecruiterProfile(req);
+
+    return Response.json({
+            message,
+            code,
+            data
+        },
+        {
+            status: code
+        });
   } catch (error: any) {
-    return res
-      .status(500)
-      .json(responseBody("Error occurred", 400, { error: error.message }));
+
+    return Response.json({
+            //error: 'Internal Server Error'
+            error: error.message
+        },
+        {
+            status: 500
+        })
+
   }
 }
 
