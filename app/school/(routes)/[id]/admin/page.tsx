@@ -44,7 +44,10 @@ export default function AdminPage() {
                     <PageTitleContainer
                         title="Admin"
                         rightContent={
-                            <div>
+                            <div className={cn(
+                                currentProgress === "CREATE_RECRUITER"
+                                && 'hidden'
+                            )}>
                                 <span
                                     onClick={() => setCurrentProgress("CREATE_RECRUITER")}
                                     className="flex border border-primary text-primary text-xs p-2 px-4 rounded-md cursor-pointer"
