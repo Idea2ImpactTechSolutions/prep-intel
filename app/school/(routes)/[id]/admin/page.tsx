@@ -99,6 +99,7 @@ export default function AdminPage() {
                         <CreateRecruiter
                             setCurrentProgress={setCurrentProgress}
                             setAdmin={setAdmin}
+                            schoolId={schoolId}
                         />}
 
                     </section>

@@ -1,5 +1,5 @@
-import { responseBody } from "../../../../app/config/helpers";
-const { models } = require("../../../../app/models");
+import { responseBody } from "@/app/config/helpers";
+const { models } = require("@/app/models");
 const { School, Users } = models;
 
 const PERSONNEL_ROLES = ["manager", "recruiter"]

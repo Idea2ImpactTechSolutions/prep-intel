@@ -19,7 +19,7 @@ interface CreateRecruiterProps {
     setAdmin: (arg: any) => void;
 }
 
-export default function CreateRecruiter({ setCurrentProgress, setAdmin }: CreateRecruiterProps) {
+export default function CreateRecruiter({ setCurrentProgress, setAdmin, schoolId }: CreateRecruiterProps) {
     const { data: userData }: any = useSession()
     const [createRecruiter, { isLoading: isCreatingRecruiter, isSuccess }] = useCreateRecruiterMutation()
     const [getAllAdmin] = useLazyGetAllAdminQuery()
@@ -40,8 +40,7 @@ export default function CreateRecruiter({ setCurrentProgress, setAdmin }: Create
     }
 
     const handleFormSubmit = async (values: Dictionary) => {
-        let payload = { ...values, school_id: userData?.user?.schoolID }
-        createRecruiter(payload)
+        createRecruiter(values)
             .unwrap()
             .then((payload) => {
                 if (payload?.status === 201) {
@@ -61,7 +60,7 @@ export default function CreateRecruiter({ setCurrentProgress, setAdmin }: Create
             first_name: "",
             last_name: "",
             email: "",
-            school_id: userData?.user?.schoolID || ""
+            school_id: schoolId
         },
         validationSchema: yup.object().shape({
             first_name: yup.string().required('first name is required'),
@@ -107,7 +106,7 @@ export default function CreateRecruiter({ setCurrentProgress, setAdmin }: Create
                     className="text-xs h-8 rounded-sm px-8"
                     type="button"
                     onClick={() => {
-                        handleGetAllAdmin({ school_id: userData?.user?.schoolID })
+                        handleGetAllAdmin({ school_id: schoolId })
                         resetForm()
                         setCurrentProgress("VIEW_ADMIN")
                     }}
@@ -217,7 +216,7 @@ export default function CreateRecruiter({ setCurrentProgress, setAdmin }: Create
                                 className="text-xs h-8 rounded-sm px-3"
                                 type="button"
                                 onClick={() => {
-                                    handleGetAllAdmin({ school_id: userData?.user?.schoolID })
+                                    handleGetAllAdmin({ school_id: schoolId})
                                     resetForm()
                                     setCurrentProgress("VIEW_ADMIN")
                                 }}
