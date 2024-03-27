@@ -57,10 +57,9 @@ async function setPassword(req: any) {
     };
   }
 
-  const harsh = bcrypt.hashSync(password);
-  // Create a new Date object representing the current date and time
+  const hash = bcrypt.hashSync(password);
+  await Users.update({ password: hash }, { where: { auth_code: auth_code } });
 
-  await Users.update({ password: harsh }, { where: { auth_code: auth_code } });
   return {
     code: 200,
     message: "Password successfully updated",
