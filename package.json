@@ -79,9 +79,19 @@
     "jest-environment-jsdom": "^29.7.0",
     "node-mocks-http": "^1.14.1",
     "postcss": "^8",
+    "prettier": "^3.2.5",
+    "prettier-eslint": "^16.3.0",
     "sequelize-cli": "^6.6.2",
     "tailwindcss": "^3.3.0",
     "ts-node": "^10.9.2",
     "typescript": "^5"
+  },
+  "prettier": {
+    "semi": true,
+    "trailingComma": "es5",
+    "singleQuote": false,
+    "printWidth": 80,
+    "tabWidth": 2,
+    "useTabs": false
   }
 }
