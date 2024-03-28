@@ -16,7 +16,7 @@ export default function AdminPage() {
     const [admin, setAdmin] = useState<any[]>([]);
     const [getAllAdmin, { isLoading, isFetching, isSuccess }] = useLazyGetAllAdminQuery()
     const pageParams = useParams();
-    const schoolId = pageParams?.id;
+    const schoolId = pageParams?.id as string;
 
     const handleGetAllAdmin = async (payload) => {
         getAllAdmin(payload)

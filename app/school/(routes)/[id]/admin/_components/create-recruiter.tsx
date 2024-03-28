@@ -8,7 +8,6 @@ import { Dictionary } from "@/types/dictionary";
 import copy from "copy-to-clipboard";
 import { useFormik } from "formik";
 import { ArrowLeft, ChevronLeft, ChevronRight, Save, X } from "lucide-react";
-import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { LuCopy, LuCopyCheck } from "react-icons/lu";
 import { toast } from "sonner";
@@ -17,11 +16,10 @@ import * as yup from "yup"
 interface CreateRecruiterProps {
     setCurrentProgress: (arg: any) => void;
     setAdmin: (arg: any) => void;
-    schoolId: string;
+    schoolId: string | null;
 }
 
 export default function CreateRecruiter({ setCurrentProgress, setAdmin, schoolId }: CreateRecruiterProps) {
-    const { data: userData }: any = useSession()
     const [createRecruiter, { isLoading: isCreatingRecruiter, isSuccess }] = useCreateRecruiterMutation()
     const [getAllAdmin] = useLazyGetAllAdminQuery()
     const [isCopied, setIsCopied] = useState(false)
