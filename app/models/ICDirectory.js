@@ -18,6 +18,15 @@ const ICDirectory = elephantsql.define(
     IALIAS: {
       type: DataTypes.INTEGER,
     },
+    APPLURL: {
+      type: DataTypes.STRING,
+    },
+    FAIDURL: {
+      type: DataTypes.STRING,
+    },
+    APPLURL: {
+      type: DataTypes.STRING,
+    },
     ADDR: {
       type: DataTypes.STRING,
     },
@@ -29,6 +38,12 @@ const ICDirectory = elephantsql.define(
     },
     ZIP: {
       type: DataTypes.STRING
+    },
+    CONTROL: {
+      type: DataTypes.INTEGER
+    },
+    ICLEVEL: {
+      type: DataTypes.INTEGER
     }
   },
   {

@@ -1,4 +1,15 @@
-require("dotenv").config();
+require('dotenv').config();
+
+// Allow for config based overrides of SSL options, specifically for local dev.
+let dialectOptions = {
+  ssl: {
+    require: true,
+  },
+}
+
+if (process.env.LOCAL_DB === 'true') {
+  dialectOptions.ssl = false;
+}
 
 const config = {
   username: process.env.DB_USERNAME,
@@ -6,13 +17,8 @@ const config = {
   database: process.env.DB_NAME,
   host: process.env.DB_HOST,
   dialect: "postgres",
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false, // Note: Setting this to false can be insecure
-    },
-  },
-  // other configurations...
+  dialectOptions,
 };
+
 
 module.exports = config;
