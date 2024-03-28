@@ -17,6 +17,7 @@ import * as yup from "yup"
 interface CreateRecruiterProps {
     setCurrentProgress: (arg: any) => void;
     setAdmin: (arg: any) => void;
+    schoolId: string;
 }
 
 export default function CreateRecruiter({ setCurrentProgress, setAdmin, schoolId }: CreateRecruiterProps) {
