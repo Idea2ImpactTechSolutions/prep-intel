@@ -8,7 +8,6 @@ import { Dictionary } from "@/types/dictionary";
 import copy from "copy-to-clipboard";
 import { useFormik } from "formik";
 import { ArrowLeft, ChevronLeft, ChevronRight, Save, X } from "lucide-react";
-import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { LuCopy, LuCopyCheck } from "react-icons/lu";
 import { toast } from "sonner";
@@ -17,10 +16,10 @@ import * as yup from "yup"
 interface CreateRecruiterProps {
     setCurrentProgress: (arg: any) => void;
     setAdmin: (arg: any) => void;
+    schoolId: string | null;
 }
 
-export default function CreateRecruiter({ setCurrentProgress, setAdmin }: CreateRecruiterProps) {
-    const { data: userData }: any = useSession()
+export default function CreateRecruiter({ setCurrentProgress, setAdmin, schoolId }: CreateRecruiterProps) {
     const [createRecruiter, { isLoading: isCreatingRecruiter, isSuccess }] = useCreateRecruiterMutation()
     const [getAllAdmin] = useLazyGetAllAdminQuery()
     const [isCopied, setIsCopied] = useState(false)
@@ -40,8 +39,7 @@ export default function CreateRecruiter({ setCurrentProgress, setAdmin }: Create
     }
 
     const handleFormSubmit = async (values: Dictionary) => {
-        let payload = { ...values, school_id: userData?.user?.schoolID }
-        createRecruiter(payload)
+        createRecruiter(values)
             .unwrap()
             .then((payload) => {
                 if (payload?.status === 201) {
@@ -61,7 +59,7 @@ export default function CreateRecruiter({ setCurrentProgress, setAdmin }: Create
             first_name: "",
             last_name: "",
             email: "",
-            school_id: userData?.user?.schoolID || ""
+            school_id: schoolId
         },
         validationSchema: yup.object().shape({
             first_name: yup.string().required('first name is required'),
@@ -107,7 +105,7 @@ export default function CreateRecruiter({ setCurrentProgress, setAdmin }: Create
                     className="text-xs h-8 rounded-sm px-8"
                     type="button"
                     onClick={() => {
-                        handleGetAllAdmin({ school_id: userData?.user?.schoolID })
+                        handleGetAllAdmin({ school_id: schoolId })
                         resetForm()
                         setCurrentProgress("VIEW_ADMIN")
                     }}
@@ -217,7 +215,7 @@ export default function CreateRecruiter({ setCurrentProgress, setAdmin }: Create
                                 className="text-xs h-8 rounded-sm px-3"
                                 type="button"
                                 onClick={() => {
-                                    handleGetAllAdmin({ school_id: userData?.user?.schoolID })
+                                    handleGetAllAdmin({ school_id: schoolId})
                                     resetForm()
                                     setCurrentProgress("VIEW_ADMIN")
                                 }}
