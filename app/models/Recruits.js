@@ -38,11 +38,31 @@ const Recruits = sequelize.define(
             type: DataTypes.DATE,
             allowNull: false,
         },
+        create_date: {
+            type: DataTypes.DATE,
+            allowNull: false,
+        },
         contacted: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
         },
         interested: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+        },
+        application_date: {
+            type: DataTypes.DATE,
+            allowNull: false,
+        },
+        application_status: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        applicant_status: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        is_applicant: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
         },
