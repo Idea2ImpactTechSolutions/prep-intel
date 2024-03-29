@@ -4,6 +4,7 @@ require('dotenv').config();
 let dialectOptions = {
   ssl: {
     require: true,
+    rejectUnauthorized: false, // Required due to self-signing
   },
 }
 

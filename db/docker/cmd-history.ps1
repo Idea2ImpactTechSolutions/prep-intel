@@ -1,9 +1,6 @@
 # Clean postgres db - alternatively, `docker-compose up` from project root
 docker run --name postgres-local -e POSTGRES_USER=jl-user -e POSTGRES_PASSWORD=jl-pass -e POSTGRES_DB=preppintel -p 5432:5432 -d postgres
 
-# Extract existing models
-npx sequelize-auto -o "./models" -d preppintel -h localhost -u jl-user -p 5432 -x jl-pass -e postgresstart models2
-
 # Generate migration from extracted models
 npx sequelize-mig migration:make --modp models
 
@@ -43,8 +40,11 @@ npx sequelize-cli migration:generate --name migration-example
 #switch to env for local dev
 mklink .env .env.localdb
 
-# Infer models from latest db
+# Infer models from latest db/extract existing models
+#
+# run from the db folder
 npx sequelize-auto -o "./models" --caseModel p --caseFile p --useDefine -c .\config\config-prod.js --noIndexes
+npx sequelize-auto -o "./models" -d preppintel -h localhost -u jl-user -p 5432 -x jl-pass -e postgresstart models2
 
 # Generate migrations from these models
 npx sequelize-mig migration:make --modp models
