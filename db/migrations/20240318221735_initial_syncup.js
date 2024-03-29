@@ -17,8 +17,8 @@ const Sequelize = require("sequelize");
  * createTable() => "schools", deps: []
  * createTable() => "users", deps: [schools]
  * createTable() => "assets", deps: [schools]
- * createTable() => "managers", deps: [schools]
  * createTable() => "recruiters", deps: [schools, users]
+ * createTable() => "managers", deps: [users]
  * createTable() => "students", deps: [users]
  * createTable() => "recruiter", deps: [schools]
  * createTable() => "notes", deps: [students]
@@ -41,7 +41,7 @@ const Sequelize = require("sequelize");
 const info = {
   revision: 1,
   name: "noname",
-  created: "2024-03-18T22:17:35.662Z",
+  created: "2024-03-29T00:42:39.032Z",
   comment: "",
 };
 
@@ -614,80 +614,6 @@ const migrationCommands = (transaction) => [
   {
     fn: "createTable",
     params: [
-      "managers",
-      {
-        id: {
-          type: Sequelize.INTEGER,
-          field: "id",
-          primaryKey: true,
-          allowNull: false,
-          autoIncrement: true,
-        },
-        guid: {
-          type: Sequelize.UUID,
-          field: "guid",
-          defaultValue: Sequelize.UUIDV4,
-          allowNull: true,
-        },
-        first_name: {
-          type: Sequelize.STRING(255),
-          field: "first_name",
-          allowNull: true,
-        },
-        last_name: {
-          type: Sequelize.STRING(255),
-          field: "last_name",
-          allowNull: true,
-        },
-        password: {
-          type: Sequelize.STRING(255),
-          field: "password",
-          allowNull: true,
-        },
-        school_id: {
-          type: Sequelize.STRING(255),
-          field: "school_id",
-          references: { model: "schools", key: "id" },
-          allowNull: true,
-        },
-        email: { type: Sequelize.STRING(255), field: "email", allowNull: true },
-        auth_code: {
-          type: Sequelize.STRING(255),
-          field: "auth_code",
-          allowNull: true,
-        },
-        account_claimed: {
-          type: Sequelize.BOOLEAN,
-          field: "account_claimed",
-          allowNull: true,
-        },
-        date_claimed: {
-          type: Sequelize.DATE,
-          field: "date_claimed",
-          allowNull: true,
-        },
-        auth_code_expiration: {
-          type: Sequelize.DATE,
-          field: "auth_code_expiration",
-          allowNull: true,
-        },
-        is_active: {
-          type: Sequelize.BOOLEAN,
-          field: "is_active",
-          allowNull: true,
-        },
-        deactivation_date: {
-          type: Sequelize.DATE,
-          field: "deactivation_date",
-          allowNull: true,
-        },
-      },
-      { transaction },
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
       "recruiters",
       {
         id: {
@@ -712,6 +638,28 @@ const migrationCommands = (transaction) => [
         territories: {
           type: Sequelize.ARRAY(Sequelize.TEXT),
           field: "territories",
+          allowNull: true,
+        },
+      },
+      { transaction },
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "managers",
+      {
+        id: {
+          type: Sequelize.INTEGER,
+          field: "id",
+          primaryKey: true,
+          allowNull: false,
+          autoIncrement: true,
+        },
+        user_id: {
+          type: Sequelize.INTEGER,
+          field: "user_id",
+          references: { model: "users", key: "id" },
           allowNull: true,
         },
       },
@@ -771,21 +719,6 @@ const migrationCommands = (transaction) => [
         create_date: {
           type: Sequelize.DATE,
           field: "create_date",
-          allowNull: true,
-        },
-        cancel_date: {
-          type: Sequelize.DATE,
-          field: "cancel_date",
-          allowNull: true,
-        },
-        cancel_reason: {
-          type: Sequelize.TEXT,
-          field: "cancel_reason",
-          allowNull: true,
-        },
-        last_login_date: {
-          type: Sequelize.DATE,
-          field: "last_login_date",
           allowNull: true,
         },
         user_id: {
@@ -1323,6 +1256,26 @@ const migrationCommands = (transaction) => [
         is_viewable: {
           type: Sequelize.BOOLEAN,
           field: "is_viewable",
+          allowNull: true,
+        },
+        application_date: {
+          type: Sequelize.DATEONLY,
+          field: "application_date",
+          allowNull: true,
+        },
+        application_status: {
+          type: Sequelize.STRING(255),
+          field: "application_status",
+          allowNull: true,
+        },
+        applicant_status: {
+          type: Sequelize.STRING(255),
+          field: "applicant_status",
+          allowNull: true,
+        },
+        is_applicant: {
+          type: Sequelize.BOOLEAN,
+          field: "is_applicant",
           allowNull: true,
         },
       },

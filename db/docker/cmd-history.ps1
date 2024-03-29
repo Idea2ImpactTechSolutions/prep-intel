@@ -47,4 +47,6 @@ npx sequelize-auto -o "./models" --caseModel p --caseFile p --useDefine -c .\con
 npx sequelize-auto -o "./models" -d preppintel -h localhost -u jl-user -p 5432 -x jl-pass -e postgresstart models2
 
 # Generate migrations from these models
+npx sequelize-auto -o "./models" --caseModel p --caseFile p --useDefine -c .\config\config-prod.js --noIndexes
+npm install --save-dev sequelize-mig
 npx sequelize-mig migration:make --modp models
