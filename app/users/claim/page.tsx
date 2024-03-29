@@ -58,7 +58,7 @@ export default function UserClaimAccountPage() {
           router.push(`/users/set-password?auth_code=${auth_code}`);
         }
       })
-      .catch((errors) => {
+      .catch((errors: any) => {
         setError(errors?.data?.message);
       });
   };
