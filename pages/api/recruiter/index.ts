@@ -1,5 +1,5 @@
-import { responseBody } from "../../../app/config/helpers";
-const { models } = require("../../../app/models");
+import { responseBody } from "@/app/config/helpers";
+const { models } = require("@/app/models");
 const { School, Recruiters, Users } = models;
 const { v4 } = require("uuid");
 
@@ -24,11 +24,9 @@ export default async function handler(req, res) {
 
 async function handlePostRequest(req, res) {
   try {
-    const createRecruiter: any = await createRecruiterProfile(req);
-    return res.status(createRecruiter.code).json(
-      responseBody(createRecruiter.message, createRecruiter.code, {
-        school: createRecruiter.data,
-      })
+    const {code, message, data} = await createRecruiterProfile(req);
+    return res.status(code).json(
+      responseBody(message, code, { school: data })
     );
   } catch (error: any) {
     return res
@@ -39,29 +37,18 @@ async function handlePostRequest(req, res) {
 
 async function createRecruiterProfile(req: any) {
   try {
-    // Extract data from request body
-
     const { first_name, last_name, email, school_id } = req.body;
-    // const { invitation_subject, invitation_message } = invitation_info;
 
-    let checkUserExists = await Users.findOne({
-      where: {
-        first_name: first_name,
-        email: email,
-        last_name: last_name,
-      },
-    });
-
+    let checkUserExists = await Users.findOne({ where: { email: email }});
     if (checkUserExists) {
       return {
-        message: "recruiter with first name and last name already exists",
+        message: "Recruiter already exists",
         code: 409,
         data: [],
       };
     }
 
     let school = await School.findOne({ where: { id: school_id } });
-
     if (!school) {
       return {
         message: "school does not exist",
@@ -70,8 +57,8 @@ async function createRecruiterProfile(req: any) {
       };
     }
 
-    const currentDate = new Date();
     // Add 30 minutes to the current date
+    const currentDate = new Date();
     const newDate = new Date(currentDate.getTime() + 60 * 60000); // 30 minutes * 60 seconds/minute * 1000 milliseconds/second
 
     let user = await Users.create({
@@ -90,7 +77,6 @@ async function createRecruiterProfile(req: any) {
     });
 
     await Recruiters.create({
-      id: v4(),
       school_id: school.id,
       user_id: user.id,
     });

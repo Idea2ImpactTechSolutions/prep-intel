@@ -19,7 +19,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
     const { data: userData }: any = useSession()
     const router = useRouter()
-    
     const pageParams = useParams();
     const schoolId = pageParams?.id;
     const location = usePathname()
@@ -36,11 +35,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     }
 
     useEffect(() => {
-        if (userData) {
-            const { user } = userData;
-            handleGetSchoolInformation(user.schoolID)
-        }
-    }, [])
+        handleGetSchoolInformation(schoolId)
+    }, [schoolId])
 
     useEffect(() => {
         !school_data?.publish_date ? setIsProfileCompleted(false) : setIsProfileCompleted(true)

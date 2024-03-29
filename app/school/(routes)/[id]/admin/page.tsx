@@ -16,7 +16,7 @@ export default function AdminPage() {
     const [admin, setAdmin] = useState<any[]>([]);
     const [getAllAdmin, { isLoading, isFetching, isSuccess }] = useLazyGetAllAdminQuery()
     const pageParams = useParams();
-    const schoolId = pageParams?.id;
+    const schoolId = pageParams?.id as string;
 
     const handleGetAllAdmin = async (payload) => {
         getAllAdmin(payload)
@@ -44,7 +44,10 @@ export default function AdminPage() {
                     <PageTitleContainer
                         title="Admin"
                         rightContent={
-                            <div>
+                            <div className={cn(
+                                currentProgress === "CREATE_RECRUITER"
+                                && 'hidden'
+                            )}>
                                 <span
                                     onClick={() => setCurrentProgress("CREATE_RECRUITER")}
                                     className="flex border border-primary text-primary text-xs p-2 px-4 rounded-md cursor-pointer"
@@ -96,6 +99,7 @@ export default function AdminPage() {
                         <CreateRecruiter
                             setCurrentProgress={setCurrentProgress}
                             setAdmin={setAdmin}
+                            schoolId={schoolId}
                         />}
 
                     </section>
