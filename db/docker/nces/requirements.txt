@@ -2,4 +2,5 @@ sqlalchemy
 #psycopg2
 psycopg2-binary
 pypeds
-
+pandas
+pyarrow

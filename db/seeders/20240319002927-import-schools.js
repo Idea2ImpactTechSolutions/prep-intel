@@ -1,66 +1,77 @@
 'use strict';
 
-const ICDirectory = require("../../app/models/ICDirectory");
-const  models = require("../models");
-const { Schools, SchoolAddresses  } = models;
+const  { models } = require("../../app/models");
+const { School, SchoolAddress, HD2021 } = models;
+const { v4 } = require('uuid');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
 
-    const schools = await ICDirectory.findAll({
-      where: {
-        STABBR: 'ID',
-      },
+    const schools = await HD2021.findAll();
+
+    await School.bulkCreate(
+      schools.map(function(school) {
+        let control = '';
+        switch (school.control) {
+          case 1:
+            control = 'Public'
+            break;
+          case 2:
+            control = 'Private not-for-profit'
+            break;
+          case 3:
+            control = 'Private for-profit'
+            break;
+        }
+
+        let iclevel = '';
+        switch (school.iclevel) {
+          case 1:
+            iclevel = '4-year, '
+            break;
+          case 2:
+            iclevel = '2-year, '
+            break;
+          case 3:
+            iclevel = '< 2-year, '
+            break;
+        }
+
+        return {
+          id: school.unitid,
+          name: school.instnm,
+          application_url: school.applurl,
+          financial_aid_url: school.faidurl,
+          institution_type: `${iclevel}${control}`
+        }
+    }));
+
+
+    const school_addrs = schools.map(function (school) {
+      return {
+        school_id: school.unitid.toString(),
+        street_address_1: school.addr,
+        city: school.city,
+        state: school.stabbr,
+        postal: school.zip.toString()
+      }
     });
 
-    let i = 0;
+    console.log(JSON.stringify(school_addrs[0]));
 
-    for(let idx in schools) {
-      const school = schools[idx];
+    // TODO: Works but bulkCreate doesn't?
+    //
+    // for (var idx in school_addrs) {
+    //   try
+    //   {
+    //     await SchoolAddress.create(school_addrs[idx]);
+    //   } catch(err) {
+    //     console.log(school_addrs[idx], err);
+    //   }
+    // }
 
-      let control = '';
-      switch(school.CONTROL) {
-        case 1:
-          control = 'Public'
-          break;
-        case 2:
-          control = 'Private not-for-profit'
-          break;
-        case 3:
-          control = 'Private for-profit'
-            break;
-      }
-
-      let iclevel = '';
-      switch(school.ICLEVEL) {
-        case 1:
-          iclevel = '4-year, '
-          break;
-        case 2:
-          iclevel = '2-year, '
-          break;
-        case 3:
-          iclevel = '< 2-year, '
-            break;
-      }
-
-      const newSchool = await Schools.create({
-        id: school.UNITID,
-        name: school.INSTNM,
-        application_url: school.APPLURL,
-        financial_aid_url: school.FAIDURL,
-        institution_type: `${iclevel}${control}`
-      });
-
-      const address = SchoolAddresses.create({
-        school_id: school.UNITID,
-        street_address_1: school.ADDR,
-        city: school.CITY,
-        state: school.STABBR,
-        postal: school.ZIP,
-      });
-    }
+    await SchoolAddress.bulkCreate(school_addrs);
   },
 
   async down (queryInterface, Sequelize) {

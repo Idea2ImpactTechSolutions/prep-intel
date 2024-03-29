@@ -14,7 +14,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
       - ./db/docker/init-scripts:/docker-entrypoint-initdb.d
     env_file:
-      - ./.env.localdb
+      - ./db/.env.localdb
 
 volumes:
   postgres-data:

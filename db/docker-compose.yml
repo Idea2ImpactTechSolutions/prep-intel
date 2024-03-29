@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   pypeds:
-    build: ./docker/python
+    build: ./docker/nces
     environment:
       TARGET_POSTGRES_TABLE: HD2021
       DB_HOST: postgres

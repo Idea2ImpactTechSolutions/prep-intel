@@ -5,10 +5,12 @@
     "CURRICULARS",
     "formik",
     "iclevel",
+    "ipeds",
     "lucide",
     "siteadmin",
     "unitid"
     "pypeds",
+    "sequelize",
     "sonner"
 ],
 "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
