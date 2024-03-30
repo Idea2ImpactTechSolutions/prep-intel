@@ -1,10 +1,7 @@
 import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { ChevronLeft, ChevronRight, ImagePlus, Save } from "lucide-react"
-import { CAMPUS_AMENITIES, EXTRA_CURRICULARS } from "../../data"
+import { ChevronLeft, ChevronRight, Save } from "lucide-react"
+import { EXTRA_CURRICULARS } from "../../data"
 import CustomCheckbox from "@/components/custom-checkbox"
-import CustomFileInput from "@/components/custom-file-input"
-
 
 export default function ExtraCurricularsForm() {
   return (
@@ -16,7 +13,7 @@ export default function ExtraCurricularsForm() {
               <label htmlFor="school_details" className="text-sm font-bold">Extra-Curriculars</label>
               <div className="grid grid-cols-3 items-center gap-x-3  md:grid-cols-4 md:gap-x-8">
                 {
-                  EXTRA_CURRICULARS.ACADEMIC_PROFESSIONAL.map(({ id, name, isChecked }) => (
+                  EXTRA_CURRICULARS.ACADEMIC_PROFESSIONAL.map(({ id, name }) => (
                     <div
                       id={id}
                       key={id}
@@ -34,26 +31,7 @@ export default function ExtraCurricularsForm() {
               <label htmlFor="school_details" className="text-sm font-bold">Extra-Curriculars</label>
               <div className="grid grid-cols-3 items-center gap-x-3  md:grid-cols-4 md:gap-x-8">
                 {
-                  EXTRA_CURRICULARS.ARTS_PERFOMANCE.map(({ id, name, isChecked }) => (
-                    <div
-                      id={id}
-                      key={id}
-                      className="mt-4 flex flex-col gap-y-1">
-                      <CustomCheckbox
-                        label={name}
-                        labelClass="text-xs font-normal text-[#61646B]"
-                        key={2}
-                      />
-                    </div>
-                  ))
-                }
-              </div>
-            </div>
-            <div className="mt-6">
-              <label htmlFor="school_details" className="text-sm font-bold">Extra-Curriculars</label>
-              <div className="grid grid-cols-3 items-center gap-x-3  md:grid-cols-4 md:gap-x-8">
-                {
-                  EXTRA_CURRICULARS.ATHLETICS_PHYSICAL_ACTIVITIES.map(({ id, name, isChecked }) => (
+                  EXTRA_CURRICULARS.ARTS_PERFOMANCE.map(({ id, name }) => (
                     <div
                       id={id}
                       key={id}
@@ -72,7 +50,7 @@ export default function ExtraCurricularsForm() {
               <label htmlFor="school_details" className="text-sm font-bold">Extra-Curriculars</label>
               <div className="grid grid-cols-3 items-center gap-x-3  md:grid-cols-4 md:gap-x-8">
                 {
-                  EXTRA_CURRICULARS.SOCIAL_CULTURAL.map(({ id, name, isChecked }) => (
+                  EXTRA_CURRICULARS.ATHLETICS_PHYSICAL_ACTIVITIES.map(({ id, name }) => (
                     <div
                       id={id}
                       key={id}
@@ -91,7 +69,7 @@ export default function ExtraCurricularsForm() {
               <label htmlFor="school_details" className="text-sm font-bold">Extra-Curriculars</label>
               <div className="grid grid-cols-3 items-center gap-x-3  md:grid-cols-4 md:gap-x-8">
                 {
-                  EXTRA_CURRICULARS.SERVICE_COMMUNITY.map(({ id, name, isChecked }) => (
+                  EXTRA_CURRICULARS.SOCIAL_CULTURAL.map(({ id, name }) => (
                     <div
                       id={id}
                       key={id}
@@ -110,7 +88,7 @@ export default function ExtraCurricularsForm() {
               <label htmlFor="school_details" className="text-sm font-bold">Extra-Curriculars</label>
               <div className="grid grid-cols-3 items-center gap-x-3  md:grid-cols-4 md:gap-x-8">
                 {
-                  EXTRA_CURRICULARS.SPECIAL_INTEREST_HOBBIES.map(({ id, name, isChecked }) => (
+                  EXTRA_CURRICULARS.SERVICE_COMMUNITY.map(({ id, name }) => (
                     <div
                       id={id}
                       key={id}
@@ -129,7 +107,7 @@ export default function ExtraCurricularsForm() {
               <label htmlFor="school_details" className="text-sm font-bold">Extra-Curriculars</label>
               <div className="grid grid-cols-3 items-center gap-x-3  md:grid-cols-4 md:gap-x-8">
                 {
-                  EXTRA_CURRICULARS.RELIGIOUS_FAITH_BASED.map(({ id, name, isChecked }) => (
+                  EXTRA_CURRICULARS.SPECIAL_INTEREST_HOBBIES.map(({ id, name }) => (
                     <div
                       id={id}
                       key={id}
@@ -148,7 +126,26 @@ export default function ExtraCurricularsForm() {
               <label htmlFor="school_details" className="text-sm font-bold">Extra-Curriculars</label>
               <div className="grid grid-cols-3 items-center gap-x-3  md:grid-cols-4 md:gap-x-8">
                 {
-                  EXTRA_CURRICULARS.LEADERSHIP_ADVOCACY.map(({ id, name, isChecked }) => (
+                  EXTRA_CURRICULARS.RELIGIOUS_FAITH_BASED.map(({ id, name }) => (
+                    <div
+                      id={id}
+                      key={id}
+                      className="mt-4 flex flex-col gap-y-1">
+                      <CustomCheckbox
+                        label={name}
+                        labelClass="text-xs font-normal text-[#61646B]"
+                        key={2}
+                      />
+                    </div>
+                  ))
+                }
+              </div>
+            </div>
+            <div className="mt-6">
+              <label htmlFor="school_details" className="text-sm font-bold">Extra-Curriculars</label>
+              <div className="grid grid-cols-3 items-center gap-x-3  md:grid-cols-4 md:gap-x-8">
+                {
+                  EXTRA_CURRICULARS.LEADERSHIP_ADVOCACY.map(({ id, name }) => (
                     <div
                       id={id}
                       key={id}
@@ -167,7 +164,7 @@ export default function ExtraCurricularsForm() {
               <label htmlFor="school_details" className="text-sm font-bold">Extra-Curriculars</label>
               <div className="grid grid-cols-3 items-center gap-x-3  md:grid-cols-4 md:gap-x-8">
                 {
-                  EXTRA_CURRICULARS.TECHNOLOGY_DIGITAL_MEDIA.map(({ id, name, isChecked }) => (
+                  EXTRA_CURRICULARS.TECHNOLOGY_DIGITAL_MEDIA.map(({ id, name }) => (
                     <div
                       id={id}
                       key={id}

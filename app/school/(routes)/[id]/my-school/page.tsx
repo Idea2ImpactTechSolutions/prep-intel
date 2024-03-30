@@ -17,7 +17,7 @@ import LoadingSpinner from "../../../_components/loading-spinner";
 
 export default function MySchool() {
     const [isFetchedProfile, setIsFetechProfile] = useState<boolean>(false)
-    const [getSchoolProfile, {isLoading: isLoadingGetProfile, isFetching: isFetchingSchoolProfile, isSuccess:isSuccessGetProfile}] = useLazyGetSchoolProfileQuery()
+    const [getSchoolProfile, {isLoading: isLoadingGetProfile, isFetching: isFetchingSchoolProfile }] = useLazyGetSchoolProfileQuery()
     const { manager: { school_information: { school_data } } }: Dictionary = useAppSelector((state) => state.manager)
 
     const router = useRouter()

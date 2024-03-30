@@ -95,7 +95,7 @@ async function updateSchoolProfile(req: any) {
   // 4) How to add jwt token
 
   const {
-    school_image,
+    // school_image,
     school_details,
     school_address,
     school_social_medias,
@@ -158,7 +158,7 @@ async function getSchool(req: any) {
         { model: SchoolSocialMedia, as: "school_social_medias" },
       ],
     });
-  
+
     // If schoolDetails is not null, format the response object
     if (schoolDetails) {
       schoolDetails = {
@@ -199,7 +199,7 @@ async function updateSchoolAddress(schoolId : string, schoolAddressFormData) {
   if (!schoolAddressData.id || schoolAddressData.id.trim() === '') {
     delete schoolAddressData.id; // Remove the id key if it's empty or invalid
   }
-  
+
   // Now schoolAddressData no longer has the 'id' key if it was invalid
   let [savedAddress, newAddressCreated] = await SchoolAddress.findOrCreate({
     where: schoolAddressData.id ? { id: schoolAddressData.id } : {},
@@ -208,7 +208,7 @@ async function updateSchoolAddress(schoolId : string, schoolAddressFormData) {
 
   if (! newAddressCreated) {
     const addressNeedsUpdate = await checkForChangedAttributes(
-      schoolAddressData, 
+      schoolAddressData,
       savedAddress.dataValues
     );
     if (addressNeedsUpdate) {
@@ -230,7 +230,7 @@ async function reconcileRecordsLists(schoolId: string, formRecords, dbModel) {
     }
   }
 
-  let newRecords: Object[] = [];
+  let newRecords: object[] = [];
   for (let i = 0; i < formRecords.length; i++) {
     if (formRecords[i].id == undefined) {
       const newRecord = await dbModel.create(formRecords[i]);
@@ -239,7 +239,7 @@ async function reconcileRecordsLists(schoolId: string, formRecords, dbModel) {
     else {
       for (let j = 0; j < savedRecords.length; j++) {
         if (savedRecords[j].id == formRecords[i].id) {
-          const recordNeedsUpdate = await checkForChangedAttributes(formRecords[i], 
+          const recordNeedsUpdate = await checkForChangedAttributes(formRecords[i],
             savedRecords[j].dataValues);
           if (recordNeedsUpdate) {
             await savedRecords[j].update(formRecords[i]);

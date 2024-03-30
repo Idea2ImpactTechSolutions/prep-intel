@@ -1,6 +1,5 @@
 
-import { GoChevronRight, GoChevronLeft } from "react-icons/go";
-import { FaSave } from "react-icons/fa";
+import { GoChevronLeft } from "react-icons/go";
 import { IoCloseOutline } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, Upload } from "lucide-react";

@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { ImageIcon } from "lucide-react";
 import AuthFooter from "./_components/auth-footer";
 

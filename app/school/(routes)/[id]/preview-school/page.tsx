@@ -17,7 +17,7 @@ import { toast } from "sonner";
 
 export default function SchoolPreview() {
     const [isFetchedProfile, setIsFetchedProfile] = useState<boolean>(false)
-    const [getSchoolProfile, {isLoading: isLoadingGetProfile, isFetching: isFetchingSchoolProfile, isSuccess:isSuccessGetProfile}] = useLazyGetSchoolProfileQuery()
+    const [getSchoolProfile, {isLoading: isLoadingGetProfile, isFetching: isFetchingSchoolProfile }] = useLazyGetSchoolProfileQuery()
     const { manager: { school_information: { school_data } } }: Dictionary = useAppSelector((state) => state.manager)
 
     const router = useRouter()
@@ -25,7 +25,7 @@ export default function SchoolPreview() {
     const schoolId = pageParams?.id;
 
     const dispatch = useAppDispatch()
-    const [publishSchoolProfileMutation, {isLoading: isPublishingSchool, isSuccess: isSuccessSchoolPublished}] = usePublishSchoolProfileMutation()
+    const [publishSchoolProfileMutation, {isLoading: isPublishingSchool }] = usePublishSchoolProfileMutation()
 
     const handleGetSchoolInformation = async (schoolId) => {
         getSchoolProfile(schoolId)
@@ -51,7 +51,7 @@ export default function SchoolPreview() {
         })
     }
 
-    const {values, errors, handleSubmit, setFieldValue} = useFormik({
+    const { handleSubmit, setFieldValue} = useFormik({
         initialValues: {
             publish_date: moment().format('YYYY-MM-DD'),
             school_id: school_data?.id || ""

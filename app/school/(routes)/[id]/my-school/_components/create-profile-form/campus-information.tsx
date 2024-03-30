@@ -1,6 +1,5 @@
 import CustomCheckbox from "@/components/custom-checkbox";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { ChevronLeft, ChevronRight, ImagePlus, Save } from "lucide-react";
 import { CAMPUS_AMENITIES } from "../../data";
 import CustomFileInput from "@/components/custom-file-input";
@@ -45,8 +44,8 @@ export default function CampusInformation() {
                 {
                   Array.from(({ length: 8 }), function (index) {
                     return (
-                      // @ts-ignore
-                      <CustomFileInput key={Date.now}>
+                      // @ts-expect-error - component not yet implmenting expected params
+                      <CustomFileInput key={index}>
                           <div className="border border-dashed border-gray-400 h-32 grid place-content-center rounded-[5px]">
                             <ImagePlus className="w-10 h-10 text-gray-400" />
                           </div>

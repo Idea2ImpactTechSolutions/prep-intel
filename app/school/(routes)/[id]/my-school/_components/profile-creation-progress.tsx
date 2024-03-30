@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import { useSession } from "next-auth/react";
 
 type ProfileCreationProgressType = {
     progressValue: number,
@@ -7,8 +6,6 @@ type ProfileCreationProgressType = {
 }
 
 export default function ProfileCreationProgress({ progressValue, step }: ProfileCreationProgressType) {
-    const {data: session, status}: any = useSession()
-
 
     return (
         <div className="p-2 px-4 flex items-center justify-between bg-[#F0F4F7] rounded-[6px] md:w-[25rem]">

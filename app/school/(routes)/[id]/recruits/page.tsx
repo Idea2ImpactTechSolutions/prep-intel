@@ -12,6 +12,9 @@ export default function Page() {
   const [filter, setFilter] = useState('');
   const [recruits, setRecruits] = useState<any[]>([]);
   const pageParams = useParams();
+
+  // TODO: Replace fixed list with query to backend using schoolId
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const schoolId = pageParams?.id;
 
   const onChangeHandler = (event) => {
@@ -45,9 +48,6 @@ export default function Page() {
           <Button
               className="text-xs bg-primary hover:bg-primary-500 text-white font-bold"
             >Filter</Button>
-
-
-
         </div>
 
         <table className="table-auto">

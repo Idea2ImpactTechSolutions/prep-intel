@@ -1,7 +1,5 @@
 
 import { GoChevronRight, GoChevronLeft } from "react-icons/go";
-import { FaSave } from "react-icons/fa";
-import { IoCloseOutline } from "react-icons/io5";
 
 const BottomBar = ({
   onBack,

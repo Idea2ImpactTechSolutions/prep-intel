@@ -1,17 +1,13 @@
-import { models } from "../../../../app/models";
+//import { models } from "../../../../app/models";
+//const { Users, Students } = models;
 import { responseBody } from "../../../../app/config/helpers";
-const { Users, Students } = models;
 
 export default async function handler(req, res) {
   switch (req.method) {
     case "POST":
-      return res
-        .status(501)
-        .json(responseBody("Not implemented", 501, null));
+      return res.status(501).json(responseBody("Not implemented", 501, null));
     case "GET":
-      return res
-        .status(501)
-        .json(responseBody("Not implemented", 501, null));
+      return res.status(501).json(responseBody("Not implemented", 501, null));
     default:
       return res
         .status(405)
@@ -19,35 +15,49 @@ export default async function handler(req, res) {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function handleGetRequest(req, res) {
   try {
     const studentSchools: any = await getStudentSchools(req);
     if (!studentSchools) {
-      return res.status(404).json(responseBody("School interests not found", 404, null));
+      return res
+        .status(404)
+        .json(responseBody("School interests not found", 404, null));
     }
     return res
       .status(200)
-      .json(responseBody("School interests retrieved successfully", 200, studentSchools));
+      .json(
+        responseBody(
+          "School interests retrieved successfully",
+          200,
+          studentSchools
+        )
+      );
   } catch (error: any) {
     return res
       .status(500)
-      .json(responseBody("Internal Server Error", 500, { error: error.message }));
+      .json(
+        responseBody("Internal Server Error", 500, { error: error.message })
+      );
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function handlePostRequest(req, res) {
   try {
     const updatedVitals: any = await updateStudentSchools(req);
     if (!updatedVitals) {
       return res.status(404).json(responseBody("Student not found", 404, null));
     }
-    return res.status(201).json(
-      responseBody("School interests updated successfully", 201, null)
-    );
+    return res
+      .status(201)
+      .json(responseBody("School interests updated successfully", 201, null));
   } catch (error: any) {
     return res
       .status(500)
-      .json(responseBody("Internal Server Error", 500, { error: error.message }));
+      .json(
+        responseBody("Internal Server Error", 500, { error: error.message })
+      );
   }
 }
 

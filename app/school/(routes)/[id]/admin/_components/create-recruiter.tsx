@@ -7,7 +7,7 @@ import { useCreateRecruiterMutation, useLazyGetAllAdminQuery } from "@/redux/ser
 import { Dictionary } from "@/types/dictionary";
 import copy from "copy-to-clipboard";
 import { useFormik } from "formik";
-import { ArrowLeft, ChevronLeft, ChevronRight, Save, X } from "lucide-react";
+import { ArrowLeft, X } from "lucide-react";
 import { useState } from "react";
 import { LuCopy, LuCopyCheck } from "react-icons/lu";
 import { toast } from "sonner";

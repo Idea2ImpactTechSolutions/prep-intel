@@ -1,10 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { models } from "../../../../app/models";
-const { Managers, School, Recruits, Applicants, Recruiters, Students, Users } =
-  models;
 import { Op } from "sequelize";
+const { Recruits, Recruiters, Students, Users } = models;
 import { responseBody } from "../../../../app/config/helpers";
-import { v4 } from "uuid";
 
 export default async function AuthHandler(
   req: NextApiRequest,
@@ -45,7 +43,7 @@ async function getRecruits(req: any) {
     accepted_connection,
     applicants,
     recruiterId,
-    include_applicants,
+    /* include_applicants, -- unused -- */
   } = req.query;
 
   let recruits;

@@ -82,7 +82,7 @@ export default function LoginPage() {
   };
 
   // handle input change
-  const { values, errors, handleSubmit, handleChange, touched, resetForm } = useFormik({
+  const { values, errors, handleSubmit, handleChange, touched } = useFormik({
     initialValues: {
       email: "",
       password: ""

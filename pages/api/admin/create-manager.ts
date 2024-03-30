@@ -48,7 +48,7 @@ export default async function AuthHandler(
 
     const schoolId = v4();
 
-    let createSch = await School.create({
+    await School.create({
       id: schoolId,
       name: school_name,
     });
@@ -65,7 +65,7 @@ export default async function AuthHandler(
       is_active : false
     });
 
-    let manager = await Managers.create({
+    await Managers.create({
       user_id : user.id
     });
 

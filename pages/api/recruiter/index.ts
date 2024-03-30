@@ -1,5 +1,5 @@
 import { responseBody } from "@/app/config/helpers";
-const { models } = require("@/app/models");
+const { models } = require("../../../app/models");
 const { School, Recruiters, Users } = models;
 const { v4 } = require("uuid");
 

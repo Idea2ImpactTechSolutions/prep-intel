@@ -14,7 +14,7 @@ export default function AdminPage() {
     const [isFetchedProfile, setIsFetchedProfile] = useState<boolean>(false)
     const [currentProgress, setCurrentProgress] = useState<CURRENT_TAB_TYPES>("VIEW_ADMIN")
     const [admin, setAdmin] = useState<any[]>([]);
-    const [getAllAdmin, { isLoading, isFetching, isSuccess }] = useLazyGetAllAdminQuery()
+    const [getAllAdmin, { isLoading, isFetching }] = useLazyGetAllAdminQuery()
     const pageParams = useParams();
     const schoolId = pageParams?.id as string;
 

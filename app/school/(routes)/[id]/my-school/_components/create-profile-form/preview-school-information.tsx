@@ -1,7 +1,6 @@
 import PageTitleContainer from "@/components/page-title";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ArrowUpFromLine, ChevronLeft, ChevronRight, Save } from "lucide-react";
+import { ArrowUpFromLine, ChevronLeft, Save } from "lucide-react";
 
 export default function PreviewSchoolInformation() {
     return (
