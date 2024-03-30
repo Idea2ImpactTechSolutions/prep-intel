@@ -12,7 +12,7 @@ import { Dictionary } from "@/types/dictionary";
 import { STATE_CITY_DATA } from "@/utils/data";
 import { formatRMDatePicker } from "@/utils/helpers/date-format";
 import { Formik, Form, FieldArray, Field } from "formik";
-import { ChevronLeft, ChevronRight, File, Image, ImagePlus, LucideLoader, MinusCircle, PlusSquare, Save, X } from "lucide-react";
+import { File, ImagePlus, MinusCircle, PlusSquare } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import * as yup from "yup"
@@ -57,8 +57,8 @@ export default function Page() {
   const [selectedImage, setSelectedImage] = useState<File>()
   const [schoolImgUrl, setSchoolImgUrl] = useState('')
   const [getSchoolProfile, {isLoading: isLoadingGetProfile, isFetching: isFetchingSchoolProfile, isSuccess:isSuccessGetProfile}] = useLazyGetSchoolProfileQuery()
-  const [uploadSchoolImage, { isLoading, isSuccess }] = useUploadSchoolImageMutation()
-  const [managerCreateSchoolProfile, { isLoading: isCreatingSchoolProfile, isSuccess: isSuccessCreateSchoolProfile }] = useManagerCreateSchoolProfileMutation()
+  const [uploadSchoolImage, { isLoading }] = useUploadSchoolImageMutation()
+  const [managerCreateSchoolProfile, { isLoading: isCreatingSchoolProfile }] = useManagerCreateSchoolProfileMutation()
 
   const dispatch = useAppDispatch()
   const router = useRouter()

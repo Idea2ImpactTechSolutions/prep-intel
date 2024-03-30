@@ -6,14 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { useLazyGetSchoolProfileQuery, useManagerCreateSchoolProfileMutation, useUploadSchoolImageMutation } from "@/redux/services/school/managerApi";
+import { useManagerCreateSchoolProfileMutation, useUploadSchoolImageMutation } from "@/redux/services/school/managerApi";
 import { useAppSelector } from "@/redux/store";
 import { Dictionary } from "@/types/dictionary";
 import { STATE_CITY_DATA } from "@/utils/data";
 import { formatRMDatePicker } from "@/utils/helpers/date-format";
 import { Formik, Form, FieldArray, Field } from "formik";
-import { ChevronLeft, ChevronRight, File, Image, ImagePlus, LucideLoader, MinusCircle, PlusSquare, Save, X } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { ChevronLeft, ChevronRight, File, ImagePlus, MinusCircle, PlusSquare, Save } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import * as yup from "yup"
@@ -51,9 +50,8 @@ interface initialValues {
 export default function BasicInformationForm() {
   const [selectedImage, setSelectedImage] = useState<File>()
   const [schoolImgUrl, setSchoolImgUrl] = useState('')
-  const [getSchoolProfile] = useLazyGetSchoolProfileQuery()
-  const [uploadSchoolImage, {isLoading, isSuccess}] = useUploadSchoolImageMutation()
-  const [managerCreateSchoolProfile, {isLoading: isCreatingSchoolProfile, isSuccess: isSuccessCreateSchoolProfile}] = useManagerCreateSchoolProfileMutation()
+  const [uploadSchoolImage, {isLoading }] = useUploadSchoolImageMutation()
+  const [managerCreateSchoolProfile, {isLoading: isCreatingSchoolProfile }] = useManagerCreateSchoolProfileMutation()
 
   const router = useRouter();
   const pageParams = useParams();

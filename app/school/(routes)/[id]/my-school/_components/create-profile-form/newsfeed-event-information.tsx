@@ -1,8 +1,6 @@
-import CustomCheckbox from "@/components/custom-checkbox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronLeft, ChevronRight, Save } from "lucide-react";
-
 
 export default function NewsFeedEventForm() {
   return (

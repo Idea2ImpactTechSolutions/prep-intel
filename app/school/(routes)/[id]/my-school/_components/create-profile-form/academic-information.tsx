@@ -1,12 +1,7 @@
 import CustomCheckbox from "@/components/custom-checkbox";
-import CustomDatePicker from "@/components/custom-date-picker";
-import CustomFileInput from "@/components/custom-file-input";
-import CustomSelect from "@/components/custom-select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { ChevronLeft, ChevronRight, ImagePlus, Save } from "lucide-react";
-
+import { ChevronLeft, ChevronRight, Save } from "lucide-react";
 
 export default function AcademicInformationForm() {
   return (

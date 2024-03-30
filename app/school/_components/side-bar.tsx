@@ -2,16 +2,14 @@
 import CustomProfilePopover from "@/components/custom-profile-popover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { reset } from "@/redux/features/auth/authSlice";
 import { useAppDispatch } from "@/redux/store";
 import { DASHBOARD_NAVIGATION_DATA } from "@/utils/data";
 import useWindowSize from "@/utils/hooks/useWindowSize";
-import { AlignJustify, Bell, GraduationCap, LayoutGrid, LogOut, Menu, User, UserPlus } from "lucide-react";
+import { AlignJustify, Bell, LogOut, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import Cookies from 'js-cookie';
 import { signOut } from "next-auth/react";
 import { managerReset } from "@/redux/features/school/managerSlice";
 

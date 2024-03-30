@@ -14,12 +14,12 @@ const getUserUpdateSpy = jest.spyOn(Users, 'update');
 
 getUserFindOneSpy.mockImplementation((id) => {
     return Promise.resolve(new Users({
-        id: 1,
+        id,
         auth_code: "546a5374-ed66-4371-940f-8f17fe4d452b"
     }));
 });
 
-getUserUpdateSpy.mockImplementation((id) => {
+getUserUpdateSpy.mockImplementation(() => {
     updateCalled = true;
 });
 afterEach(() =>{

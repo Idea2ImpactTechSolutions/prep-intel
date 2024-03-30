@@ -3,10 +3,9 @@
 import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useRouter, usePathname, useParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { CompletionPanel } from "@/components/completion-panel";
 import { FormSection } from "@/components/form-section";
-import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { useAppDispatch } from "@/redux/store";
 import { setSchoolInformation } from "@/redux/features/school/managerSlice";

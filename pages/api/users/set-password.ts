@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { models } from "../../../app/models";
-const { Managers, School, Recruiters, Users } = models;
+const { Users } = models;
 import { responseBody } from "../../../app/config/helpers";
-import { v4 } from "uuid";
 import bcrypt from "bcryptjs";
 
 export default async function AuthHandler(

@@ -2,10 +2,9 @@ import { cn } from "@/lib/utils"
 import { Button } from "./ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 import { useRef, useState } from "react"
-import { CheckIcon, ChevronsUpDown, SortAscIcon } from "lucide-react"
+import { CheckIcon, ChevronsUpDown } from "lucide-react"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "./ui/command"
 import { Label } from "./ui/label"
-import { SelectGroup } from "./ui/select"
 // import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 
 type CustomSelectType = {

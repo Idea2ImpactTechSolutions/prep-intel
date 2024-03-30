@@ -2,22 +2,19 @@
 import React, { useEffect, useState } from 'react'
 import Sidebar from '../_components/side-bar'
 import { useLazyGetSchoolProfileQuery } from '@/redux/services/school/managerApi'
-import { useSession } from 'next-auth/react'
 import { useAppDispatch, useAppSelector } from '@/redux/store'
 import { setSchoolInformation } from '@/redux/features/school/managerSlice'
 import EmptyStateContainer from '@/components/empty-state'
 import { usePathname, useRouter, useParams } from 'next/navigation'
-import { LucideLoader2 } from 'lucide-react'
 import LoadingSpinner from '../_components/loading-spinner'
 import { Dictionary } from '@/types/dictionary'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const [showSidebar, setShowSidebar] = useState<boolean>(true)
     const [isProfileCompleted, setIsProfileCompleted] = useState<boolean>(false)
-    const [getSchoolProfile, { isLoading, isSuccess }] = useLazyGetSchoolProfileQuery()
+    const [getSchoolProfile, { isLoading }] = useLazyGetSchoolProfileQuery()
     const { manager: { school_information: { school_data } } }: Dictionary = useAppSelector((state) => state.manager)
 
-    const { data: userData }: any = useSession()
     const router = useRouter()
     const pageParams = useParams();
     const schoolId = pageParams?.id;

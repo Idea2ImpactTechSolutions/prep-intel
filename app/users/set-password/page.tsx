@@ -1,16 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Circle, EyeIcon, EyeOffIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useFormik } from "formik";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import * as yup from "yup";
-import { useAppSelector } from "@/redux/store";
-import { Dictionary } from "@/types/dictionary";
-import { useSession } from "next-auth/react";
 import { useSetPasswordMutation } from "@/redux/services/user/userApi";
 
 interface initialValue {
@@ -20,19 +17,13 @@ interface initialValue {
 }
 
 export default function UserSetPasswordPage() {
-  const session: any = useSession();
   const params = useSearchParams();
   const router = useRouter();
 
-  const userId = session?.data?.user?.id; // the value stored in this variable is an email address
   const auth_code = params?.get("auth_code");
   const [showPassword, setShowPassword] = useState(false);
 
   const [userSetPassword, { isLoading }] = useSetPasswordMutation();
-
-  const {
-    user: { claim_info },
-  }: Dictionary = useAppSelector((state) => state.user);
 
   const handleSubmitForm = async (values: initialValue) => {
     userSetPassword({ ...values, auth_code })
