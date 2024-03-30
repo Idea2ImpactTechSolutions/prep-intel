@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { models } from "../../../../app/models";
+import { Op } from "sequelize";
 const { Recruits, Recruiters, Students, Users } = models;
 import { responseBody } from "../../../../app/config/helpers";
 
