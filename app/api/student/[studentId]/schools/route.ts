@@ -51,7 +51,7 @@ export async function GET(req: Request) {
  *       200:
  *         description: Hello World!
  */
-async function POST(req: Request) {
+export async function POST(req: Request) {
   try {
     // TODO: Implement
     return Response.json(responseBody("Not implemented", 501, null), {
