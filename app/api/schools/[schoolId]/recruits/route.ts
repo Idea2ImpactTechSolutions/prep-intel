@@ -1,39 +1,37 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { models } from "../../../../app/models";
+import { models } from "app/models";
 import { Op } from "sequelize";
 const { Recruits, Recruiters, Students, Users } = models;
-import { responseBody } from "../../../../app/config/helpers";
+import { responseBody } from "app/config/helpers";
 
-export default async function AuthHandler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  switch (req.method) {
-    case "GET":
-      return await handleGetRecruits(req, res);
-    case "POST":
-      return res
-        .status(501)
-        .json(responseBody("Method Not Implemented", 501, null));
-    default:
-      return res
-        .status(405)
-        .json(responseBody("Method Not Allowed", 405, null));
-  }
-}
+/**
+ * @openapi
+ * /api/schools/{schoolId}/recruits:
+ *   get:
+ *       responses:
+ *           '200':
+ *               content:
+ *                    application/json:
+ *                       schema:
+ *                           type: array
+ *                           items: {}
+ *                       examples:
+ *                           One Sample:
+ *                               value: '[{id: 1, first_name: "John"}]'
+ *       summary: Retrieves a list of recruits
+ */
+export async function GET(req: Request) {
 
-async function handleGetRecruits(req, res) {
   try {
-    const getRecruitsRequest: any = await getRecruits(req);
-    return res
-      .status(200)
-      .json(
-        responseBody("Recruits successfully retrieved", 200, getRecruitsRequest)
-      );
+    const getRecruitsRequest = await getRecruits(req);
+    return Response.json(
+      responseBody("Recruits successfully retrieved", 200, getRecruitsRequest)
+    );
   } catch (error: any) {
-    return res
-      .status(400)
-      .json(responseBody("Error occurred", 400, { error: error.message }));
+    // Report
+    return Response.json(
+       responseBody("Error occurred", 400, { error: error.message }),
+      { status: 400 }
+    );
   }
 }
 
