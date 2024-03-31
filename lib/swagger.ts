@@ -8,7 +8,7 @@ export const getApiDocs = async () => {
     definition: {
       openapi: "3.0.0",
       info: {
-        title: "Backend API (prep-intel)",
+        title: "Prep-Intel API",
         version: "1.0",
       },
       components: {
