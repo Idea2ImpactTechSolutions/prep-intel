@@ -5,7 +5,7 @@ import { responseBody } from "app/config/helpers";
 
 /**
  * @openapi
- * /api/schools/{schoolId{/recruits:
+ * /api/schools/{schoolId}/recruits:
  *   get:
  *       responses:
  *           '200':
