@@ -1,4 +1,5 @@
-const { models } = require("../../../app/models");
+import { responseBody } from "@/app/config/helpers";
+const { models } = require("app/models");
 const { School, Recruiters, Users } = models;
 const { v4 } = require("uuid");
 
@@ -6,6 +7,7 @@ const { v4 } = require("uuid");
  * @openapi
  * /api/recruiter:
  *   get:
+ *       summary: Retrieves a list of recruiters or a specific recruiter by ID
  *       responses:
  *           '200':
  *               content:
@@ -16,10 +18,9 @@ const { v4 } = require("uuid");
  *                       examples:
  *                           One Sample:
  *                               value: '[{id: 1, first_name: "John"}]'
- *       summary: Retrieves a list of recruiters or a specific recruiter by ID
  */
 export async function GET() {
-    return Response.json(await Recruiters.findAll());
+  return Response.json(await Recruiters.findAll());
 }
 
 /**
@@ -27,32 +28,30 @@ export async function GET() {
  * /api/recruiter:
  *   post:
  *     description: Returns the hello world
+ *     summary: Creates a new recruiter
  *     responses:
  *       200:
  *         description: Hello World!
  */
-async function POST(req: Request) {
+export async function POST(req: Request) {
   try {
     const { message, code, data } = await createRecruiterProfile(req);
-
-    return Response.json({
-            message,
-            code,
-            data
-        },
-        {
-            status: code
-        });
+    return Response.json(
+      responseBody(message, code, data),
+      {
+        status: code,
+      }
+    );
   } catch (error: any) {
-
-    return Response.json({
-            //error: 'Internal Server Error'
-            error: error.message
-        },
-        {
-            status: 500
-        })
-
+    return Response.json(
+      {
+        //error: 'Internal Server Error'
+        error: error.message,
+      },
+      {
+        status: 500,
+      }
+    );
   }
 }
 
@@ -60,7 +59,7 @@ async function createRecruiterProfile(req: any) {
   try {
     const { first_name, last_name, email, school_id } = req.body;
 
-    let checkUserExists = await Users.findOne({ where: { email: email }});
+    let checkUserExists = await Users.findOne({ where: { email: email } });
     if (checkUserExists) {
       return {
         message: "Recruiter already exists",
