@@ -35,13 +35,11 @@ export async function GET() {
  */
 export async function POST(req: Request) {
   try {
-    const { message, code, data } = await createRecruiterProfile(req);
-    return Response.json(
-      responseBody(message, code, data),
-      {
-        status: code,
-      }
-    );
+    const jsonBody = await req.json();
+    const { message, code, data } = await createRecruiterProfile(jsonBody);
+    return Response.json(responseBody(message, code, data), {
+      status: code,
+    });
   } catch (error: any) {
     return Response.json(
       {
@@ -55,9 +53,9 @@ export async function POST(req: Request) {
   }
 }
 
-async function createRecruiterProfile(req: any) {
+async function createRecruiterProfile(json) {
   try {
-    const { first_name, last_name, email, school_id } = req.body;
+    const { first_name, last_name, email, school_id } = json;
 
     let checkUserExists = await Users.findOne({ where: { email: email } });
     if (checkUserExists) {

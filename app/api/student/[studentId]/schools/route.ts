@@ -15,7 +15,8 @@ import { responseBody } from "app/config/helpers";
  */
 export async function GET(req: Request) {
   try {
-    const studentSchools: any = await getStudentSchools(req);
+    const jsonBody = await req.json();
+    const studentSchools: any = await getStudentSchools(jsonBody);
     if (!studentSchools) {
       return Response.json(
         responseBody("School interests not found", 404, null),
@@ -59,9 +60,10 @@ export async function POST(req: Request) {
     });
 
     // Collect
-    const updatedVitals: any = await updateStudentSchools(req);
+    const jsonBody = await req.json();
+    const updatedVitals: any = await updateStudentSchools(jsonBody);
 
-        // Report
+    // Report
     if (!updatedVitals) {
       return Response.json(responseBody("Student not found", 404, null), {
         status: 404,
@@ -86,10 +88,10 @@ export async function POST(req: Request) {
   }
 }
 
-async function getStudentSchools(req) {
+async function getStudentSchools(json) {
   return;
 }
 
-async function updateStudentSchools(req) {
+async function updateStudentSchools(json) {
   return;
 }
