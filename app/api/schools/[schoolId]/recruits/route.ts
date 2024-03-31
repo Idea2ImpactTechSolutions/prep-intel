@@ -7,42 +7,61 @@ import { responseBody } from "app/config/helpers";
  * @openapi
  * /api/schools/{schoolId}/recruits:
  *   get:
- *       responses:
- *           '200':
- *               content:
- *                    application/json:
- *                       schema:
- *                           type: array
- *                           items: {}
- *                       examples:
- *                           One Sample:
- *                               value: '[{id: 1, first_name: "John"}]'
- *       summary: Retrieves a list of recruits
+ *     summary: Retrieves a list of recruits for the given school
+ *     description: ""
+ *     parameters:
+ *       - in: path
+ *         name: schoolId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the school to retrieve recruits for.
+ *     responses:
+ *       '200':
+ *         description: A list of recruits
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   first_name:
+ *                     type: string
+ *             examples:
+ *               One Sample:
+ *                 value: '[{"id": 1, "first_name": "John"}]'
  */
-export async function GET(req: Request) {
-
+export async function GET(
+  req: Request,
+  { params }: { params: { schoolId: string } }
+) {
   try {
-    const getRecruitsRequest = await getRecruits(req);
+    const schoolId = params.schoolId;
+
+    const getRecruitsRequest = await getRecruits({ schoolId });
     return Response.json(
       responseBody("Recruits successfully retrieved", 200, getRecruitsRequest)
     );
   } catch (error: any) {
     // Report
     return Response.json(
-       responseBody("Error occurred", 400, { error: error.message }),
+      responseBody("Error occurred", 400, { error: error.message }),
       { status: 400 }
     );
   }
 }
 
-async function getRecruits(req: any) {
+async function getRecruits(json) {
   const {
     schoolId,
     accepted_connection,
     applicants,
     recruiterId,
     /* include_applicants, -- unused -- */
-  } = req.query;
+  } = json;
 
   let recruits;
 
