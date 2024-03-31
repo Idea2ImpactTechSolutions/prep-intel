@@ -31,13 +31,13 @@ export async function GET() {
  *     summary: Creates a new recruiter
  *     responses:
  *       200:
- *         description: Hello World!
+ *         description:
  */
 export async function POST(req: Request) {
   try {
     const jsonBody = await req.json();
     const { message, code, data } = await createRecruiterProfile(jsonBody);
-    return Response.json(responseBody(message, code, data), {
+    return Response.json(responseBody(message, code, { school: data }), {
       status: code,
     });
   } catch (error: any) {
