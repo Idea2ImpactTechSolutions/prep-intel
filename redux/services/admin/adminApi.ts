@@ -17,8 +17,23 @@ const adminApi = baseApi.injectEndpoints({
                     console.log(error)
                 }
             }
-        })
+        }),
+        addSiteAdmin: builder.mutation({
+          query: (payload) => ({
+              url: `/siteadmin`,
+              method: 'POST',
+              body: payload
+          }),
+          async onQueryStarted (_, {queryFulfilled, dispatch}) {
+              try {
+                  const result = await queryFulfilled
+                  console.log(result)
+              } catch (error) {
+                  console.log(error)
+              }
+          }
+      })
     })
 })
 
-export const { useAddSchoolManagerMutation } = adminApi
+export const { useAddSchoolManagerMutation, useAddSiteAdminMutation } = adminApi
