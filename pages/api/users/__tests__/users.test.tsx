@@ -42,7 +42,7 @@ describe('Set Password API', () => {
       // Assert
       expect(userFindOneSpy).toHaveBeenCalledWith({"where": {"auth_code": AUTH_CODE}});
       expect(bcryptSpy).toHaveBeenCalledWith(PASSWORD);
-      expect(userUpdateSpy).toHaveBeenCalled;
+      expect(userUpdateSpy).toHaveBeenCalled();
       expect(res._getStatusCode()).toBe(200);
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({
@@ -65,7 +65,7 @@ describe('Set Password API', () => {
   
         // Assert
         expect(res._getStatusCode()).toBe(400);
-        expect(userUpdateSpy).not.toHaveBeenCalled;
+        expect(userUpdateSpy).not.toHaveBeenCalled();
     },15000);
     it('An invalid auth_code is provided', async () => {
       const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
@@ -78,7 +78,7 @@ describe('Set Password API', () => {
       });
       await handler(req, res);
       expect(userFindOneSpy).toHaveBeenCalledWith({"where": {"auth_code": BAD_AUTH_CODE}});
-      expect(userUpdateSpy).not.toHaveBeenCalled;
+      expect(userUpdateSpy).not.toHaveBeenCalled();
       expect(res._getStatusCode()).toBe(404);
     },15000);
   });
