@@ -23,8 +23,8 @@ describe('Set Password API', () => {
   });
   describe('POST requests', () => {
     afterEach(() => {
-      jest.resetAllMocks;
-    })
+      jest.clearAllMocks();
+    });
     it('Sets the user password', async () => {
       // Setup
       const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
