@@ -28,6 +28,20 @@ const managerApi = baseApi.injectEndpoints({
         }
       },
     }),
+    getRecruits: builder.query({
+      query: ({ school_id }) => ({
+        url: `/schools/${school_id}/recruits`,
+        method: "GET",
+      }),
+      async onQueryStarted(_, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    }),
+
     uploadSchoolImage: builder.mutation({
       query: (school_image) => ({
         url: `/manager/profile/upload-image`,
@@ -99,4 +113,5 @@ export const {
   usePublishSchoolProfileMutation,
   useLazyGetAllAdminQuery,
   useCreateRecruiterMutation,
+  useLazyGetRecruitsQuery,
 } = managerApi;
