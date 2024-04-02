@@ -11,7 +11,7 @@ env:
   ECR_REPO: "533267153582.dkr.ecr.us-east-1.amazonaws.com/prep-intel-app"
   IMAGE_VERSION: production
   DB_USERNAME: ${{vars.DB_USERNAME_PROD}}
-  DB_PASSWORD: ${{vars.DB_PASSWORD_PROD}}
+  DB_PASSWORD: ${{vars.DB_PASSWORD}}
   DB_NAME: ${{vars.DB_NAME}}
   DB_HOST: ${{vars.DB_HOST_PROD}}
   NEXTAUTH_URL: ${{vars.NEXTAUTH_URL}}
