@@ -11,14 +11,21 @@ import bulletImage from "public/images/bullet.png";
 import workWithImage from "public/images/work-with.png";
 import Link from "next/link";
 import { Space_Grotesk } from "next/font/google";
+import { usePathname } from 'next/navigation'
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
 export default function Home() {
   const router = useRouter();
+  const pathname = usePathname();
+
+  const PAGE_TABS = [
+    {title: "Home", href: "/"},
+    {title: "Search", href: "/login"},
+    {title: "Blog", href: "/login"}];
 
   return (
     <>
-    <main className="container flex min-h-[950px] flex-col pt-20 p-0 font-sans bg-auto bg-no-repeat bg-right-top bg-[url('/images/banner.png')]">
+    <main className="container flex min-h-[950px] flex-col p-8 pt-20 font-sans bg-auto bg-no-repeat bg-right-top bg-[url('/images/banner.png')]">
 
       <div className="flex justify-between items-center">
         <Image
@@ -27,10 +34,16 @@ export default function Home() {
           className="object-contain"
         />
 
-        <div className="flex space-x-24 text-bold">
-          <a href="#" className="font-bold">Home</a>
-          <a href="#" className="font-bold">Search</a>
-          <a href="#" className="text-primary font-bold">Blog</a>
+        <div className="flex space-x-24 font-bold">
+          {
+            PAGE_TABS.map((item, index) => (
+              <Link
+                href={item.href}
+                key={index}
+                className={`pb-1 ml-4 text-sm transition-all hover:border-b-[2px] hover:border-b-[#FEBB0E] md:ml-12 md:text-[1rem] ${pathname === item.href && 'border-b-[2px] border-b-[#FEBB0E]'} `}
+              >{item.title}</Link>
+            ))
+          }
         </div>
 
         <Button className="bg-[#FEBB0E] border-[#FEBB0E] text-black mt-0 mr-20"
@@ -79,7 +92,7 @@ export default function Home() {
 
     </main>
     <footer className="flex w-full bg-[url('/images/footer-tile.png')] min-h-[550px] align-top text-white" >
-      <div className="container p-2 px-6 pb-20 flex flex-col md:flex-col justify-end pl-8">
+      <div className="container p-8 pb-20 flex flex-col md:flex-col justify-end">
 
       <div className="flex justify-between">
         <div className="w-[280px]">
