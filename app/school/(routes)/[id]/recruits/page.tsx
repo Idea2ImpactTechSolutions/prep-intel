@@ -1,55 +1,36 @@
 "use client";
 import { useState, useEffect } from "react";
-import { SchoolRecruits }  from "@/app/ui/mock-data/Users"
 import { IoMdEye } from "react-icons/io";
 import { FaEdit } from "react-icons/fa";
 import PageTitleContainer from "@/components/page-title";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useParams } from "next/navigation"
+import { useParams } from "next/navigation";
+import { useLazyGetRecruitsQuery } from "@/redux/services/school/managerApi";
 
 export default function Page() {
-  const [filter, setFilter] = useState('');
   const [recruits, setRecruits] = useState<any[]>([]);
+  const [getRecruits, { isLoading }] = useLazyGetRecruitsQuery();
   const pageParams = useParams();
-
-  // TODO: Replace fixed list with query to backend using schoolId
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const schoolId = pageParams?.id;
 
-  const onChangeHandler = (event) => {
-    setFilter(event.target.value);
-  };
+  async function handleGetRecruits() {
+    const recruits = await getRecruits({ school_id: schoolId });
+
+    // TODO: Fix the endpoint to eliminate excess path steps
+    setRecruits(recruits?.data.data);
+  }
 
   useEffect(() => {
-    // TODO: Use schoolId to query for data matching the given id
-    const lowerFilter= filter.toLowerCase();
-    setRecruits(SchoolRecruits.filter(r => r['Full Name'].toLowerCase().includes(lowerFilter)))
-  }, [filter, pageParams]);
+    if (schoolId) {
+      handleGetRecruits();
+    }
+  }, []);
 
   return (
-  	<section>
-  	<PageTitleContainer title="Recruits" />
-  	<hr className="border-t border-gray-300 my-4" />
+    <section>
+      <PageTitleContainer title="Recruits" />
+      <hr className="border-t border-gray-300 my-4" />
 
-     <section className="p-4 items-center justify-between md:px-16 md:mt-4">
-        <div className="w-full mt-5 flex items-end">
-          <div className="w-[40%]">
-          <Input
-            label="Filter"
-            labelClass="text-xs font-normal text-[#61646B]"
-            type="text"
-            className="w-full"
-            onChange={onChangeHandler}
-            />
-          </div>
-          <div className="flex-grow"></div>
-
-          <Button
-              className="text-xs bg-primary hover:bg-primary-500 text-white font-bold"
-            >Filter</Button>
-        </div>
-
+      <section className="p-4 items-center justify-between md:px-16 md:mt-4">
         <table className="table-auto">
           <thead>
             <tr>
@@ -64,22 +45,27 @@ export default function Page() {
             </tr>
           </thead>
           <tbody>
-          {
-            recruits.map((user, index) => (
+            {isLoading && <div>Loading...</div>}
+
+            {!isLoading && recruits?.length > 0 && recruits.map((user, index) => (
               <tr key={index}>
-                <td>{user['Full Name']}</td>
-                <td>{user['Application Status']}</td>
-                <td>{user['Recruitment Source']}</td>
-                <td>{user['Application Date']}</td>
-                <td>{user['Recruiter Name']}</td>
-                <td>{user['Program of Interest']}</td>
-                <td>{user['Email Address']}</td>
-                <td ><div className="flex "><IoMdEye className="mr-4" /> <FaEdit /></div></td>
-              </tr>))
-          }
+                <td>Full Name</td>
+                <td>Application Status</td>
+                <td>Recruitment Source</td>
+                <td>Application Date</td>
+                <td>{user.recruiter_id}</td>
+                <td>{user.student.high_school}</td>
+                <td>Email Address</td>
+                <td>
+                  <div className="flex ">
+                    <IoMdEye className="mr-4" /> <FaEdit />
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
-    </section>
+      </section>
     </section>
   );
 }
