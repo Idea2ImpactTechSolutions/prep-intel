@@ -18,6 +18,9 @@ jest.mock("next/navigation", () => ({
     return {
       id: 123456,
     }
+  },
+  usePathname() {
+    return "/";
   }
 }));
 
@@ -42,7 +45,7 @@ describe("Home", () => {
   it("renders a heading", () => {
     render(<Page/>);
 
-    const button = screen.getByText("Sign Up");
+    const button = screen.getByText("Send a Message");
     expect(button).toBeInTheDocument();
   });
 });
