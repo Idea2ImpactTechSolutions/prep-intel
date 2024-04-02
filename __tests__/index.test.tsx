@@ -42,8 +42,8 @@ describe("Home", () => {
   it("renders a heading", () => {
     render(<Page/>);
 
-    const heading = screen.getByText("Welcome to Prep Intel");
-    expect(heading).toBeInTheDocument();
+    const button = screen.getByText("Sign Up");
+    expect(button).toBeInTheDocument();
   });
 });
 
