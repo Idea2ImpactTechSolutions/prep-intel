@@ -1,9 +1,7 @@
 import { responseBody } from "../../../../app/config/helpers";
-
 const { models } = require("../../../../app/models");
 const { School, SchoolDepartment, SchoolAccreditation, SchoolResearchProgram } =
   models;
-const { v4 } = require("uuid");
 
 export default async function handler(req, res) {
   switch (req.method) {
@@ -62,7 +60,6 @@ async function createSchoolDetails(req: any) {
     schoolId,
     application_url,
   } = req.body;
-  const id = v4();
   const {
     inStateTuition,
     outOfStateTuition,
@@ -94,7 +91,7 @@ async function createSchoolDetails(req: any) {
     school = await School.findByPk(schoolId);
     if (school) {
       // delete schoolData.id;
-      let school = await School.update(schoolData, {
+      await School.update(schoolData, {
         where: { id: schoolId },
       });
     }
@@ -133,7 +130,7 @@ async function createSchoolDetails(req: any) {
       schoolDepartmentsData
     );
 
-    const newSchoolAccreditations = await SchoolAccreditation.bulkCreate(
+    await SchoolAccreditation.bulkCreate(
       schoolAccreditationData
     );
 

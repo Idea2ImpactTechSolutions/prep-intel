@@ -2,16 +2,14 @@
 import CustomProfilePopover from "@/components/custom-profile-popover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { reset } from "@/redux/features/auth/authSlice";
 import { useAppDispatch } from "@/redux/store";
 import { DASHBOARD_NAVIGATION_DATA } from "@/utils/data";
 import useWindowSize from "@/utils/hooks/useWindowSize";
-import { AlignJustify, Bell, GraduationCap, LayoutGrid, LogOut, Menu, User, UserPlus } from "lucide-react";
+import { AlignJustify, Bell, LogOut, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import Cookies from 'js-cookie';
 import { signOut } from "next-auth/react";
 import { managerReset } from "@/redux/features/school/managerSlice";
 
@@ -33,6 +31,8 @@ export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
     // const location = useLocation();
     const router = useRouter()
     const location = usePathname()
+    const pageParams = useParams();
+    const schoolId = pageParams?.id;
 
     const dispatch = useAppDispatch()
 
@@ -87,13 +87,13 @@ export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
                                     DASHBOARD_NAVIGATION_DATA.map(({ id, title, url, icon }) => (
                                         <Link
                                             key={id}
-                                            href={url}
+                                            href={url(schoolId)}
                                             className={cn(`relative p-2.5 items-center gap-x-2`,
-                                                (location === url) ? activeLink : defaultLink
+                                                (location === url(schoolId)) ? activeLink : defaultLink
                                             )}
                                             onClick={() => {
                                                 setShowSidebar(!showSidebar)
-                                                router.push(url)
+                                                router.push(url(schoolId))
                                             }}
                                         >
                                             <span className="flex items-center">{icon} <span className="pl-2">{title}</span> </span>
@@ -127,10 +127,10 @@ export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
                                     DASHBOARD_NAVIGATION_DATA.map(({ id, title, url }) => (
                                         <Link
                                             key={id}
-                                            href={url}
+                                            href={url(schoolId)}
                                             className={cn(
                                                 "text-sm pb-1 ml-10 hover:text-primary",
-                                                location === url && 'text-primary border-b-2 border-b-primary'
+                                                location === url(schoolId) && 'text-primary border-b-2 border-b-primary'
                                             )}
                                         >
                                             {title}

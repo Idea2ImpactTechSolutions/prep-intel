@@ -1,8 +1,6 @@
 import { responseBody } from "../../../../app/config/helpers";
-
 const { models } = require("../../../../app/models");
 const { School, Recruiters } = models;
-const { v4 } = require("uuid");
 
 export default async function handler(req, res) {
   try {

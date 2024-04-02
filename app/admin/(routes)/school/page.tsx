@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useAddSchoolManagerMutation } from "@/redux/services/admin/adminApi";
-import { useAppDispatch } from "@/redux/store";
 import { useFormik } from "formik";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -21,7 +20,6 @@ interface initialState {
 }
 
 export default function SchoolAdminRegisterPage() {
-    const dispatch = useAppDispatch()
     const [addSchoolManager, {isLoading, isSuccess}] = useAddSchoolManagerMutation()
     const [isCopied, setIsCopied] = useState(false)
     const [claimUrl, setClaimUrl] = useState("")
@@ -38,7 +36,7 @@ export default function SchoolAdminRegisterPage() {
             if (payload.status === 200) {
                 const authCode = payload?.data?.[0]?.auth_code;
                 const pageUrl = new URL(window.location.href);
-                setClaimUrl(`${pageUrl.origin}/school/claim?auth_code=${authCode}`);
+                setClaimUrl(`${pageUrl.origin}/users/claim?auth_code=${authCode}`);
 
                 toast.success(payload.message)
                 resetForm()

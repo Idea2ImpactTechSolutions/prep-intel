@@ -3,7 +3,7 @@
  */
 import { render, screen } from "@testing-library/react";
 import Page from "@/app/page";
-import SchoolDashboard from "@/app/school/(routes)/dashboard/page"
+import SchoolDashboard from "@/app/school/(routes)/[id]/dashboard/page"
 
 jest.mock("next/navigation", () => ({
   useRouter() {
@@ -14,6 +14,11 @@ jest.mock("next/navigation", () => ({
           asPath: "",
       };
   },
+  useParams() {
+    return {
+      id: 123456,
+    }
+  }
 }));
 
 jest.mock("next/router", () => ({
@@ -25,6 +30,12 @@ jest.mock("next/router", () => ({
           asPath: "",
       };
   },
+}));
+
+jest.mock("next-auth/react", () => ({
+  useSession() {
+    return {}
+  }
 }));
 
 describe("Home", () => {

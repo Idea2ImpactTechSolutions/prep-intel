@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
-import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
+import { Formik, Field, ErrorMessage } from "formik";
 import BottomBar from "../shared/bottom-bar";
 import { useRouter } from "next/navigation";
 import { FaUser } from "react-icons/fa";
 
-const handleSubmit = async (values, { setSubmitting }) => {
+const handleSubmit = async () => {
   // Placeholder
 }
 
