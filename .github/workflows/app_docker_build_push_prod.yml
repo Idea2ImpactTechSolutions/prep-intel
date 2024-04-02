@@ -10,10 +10,10 @@ env:
   AWS_REGION: "us-east-1"
   ECR_REPO: "533267153582.dkr.ecr.us-east-1.amazonaws.com/prep-intel-app"
   IMAGE_VERSION: production
-  DB_USERNAME: ${{vars.DB_USERNAME}}
-  DB_PASSWORD: ${{vars.DB_PASSWORD}}
+  DB_USERNAME: ${{vars.DB_USERNAME_PROD}}
+  DB_PASSWORD: ${{vars.DB_PASSWORD_PROD}}
   DB_NAME: ${{vars.DB_NAME}}
-  DB_HOST: ${{vars.DB_HOST}}
+  DB_HOST: ${{vars.DB_HOST_PROD}}
   NEXTAUTH_URL: ${{vars.NEXTAUTH_URL}}
   AWS_ACCESS_KEY_ID: ${{vars.AWS_ACCESS_KEY_ID}}
   AWS_SECRET_ACCESS_KEY: ${{vars.AWS_SECRET_ACCESS_KEY}}
@@ -43,10 +43,10 @@ jobs:
       - name: Build tagged Docker image
         run: |
           docker build -t ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }} \
-          --build-arg DB_USERNAME=${{env.DB_USERNAME_PROD}} \
-          --build-arg DB_PASSWORD=${{env.DB_PASSWORD_PROD}} \
+          --build-arg DB_USERNAME=${{env.DB_USERNAME}} \
+          --build-arg DB_PASSWORD=${{env.DB_PASSWORD}} \
           --build-arg DB_NAME=${{env.DB_NAME}} \
-          --build-arg DB_HOST=${{env.DB_HOST_PROD}} \
+          --build-arg DB_HOST=${{env.DB_HOST}} \
           --build-arg NEXTAUTH_SECRET=${{env.NEXTAUTH_SECRET}} \
           --build-arg AWS_ACCESS_KEY_ID=${{env.AWS_ACCESS_KEY_ID}} \
           --build-arg AWS_REGION=${{env.AWS_REGION}} \
