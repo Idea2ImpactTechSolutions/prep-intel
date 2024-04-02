@@ -1,34 +1,49 @@
 const { DataTypes } = require("sequelize");
-const elephantsql = require("./ElephantSQL");
+const sequelize = require("./sequelize");
 
 // Datsource: https://nces.ed.gov/ipeds/datacenter/DataFiles.aspx
 // HD2021 = "Institutional Characteristics ->	Directory information"
-const ICDirectory = elephantsql.define(
+const ICDirectory = sequelize.define(
   "hd_2021",
   {
     // Define model attributes
-    UNITID: {
+    unitid: {
       type: DataTypes.INTEGER,
       primaryKey: true,
     },
-    INSTNM: {
+    instnm: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    IALIAS: {
+    ialias: {
       type: DataTypes.INTEGER,
     },
-    ADDR: {
+    applurl: {
       type: DataTypes.STRING,
     },
-    CITY: {
+    faidurl: {
       type: DataTypes.STRING,
     },
-    STABBR: {
+    applurl: {
+      type: DataTypes.STRING,
+    },
+    addr: {
+      type: DataTypes.STRING,
+    },
+    city: {
+      type: DataTypes.STRING,
+    },
+    stabbr: {
       type: DataTypes.STRING
     },
-    ZIP: {
+    zip: {
       type: DataTypes.STRING
+    },
+    control: {
+      type: DataTypes.INTEGER
+    },
+    iclevel: {
+      type: DataTypes.INTEGER
     }
   },
   {

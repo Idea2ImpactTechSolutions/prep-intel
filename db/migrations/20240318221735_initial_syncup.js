@@ -7,34 +7,33 @@ const Sequelize = require("sequelize");
  * createTable() => "amenities", deps: []
  * createTable() => "departments", deps: []
  * createTable() => "extracurriculars", deps: []
- * createTable() => "managers", deps: []
  * createTable() => "messages", deps: []
- * createTable() => "provider_type", deps: []
+ * createTable() => "phones", deps: []
+ * createTable() => "recruiter_states", deps: []
  * createTable() => "school_form_history", deps: []
  * createTable() => "school_forms_history", deps: []
+ * createTable() => "school_images", deps: []
+ * createTable() => "school_research_programs", deps: []
  * createTable() => "schools", deps: []
- * createTable() => "students", deps: []
- * createTable() => "users", deps: []
- * createTable() => "verification_tokens", deps: []
- * createTable() => "accounts", deps: [provider_type, users]
- * createTable() => "recruiters", deps: [schools]
- * createTable() => "applicants", deps: [students, schools, recruiters]
- * createTable() => "notes", deps: [students, recruiters]
- * createTable() => "phones", deps: [schools]
- * createTable() => "opt_out_logs", deps: [recruiters, students, schools]
- * createTable() => "recruiter_states", deps: [recruiters, schools]
+ * createTable() => "users", deps: [schools]
+ * createTable() => "assets", deps: [schools]
+ * createTable() => "recruiters", deps: [schools, users]
+ * createTable() => "managers", deps: [users]
+ * createTable() => "students", deps: [users]
+ * createTable() => "recruiter", deps: [schools]
+ * createTable() => "notes", deps: [students]
+ * createTable() => "opt_out_logs", deps: [students]
  * createTable() => "school_accreditations", deps: [schools, accreditations]
  * createTable() => "school_addresses", deps: [schools]
- * createTable() => "school_amenities", deps: [schools, amenities]
+ * createTable() => "school_amenities", deps: [amenities]
  * createTable() => "school_contacts", deps: [schools]
  * createTable() => "school_departments", deps: [schools]
- * createTable() => "school_extracurriculars", deps: [schools, extracurriculars]
- * createTable() => "school_images", deps: [schools]
- * createTable() => "school_research_programs", deps: [schools]
+ * createTable() => "school_extracurriculars", deps: [extracurriculars]
  * createTable() => "school_social_medias", deps: [schools]
- * createTable() => "sessions", deps: [users]
- * createTable() => "student_connections", deps: [students, schools]
- * createTable() => "student_department_interests", deps: [students, school_departments]
+ * createTable() => "applicants", deps: [students, schools, recruiters]
+ * createTable() => "recruits", deps: [students, recruiters, schools]
+ * createTable() => "student_connections", deps: [students]
+ * createTable() => "student_department_interests", deps: [students]
  * createTable() => "student_extracurriculars", deps: [students]
  *
  */
@@ -42,7 +41,7 @@ const Sequelize = require("sequelize");
 const info = {
   revision: 1,
   name: "noname",
-  created: "2024-02-21T04:56:07.350Z",
+  created: "2024-03-29T00:42:39.032Z",
   comment: "",
 };
 
@@ -143,73 +142,6 @@ const migrationCommands = (transaction) => [
   {
     fn: "createTable",
     params: [
-      "managers",
-      {
-        id: {
-          type: Sequelize.UUID,
-          field: "id",
-          primaryKey: true,
-          defaultValue: Sequelize.UUIDV4,
-          allowNull: false,
-        },
-        first_name: {
-          type: Sequelize.STRING(255),
-          field: "first_name",
-          allowNull: true,
-        },
-        last_name: {
-          type: Sequelize.STRING(255),
-          field: "last_name",
-          allowNull: true,
-        },
-        password: {
-          type: Sequelize.STRING(255),
-          field: "password",
-          allowNull: true,
-        },
-        school_id: {
-          type: Sequelize.UUID,
-          field: "school_id",
-          allowNull: true,
-        },
-        email: { type: Sequelize.STRING(255), field: "email", allowNull: true },
-        auth_code: {
-          type: Sequelize.STRING(255),
-          field: "auth_code",
-          allowNull: true,
-        },
-        account_claimed: {
-          type: Sequelize.BOOLEAN,
-          field: "account_claimed",
-          allowNull: true,
-        },
-        date_claimed: {
-          type: Sequelize.DATE,
-          field: "date_claimed",
-          allowNull: true,
-        },
-        auth_code_expiration: {
-          type: Sequelize.DATE,
-          field: "auth_code_expiration",
-          allowNull: true,
-        },
-        is_active: {
-          type: Sequelize.BOOLEAN,
-          field: "is_active",
-          allowNull: true,
-        },
-        deactivation_date: {
-          type: Sequelize.DATE,
-          field: "deactivation_date",
-          allowNull: true,
-        },
-      },
-      { transaction },
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
       "messages",
       {
         message_id: {
@@ -257,13 +189,47 @@ const migrationCommands = (transaction) => [
   {
     fn: "createTable",
     params: [
-      "provider_type",
+      "phones",
       {
-        value: {
-          type: Sequelize.TEXT,
-          field: "value",
+        id: {
+          type: Sequelize.INTEGER,
+          field: "id",
           primaryKey: true,
           allowNull: false,
+          autoIncrement: true,
+        },
+        school_id: {
+          type: Sequelize.UUID,
+          field: "school_id",
+          allowNull: true,
+        },
+        type: { type: Sequelize.STRING(255), field: "type", allowNull: true },
+      },
+      { transaction },
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "recruiter_states",
+      {
+        id: {
+          type: Sequelize.INTEGER,
+          field: "id",
+          primaryKey: true,
+          allowNull: false,
+          autoIncrement: true,
+        },
+        recruiter_id: {
+          type: Sequelize.UUID,
+          field: "recruiter_id",
+          allowNull: true,
+        },
+        state: { type: Sequelize.STRING(2), field: "state", allowNull: true },
+        school_id: {
+          type: Sequelize.UUID,
+          field: "school_id",
+          allowNull: true,
         },
       },
       { transaction },
@@ -363,22 +329,75 @@ const migrationCommands = (transaction) => [
   {
     fn: "createTable",
     params: [
+      "school_images",
+      {
+        id: {
+          type: Sequelize.INTEGER,
+          field: "id",
+          primaryKey: true,
+          allowNull: false,
+          autoIncrement: true,
+        },
+        school_id: {
+          type: Sequelize.UUID,
+          field: "school_id",
+          allowNull: true,
+        },
+        url: { type: Sequelize.STRING(255), field: "url", allowNull: true },
+      },
+      { transaction },
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "school_research_programs",
+      {
+        id: {
+          type: Sequelize.INTEGER,
+          field: "id",
+          primaryKey: true,
+          allowNull: false,
+          autoIncrement: true,
+        },
+        school_id: {
+          type: Sequelize.STRING,
+          field: "school_id",
+          allowNull: true,
+        },
+        research_program: {
+          type: Sequelize.STRING(255),
+          field: "research_program",
+          allowNull: true,
+        },
+        description: {
+          type: Sequelize.TEXT,
+          field: "description",
+          allowNull: true,
+        },
+        name: { type: Sequelize.STRING, field: "name", allowNull: true },
+      },
+      { transaction },
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
       "schools",
       {
         id: {
-          type: Sequelize.UUID,
+          type: Sequelize.STRING(255),
           field: "id",
           primaryKey: true,
-          defaultValue: Sequelize.UUIDV4,
           allowNull: false,
         },
         found_date: {
-          type: Sequelize.DATEONLY,
+          type: Sequelize.DATE,
           field: "found_date",
           allowNull: true,
         },
         institution_type: {
-          type: Sequelize.STRING(50),
+          type: Sequelize.STRING(255),
           field: "institution_type",
           allowNull: true,
         },
@@ -389,7 +408,7 @@ const migrationCommands = (transaction) => [
           allowNull: true,
         },
         primary_color: {
-          type: Sequelize.STRING(50),
+          type: Sequelize.INTEGER,
           field: "primary_color",
           allowNull: true,
         },
@@ -444,7 +463,7 @@ const migrationCommands = (transaction) => [
           allowNull: true,
         },
         scholarship_url: {
-          type: Sequelize.STRING,
+          type: Sequelize.STRING(255),
           field: "scholarship_url",
           allowNull: true,
         },
@@ -485,14 +504,27 @@ const migrationCommands = (transaction) => [
   {
     fn: "createTable",
     params: [
-      "students",
+      "users",
       {
         id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "id",
           primaryKey: true,
           allowNull: false,
+          autoIncrement: true,
         },
+        email: {
+          type: Sequelize.STRING(255),
+          field: "email",
+          unique: "users_email_key",
+          allowNull: true,
+        },
+        password: {
+          type: Sequelize.STRING(255),
+          field: "password",
+          allowNull: true,
+        },
+        role: { type: Sequelize.STRING(50), field: "role", allowNull: false },
         first_name: {
           type: Sequelize.STRING(255),
           field: "first_name",
@@ -503,13 +535,150 @@ const migrationCommands = (transaction) => [
           field: "last_name",
           allowNull: true,
         },
-        dob: { type: Sequelize.DATEONLY, field: "dob", allowNull: true },
-        email: { type: Sequelize.STRING(255), field: "email", allowNull: true },
-        password: {
+        school_id: {
           type: Sequelize.STRING(255),
-          field: "password",
+          field: "school_id",
+          references: { model: "schools", key: "id" },
           allowNull: true,
         },
+        auth_code: {
+          type: Sequelize.STRING(255),
+          field: "auth_code",
+          allowNull: true,
+        },
+        account_claimed: {
+          type: Sequelize.BOOLEAN,
+          field: "account_claimed",
+          defaultValue: false,
+          allowNull: true,
+        },
+        date_claimed: {
+          type: Sequelize.DATE,
+          field: "date_claimed",
+          allowNull: true,
+        },
+        is_active: {
+          type: Sequelize.BOOLEAN,
+          field: "is_active",
+          defaultValue: true,
+          allowNull: true,
+        },
+      },
+      { transaction },
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "assets",
+      {
+        id: {
+          type: Sequelize.INTEGER,
+          field: "id",
+          primaryKey: true,
+          allowNull: false,
+          autoIncrement: true,
+        },
+        school_id: {
+          type: Sequelize.STRING(255),
+          onUpdate: "CASCADE",
+          onDelete: "SET NULL",
+          field: "school_id",
+          references: { model: "schools", key: "id" },
+          allowNull: true,
+        },
+        category: {
+          type: Sequelize.STRING(255),
+          field: "category",
+          allowNull: true,
+        },
+        description: {
+          type: Sequelize.TEXT,
+          field: "description",
+          allowNull: true,
+        },
+        location: {
+          type: Sequelize.STRING(255),
+          field: "location",
+          allowNull: true,
+        },
+        is_active: {
+          type: Sequelize.BOOLEAN,
+          field: "is_active",
+          allowNull: true,
+        },
+      },
+      { transaction },
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "recruiters",
+      {
+        id: {
+          type: Sequelize.UUID,
+          field: "id",
+          primaryKey: true,
+          defaultValue: Sequelize.UUIDV4,
+          allowNull: false,
+        },
+        school_id: {
+          type: Sequelize.STRING(255),
+          field: "school_id",
+          references: { model: "schools", key: "id" },
+          allowNull: true,
+        },
+        user_id: {
+          type: Sequelize.INTEGER,
+          field: "user_id",
+          references: { model: "users", key: "id" },
+          allowNull: true,
+        },
+        territories: {
+          type: Sequelize.ARRAY(Sequelize.TEXT),
+          field: "territories",
+          allowNull: true,
+        },
+      },
+      { transaction },
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "managers",
+      {
+        id: {
+          type: Sequelize.INTEGER,
+          field: "id",
+          primaryKey: true,
+          allowNull: false,
+          autoIncrement: true,
+        },
+        user_id: {
+          type: Sequelize.INTEGER,
+          field: "user_id",
+          references: { model: "users", key: "id" },
+          allowNull: true,
+        },
+      },
+      { transaction },
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "students",
+      {
+        id: {
+          type: Sequelize.UUID,
+          field: "id",
+          primaryKey: true,
+          defaultValue: Sequelize.UUIDV4,
+          allowNull: false,
+        },
+        dob: { type: Sequelize.DATEONLY, field: "dob", allowNull: true },
         city: { type: Sequelize.STRING(100), field: "city", allowNull: true },
         state: { type: Sequelize.STRING(100), field: "state", allowNull: true },
         country: {
@@ -552,135 +721,11 @@ const migrationCommands = (transaction) => [
           field: "create_date",
           allowNull: true,
         },
-        cancel_date: {
-          type: Sequelize.DATE,
-          field: "cancel_date",
-          allowNull: true,
-        },
-        cancel_reason: {
-          type: Sequelize.TEXT,
-          field: "cancel_reason",
-          allowNull: true,
-        },
-        last_login_date: {
-          type: Sequelize.DATE,
-          field: "last_login_date",
-          allowNull: true,
-        },
-      },
-      { transaction },
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
-      "users",
-      {
-        id: {
-          type: Sequelize.UUID,
-          field: "id",
-          primaryKey: true,
-          defaultValue: Sequelize.UUIDV4,
-          allowNull: false,
-        },
-        name: { type: Sequelize.TEXT, field: "name", allowNull: true },
-        email: {
-          type: Sequelize.TEXT,
-          field: "email",
-          unique: "users_email_key",
-          allowNull: false,
-        },
-        emailVerified: {
-          type: Sequelize.DATE,
-          field: "emailVerified",
-          allowNull: true,
-        },
-        image: { type: Sequelize.TEXT, field: "image", allowNull: true },
-      },
-      { transaction },
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
-      "verification_tokens",
-      {
-        token: {
-          type: Sequelize.TEXT,
-          field: "token",
-          primaryKey: true,
-          allowNull: false,
-        },
-        identifier: {
-          type: Sequelize.TEXT,
-          field: "identifier",
-          allowNull: false,
-        },
-        expires: { type: Sequelize.DATE, field: "expires", allowNull: false },
-      },
-      { transaction },
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
-      "accounts",
-      {
-        id: {
-          type: Sequelize.UUID,
-          field: "id",
-          primaryKey: true,
-          defaultValue: Sequelize.UUIDV4,
-          allowNull: false,
-        },
-        type: {
-          type: Sequelize.TEXT,
-          onUpdate: "CASCADE",
-          onDelete: "NO ACTION",
-          field: "type",
-          references: { model: "provider_type", key: "value" },
-          allowNull: false,
-        },
-        provider: { type: Sequelize.TEXT, field: "provider", allowNull: false },
-        providerAccountId: {
-          type: Sequelize.TEXT,
-          field: "providerAccountId",
-          allowNull: false,
-        },
-        refresh_token: {
-          type: Sequelize.TEXT,
-          field: "refresh_token",
-          allowNull: true,
-        },
-        access_token: {
-          type: Sequelize.TEXT,
-          field: "access_token",
-          allowNull: true,
-        },
-        expires_at: {
+        user_id: {
           type: Sequelize.INTEGER,
-          field: "expires_at",
-          allowNull: true,
-        },
-        token_type: {
-          type: Sequelize.TEXT,
-          field: "token_type",
-          allowNull: true,
-        },
-        scope: { type: Sequelize.TEXT, field: "scope", allowNull: true },
-        id_token: { type: Sequelize.TEXT, field: "id_token", allowNull: true },
-        session_state: {
-          type: Sequelize.TEXT,
-          field: "session_state",
-          allowNull: true,
-        },
-        userId: {
-          type: Sequelize.UUID,
-          onUpdate: "CASCADE",
-          onDelete: "NO ACTION",
-          field: "userId",
+          field: "user_id",
           references: { model: "users", key: "id" },
-          allowNull: false,
+          allowNull: true,
         },
       },
       { transaction },
@@ -689,7 +734,7 @@ const migrationCommands = (transaction) => [
   {
     fn: "createTable",
     params: [
-      "recruiters",
+      "recruiter",
       {
         id: {
           type: Sequelize.UUID,
@@ -699,7 +744,7 @@ const migrationCommands = (transaction) => [
           allowNull: false,
         },
         school_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.STRING(255),
           field: "school_id",
           references: { model: "schools", key: "id" },
           allowNull: true,
@@ -773,57 +818,6 @@ const migrationCommands = (transaction) => [
   {
     fn: "createTable",
     params: [
-      "applicants",
-      {
-        id: {
-          type: Sequelize.INTEGER,
-          field: "id",
-          primaryKey: true,
-          allowNull: false,
-          autoIncrement: true,
-        },
-        student_id: {
-          type: Sequelize.UUID,
-          onUpdate: "CASCADE",
-          onDelete: "NO ACTION",
-          field: "student_id",
-          references: { model: "students", key: "id" },
-          allowNull: false,
-        },
-        school_id: {
-          type: Sequelize.UUID,
-          onUpdate: "CASCADE",
-          onDelete: "NO ACTION",
-          field: "school_id",
-          references: { model: "schools", key: "id" },
-          allowNull: false,
-        },
-        recruiter_id: {
-          type: Sequelize.UUID,
-          onUpdate: "CASCADE",
-          onDelete: "NO ACTION",
-          field: "recruiter_id",
-          references: { model: "recruiters", key: "id" },
-          allowNull: false,
-        },
-        applicant_status: {
-          type: Sequelize.STRING(50),
-          field: "applicant_status",
-          allowNull: false,
-        },
-        eligible_for_enrollment: {
-          type: Sequelize.BOOLEAN,
-          field: "eligible_for_enrollment",
-          defaultValue: true,
-          allowNull: true,
-        },
-      },
-      { transaction },
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
       "notes",
       {
         id: {
@@ -842,7 +836,6 @@ const migrationCommands = (transaction) => [
         recruiter_id: {
           type: Sequelize.UUID,
           field: "recruiter_id",
-          references: { model: "recruiters", key: "id" },
           allowNull: false,
         },
         note_text: {
@@ -863,29 +856,6 @@ const migrationCommands = (transaction) => [
   {
     fn: "createTable",
     params: [
-      "phones",
-      {
-        id: {
-          type: Sequelize.INTEGER,
-          field: "id",
-          primaryKey: true,
-          allowNull: false,
-          autoIncrement: true,
-        },
-        school_id: {
-          type: Sequelize.UUID,
-          field: "school_id",
-          references: { model: "schools", key: "id" },
-          allowNull: true,
-        },
-        type: { type: Sequelize.STRING(255), field: "type", allowNull: true },
-      },
-      { transaction },
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
       "opt_out_logs",
       {
         id: {
@@ -898,7 +868,6 @@ const migrationCommands = (transaction) => [
         recruiter_id: {
           type: Sequelize.UUID,
           field: "recruiter_id",
-          references: { model: "recruiters", key: "id" },
           allowNull: true,
         },
         student_id: {
@@ -910,7 +879,6 @@ const migrationCommands = (transaction) => [
         school_id: {
           type: Sequelize.UUID,
           field: "school_id",
-          references: { model: "schools", key: "id" },
           allowNull: true,
         },
         reason: { type: Sequelize.TEXT, field: "reason", allowNull: true },
@@ -918,35 +886,6 @@ const migrationCommands = (transaction) => [
           type: Sequelize.DATE,
           field: "opt_out_date",
           defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-          allowNull: true,
-        },
-      },
-      { transaction },
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
-      "recruiter_states",
-      {
-        id: {
-          type: Sequelize.INTEGER,
-          field: "id",
-          primaryKey: true,
-          allowNull: false,
-          autoIncrement: true,
-        },
-        recruiter_id: {
-          type: Sequelize.UUID,
-          field: "recruiter_id",
-          references: { model: "recruiters", key: "id" },
-          allowNull: true,
-        },
-        state: { type: Sequelize.STRING(2), field: "state", allowNull: true },
-        school_id: {
-          type: Sequelize.UUID,
-          field: "school_id",
-          references: { model: "schools", key: "id" },
           allowNull: true,
         },
       },
@@ -966,7 +905,7 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         school_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.STRING(255),
           field: "school_id",
           references: { model: "schools", key: "id" },
           allowNull: true,
@@ -977,12 +916,12 @@ const migrationCommands = (transaction) => [
           references: { model: "accreditations", key: "id" },
           allowNull: true,
         },
-        name: {
-          type: Sequelize.STRING,
-          field: "name",
-          comment: "The name of the school_accreditation",
+        is_active: {
+          type: Sequelize.INTEGER,
+          field: "is_active",
           allowNull: true,
         },
+        name: { type: Sequelize.TEXT, field: "name", allowNull: true },
       },
       { transaction },
     ],
@@ -1000,7 +939,7 @@ const migrationCommands = (transaction) => [
           allowNull: false,
         },
         school_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.STRING(255),
           field: "school_id",
           references: { model: "schools", key: "id" },
           allowNull: true,
@@ -1044,7 +983,6 @@ const migrationCommands = (transaction) => [
         school_id: {
           type: Sequelize.UUID,
           field: "school_id",
-          references: { model: "schools", key: "id" },
           allowNull: true,
         },
         amenity_id: {
@@ -1075,18 +1013,18 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         school_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.STRING(255),
           field: "school_id",
           references: { model: "schools", key: "id" },
           allowNull: true,
         },
-        department_name: {
-          type: Sequelize.STRING(255),
-          field: "department_name",
-          allowNull: true,
-        },
         phone: { type: Sequelize.STRING(20), field: "phone", allowNull: true },
         email: { type: Sequelize.STRING(255), field: "email", allowNull: true },
+        contact_type: {
+          type: Sequelize.TEXT,
+          field: "contact_type",
+          allowNull: true,
+        },
       },
       { transaction },
     ],
@@ -1103,13 +1041,8 @@ const migrationCommands = (transaction) => [
           allowNull: false,
           autoIncrement: true,
         },
-        major_type_id: {
-          type: Sequelize.INTEGER,
-          field: "major_type_id",
-          allowNull: true,
-        },
         school_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.STRING(255),
           field: "school_id",
           references: { model: "schools", key: "id" },
           allowNull: true,
@@ -1149,10 +1082,10 @@ const migrationCommands = (transaction) => [
           field: "description",
           allowNull: true,
         },
-        name: {
-          type: Sequelize.STRING,
-          field: "name",
-          comment: "Name of department",
+        name: { type: Sequelize.TEXT, field: "name", allowNull: true },
+        major_type_id: {
+          type: Sequelize.INTEGER,
+          field: "major_type_id",
           allowNull: true,
         },
       },
@@ -1174,7 +1107,6 @@ const migrationCommands = (transaction) => [
         school_id: {
           type: Sequelize.UUID,
           field: "school_id",
-          references: { model: "schools", key: "id" },
           allowNull: true,
         },
         extracurricular_activity_id: {
@@ -1195,62 +1127,6 @@ const migrationCommands = (transaction) => [
   {
     fn: "createTable",
     params: [
-      "school_images",
-      {
-        id: {
-          type: Sequelize.INTEGER,
-          field: "id",
-          primaryKey: true,
-          allowNull: false,
-          autoIncrement: true,
-        },
-        school_id: {
-          type: Sequelize.UUID,
-          field: "school_id",
-          references: { model: "schools", key: "id" },
-          allowNull: true,
-        },
-        url: { type: Sequelize.STRING(255), field: "url", allowNull: true },
-      },
-      { transaction },
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
-      "school_research_programs",
-      {
-        id: {
-          type: Sequelize.INTEGER,
-          field: "id",
-          primaryKey: true,
-          allowNull: false,
-          autoIncrement: true,
-        },
-        school_id: {
-          type: Sequelize.UUID,
-          field: "school_id",
-          references: { model: "schools", key: "id" },
-          allowNull: true,
-        },
-        research_program: {
-          type: Sequelize.STRING(255),
-          field: "research_program",
-          allowNull: true,
-        },
-        description: {
-          type: Sequelize.TEXT,
-          field: "description",
-          allowNull: true,
-        },
-        name: { type: Sequelize.STRING, field: "name", allowNull: true },
-      },
-      { transaction },
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
       "school_social_medias",
       {
         id: {
@@ -1261,7 +1137,7 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         school_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.STRING(255),
           field: "school_id",
           references: { model: "schools", key: "id" },
           allowNull: true,
@@ -1279,27 +1155,129 @@ const migrationCommands = (transaction) => [
   {
     fn: "createTable",
     params: [
-      "sessions",
+      "applicants",
       {
         id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "id",
-          defaultValue: Sequelize.UUIDV4,
-          allowNull: false,
-        },
-        sessionToken: {
-          type: Sequelize.TEXT,
-          field: "sessionToken",
           primaryKey: true,
           allowNull: false,
+          autoIncrement: true,
         },
-        userId: {
+        student_id: {
           type: Sequelize.UUID,
-          field: "userId",
-          references: { model: "users", key: "id" },
+          onUpdate: "CASCADE",
+          onDelete: "NO ACTION",
+          field: "student_id",
+          references: { model: "students", key: "id" },
           allowNull: false,
         },
-        expires: { type: Sequelize.DATE, field: "expires", allowNull: false },
+        school_id: {
+          type: Sequelize.STRING,
+          onUpdate: "CASCADE",
+          onDelete: "NO ACTION",
+          field: "school_id",
+          references: { model: "schools", key: "id" },
+          allowNull: false,
+        },
+        recruiter_id: {
+          type: Sequelize.UUID,
+          onUpdate: "CASCADE",
+          onDelete: "NO ACTION",
+          field: "recruiter_id",
+          references: { model: "recruiters", key: "id" },
+          allowNull: false,
+        },
+        applicant_status: {
+          type: Sequelize.TEXT,
+          field: "applicant_status",
+          allowNull: false,
+        },
+        application_status: {
+          type: Sequelize.TEXT,
+          field: "application_status",
+          allowNull: false,
+        },
+      },
+      { transaction },
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "recruits",
+      {
+        id: {
+          type: Sequelize.INTEGER,
+          field: "id",
+          primaryKey: true,
+          allowNull: false,
+          autoIncrement: true,
+        },
+        student_id: {
+          type: Sequelize.UUID,
+          field: "student_id",
+          references: { model: "students", key: "id" },
+          allowNull: true,
+        },
+        recruiter_id: {
+          type: Sequelize.UUID,
+          field: "recruiter_id",
+          references: { model: "recruiters", key: "id" },
+          allowNull: true,
+        },
+        school_id: {
+          type: Sequelize.STRING,
+          field: "school_id",
+          references: { model: "schools", key: "id" },
+          allowNull: true,
+        },
+        criteria: { type: Sequelize.TEXT, field: "criteria", allowNull: true },
+        contacted: {
+          type: Sequelize.BOOLEAN,
+          field: "contacted",
+          allowNull: true,
+        },
+        interested: {
+          type: Sequelize.BOOLEAN,
+          field: "interested",
+          allowNull: true,
+        },
+        connection_initiator: {
+          type: Sequelize.TEXT,
+          field: "connection_initiator",
+          allowNull: true,
+        },
+        connection_date: {
+          type: Sequelize.DATE,
+          field: "connection_date",
+          allowNull: true,
+        },
+        is_viewable: {
+          type: Sequelize.BOOLEAN,
+          field: "is_viewable",
+          allowNull: true,
+        },
+        application_date: {
+          type: Sequelize.DATEONLY,
+          field: "application_date",
+          allowNull: true,
+        },
+        application_status: {
+          type: Sequelize.STRING(255),
+          field: "application_status",
+          allowNull: true,
+        },
+        applicant_status: {
+          type: Sequelize.STRING(255),
+          field: "applicant_status",
+          allowNull: true,
+        },
+        is_applicant: {
+          type: Sequelize.BOOLEAN,
+          field: "is_applicant",
+          allowNull: true,
+        },
       },
       { transaction },
     ],
@@ -1325,7 +1303,6 @@ const migrationCommands = (transaction) => [
         school_id: {
           type: Sequelize.UUID,
           field: "school_id",
-          references: { model: "schools", key: "id" },
           allowNull: true,
         },
         status: {
@@ -1358,7 +1335,6 @@ const migrationCommands = (transaction) => [
         department_id: {
           type: Sequelize.INTEGER,
           field: "department_id",
-          references: { model: "school_departments", key: "id" },
           allowNull: true,
         },
       },
@@ -1414,10 +1390,6 @@ const migrationCommands = (transaction) => [
 const rollbackCommands = (transaction) => [
   {
     fn: "dropTable",
-    params: ["accounts", { transaction }],
-  },
-  {
-    fn: "dropTable",
     params: ["accreditations", { transaction }],
   },
   {
@@ -1427,6 +1399,10 @@ const rollbackCommands = (transaction) => [
   {
     fn: "dropTable",
     params: ["applicants", { transaction }],
+  },
+  {
+    fn: "dropTable",
+    params: ["assets", { transaction }],
   },
   {
     fn: "dropTable",
@@ -1458,7 +1434,7 @@ const rollbackCommands = (transaction) => [
   },
   {
     fn: "dropTable",
-    params: ["provider_type", { transaction }],
+    params: ["recruiter", { transaction }],
   },
   {
     fn: "dropTable",
@@ -1467,6 +1443,10 @@ const rollbackCommands = (transaction) => [
   {
     fn: "dropTable",
     params: ["recruiter_states", { transaction }],
+  },
+  {
+    fn: "dropTable",
+    params: ["recruits", { transaction }],
   },
   {
     fn: "dropTable",
@@ -1518,10 +1498,6 @@ const rollbackCommands = (transaction) => [
   },
   {
     fn: "dropTable",
-    params: ["sessions", { transaction }],
-  },
-  {
-    fn: "dropTable",
     params: ["student_connections", { transaction }],
   },
   {
@@ -1539,10 +1515,6 @@ const rollbackCommands = (transaction) => [
   {
     fn: "dropTable",
     params: ["users", { transaction }],
-  },
-  {
-    fn: "dropTable",
-    params: ["verification_tokens", { transaction }],
   },
 ];
 
