@@ -1,9 +1,9 @@
 name: Production App Docker Build and Push
 
 on:
-  # push:
-  #   branches:
-  #     [production]
+  push:
+    branches:
+      [production]
   workflow_dispatch:  
 
 env:
