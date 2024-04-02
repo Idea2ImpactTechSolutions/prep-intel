@@ -2,10 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import PageList  from "@/components/page-list"
 export default function Home() {
   const router = useRouter();
+
+  const { data: userData }: any = useSession()
+  const schoolId = userData?.user?.schoolID || "2e0f768e-c887-4945-8cd7-96f96a07a3eb";
 
   return (
     <main className='flex min-h-screen flex-col items-center justify-between p-24 font-sans'>
@@ -32,10 +36,15 @@ export default function Home() {
           variant="outline"
         >Recruiter Portal</Button>
         <Button
-          onClick={() => router.push('/school/dashboard')}
+          onClick={() => router.push(`/school/${schoolId}/dashboard`)}
           type="button"
           variant="outline"
         >Manager Portal</Button>
+        <Button
+          onClick={() => router.push(`/admin/school`)}
+          type="button"
+          variant="outline"
+        >Admin</Button>
       </div>
     </main>
   );

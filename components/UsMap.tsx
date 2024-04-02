@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import statePaths from "../data/state-paths.json"
 
 export default function USMap({ activeStates, setActiveStates }) {
@@ -28,8 +28,7 @@ export default function USMap({ activeStates, setActiveStates }) {
   }
 
   function mouseMove(e) {
-
-    var x = e.clientX,
+    const x = e.clientX,
         y = e.clientY;
 
     if (!bubbleElement || !bubbleElement.current)
@@ -39,7 +38,7 @@ export default function USMap({ activeStates, setActiveStates }) {
     bubbleElement.current.style.left = (x + svgOffset.current[0]) + 'px';
 
     if (e.target.tagName == 'path') {
-      var content = e.target.dataset;
+      const content = e.target.dataset;
       hoveredLocation.current = content;
 
       bubbleElement.current.innerHTML = content.name;

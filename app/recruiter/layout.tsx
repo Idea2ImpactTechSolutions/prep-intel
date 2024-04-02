@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { Metadata } from "next";
 import RecruiterTabs from "./shared/recruiter-tabs";
 import { FaBell } from "react-icons/fa";
 import { IoPersonCircle } from "react-icons/io5";

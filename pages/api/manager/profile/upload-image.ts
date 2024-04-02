@@ -2,7 +2,7 @@ import { responseBody } from "../../../../app/config/helpers";
 import { NextApiRequest, NextApiResponse } from "next";
 import { IncomingForm, Fields, Files } from "formidable";
 import fs from "fs";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client } from "@aws-sdk/client-s3";
 const { Upload } = require("@aws-sdk/lib-storage");
 const { models } = require("../../../../app/models");
 const { Assets, School } = models;
@@ -68,7 +68,8 @@ export default async function handler(
             { where: { school_id: schoolId[0], category: category[0] } }
           );
         }
-        let createAsset = await Assets.create({
+
+        await Assets.create({
           description: "logo",
           school_id: schoolId[0],
           category: category[0],

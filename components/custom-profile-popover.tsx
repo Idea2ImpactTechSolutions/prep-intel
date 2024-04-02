@@ -3,11 +3,9 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { LucideUser, LucideUserCircle } from "lucide-react";
+import { LucideUserCircle } from "lucide-react";
 import { Button } from "./ui/button";
-import  Cookies from 'js-cookie';
 import { useAppDispatch } from "@/redux/store";
-import { reset } from "@/redux/features/auth/authSlice";
 import { signOut } from "next-auth/react";
 import { managerReset } from "@/redux/features/school/managerSlice";
 

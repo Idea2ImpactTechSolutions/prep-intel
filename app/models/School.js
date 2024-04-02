@@ -90,7 +90,6 @@ const School = sequelize.define(
 );
 
 School.hasMany(Assets, { foreignKey: "school_id", as: "assets" })
-// School.hasMany(SchoolDepartment, { foreignKey: "schoolId", as: "departments" });
 School.hasMany(SchoolDepartment, {
   foreignKey: "school_id",
   as: "school_departments",
