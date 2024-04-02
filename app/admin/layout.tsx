@@ -1,41 +1,39 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-import { ImageIcon } from "lucide-react";
+import { FaBell } from "react-icons/fa";
+import { IoPersonCircle } from "react-icons/io5";
+import { usePathname } from "next/navigation";
 
-export default function AuthLayout({
-  children,
-}: {
-  children: React.ReactElement;
-}) {
-  return (
-    <main className='min-h-screen bg-white'>
-      <section className='grid lg:grid-cols-2 font-sans'>
-        <aside className='bg-white min-h-screen flex flex-col'>
-          <div className='flex-1 mx-10 pt-20 md:w-[23rem] md:mx-auto'>
-            <div className='flex gap-2 items-center justify-start mb-8'>
-              <Image
-                src='/images/logo/logo.png'
-                alt='logo'
-                width={100}
-                height={100}
-              />
-              <h2 className='text-4xl font-bold font-sans'>Prep Intel</h2>
+export default function Layout({ children }: { children: React.ReactNode }) {
+    const pathname = usePathname();
+    return (
+        <main className="font-sans">
+            <nav className={`bg-panel p-2 border-b md:px-6 lg:px-6`}>
+                <div className="container p-2 px-6 flex flex-col items-center md:flex-row md:items-center md:justify-between pl-0">
+                    <Link
+                        href="/"
+                    >
+                        <Image
+                            src="/images/logo/text-logo.png"
+                            className=""
+                            width={160}
+                            height={0}
+                            alt="logo"
+                        />
+                    </Link>
+                    <div className=" flex flex-grow-1"></div>
+                    {pathname?.includes('/profile/') ? <div className="flex mt-4 md:mt-0 px-6"></div> : <div className="flex mt-4 md:mt-0 px-6">
+                      <IoPersonCircle size="1.5em" className="mx-4 w-8" />
+                      <FaBell  size="1.2em" className="w-4 mt-[2px]" />
+                    </div>}
+                </div>
+            </nav>
+            <section className="md:flex">
+            <div className="flex flex-col flex-grow">
+               {children}
             </div>
-            {children}
-          </div>
-          <div className='bg-neutral-100 h-[5rem] grid place-content-center'>
-            <p>
-              Already created a school?{" "}
-              <Link href='/login' className='text-primary font-semibold ml-2'>
-                Sign In Here
-              </Link>
-            </p>
-          </div>
-        </aside>
-        <aside className='hidden bg-accent border-l min-h-screen lg:grid place-content-center'>
-          <ImageIcon className='text-gray-300 w-[10rem] h-[10rem]' />
-        </aside>
-      </section>
-    </main>
-  );
+            </section>
+        </main>
+    )
 }
