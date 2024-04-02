@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import Link from "next/link";
-import { useSession } from "next-auth/react";
-
-
-
 interface PageProps {
-  schooldId: string
+  schoolId: string
 }
 
 export default function PageList({ schoolId }: PageProps) {
   const [links, setLinks] = useState([]);
 
   function resolveIds(url) {
-    const xxx= url.replace('[id]', schoolId);
     return url.replace('[id]', schoolId);
   }
 
