@@ -11,7 +11,7 @@ export default function PageTitleContainer({title, rightContent, titleClass, cla
 
   return (
     <section className={cn(
-      "pi-container flex items-center justify-between md:mt-4",
+      "pi-container flex items-center justify-between",
       className
     )}>
         <h2 className={cn(

@@ -28,7 +28,7 @@ export default function Page() {
   return (
     <section>
       <PageTitleContainer title="Recruits" />
-      <hr className="border-t border-gray-300 my-4" />
+      <hr className="border-t border-gray-300" />
 
       <section className="pi-container pt-0 items-center justify-between">
         <table className="table-auto">
