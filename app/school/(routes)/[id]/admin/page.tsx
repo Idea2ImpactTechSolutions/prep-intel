@@ -57,7 +57,8 @@ export default function AdminPage() {
                     />
                 </div>
                 <div className={cn(
-                    "p-4 md:px-16",
+                    "p-4",
+                    "pi-container",
                     currentProgress === "VIEW_ADMIN" ? "block" : 'hidden'
                 )}>
                     <table className="table-auto">
@@ -88,20 +89,14 @@ export default function AdminPage() {
                     "hidden",
                     currentProgress === "CREATE_RECRUITER" && "block"
                 )}>
-                    <PageTitleContainer
-                        title="Create a New User"
-                        titleClass="text-sm"
-                        rightContent=""
-                    />
-                    <section className="">
-
+                    <section className="pi-container">
+                        <h2 className="font-bold md:text-lg text-sm mb-2">Create Recruiter</h2>
                         {currentProgress === 'CREATE_RECRUITER' &&
                         <CreateRecruiter
                             setCurrentProgress={setCurrentProgress}
                             setAdmin={setAdmin}
                             schoolId={schoolId}
                         />}
-
                     </section>
                 </section>
             </>

@@ -30,7 +30,7 @@ export default function Page() {
       <PageTitleContainer title="Recruits" />
       <hr className="border-t border-gray-300 my-4" />
 
-      <section className="p-4 items-center justify-between md:px-16 md:mt-4">
+      <section className="pi-container pt-0 items-center justify-between">
         <table className="table-auto">
           <thead>
             <tr>

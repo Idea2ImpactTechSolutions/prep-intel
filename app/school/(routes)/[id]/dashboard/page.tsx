@@ -23,7 +23,7 @@ export default function Page() {
       <PageTitleContainer title="My Dashboard" />
       <hr className="border-t border-gray-300 my-4" />
 
-      <section className="p-4 flex items-center justify-between md:px-16 md:mt-4">
+      <section className="pi-container flex items-center justify-between">
         <div
           className="grid grid-cols-4 grid-rows-3 gap-4 w-full"
           style={{ gridTemplateColumns: "1fr 1fr 1fr 2fr" }}

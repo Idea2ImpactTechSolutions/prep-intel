@@ -16,7 +16,7 @@ export default function AdminPage() {
   const defaultSampleSchool = "2e0f768e-c887-4945-8cd7-96f96a07a3eb";
 
   return (
-    <div className="container p-0 pt-6">
+    <div className="pi-container">
       <h1 className="text-2xl font-bold mb-4">Site Admin</h1>
       <div className="flex w-full rows p-0 mt-2 space-x-6 self-center">
         <CreateSchoolManagerForm setClaimUrl={setClaimUrl} />

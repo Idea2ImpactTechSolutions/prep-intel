@@ -1,5 +1,5 @@
 import { models } from "../../../../app/models";
-const { ICDirectory } = models;
+const { HD2021 } = models;
 const { Op } = require("sequelize");
 
 export default async function handler(req, res) {
@@ -7,9 +7,9 @@ export default async function handler(req, res) {
     try {
       const states = req.query.states.split(",");
 
-      let schoolDetails = await ICDirectory.findAll({
+      let schoolDetails = await HD2021.findAll({
         where: {
-          STABBR: {
+          stabbr: {
             [Op.in]: states,
           },
         },

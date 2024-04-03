@@ -78,9 +78,8 @@ export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
                 onClick={() => setShowSidebar(!showSidebar)}
             ></div>}
             <nav className={cn(
-              width < 768 && "p-4",
-              width >= 758 && "p-6 container",
-              "flex justify-between items-center")}>
+               //width < 768 && "p-4",
+              "pi-container flex justify-between items-center")}>
                 <Link
                     href="/"
                     className="hidden md:block"

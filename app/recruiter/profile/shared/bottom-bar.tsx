@@ -10,7 +10,7 @@ const BottomBar = ({
 }) => {
   return (
     <div className="sticky bottom-0 bg-gray-200 py-3 w-full flex justify-between px-4 border-t-2">
-        <div className="container flex px-6">
+        <div className="pi-container flex">
         <button
           type="button"
           className={`flex items-center bg-background border-solid border-primary border text-primary hover:bg-primary-800 font-bold py-1 px-4 rounded mr-2 pl-2 ${

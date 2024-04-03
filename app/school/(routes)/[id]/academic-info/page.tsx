@@ -268,7 +268,7 @@ export default function AcademicInfo() {
 
         <Form className="flex-grow">
 
-          <div className="container mx-auto p-6">
+          <div className="pi-container mx-auto">
             <CompletionPanel percentCompleted={40} title={"2/3"}></CompletionPanel>
             <h1 className="text-2xl my-3 font-bold text-gray-800 mb-6">
               Create your School's Profile
