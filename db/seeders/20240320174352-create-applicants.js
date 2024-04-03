@@ -3,7 +3,7 @@
 const { models } = require("../../app/models");
 const { Users, Students, Recruits, Applicants, Recruiters } = models;
 const { SchoolRecruits } = require("../recruits");
-const DEFAULT_SCHOOL = 'b14e03a9-656a-4726-9d38-6f09c912a543';
+const DEFAULT_SCHOOL = 7001
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -16,7 +16,8 @@ module.exports = {
       last_name: "Recruiter",
       school_id: DEFAULT_SCHOOL,
       role: 'recruiter',
-      account_claimed: true
+      account_claimed: true,
+      is_active: true,
     });
 
     const recruiters = await Recruiters.create({
@@ -48,7 +49,7 @@ module.exports = {
         user_id: user.id,
       });
 
-      const recruits = await Recruits.create({
+      await Recruits.create({
         student_id: student.id,
         recruiter_id: recruiters.id,
         school_id: DEFAULT_SCHOOL,

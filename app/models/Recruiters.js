@@ -7,9 +7,9 @@ const Recruiters = sequelize.define(
     {
         // Define model attributes
         id: {
-            type: DataTypes.STRING,
-            primaryKey: true,
-            autoIncrement: true,
+          type: DataTypes.INTEGER,
+          primaryKey: true,
+          autoIncrement: true,
         },
         school_id: {
             type: DataTypes.STRING,

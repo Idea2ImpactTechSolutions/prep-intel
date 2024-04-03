@@ -13,7 +13,6 @@ const Students = sequelize.define(
         },
         dob: {
             type: DataTypes.DATE,
-            allowNull: false,
         },
         city: {
             type: DataTypes.STRING,

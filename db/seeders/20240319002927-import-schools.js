@@ -2,7 +2,6 @@
 
 const  { models } = require("../../app/models");
 const { School, SchoolAddress, HD2021 } = models;
-const { v4 } = require('uuid');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -47,30 +46,15 @@ module.exports = {
         }
     }));
 
-
     const school_addrs = schools.map(function (school) {
       return {
-        school_id: school.unitid.toString(),
+        school_id: school.unitid,
         street_address_1: school.addr,
         city: school.city,
         state: school.stabbr,
-        postal: school.zip.toString()
+        postal: school.zip.toString(),
       }
     });
-
-    console.log(JSON.stringify(school_addrs[0]));
-
-    // TODO: Works but bulkCreate doesn't?
-    //
-    // for (var idx in school_addrs) {
-    //   try
-    //   {
-    //     await SchoolAddress.create(school_addrs[idx]);
-    //   } catch(err) {
-    //     console.log(school_addrs[idx], err);
-    //   }
-    // }
-
     await SchoolAddress.bulkCreate(school_addrs);
   },
 

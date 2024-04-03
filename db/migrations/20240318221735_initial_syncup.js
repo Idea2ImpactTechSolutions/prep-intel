@@ -199,7 +199,7 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         school_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "school_id",
           allowNull: true,
         },
@@ -221,13 +221,13 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         recruiter_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "recruiter_id",
           allowNull: true,
         },
         state: { type: Sequelize.STRING(2), field: "state", allowNull: true },
         school_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "school_id",
           allowNull: true,
         },
@@ -248,7 +248,7 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         school_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "school_id",
           allowNull: true,
         },
@@ -268,7 +268,7 @@ const migrationCommands = (transaction) => [
           allowNull: true,
         },
         created_by: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "created_by",
           allowNull: true,
         },
@@ -282,7 +282,7 @@ const migrationCommands = (transaction) => [
       "school_forms_history",
       {
         school_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "school_id",
           primaryKey: true,
           allowNull: false,
@@ -308,7 +308,7 @@ const migrationCommands = (transaction) => [
           allowNull: true,
         },
         last_modified_by: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "last_modified_by",
           allowNull: true,
         },
@@ -318,7 +318,7 @@ const migrationCommands = (transaction) => [
           allowNull: true,
         },
         created_by: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "created_by",
           allowNull: true,
         },
@@ -339,7 +339,7 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         school_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "school_id",
           allowNull: true,
         },
@@ -361,7 +361,7 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         school_id: {
-          type: Sequelize.STRING,
+          type: Sequelize.INTEGER,
           field: "school_id",
           allowNull: true,
         },
@@ -386,10 +386,12 @@ const migrationCommands = (transaction) => [
       "schools",
       {
         id: {
-          type: Sequelize.STRING(255),
+          type: Sequelize.INTEGER,
           field: "id",
           primaryKey: true,
           allowNull: false,
+          autoIncrement: true,
+          initialAutoIncrement: 700000
         },
         found_date: {
           type: Sequelize.DATE,
@@ -536,7 +538,7 @@ const migrationCommands = (transaction) => [
           allowNull: true,
         },
         school_id: {
-          type: Sequelize.STRING(255),
+          type: Sequelize.INTEGER,
           field: "school_id",
           references: { model: "schools", key: "id" },
           allowNull: true,
@@ -580,7 +582,7 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         school_id: {
-          type: Sequelize.STRING(255),
+          type: Sequelize.INTEGER,
           onUpdate: "CASCADE",
           onDelete: "SET NULL",
           field: "school_id",
@@ -617,14 +619,14 @@ const migrationCommands = (transaction) => [
       "recruiters",
       {
         id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "id",
           primaryKey: true,
-          defaultValue: Sequelize.UUIDV4,
           allowNull: false,
+          autoIncrement: true,
         },
         school_id: {
-          type: Sequelize.STRING(255),
+          type: Sequelize.INTEGER,
           field: "school_id",
           references: { model: "schools", key: "id" },
           allowNull: true,
@@ -672,11 +674,11 @@ const migrationCommands = (transaction) => [
       "students",
       {
         id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "id",
           primaryKey: true,
-          defaultValue: Sequelize.UUIDV4,
           allowNull: false,
+          autoIncrement: true,
         },
         dob: { type: Sequelize.DATEONLY, field: "dob", allowNull: true },
         city: { type: Sequelize.STRING(100), field: "city", allowNull: true },
@@ -737,14 +739,14 @@ const migrationCommands = (transaction) => [
       "recruiter",
       {
         id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "id",
           primaryKey: true,
-          defaultValue: Sequelize.UUIDV4,
           allowNull: false,
+          autoIncrement: true,
         },
         school_id: {
-          type: Sequelize.STRING(255),
+          type: Sequelize.INTEGER,
           field: "school_id",
           references: { model: "schools", key: "id" },
           allowNull: true,
@@ -828,13 +830,13 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         student_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "student_id",
           references: { model: "students", key: "id" },
           allowNull: false,
         },
         recruiter_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "recruiter_id",
           allowNull: false,
         },
@@ -866,18 +868,18 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         recruiter_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "recruiter_id",
           allowNull: true,
         },
         student_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "student_id",
           references: { model: "students", key: "id" },
           allowNull: true,
         },
         school_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "school_id",
           allowNull: true,
         },
@@ -905,7 +907,7 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         school_id: {
-          type: Sequelize.STRING(255),
+          type: Sequelize.INTEGER,
           field: "school_id",
           references: { model: "schools", key: "id" },
           allowNull: true,
@@ -932,14 +934,14 @@ const migrationCommands = (transaction) => [
       "school_addresses",
       {
         id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "id",
           primaryKey: true,
-          defaultValue: Sequelize.UUIDV4,
           allowNull: false,
+          autoIncrement: true,
         },
         school_id: {
-          type: Sequelize.STRING(255),
+          type: Sequelize.INTEGER,
           field: "school_id",
           references: { model: "schools", key: "id" },
           allowNull: true,
@@ -981,7 +983,7 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         school_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "school_id",
           allowNull: true,
         },
@@ -1013,7 +1015,7 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         school_id: {
-          type: Sequelize.STRING(255),
+          type: Sequelize.INTEGER,
           field: "school_id",
           references: { model: "schools", key: "id" },
           allowNull: true,
@@ -1042,7 +1044,7 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         school_id: {
-          type: Sequelize.STRING(255),
+          type: Sequelize.INTEGER,
           field: "school_id",
           references: { model: "schools", key: "id" },
           allowNull: true,
@@ -1105,7 +1107,7 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         school_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "school_id",
           allowNull: true,
         },
@@ -1137,7 +1139,7 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         school_id: {
-          type: Sequelize.STRING(255),
+          type: Sequelize.INTEGER,
           field: "school_id",
           references: { model: "schools", key: "id" },
           allowNull: true,
@@ -1165,7 +1167,7 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         student_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           onUpdate: "CASCADE",
           onDelete: "NO ACTION",
           field: "student_id",
@@ -1173,7 +1175,7 @@ const migrationCommands = (transaction) => [
           allowNull: false,
         },
         school_id: {
-          type: Sequelize.STRING,
+          type: Sequelize.INTEGER,
           onUpdate: "CASCADE",
           onDelete: "NO ACTION",
           field: "school_id",
@@ -1181,7 +1183,7 @@ const migrationCommands = (transaction) => [
           allowNull: false,
         },
         recruiter_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           onUpdate: "CASCADE",
           onDelete: "NO ACTION",
           field: "recruiter_id",
@@ -1215,19 +1217,19 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         student_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "student_id",
           references: { model: "students", key: "id" },
           allowNull: true,
         },
         recruiter_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "recruiter_id",
           references: { model: "recruiters", key: "id" },
           allowNull: true,
         },
         school_id: {
-          type: Sequelize.STRING,
+          type: Sequelize.INTEGER,
           field: "school_id",
           references: { model: "schools", key: "id" },
           allowNull: true,
@@ -1236,6 +1238,11 @@ const migrationCommands = (transaction) => [
         contacted: {
           type: Sequelize.BOOLEAN,
           field: "contacted",
+          allowNull: true,
+        },
+        create_date: {
+          type: Sequelize.DATE,
+          field: "create_date",
           allowNull: true,
         },
         interested: {
@@ -1295,13 +1302,13 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         student_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "student_id",
           references: { model: "students", key: "id" },
           allowNull: true,
         },
         school_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "school_id",
           allowNull: true,
         },
@@ -1327,7 +1334,7 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         student_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "student_id",
           references: { model: "students", key: "id" },
           allowNull: true,
@@ -1354,7 +1361,7 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
         },
         student_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           field: "student_id",
           references: { model: "students", key: "id" },
           allowNull: false,
