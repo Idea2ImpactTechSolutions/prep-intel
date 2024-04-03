@@ -2,7 +2,7 @@ import { responseBody } from "app/config/helpers";
 
 /**
  * @openapi
- * /api/student/{studentId}/schools:
+ * /api/students/{studentId}/schools:
  *   get:
  *       responses:
  *           '200':
@@ -44,7 +44,7 @@ export async function GET(req: Request) {
 
 /**
  * @swagger
- * /api/student/{studentId}/schools:
+ * /api/students/{studentId}/schools:
  *   post:
  *     description: Returns the hello world
  *     summary: Creates a new recruiter
