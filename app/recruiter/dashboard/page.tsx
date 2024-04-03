@@ -9,7 +9,7 @@ export default function Page() {
   };
 
   return (
-    <div className="container p-0 mt-8">
+    <div className="pi-container">
         <h1 className="text-xl font-bold mb-4">Welcome, {recruiter.name} </h1>
         <h2 className="">Here are students that match your profile</h2>
 

@@ -92,7 +92,7 @@ export default function Home() {
 
     </main>
     <footer className="flex w-full bg-[url('/images/footer-tile.png')] min-h-[550px] align-top text-white" >
-      <div className="container p-8 pb-20 flex flex-col md:flex-col justify-end">
+      <div className="pi-container pb-20 flex flex-col md:flex-col justify-end">
 
       <div className="flex justify-between">
         <div className="w-[280px]">

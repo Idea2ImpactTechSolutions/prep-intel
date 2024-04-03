@@ -23,7 +23,7 @@ export default function Page() {
       onSubmit={handleSubmit}
       initialValues={initialValues}
     >
-    <div className="container p-0 mt-6">
+    <div className="pi-container">
         <h1 className="text-2xl font-bold mb-4">Recruiter</h1>
         <div className="flex w-full justify-center rows bg-gray-100 p-6 mt-2 self-center rounded-tl-md rounded-tr-md pb-20">
             <div className="flex flex-col items-center justify-center rows bg-gray-150 p-6 mt-20 self-center w-[600px] center">

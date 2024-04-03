@@ -11,8 +11,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     return (
         <main className="font-sans">
-            <nav className={`bg-panel p-2 border-b md:px-6 lg:px-6`}>
-                <div className="container p-2 px-6 flex flex-col items-center md:flex-row md:items-center md:justify-between pl-0">
+            <nav className={`bg-panel border-b`}>
+                <div className="pi-container flex flex-col items-center md:flex-row md:items-center md:justify-between">
                     <Link
                         href="/"
                     >

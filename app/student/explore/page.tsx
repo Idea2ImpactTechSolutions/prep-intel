@@ -81,7 +81,7 @@ export default function Page() {
   }
 
   return (
-    <div className="container p-6 mt-6">
+    <div className="pi-container mt-6">
       <h1 className="text-2xl font-bold mb-4">Select the states you would like to explore</h1>
 
       <UsMap activeStates={activeStates} setActiveStates={setActiveStates} ></UsMap>

@@ -73,7 +73,7 @@ export default function CreateRecruiter({ setCurrentProgress, setAdmin, schoolId
         <>
             <div className={cn(
                 "hidden",
-                isSuccess && "block p-4 lg:px-16")}>
+                isSuccess && "block")}>
 
                 <h3 className="text-xl font-bold">Invite Sent</h3>
                 <div className="pb-28">
@@ -116,11 +116,11 @@ export default function CreateRecruiter({ setCurrentProgress, setAdmin, schoolId
                 isSuccess && "hidden"
             )}>
                 <form onSubmit={handleSubmit}>
-                    <div className="p-4 md:px-16 flex flex-col h-[calc(100vh_-_18rem)] overflow-y-scroll">
+                    <div className="flex flex-col md:w-[36rem] p-6 bg-gray-100 rounded-md">
                         <div className="flex-1">
                             <div>
                                 <label htmlFor="school_details" className="block mb-2 text-sm font-bold">User Information</label>
-                                <div className="grid grid-cols-1 gap-y-2 md:grid-cols-2 md:gap-x-8">
+                                <div className="grid grid-cols-1 gap-y-2 md:grid-cols-2 md:gap-x-4">
                                     <Input
                                         label="First Name"
                                         labelClass="text-xs font-normal text-[#61646B]"
@@ -206,9 +206,7 @@ export default function CreateRecruiter({ setCurrentProgress, setAdmin, schoolId
                                 </div>
                             </div>
                         </div>
-
-                    </div>
-                    <div className="border-t-2 border-t-[#880505] bg-[#F0F4F7] p-4 flex justify-between items-center md:px-16">
+                        <div className="pt-2 flex justify-between items-center">
                         <div className="flex gap-x-4 items-center">
                             <Button
                                 variant="outline"
@@ -230,6 +228,8 @@ export default function CreateRecruiter({ setCurrentProgress, setAdmin, schoolId
                                 disabled={isCreatingRecruiter}
                             >Create User </Button>
                         </div>
+                    </div>
+
                     </div>
                 </form>
             </div>
