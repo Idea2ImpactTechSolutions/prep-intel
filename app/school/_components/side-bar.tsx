@@ -3,7 +3,6 @@ import CustomProfilePopover from "@/components/custom-profile-popover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAppDispatch } from "@/redux/store";
-import { DASHBOARD_NAVIGATION_DATA } from "@/utils/data";
 import useWindowSize from "@/utils/hooks/useWindowSize";
 import { AlignJustify, Bell, LogOut, User } from "lucide-react";
 import Image from "next/image";
@@ -12,12 +11,35 @@ import { usePathname, useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { signOut } from "next-auth/react";
 import { managerReset } from "@/redux/features/school/managerSlice";
+import { GraduationCap, LayoutGrid, Lock, UserPlus } from "lucide-react"
 
 interface SidebarProps {
     showSidebar: any;
     setShowSidebar: (state: any) => any;
 }
 
+  const SCHOOL_TABS = [
+  {
+      title: 'Dashboard',
+      url: (schoolId) => `/school/${schoolId}/dashboard`,
+      icon: <LayoutGrid className="w-4 h-4" />
+  },
+  {
+      title: 'Recruits',
+      url: (schoolId) => `/school/${schoolId}/recruits`,
+      icon: <UserPlus className="w-4 h-4" />
+  },
+  {
+      title: 'My School',
+      url: (schoolId) => `/school/${schoolId}/my-school`,
+      icon: <GraduationCap className="w-4 h-4" />
+  },
+  {
+      title: 'Admin',
+      url: (schoolId) => `/school/${schoolId}/admin`,
+      icon: <Lock className="w-4 h-4" />
+  },
+]
 
 export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
     const [showProfilePopover, setShowProfilePopover] = useState(false)
@@ -51,11 +73,14 @@ export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
     }, [width])
 
     return (
-        <>
+        <div className="bg-[#F0F4F7]">
             {showSidebar && width < 768 && <div className='absolute w-screen h-screen left-0 bg-neutral-50/5 z-20 cursor-pointer'
                 onClick={() => setShowSidebar(!showSidebar)}
             ></div>}
-            <nav className="p-4 bg-[#F0F4F7] flex justify-between items-center md:px-16">
+            <nav className={cn(
+              width < 768 && "p-4",
+              width >= 758 && "p-6 container",
+              "flex justify-between items-center")}>
                 <Link
                     href="/"
                     className="hidden md:block"
@@ -84,9 +109,11 @@ export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
                         <div className="p-4 mt-5 flex flex-col">
                             <div className="">
                                 {
-                                    DASHBOARD_NAVIGATION_DATA.map(({ id, title, url, icon }) => (
+                                    // Use the array index as the item key - it's stable in this context,
+                                    // isn't used for anything and eliminates unnecessary UUIDs
+                                    SCHOOL_TABS.map(({ title, url, icon }, index) => (
                                         <Link
-                                            key={id}
+                                            key={index}
                                             href={url(schoolId)}
                                             className={cn(`relative p-2.5 items-center gap-x-2`,
                                                 (location === url(schoolId)) ? activeLink : defaultLink
@@ -124,9 +151,9 @@ export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
                         <div className="flex items-center justify-between gap-x-16">
                             <div className="hidden md:flex md:justify-between md:items-center">
                                 {
-                                    DASHBOARD_NAVIGATION_DATA.map(({ id, title, url }) => (
+                                    SCHOOL_TABS.map(({ title, url }, index) => (
                                         <Link
-                                            key={id}
+                                            key={index}
                                             href={url(schoolId)}
                                             className={cn(
                                                 "text-sm pb-1 ml-10 hover:text-primary",
@@ -142,7 +169,7 @@ export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
                             <div className="flex gap-x-4">
                                 <Bell className="w-4 h-4 cursor-pointer" />
                                 <User className="w-4 h-4 cursor-pointer" onClick={() => setShowProfilePopover(!showProfilePopover)}/>
-                                <CustomProfilePopover 
+                                <CustomProfilePopover
                                     show={showProfilePopover}
                                     handleClose={() => setShowProfilePopover(false)}
                                 />
@@ -151,6 +178,6 @@ export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
 
                     )}
             </nav>
-        </>
+        </div>
     )
 }

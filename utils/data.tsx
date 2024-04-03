@@ -1,7 +1,5 @@
 import { v4 as uuid } from 'uuid';
 
-import { GraduationCap, LayoutGrid, Lock, UserPlus } from "lucide-react"
-
     export const STATE_CITY_DATA =  [
         {
             name: 'New York',
@@ -301,7 +299,7 @@ import { GraduationCap, LayoutGrid, Lock, UserPlus } from "lucide-react"
                 ],
         },
         {
-            name: "Texas", 
+            name: "Texas",
             cities:[
             "Houston",
             "San Antonio",
@@ -388,7 +386,7 @@ import { GraduationCap, LayoutGrid, Lock, UserPlus } from "lucide-react"
             "Weslaco"
             ]
         },
-        { 
+        {
             name: "Pennsylvania",
             cities: [
             "Philadelphia",
@@ -514,7 +512,7 @@ import { GraduationCap, LayoutGrid, Lock, UserPlus } from "lucide-react"
             ]
         },
         {
-            name: "Indiana", 
+            name: "Indiana",
             cities: [
             "Indianapolis",
             "Fort Wayne",
@@ -1095,7 +1093,7 @@ import { GraduationCap, LayoutGrid, Lock, UserPlus } from "lucide-react"
             "Cedar Falls"
             ]
         },
-        { 
+        {
             name: "Arkansas",
             cities: [
             "Little Rock",
@@ -1144,7 +1142,7 @@ import { GraduationCap, LayoutGrid, Lock, UserPlus } from "lucide-react"
             "Woonsocket"
             ]
         },
-        { 
+        {
             name: "Mississippi",
             cities: [
             "Jackson",
@@ -1258,31 +1256,4 @@ import { GraduationCap, LayoutGrid, Lock, UserPlus } from "lucide-react"
             "Burlington"
             ]
         }
-    ]
-
-    export const DASHBOARD_NAVIGATION_DATA = [
-        {
-            id: uuid(),
-            title: 'Dashboard',
-            url: (schoolId) => `/school/${schoolId}/dashboard`,
-            icon: <LayoutGrid className="w-4 h-4" />
-        },
-        {
-            id: uuid(),
-            title: 'Recruits',
-            url: (schoolId) => `/school/${schoolId}/recruits`,
-            icon: <UserPlus className="w-4 h-4" />
-        },
-        {
-            id: uuid(),
-            title: 'My School',
-            url: (schoolId) => `/school/${schoolId}/my-school`,
-            icon: <GraduationCap className="w-4 h-4" />
-        },
-        {
-            id: uuid(),
-            title: 'Admin',
-            url: (schoolId) => `/school/${schoolId}/admin`,
-            icon: <Lock className="w-4 h-4" />
-        },
     ]
