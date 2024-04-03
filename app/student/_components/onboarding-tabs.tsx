@@ -1,7 +1,7 @@
 "use client"
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { STUDENT_ONBOARDING_LINKS } from '../onboarding/(routes)/data'
+import { STUDENT_ONBOARDING_LINKS } from '../onboarding/data'
 
 export default function OnboardingTabs() {
   const pathname = usePathname()
