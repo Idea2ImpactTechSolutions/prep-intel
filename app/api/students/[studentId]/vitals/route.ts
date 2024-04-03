@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
-import { checkForChangedAttributes } from "pages/api/manager/profile/school-profile";
-import { models } from "app/models";
-import { responseBody } from "app/config/helpers";
+import { checkForChangedAttributes } from "@/pages/api/manager/profile/school-profile";
+import { models } from "@/app/models";
+import { responseBody } from "@/app/config/helpers";
 const { Users, Students } = models;
 
 const VITALS_FIELDS = [
@@ -19,7 +19,7 @@ const VITALS_FIELDS_FROM_USERS = ["user.first_name", "user.last_name"];
 
 /**
  * @swagger
- * /api/student/{studentId}/vitals:
+ * /api/students/{studentId}/vitals:
  *   get:
  *     summary: Retrieve student vitals information
  *     description: Fetches the vital information of a student by their ID.
@@ -73,7 +73,7 @@ export async function GET(
 
 /**
  * @swagger
- * /api/student/{studentId}/vitals:
+ * /api/students/{studentId}/vitals:
  *   post:
  *     summary: Updates student vitals
  *     description: Takes form field values posted in the body and updates them in the database.
