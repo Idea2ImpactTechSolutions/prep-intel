@@ -6,37 +6,37 @@ const SchoolAddress = sequelize.define(
   {
     // Define model attributes
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       primaryKey: true,
       autoIncrement: true,
     },
     school_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
     name: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
     },
     type: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(50),
     },
     street_address_1: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
     },
     street_address_2: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
     },
     city: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
     },
     state: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
     },
     postal: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(10),
     },
     country: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(2),
     },
   },
   {

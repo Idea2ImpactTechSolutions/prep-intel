@@ -13,7 +13,7 @@ const Users = require("./Users")
 const SchoolSocialMedia = require("./SchoolSocialMedia");
 const Assets = require("./Assets");
 const Students = require("./Students");
-const ICDirectory = require("./ICDirectory");
+const HD2021 = require("./HD2021");
 
 const models = {
   SchoolDepartment,
@@ -30,7 +30,7 @@ const models = {
   Assets,
   Managers,
   SchoolSocialMedia,
-  ICDirectory
+  HD2021,
 };
 
 // Model associations

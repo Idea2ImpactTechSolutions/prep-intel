@@ -1,16 +1,16 @@
 'use strict';
 
-const  models = require("../models");
-const { Users, Students, Recruits, Applicants, Recruiter, Recruiters } = models;
-const { SchoolRecruits } = require("./recruits");
+const { models } = require("../../app/models");
+const { Users, Students, Recruits, Applicants, Recruiters } = models;
+const { SchoolRecruits } = require("../recruits");
 const DEFAULT_SCHOOL = 'b14e03a9-656a-4726-9d38-6f09c912a543';
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
 
     // Recruiter user
-    const user = await Users.create({
+    const recruiterUser = await Users.create({
       email: "rec@college.edu",
       first_name: "Some",
       last_name: "Recruiter",
@@ -19,25 +19,15 @@ module.exports = {
       account_claimed: true
     });
 
-    const recruiter = await Recruiter.create({
-      school_id: DEFAULT_SCHOOL,
-      user_id: user.id,
-      first_name: "Jed",
-      last_name: "Smith",
-      email: "jed@some.edu",
-    });
-
-    // This table is quite confusing to me - I believe it's a mapping table
-    // for recruiters <-> students
     const recruiters = await Recruiters.create({
-      recruiter_id: recruiter.id,
+      recruiter_id: recruiterUser.id,
       school_id: DEFAULT_SCHOOL,
-      user_id: user.id,
+      user_id: recruiterUser.id,
     });
 
     let i = 0;
 
-    for(let idx in SchoolRecruits) {
+    for (let idx in SchoolRecruits) {
       const recruit = SchoolRecruits[idx];
 
       const fullName = recruit['Full Name'];
@@ -76,7 +66,7 @@ module.exports = {
     }
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     /**
      * Add commands to revert seed here.
      *
