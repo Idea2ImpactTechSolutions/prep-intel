@@ -34,6 +34,7 @@ const handler = NextAuth({
           // Any object returned will be saved in `user` property of the JWT
           return {
             id: user.email,
+            firstName: user.first_name,
             role: user.role,
             schoolID: user.school_id
           };

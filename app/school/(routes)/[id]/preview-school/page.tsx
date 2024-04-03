@@ -74,9 +74,9 @@ export default function SchoolPreview() {
             <div className="">
                 <form onSubmit={handleSubmit}>
                     <div className=" flex flex-col overflow-y-auto">
-                        <div className="container mx-auto p-4 pt-6 px-0 md:px-11 ">
+                        <div className="pi-container mx-auto">
                             <CompletionPanel percentCompleted={100} title={"3/3"}></CompletionPanel>
-                            <h1 className="p-4 text-xl font-bold text-gray-800 mb-6 md:p-0">
+                            <h1 className="py-4 text-xl font-bold text-gray-800 mb-6 md:p-0">
                                 Preview of Your School’s Profile
                             </h1>
                         </div>
@@ -92,7 +92,6 @@ export default function SchoolPreview() {
                                 </>
                             }
                             titleClass="text-sm"
-                            className="md:px-16"
                             rightContent={
                                 <Button
                                     variant={"outline"}
@@ -103,7 +102,9 @@ export default function SchoolPreview() {
                                 </Button>
                             }
                         />
-                        <SchoolInformation schoolData={school_data}/>
+                        <div className="pi-container">
+                          <SchoolInformation schoolData={school_data}/>
+                        </div>
                     </div>
                     <BottomBar
                         onBack={() => router.push(`/school/${schoolId}/academic-info`)}

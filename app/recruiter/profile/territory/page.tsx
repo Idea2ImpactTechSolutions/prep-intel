@@ -9,7 +9,7 @@ export default function Page() {
   const [activeStates, setActiveStates] = useState<string[]>([]);
 
   return (
-    <div className="container p-0 mt-6">
+    <div className="pi-container">
         <h1 className="text-2xl font-bold mb-4">Where Do You Recruit?</h1>
         <div className="ml-20 mb-20">
           <UsMap activeStates={activeStates} setActiveStates={setActiveStates} ></UsMap>

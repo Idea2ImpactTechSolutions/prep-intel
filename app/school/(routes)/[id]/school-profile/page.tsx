@@ -257,7 +257,7 @@ export default function Page() {
   return (
     <>
       <div className="">
-        <div className="container mx-auto p-6">
+        <div className="pi-container mx-auto">
           <CompletionPanel percentCompleted={0} title={"0/3"}></CompletionPanel>
           <h1 className="text-2xl font-bold text-gray-800 mb-6">
             Create Your School's Profile
@@ -272,7 +272,7 @@ export default function Page() {
           {({ values, errors, touched, handleChange, setFieldValue }) => {
             return (
               <Form>
-                <div className="p-4 md:px-16 flex flex-col h-[calc(100vh_-_14rem)] overflow-y-scroll">
+                <div className="pi-container flex flex-col h-[calc(100vh_-_14rem)] overflow-y-auto">
                   <div className="flex-1">
                     <div className="flex flex-col gap-y-4 md:flex-row md:gap-x-8">
                       <div className="flex gap-x-8">

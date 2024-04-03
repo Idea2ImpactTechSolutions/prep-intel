@@ -48,14 +48,8 @@ export default function MySchool() {
 
     return (
         <>
-            <div className="">
-                <div className=" flex flex-col overflow-y-auto">
-                    <div className="container mx-auto p-4 pt-6 px-0 md:px-11 ">
-                        <h1 className="p-4 text-xl font-bold text-gray-800 mb-6 md:p-0">
-                            My School
-                        </h1>
-                    </div>
-                    <div className="border-t"> </div>
+            <div>
+                <div className="flex flex-col overflow-y-auto">
                     <PageTitleContainer
                         title={
                             <>
@@ -67,7 +61,6 @@ export default function MySchool() {
                             </>
                         }
                         titleClass="text-sm"
-                        className="md:px-16"
                         rightContent={
                             <Button
                                     variant={"outline"}
@@ -78,7 +71,11 @@ export default function MySchool() {
                                 </Button>
                         }
                     />
-                    <SchoolInformation schoolData={school_data}/>
+                    <div className="border-t"> </div>
+
+                    <div className="pi-container pi-container">
+                      <SchoolInformation schoolData={school_data} />
+                    </div>
                 </div>
             </div>
         </>
