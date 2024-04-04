@@ -9,8 +9,8 @@ import { FormSection } from "@/components/form-section";
 import { toast } from "sonner";
 import { useAppDispatch } from "@/redux/store";
 import { setSchoolInformation } from "@/redux/features/school/managerSlice";
-import LoadingSpinner from "../../../_components/loading-spinner";
-import BottomBar from "../../../_components/bottom-bar";
+import LoadingSpinner from "../../_components/loading-spinner";
+import BottomBar from "../../_components/bottom-bar";
 
 // Define the validation schema using Yup
 const validationSchema = Yup.object().shape({

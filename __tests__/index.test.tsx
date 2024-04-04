@@ -3,7 +3,7 @@
  */
 import { render, screen } from "@testing-library/react";
 import Page from "@/app/page";
-import SchoolDashboard from "@/app/school/(routes)/[id]/dashboard/page"
+import SchoolDashboard from "@/app/school/[id]/dashboard/page"
 
 jest.mock("next/navigation", () => ({
   useRouter() {

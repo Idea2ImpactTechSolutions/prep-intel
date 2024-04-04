@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { UserPlus } from "lucide-react"
-import LoadingSpinner from "../../../_components/loading-spinner"
+import LoadingSpinner from "../../_components/loading-spinner"
 import { useLazyGetAllAdminQuery } from "@/redux/services/school/managerApi"
 
 type CURRENT_TAB_TYPES = 'VIEW_ADMIN' | 'CREATE_RECRUITER'

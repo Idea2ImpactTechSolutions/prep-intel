@@ -9,9 +9,9 @@ import { Dictionary } from "@/types/dictionary";
 import moment from 'moment';
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import SchoolInformation from "../../../_components/school-information";
-import BottomBar from "../../../_components/bottom-bar";
-import LoadingSpinner from "../../../_components/loading-spinner";
+import SchoolInformation from "../../_components/school-information";
+import BottomBar from "../../_components/bottom-bar";
+import LoadingSpinner from "../../_components/loading-spinner";
 import { useFormik } from "formik";
 import { toast } from "sonner";
 
