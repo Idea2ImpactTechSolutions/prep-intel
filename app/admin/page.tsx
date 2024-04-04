@@ -49,6 +49,14 @@ export default function AdminPage() {
           >
             Manager Portal
           </Button>
+          <Button
+            onClick={() => router.push(`/api-doc`)}
+            type="button"
+            variant="outline"
+          >
+            Developer API
+          </Button>
+
         </div>
         <PageList schoolId={defaultSampleSchool} />
       </div>

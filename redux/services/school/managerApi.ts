@@ -90,7 +90,7 @@ const managerApi = baseApi.injectEndpoints({
     }),
     createRecruiter: builder.mutation({
       query: (payload) => ({
-        url: `/recruiter`,
+        url: `/recruiters`,
         method: "POST",
         body: payload,
       }),
