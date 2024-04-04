@@ -40,8 +40,8 @@ export async function GET(
 ) {
   try {
     const schoolId = params.schoolId;
-
-    const getRecruitsRequest = await getRecruits({ schoolId });
+    const json = await req.json();
+    const getRecruitsRequest = await getRecruits({...json, schoolId });
     return Response.json(
       responseBody("Recruits successfully retrieved", 200, getRecruitsRequest)
     );
