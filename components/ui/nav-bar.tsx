@@ -11,37 +11,21 @@ import { usePathname, useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { signOut } from "next-auth/react";
 import { managerReset } from "@/redux/features/school/managerSlice";
-import { GraduationCap, LayoutGrid, Lock, UserPlus } from "lucide-react"
 
-interface SidebarProps {
-    showSidebar: any;
-    setShowSidebar: (state: any) => any;
+interface TabLink
+{
+  title: string;
+  url: (id: string) => string;
+  icon:React.ReactNode;
 }
 
-  const SCHOOL_TABS = [
-  {
-      title: 'Dashboard',
-      url: (schoolId) => `/school/${schoolId}/dashboard`,
-      icon: <LayoutGrid className="w-4 h-4" />
-  },
-  {
-      title: 'Recruits',
-      url: (schoolId) => `/school/${schoolId}/recruits`,
-      icon: <UserPlus className="w-4 h-4" />
-  },
-  {
-      title: 'My School',
-      url: (schoolId) => `/school/${schoolId}/my-school`,
-      icon: <GraduationCap className="w-4 h-4" />
-  },
-  {
-      title: 'Admin',
-      url: (schoolId) => `/school/${schoolId}/admin`,
-      icon: <Lock className="w-4 h-4" />
-  },
-]
+interface NavbarProps {
+    showSidebar: any;
+    setShowSidebar: (state: any) => any;
+    tabs: TabLink[];
+}
 
-export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
+export default function Navbar({ setShowSidebar, showSidebar, tabs }: NavbarProps) {
     const [showProfilePopover, setShowProfilePopover] = useState(false)
 
     const { width } = useWindowSize()
@@ -54,7 +38,7 @@ export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
     const router = useRouter()
     const location = usePathname()
     const pageParams = useParams();
-    const schoolId = pageParams?.id;
+    const schoolId = pageParams?.id as string;
 
     const dispatch = useAppDispatch()
 
@@ -110,7 +94,7 @@ export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
                                 {
                                     // Use the array index as the item key - it's stable in this context,
                                     // isn't used for anything and eliminates unnecessary UUIDs
-                                    SCHOOL_TABS.map(({ title, url, icon }, index) => (
+                                    tabs.map(({ title, url, icon }, index) => (
                                         <Link
                                             key={index}
                                             href={url(schoolId)}
@@ -150,7 +134,7 @@ export default function Sidebar({ setShowSidebar, showSidebar }: SidebarProps) {
                         <div className="flex items-center justify-between gap-x-16">
                             <div className="hidden md:flex md:justify-between md:items-center">
                                 {
-                                    SCHOOL_TABS.map(({ title, url }, index) => (
+                                    tabs.map(({ title, url }, index) => (
                                         <Link
                                             key={index}
                                             href={url(schoolId)}
