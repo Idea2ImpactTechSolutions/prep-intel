@@ -60,7 +60,14 @@ export async function GET(
   try {
     const schoolId = params.schoolId;   
     const searchParams = req.nextUrl.searchParams
-    const getRecruitsRequest = await getRecruits(schoolId,searchParams);
+    const requestData = { 
+      schoolId,
+      accepted_connection :searchParams.get('accepted_connection') === 'true',
+      applicants : searchParams.get('applicants') === 'true',
+      recruiterId : searchParams.get('recruiterId')
+    }
+  
+    const getRecruitsRequest = await getRecruits(requestData);
     return Response.json(
       responseBody("Recruits successfully retrieved", 200, getRecruitsRequest)
     );
@@ -73,12 +80,15 @@ export async function GET(
   }
 }
 
-async function getRecruits(schoolId,searchParams) {
-  const accepted_connection = searchParams.get('accepted_connection') === 'true';
-  const applicants = searchParams.get('applicants') === 'true';
-  const  recruiterId = searchParams.get('recruiterId');
+async function getRecruits(requestData) {
 
   let recruits;
+  const { 
+    schoolId,
+    accepted_connection,
+    applicants,
+    recruiterId,
+  } = requestData;
 
   if (recruiterId) {
     recruits = await Recruits.findAll({
