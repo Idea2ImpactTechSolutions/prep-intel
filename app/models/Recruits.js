@@ -16,59 +16,45 @@ const Recruits = sequelize.define(
         },
         student_id: {
             type: DataTypes.STRING,
-            allowNull: false,
         },
         school_id: {
             type: DataTypes.STRING,
-            allowNull: false,
         },
         recruiter_id: {
             type: DataTypes.STRING,
-            allowNull: false,
         },
         criteria: {
             type: DataTypes.TEXT,
-            allowNull: false,
         },
         connection_initiator: {
             type: DataTypes.TEXT,
-            allowNull: false,
         },
         connection_date: {
             type: DataTypes.DATE,
-            allowNull: false,
         },
         create_date: {
             type: DataTypes.DATE,
-            allowNull: false,
         },
         contacted: {
             type: DataTypes.BOOLEAN,
-            allowNull: false,
         },
         interested: {
             type: DataTypes.BOOLEAN,
-            allowNull: false,
         },
         application_date: {
             type: DataTypes.DATE,
-            allowNull: false,
         },
         application_status: {
             type: DataTypes.STRING,
-            allowNull: false,
         },
         applicant_status: {
             type: DataTypes.STRING,
-            allowNull: false,
         },
         is_applicant: {
             type: DataTypes.BOOLEAN,
-            allowNull: false,
         },
         is_viewable: {
             type: DataTypes.BOOLEAN,
-            allowNull: false,
         },
     },
     {
