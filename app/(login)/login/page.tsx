@@ -36,7 +36,7 @@ export default function LoginPage() {
           router.push(`school/${schoolId}/dashboard`);
           break;
         case 'recruiter':
-          router.push('/recruiter/profile/welcome')
+          router.push('/recruiter/dashboard')
           break;
         case 'student':
           router.push('/student/explore')
