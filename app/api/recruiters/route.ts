@@ -1,11 +1,10 @@
-import { responseBody } from "@/app/config/helpers";
+import { responseBody, getAuthCode } from "app/config/helpers";
 const { models } = require("app/models");
 const { School, Recruiters, Users } = models;
-const { v4 } = require("uuid");
 
 /**
  * @openapi
- * /api/recruiter:
+ * /api/recruiters:
  *   get:
  *       summary: Retrieves a list of recruiters or a specific recruiter by ID
  *       responses:
@@ -25,7 +24,7 @@ export async function GET() {
 
 /**
  * @swagger
- * /api/recruiter:
+ * /api/recruiters:
  *   post:
  *     description: Returns the hello world
  *     summary: Creates a new recruiter
@@ -36,14 +35,14 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const jsonBody = await req.json();
-    const { message, code, data } = await createRecruiterProfile(jsonBody);
-    return Response.json(responseBody(message, code, { school: data }), {
+    const { message, code, data } = await createRecruiter(jsonBody);
+    return Response.json(
+      responseBody(message, code, { school: data }), {
       status: code,
     });
   } catch (error: any) {
     return Response.json(
       {
-        //error: 'Internal Server Error'
         error: error.message,
       },
       {
@@ -53,7 +52,7 @@ export async function POST(req: Request) {
   }
 }
 
-async function createRecruiterProfile(json) {
+async function createRecruiter(json) {
   try {
     const { first_name, last_name, email, school_id } = json;
 
@@ -75,9 +74,7 @@ async function createRecruiterProfile(json) {
       };
     }
 
-    // Add 30 minutes to the current date
-    const currentDate = new Date();
-    const newDate = new Date(currentDate.getTime() + 60 * 60000); // 30 minutes * 60 seconds/minute * 1000 milliseconds/second
+    const {authCode, expiresAt } = getAuthCode();
 
     let user = await Users.create({
       school_id: school.id,
@@ -88,9 +85,9 @@ async function createRecruiterProfile(json) {
       account_claimed: false,
       role: "recruiter",
       create_date: new Date(),
-      auth_code_expiration: newDate,
+      auth_code_expiration: expiresAt,
       is_active: false,
-      auth_code: v4(),
+      auth_code: authCode,
       status: "pending",
     });
 

@@ -1,19 +1,20 @@
 'use strict';
 const { models } = require("../../app/models");
 const { School, Managers, Users } = models;
+const DEFAULT_SCHOOL = 7001;
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 
     // Quickly put in a place a system to
     async up(queryInterface, Sequelize) {
-
         // Create one or more users for basic/default authentication
         const users = [{
-            schoolId: 'b14e03a9-656a-4726-9d38-6f09c912a543',
+            schoolId: DEFAULT_SCHOOL,
             firstName: 'sample',
             lastName: 'admin',
             email: 'admin@x',
+            auth_code: '1234',
             role: 'admin',
         }];
 
@@ -32,8 +33,10 @@ module.exports = {
                 last_name: user.lastName,
                 school_id: user.schoolId,
                 role: 'admin',
+                auth_code: user.auth_code,
                 account_claimed: true,
                 is_active: true,
+                account_claimed: false,
             });
 
             await Managers.create({

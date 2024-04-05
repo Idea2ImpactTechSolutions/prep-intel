@@ -22,7 +22,7 @@ const Applicants = sequelize.define(
             allowNull: false,
         },
         recruiter_id: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
         application_status: {

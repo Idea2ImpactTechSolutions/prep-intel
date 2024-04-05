@@ -32,8 +32,14 @@ const adminApi = baseApi.injectEndpoints({
                   console.log(error)
               }
           }
-      })
+      }),
+      getSchools: builder.query({
+        query: (q) => ({
+            url: `/admin/schools?q=${q}`,
+            method: 'GET',
+        }),
+    }),
     })
 })
 
-export const { useAddSchoolManagerMutation, useAddSiteAdminMutation } = adminApi
+export const { useAddSchoolManagerMutation, useAddSiteAdminMutation, useLazyGetSchoolsQuery } = adminApi
