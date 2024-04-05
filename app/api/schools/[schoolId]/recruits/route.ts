@@ -3,6 +3,7 @@ import { Op } from "sequelize";
 const { Recruits, Recruiters, Students, Users } = models;
 import { responseBody } from "app/config/helpers";
 import { type NextRequest } from 'next/server'
+import logger from 'lib/logger';
 
 /**
  * @openapi
@@ -73,6 +74,7 @@ export async function GET(
     );
   } catch (error: any) {
     // Report
+    logger.error(error.message);
     return Response.json(
       responseBody("Error occurred", 400, { error: error.message }),
       { status: 400 }
