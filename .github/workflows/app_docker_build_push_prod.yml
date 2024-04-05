@@ -1,0 +1,99 @@
+name: Production App Docker Build and Push
+
+on:
+  push:
+    branches:
+      [production]
+  workflow_dispatch:  
+
+env:
+  AWS_REGION: "us-east-1"
+  ECR_REPO: "533267153582.dkr.ecr.us-east-1.amazonaws.com/prep-intel-app"
+  IMAGE_VERSION: production
+  DB_USERNAME: ${{vars.DB_USERNAME_PROD}}
+  DB_PASSWORD: ${{vars.DB_PASSWORD_PROD}}
+  DB_NAME: ${{vars.DB_NAME}}
+  DB_HOST: ${{vars.DB_HOST_PROD}}
+  NEXTAUTH_URL: ${{vars.NEXTAUTH_URL}}
+  AWS_ACCESS_KEY_ID: ${{vars.AWS_ACCESS_KEY_ID}}
+  AWS_SECRET_ACCESS_KEY: ${{vars.AWS_SECRET_ACCESS_KEY}}
+  BUCKET_NAME: ${{vars.BUCKET_NAME}}
+  NEXTAUTH_SECRET: "test"
+
+jobs:
+  docker-build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write   # Required for requesting the JWT
+      contents: read    # Required for actions/checkout
+
+    steps:
+      - name: Checkout app code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::533267153582:role/AWS_PrepIntel_GHA_Role
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build tagged Docker image
+        run: |
+          docker build -t ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }} \
+          --build-arg DB_USERNAME=${{env.DB_USERNAME}} \
+          --build-arg DB_PASSWORD=${{env.DB_PASSWORD}} \
+          --build-arg DB_NAME=${{env.DB_NAME}} \
+          --build-arg DB_HOST=${{env.DB_HOST}} \
+          --build-arg NEXTAUTH_SECRET=${{env.NEXTAUTH_SECRET}} \
+          --build-arg AWS_ACCESS_KEY_ID=${{env.AWS_ACCESS_KEY_ID}} \
+          --build-arg AWS_REGION=${{env.AWS_REGION}} \
+          --build-arg AWS_SECRET_ACCESS_KEY=${{env.AWS_SECRET_ACCESS_KEY}} \
+          --build-arg BUCKET_NAME=${{env.BUCKET_NAME}} .
+
+      - name: Push tagged Docker image to ECR
+        run: |
+          docker push ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }}
+
+  deploy:
+    needs: docker-build-and-push
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write   # Required for requesting the JWT
+      contents: read    # Required for actions/checkout
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::533267153582:role/AWS_PrepIntel_GHA_Role
+          aws-region: ${{ env.AWS_REGION }}
+
+
+      - name: Refresh ASG for testing infrastructure
+        run: |
+          aws autoscaling start-instance-refresh \
+          --auto-scaling-group-name prep-intel-prod-asg \
+          --preferences '{"InstanceWarmup": 60, "MinHealthyPercentage": 50}'
+
+
+      # - name: Fill in the new image ID in the Amazon ECS task definition
+      #   id: task-def
+      #   run: |
+      #     IMAGE_URI="${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }}"
+      #     TASK_DEF=$(sed -e "s|<CONTAINER_NAME>:latest|${IMAGE_URI}|g" task-definition.json)
+      #     echo "::set-output name=task_definition::${TASK_DEF}"
+
+      # - name: Deploy image to Amazon ECS
+      #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      #   with:
+      #     task-definition: task-definition.json
+      #     service: prep-intel-dev
+      #     cluster: prep-intel-test-cluster
+      #     wait-for-service-stability: true
+
