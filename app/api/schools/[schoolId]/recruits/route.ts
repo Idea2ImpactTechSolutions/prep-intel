@@ -2,6 +2,7 @@ import { models } from "app/models";
 import { Op } from "sequelize";
 const { Recruits, Recruiters, Students, Users } = models;
 import { responseBody } from "app/config/helpers";
+import { type NextRequest } from 'next/server'
 
 /**
  * @openapi
@@ -16,6 +17,24 @@ import { responseBody } from "app/config/helpers";
  *         schema:
  *           type: string
  *         description: The ID of the school to retrieve recruits for.
+ *      - in: query
+ *         name: recruiterId
+ *         schema:
+ *           type: string
+ *         description: The search query to filter recruits who are connected with a given recruiter .
+ *         required: false
+ *    - in: query
+ *         name: accepted_connection
+ *         schema:
+ *           type: string
+ *         description: The search query to filter for students that have accepted a connection with the school .
+ *         required: false
+ *  - in: query
+ *         name: applicants
+ *         schema:
+ *           type: string
+ *         description: The search query to filter recruiters by who have applied to the school .
+ *         required: false
  *     responses:
  *       '200':
  *         description: A list of recruits
@@ -35,13 +54,13 @@ import { responseBody } from "app/config/helpers";
  *                 value: '[{"id": 1, "first_name": "John"}]'
  */
 export async function GET(
-  req: Request,
+  req: NextRequest,
   { params }: { params: { schoolId: string } }
 ) {
   try {
-    const schoolId = params.schoolId;
-    const json = await req.json();
-    const getRecruitsRequest = await getRecruits({...json, schoolId });
+    const schoolId = params.schoolId;   
+    const searchParams = req.nextUrl.searchParams
+    const getRecruitsRequest = await getRecruits(schoolId,searchParams);
     return Response.json(
       responseBody("Recruits successfully retrieved", 200, getRecruitsRequest)
     );
@@ -54,14 +73,10 @@ export async function GET(
   }
 }
 
-async function getRecruits(json) {
-  const {
-    schoolId,
-    accepted_connection,
-    applicants,
-    recruiterId,
-    /* include_applicants, -- unused -- */
-  } = json;
+async function getRecruits(schoolId,searchParams) {
+  const accepted_connection = searchParams.get('accepted_connection') === 'true';
+  const applicants = searchParams.get('applicants') === 'true';
+  const  recruiterId = searchParams.get('recruiterId');
 
   let recruits;
 
