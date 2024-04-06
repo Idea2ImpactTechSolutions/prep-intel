@@ -83,7 +83,7 @@ async function getUsersRoleId(userId,role){
       roleId = await getRecruiter(userId);
       break;
     case 'manager':
-      roleId = await getRecruiter(userId);
+      roleId = await getManager(userId);
       break;
     case 'student':
       roleId = await getStudent(userId);
