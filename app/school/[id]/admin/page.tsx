@@ -4,7 +4,7 @@ import CreateRecruiter from "./_components/create-recruiter"
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { UserPlus } from "lucide-react"
+import { LucideChevronLeft, UserPlus } from "lucide-react"
 import LoadingSpinner from "../../_components/loading-spinner"
 import { useLazyGetAllAdminQuery } from "@/redux/services/school/managerApi"
 
@@ -42,7 +42,18 @@ export default function AdminPage() {
             <>
                 <div className="border-b">
                     <PageTitleContainer
-                        title="Admin"
+                        title={
+                            <>
+                                {currentProgress === "VIEW_ADMIN" && 'Admin'}
+                                {currentProgress === "CREATE_RECRUITER" && (
+                                    <>
+                                        <div className="flex items-center cursor-pointer"
+                                            onClick={() => setCurrentProgress('VIEW_ADMIN')}
+                                        > <LucideChevronLeft width={20} height={20}/> <span> Admin </span> </div>
+                                    </>
+                                )}
+                            </>
+                        }
                         rightContent={
                             <div className={cn(
                                 currentProgress === "CREATE_RECRUITER"
