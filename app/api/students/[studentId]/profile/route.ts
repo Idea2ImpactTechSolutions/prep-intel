@@ -82,7 +82,7 @@ async function getStudentSchools(jsonBody: any) {
     student_state: students.state,
     student_postal: students.postal,
     student_high_school: students.high_school,
-    studnet_act_score: students.act_score,
+    student_act_score: students.act_score,
     student_gpa: students.gpa,
     student_graudation_year: students.graduation_year,
     contacted: recruits.contacted,
