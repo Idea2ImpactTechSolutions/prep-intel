@@ -2,6 +2,7 @@ import { models } from "app/models";
 const { School } = models;
 import { responseBody } from "app/config/helpers";
 const { Op } = require("sequelize");
+import logger from 'lib/logger';
 
 /**
  * @openapi
@@ -103,6 +104,8 @@ export async function GET(req: Request) {
       responseBody("schools data returned successfully", 200, schools)
     );
   } catch (error: any) {
+    logger.error(error);
+    
     // Report
     return Response.json(
       {
