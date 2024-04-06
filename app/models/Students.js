@@ -14,15 +14,15 @@ const Students = sequelize.define(
         dob: {
             type: DataTypes.DATE,
         },
-        // postal: {
-        //     type: DataTypes.INTEGER,
-        // }, sat_score: {
-        //     type: DataTypes.INTEGER,
-        // }, act_score: {
-        //     type: DataTypes.INTEGER,
-        // }, gpa: {
-        //     type: DataTypes.INTEGER,
-        // },
+        postal: {
+            type: DataTypes.INTEGER,
+        }, sat_score: {
+            type: DataTypes.INTEGER,
+        }, act_score: {
+            type: DataTypes.INTEGER,
+        }, gpa: {
+            type: DataTypes.INTEGER,
+        },
         city: {
             type: DataTypes.STRING,
         },
