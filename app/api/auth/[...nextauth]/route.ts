@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 const models = require("@/app/models");
 const { Users } = models.models;
 import bcrypt from "bcryptjs";
+import logger from 'lib/logger';
 
 const handler = NextAuth({
   providers: [
@@ -45,7 +46,7 @@ const handler = NextAuth({
         }
       }
       catch(err) {
-        //console.log(err);
+        logger.error(err);
         return null;
       }
 
