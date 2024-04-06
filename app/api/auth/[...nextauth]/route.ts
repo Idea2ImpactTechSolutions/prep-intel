@@ -97,7 +97,7 @@ async function getRecruiter(userId){
       user_id: userId,
     },
   });
-  return recruiter.dataValues.id;
+  return recruiter.id;
 }
 
 async function getStudent(userId){
@@ -106,7 +106,7 @@ async function getStudent(userId){
       user_id: userId,
     },
   });
-  return student.dataValues.id;
+  return student.id;
 }
 
 async function getManager(userId){
@@ -115,7 +115,7 @@ async function getManager(userId){
       user_id: userId,
     },
   });
-  return manager.dataValues.id;
+  return manager.id;
 }
 
 export { handler as GET, handler as POST };
