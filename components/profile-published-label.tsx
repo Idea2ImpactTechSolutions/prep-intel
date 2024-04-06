@@ -1,4 +1,3 @@
-import { Check } from 'lucide-react';
 
 function ProfilePublishedLabel() {
   return (
