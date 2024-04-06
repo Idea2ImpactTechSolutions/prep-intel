@@ -61,34 +61,34 @@ const session = useSession()
   return (
     <div className="pi-container">
       <Header title="Recruiter" />
-        <h1 className="text-xl lg:text-2xl font-bold mb-">Hello {recruiter.name}, welcome!</h1>
-        <h2 className="text-[#8E8E8E]">Here are students that match your profile</h2>
+      <h1 className="text-xl lg:text-2xl font-bold mb-">Hello {recruiter.name}, welcome!</h1>
+      <h2 className="text-[#8E8E8E]">Here are students that match your profile</h2>
 
-        <div className='mt-5'>
-          {
-            !isLoading ?
-          (<Table
-          title="Schools"
-          columns={RECRUITS_COLUMNS}
-          >
-            <TBODY>
-              {
-                users.map((user, index) => (
-                  <TR key={index}>
-                    <TD>{user.ACT}</TD>
-                    <TD>{user.GPA}</TD>
-                    <TD>{user.SAT}</TD>
-                    <TD>{user['Major Interests']}</TD>
-                    <TD>{user.Extracurriculars}</TD>
-                    <TD>{user['Grad Year']}</TD>
-                    <TD><Button variant="outlinePrimary" className="text-[#A81D28] gap-x-1 text-sm h-7"><EyeIcon size={16}/> <span>View</span></Button></TD>
-                  </TR>))
-              }
-            </TBODY>
-          </Table>): <LoadingSpinner/>
-          // (<div>No data available</div>)
-          }
-        </div>
+      <div className='mt-5'>
+        {
+          !isLoading ?
+        (<Table
+        title="Recruits"
+        columns={RECRUITS_COLUMNS}
+        >
+          <TBODY>
+            {
+              users.map((user, index) => (
+                <TR key={index}>
+                  <TD>{user.ACT}</TD>
+                  <TD>{user.GPA}</TD>
+                  <TD>{user.SAT}</TD>
+                  <TD>{user['Major Interests']}</TD>
+                  <TD>{user.Extracurriculars}</TD>
+                  <TD>{user['Grad Year']}</TD>
+                  <TD><Button variant="outlinePrimary" className="text-[#A81D28] gap-x-1 text-sm h-7"><EyeIcon size={16}/> <span>View</span></Button></TD>
+                </TR>))
+            }
+          </TBODY>
+        </Table>): <LoadingSpinner/>
+        // (<div>No data available</div>)
+        }
+      </div>
     </div>
   );
 }

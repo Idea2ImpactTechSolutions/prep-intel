@@ -17,7 +17,7 @@ const Table = ({title, columns, children}:TableProps) => {
             
     <div className='border p-'>
       <div className='flex items-center p-4 bg-[#F6F8FA] border border-[#E6EBF0] gap-x-2'>
-        <span className='text-[#141111] '>Schools</span>
+        <span className='text-[#141111] '>{title}</span>
         <span>
           <CircleAlert width={17} height={17} />
         </span>
