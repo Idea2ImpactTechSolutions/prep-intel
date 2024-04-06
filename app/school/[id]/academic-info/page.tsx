@@ -606,7 +606,7 @@ export default function AcademicInfo() {
                   htmlFor="financials.financialAidInfoURL"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Financial Information URL
+                  Financial Aid Information URL
                 </label>
                 <div className="space-y-4">
                   <Field
