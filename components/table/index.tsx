@@ -23,7 +23,7 @@ const Table = ({title, columns, children}:TableProps) => {
         <thead className='text-xs text-gray-700 uppercase bg-[#F6F8FA] border-b border-[#E6EBF0] '>
           <tr className=''>
             {columns?.map((column, key) =>(
-                <th scope='col' className='px-4 py-5 whitespace-nowrap'>
+                <th scope='col' className='px-4 py-5 whitespace-nowrap' key={key}>
                     {column?.title}
                 </th>
             ))}
