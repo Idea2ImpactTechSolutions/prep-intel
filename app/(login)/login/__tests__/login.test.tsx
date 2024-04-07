@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 const ROLE_ROUTE_MAPPER = {
   "admin": "/admin",
   "manager": "school/123456/dashboard",
-  "recruiter": "/recruiter/profile/welcome",
+  "recruiter": "/recruiter/dashboard",
   "student": "/student/explore"
 };
 jest.mock("next/navigation", () => ({
