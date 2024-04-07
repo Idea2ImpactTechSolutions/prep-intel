@@ -13,6 +13,12 @@ const TABS = [
 
   },
   {
+    title: 'Territories',
+    url: () => `/recruiter/profile/territory`,
+    // url2: (id) => `/recruiter/${id}/dashboard`, // coming shortly
+    icon: <LayoutGrid className="w-4 h-4" />
+  },
+  {
       title: 'Connections',
       url: () => `/recruiter/connections`,
       // url2: (id) => `/recruiter/${id}/connections`, // coming shortly
