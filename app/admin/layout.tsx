@@ -1,39 +1,33 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
-import { FaBell } from "react-icons/fa";
-import { IoPersonCircle } from "react-icons/io5";
-import { usePathname } from "next/navigation";
+import React, { useState } from 'react'
+import { LayoutGrid } from "lucide-react"
+import { Navbar, TabLink} from "components/ui/nav-bar"
+
+const TABS = [
+  {
+      title: 'Dashboard',
+      url: (id) => `/admin`,
+      icon: <LayoutGrid className="w-4 h-4" />
+  },
+] as TabLink[];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-    const pathname = usePathname();
+    const [showSidebar, setShowSidebar] = useState<boolean>(true)
+
     return (
-        <main className="font-sans">
-            <nav className={`bg-panel border-b`}>
-                <div className="pi-container flex flex-col items-center md:flex-row md:items-center md:justify-between pl-0">
-                    <Link
-                        href="/"
-                    >
-                        <Image
-                            src="/images/logo/text-logo.png"
-                            className=""
-                            width={160}
-                            height={0}
-                            alt="logo"
-                        />
-                    </Link>
-                    <div className=" flex flex-grow-1"></div>
-                    {pathname?.includes('/profile/') ? <div className="flex mt-4 md:mt-0 px-6"></div> : <div className="flex mt-4 md:mt-0 px-6">
-                      <IoPersonCircle size="1.5em" className="mx-4 w-8" />
-                      <FaBell  size="1.2em" className="w-4 mt-[2px]" />
-                    </div>}
-                </div>
-            </nav>
-            <section className="md:flex">
+       <main className="font-sans">
+          <section>
+            <Navbar
+                showSidebar={showSidebar}
+                setShowSidebar={setShowSidebar}
+                tabs={TABS}
+            />
+          </section>
+          <section className="md:flex">
             <div className="flex flex-col flex-grow">
                {children}
             </div>
-            </section>
+          </section>
         </main>
     )
 }
