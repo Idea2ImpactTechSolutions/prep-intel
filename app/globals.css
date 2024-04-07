@@ -103,7 +103,7 @@
     transition: opacity .4s ease;
     z-index: 1;
 }
-table {
+/* table {
   border-collapse: collapse;
   width: 100%;
   color: #333;
@@ -134,4 +134,4 @@ table td {
   background-color: #fff;
   padding: 6px 10px;
   border-bottom: 1px solid #efefef;
-}
+} */

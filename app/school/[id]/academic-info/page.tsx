@@ -11,6 +11,7 @@ import { useAppDispatch } from "@/redux/store";
 import { setSchoolInformation } from "@/redux/features/school/managerSlice";
 import LoadingSpinner from "../../_components/loading-spinner";
 import BottomBar from "../../_components/bottom-bar";
+import ProfilePublishedLabel from "@/components/profile-published-label";
 
 // Define the validation schema using Yup
 const validationSchema = Yup.object().shape({
@@ -84,6 +85,7 @@ export default function AcademicInfo() {
 
   const [isFetchedAcademiInfo, setIsFetchedAcademiInfo] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(true);
+  const [schoolRecord, setSchoolRecord] = useState<any>("")
 
   const [initialValues, setInitialValues] = useState({
     school_departments: [{ name: "" }],
@@ -183,6 +185,7 @@ export default function AcademicInfo() {
         const school = await response.json();
         dispatch(setSchoolInformation({ slug: 'school_data', data: school.data }))
         setSchoolData(school.data);
+        setSchoolRecord(school.data);
         setIsLoading(false);
         setIsFetchedAcademiInfo(true)
       } catch (error) {
@@ -269,7 +272,8 @@ export default function AcademicInfo() {
         <Form className="flex-grow">
 
           <div className="pi-container mx-auto">
-            <CompletionPanel percentCompleted={40} title={"2/3"}></CompletionPanel>
+          {!schoolRecord?.publish_date && <CompletionPanel percentCompleted={33} title={"2/3"}></CompletionPanel>}
+          {schoolRecord?.publish_date && <div className="float-right"><ProfilePublishedLabel/></div>}
             <h1 className="text-2xl my-3 font-bold text-gray-800 mb-6">
               Create your School's Profile
             </h1>
@@ -606,7 +610,7 @@ export default function AcademicInfo() {
                   htmlFor="financials.financialAidInfoURL"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Financial Information URL
+                  Financial Aid Information URL
                 </label>
                 <div className="space-y-4">
                   <Field

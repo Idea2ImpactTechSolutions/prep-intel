@@ -21,6 +21,7 @@ import { CompletionPanel } from "@/components/completion-panel";
 import BottomBar from "../../_components/bottom-bar";
 import { setSchoolInformation } from "@/redux/features/school/managerSlice";
 import LoadingSpinner from "../../_components/loading-spinner";
+import ProfilePublishedLabel from "@/components/profile-published-label";
 
 interface initialValues {
   school_id: string,
@@ -258,7 +259,8 @@ export default function Page() {
     <>
       <div className="">
         <div className="pi-container mx-auto">
-          <CompletionPanel percentCompleted={0} title={"0/3"}></CompletionPanel>
+          {!school_data?.publish_date && <CompletionPanel percentCompleted={0} title={"0/3"}></CompletionPanel>}
+          {school_data?.publish_date && <div className="float-right"><ProfilePublishedLabel/></div>}
           <h1 className="text-2xl font-bold text-gray-800 mb-6">
             Create Your School's Profile
           </h1>
