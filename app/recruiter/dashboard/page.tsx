@@ -1,18 +1,14 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { RecruiterDashboardUsers as users }  from "../../ui/mock-data/Users"
-import StatusLabel from "@/components/status-label";
-import ConnectedLabel from "@/components/connected-label";
-import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, CircleAlert, EyeIcon } from "lucide-react";
-import Table from "@/components/table";
-import { TBODY, TR , TD} from "@/components/table/table-element";
-import { useSession } from "next-auth/react";
-import { useGetRecruitsQuery } from "@/redux/services/recruiter/recruiterApi";
 import LoadingSpinner from "@/components/loading-spinner";
-import Header from "./_components/Header";
-import CustomCheckbox from "@/components/custom-checkbox";
+import Table from "@/components/table";
+import { TBODY, TD, TR } from "@/components/table/table-element";
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useGetRecruitsQuery } from "@/redux/services/recruiter/recruiterApi";
+import { EyeIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import Header from "./_components/Header";
 
 export default function Page() {
   const session = useSession()

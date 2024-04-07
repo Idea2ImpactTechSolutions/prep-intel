@@ -27,8 +27,6 @@ const Header = ({title, recruites, data, setSearchData}:HeaderProps) => {
 
   const [sortBy, setSortBy] = useState(null);
 
-  console.log(recruites)
-
   // Function to filter data based on search text
   const searchedData =(values:any)=>{
     let searchedValues = recruites?.filter((item:any) =>

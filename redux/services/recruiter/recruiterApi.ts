@@ -10,7 +10,6 @@ const recruiterApi = baseApi.injectEndpoints({
       async onQueryStarted(_, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          console.log(result);
         } catch (error) {
           console.log(error);
         }
