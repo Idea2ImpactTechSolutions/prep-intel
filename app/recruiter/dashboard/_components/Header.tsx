@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SlidersHorizontal } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   DropdownMenu,
@@ -16,22 +16,57 @@ import {
 
 interface HeaderProps {
   title?: string;
-  
-}
+  setSearchData:(data)=> void,
+  data: any
+} 
 
-const Header = ({title}:HeaderProps) => {
-
-  const [showStatusBar, setShowStatusBar] = React.useState<boolean>(true)
-  const [showActivityBar, setShowActivityBar] = React.useState<boolean>(false)
+const Header = ({title, users, data, setSearchData}:HeaderProps) => {
+  const [sortOrder, setSortOrder] = React.useState<boolean>(false)
   const [showPanel, setShowPanel] = React.useState<boolean>(false)
 
+  const [sortBy, setSortBy] = useState(null);
+
+  // Function to filter data based on search text
+  const searchedData =(values:any)=>{
+    let searchedValues = users?.filter(item =>
+      Object.values(item)?.some(value =>
+        typeof value === 'string' && value.toLowerCase().includes(values?.toLowerCase())
+        || typeof value === 'number' && value.toString().includes(values)
+      )
+    );
+    setSearchData(searchedValues)
+  }
+
+  // Function to handle sorting option selection
+  const handleSortChange = (option:any) => {
+    setSortOrder(prev => prev = !prev)
+    if (sortBy === option) {
+      setSortBy(null);
+    } else {
+      setSortBy(option); 
+    }
+  };
+
+  // Function to sort the array based on a specific key
+  const sortByKey = (array: any[], key: string) => {
+    const sortedArray = [...array].sort((a, b) => {
+      const aValue = typeof a[key] === 'string' ? a[key].toLowerCase() : a[key];
+      const bValue = typeof b[key] === 'string' ? b[key].toLowerCase() : b[key];
+      if (sortOrder && key === sortBy) {
+        return aValue - bValue;
+      } else {
+        return bValue - aValue;
+      }
+    });
+    setSearchData(sortedArray);
+  };
 
   return (
     <div className="flex lg:flex-row justify-between items-center mb-5">
       <h3 className="hidden md:flex md:text-[36px] font-bold">{title}</h3>  
       <div className="flex gap-x-4">
         <div className="w-full lg:w-[600px] ">
-          <Input placeholder="Type to search"/>
+          <Input placeholder="Type to search" onChange={(e)=>searchedData(e.target.value)}/>
         </div>
 
         <DropdownMenu>
@@ -45,22 +80,31 @@ const Header = ({title}:HeaderProps) => {
             <DropdownMenuSeparator />
 
             <DropdownMenuCheckboxItem
-              checked={showPanel}
-              onCheckedChange={setShowPanel}
+              checked={sortBy === 'SAT'}
+              onCheckedChange={() => {
+                handleSortChange('SAT')
+                sortByKey(data, 'SAT')
+              }}
             >
-              ACT
+              SAT
             </DropdownMenuCheckboxItem>
             <DropdownMenuCheckboxItem
-              checked={showStatusBar}
-              onCheckedChange={setShowStatusBar}
+              checked={sortBy === 'GPA'}
+              onCheckedChange={() => {
+                handleSortChange('GPA')
+                sortByKey(data, 'GPA')
+              }}
             >
               GPA
             </DropdownMenuCheckboxItem>
             <DropdownMenuCheckboxItem
-              checked={showPanel}
-              onCheckedChange={setShowPanel}
+              checked={sortBy === 'ACT'}
+              onCheckedChange={() => {
+                handleSortChange('ACT')
+                sortByKey(data, 'ACT')
+              }}
             >
-              SAT
+              ACT
             </DropdownMenuCheckboxItem>
 
             <DropdownMenuSeparator />

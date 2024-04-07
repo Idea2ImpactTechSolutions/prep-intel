@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { RecruiterDashboardUsers as users }  from "../../ui/mock-data/Users"
 import StatusLabel from "@/components/status-label";
 import ConnectedLabel from "@/components/connected-label";
@@ -11,12 +11,18 @@ import { useSession } from "next-auth/react";
 import { useGetRecruitsQuery } from "@/redux/services/recruiter/recruiterApi";
 import LoadingSpinner from "@/components/loading-spinner";
 import Header from "./_components/Header";
+import CustomCheckbox from "@/components/custom-checkbox";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function Page() {
-const session = useSession()
+  const session = useSession()
+
+  const [searchData, setSearchData] = useState([{}])
 
   const schoolId = session?.data?.user?.schoolID
-  const recruiterId = "57e2c5c8-a963-4713-a4d8-e832e79b48e4" 
+  // const recruiterId = session?.data?.user?.roleId
+  const recruiterId = "57e2c5c8-a963-4713-a4d8-e832e79b48e4"
+
   const acceptedConnection = ""
   const applicants = ""
 
@@ -24,8 +30,11 @@ const session = useSession()
     name: 'Jay'
   };
 
-  const RECRUITS_COLUMNS = [
-    
+  const RECRUITS_COLUMNS = [  
+    {
+      id: 1,
+      title: <Checkbox/>,
+    },
     {
       id: 2,
       title:"ACT",
@@ -58,10 +67,14 @@ const session = useSession()
 
   const {data, isLoading}  = useGetRecruitsQuery({schoolId, recruiterId, acceptedConnection, applicants})
 
+  useEffect(()=>{
+    setSearchData(users)
+  },[users])
+
   return (
     <div className="pi-container">
-      <Header title="Recruiter" />
-      <h1 className="text-xl lg:text-2xl font-bold mb-">Hello {recruiter.name}, welcome!</h1>
+      <Header title="Recruiter" users={users} setSearchData={(data)=>setSearchData(data)} data={searchData}/>
+      <h1 className="text-xl lg:text-2xl font-bold mb-">Hello {recruiter?.name}, welcome!</h1>
       <h2 className="text-[#8E8E8E]">Here are students that match your profile</h2>
 
       <div className='mt-5'>
@@ -73,13 +86,14 @@ const session = useSession()
         >
           <TBODY>
             {
-              users.map((user, index) => (
+              searchData?.map((user, index) => (
                 <TR key={index}>
-                  <TD>{user.ACT}</TD>
-                  <TD>{user.GPA}</TD>
-                  <TD>{user.SAT}</TD>
+                  <TD><Checkbox/></TD>
+                  <TD>{user["ACT"]}</TD>
+                  <TD>{user['GPA']}</TD>
+                  <TD>{user['SAT']}</TD>
                   <TD>{user['Major Interests']}</TD>
-                  <TD>{user.Extracurriculars}</TD>
+                  <TD>{user["Extracurriculars"]}</TD>
                   <TD>{user['Grad Year']}</TD>
                   <TD><Button variant="outlinePrimary" className="text-[#A81D28] gap-x-1 text-sm h-7"><EyeIcon size={16}/> <span>View</span></Button></TD>
                 </TR>))
