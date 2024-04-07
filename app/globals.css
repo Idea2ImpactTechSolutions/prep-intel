@@ -103,7 +103,9 @@
     transition: opacity .4s ease;
     z-index: 1;
 }
-/* table {
+
+/*  Remove as soon as existing tables are converted to the new template type */
+table.simple {
   border-collapse: collapse;
   width: 100%;
   color: #333;
@@ -116,22 +118,22 @@
   margin-top: 50px;
   margin-bottom: 50px;
 }
-table tr {
+table.simple tr {
   cursor: pointer;
 }
-table th {
+table.simple th {
   background-color: #e7cdcd;
   font-weight: bold;
   padding: 6px 10px;
 }
-table tr:nth-child(even) td {
+table.simple tr:nth-child(even) td {
   background-color: hsl(0, 0%, 92%);
 }
-table tr:hover td {
+table.simple tr:hover td {
   background-color: #ffedcc;
 }
-table td {
+table.simple td {
   background-color: #fff;
   padding: 6px 10px;
   border-bottom: 1px solid #efefef;
-} */
+}

@@ -72,7 +72,7 @@ export default function AdminPage() {
                     "pi-container",
                     currentProgress === "VIEW_ADMIN" ? "block" : 'hidden'
                 )}>
-                    <table className="table-auto">
+                    <table className="table-auto simple">
                         <thead>
                             <tr>
                                 <th>First Name</th>

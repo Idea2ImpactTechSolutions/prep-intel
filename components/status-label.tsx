@@ -5,30 +5,6 @@ interface StatusLabelProps {
   status: string;
 }
 
-// interface StatusColor {
-//   [key: string]: {
-//     textColor: string;
-//     bgColor: string;
-//   };
-// }
-
-// const STATUS_COLOR: StatusColor = {
-//   accepted: {
-//     textColor: "#57BFC7",
-//     bgColor: "#EDFDF8",
-//   },
-
-//   rejected: {
-//     textColor: "#C75764",
-//     bgColor: "#FDEDF2",
-//   },
-
-//   waitlisted: {
-//     textColor: "#1354FB",
-//     bgColor: "#EDF7FD",
-//   },
-// };
-
 interface StatusColor {
   [key: string]: string;
 }
