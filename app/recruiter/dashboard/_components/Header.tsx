@@ -16,20 +16,23 @@ import {
 
 interface HeaderProps {
   title?: string;
-  setSearchData:(data)=> void,
-  data: any
+  setSearchData:(data:any)=> void,
+  data: [], 
+  recruites: [] 
 } 
 
-const Header = ({title, users, data, setSearchData}:HeaderProps) => {
+const Header = ({title, recruites, data, setSearchData}:HeaderProps) => {
   const [sortOrder, setSortOrder] = React.useState<boolean>(false)
   const [showPanel, setShowPanel] = React.useState<boolean>(false)
 
   const [sortBy, setSortBy] = useState(null);
 
+  console.log(recruites)
+
   // Function to filter data based on search text
   const searchedData =(values:any)=>{
-    let searchedValues = users?.filter(item =>
-      Object.values(item)?.some(value =>
+    let searchedValues = recruites?.filter((item:any) =>
+       Object.values(item?.student)?.some(value =>
         typeof value === 'string' && value.toLowerCase().includes(values?.toLowerCase())
         || typeof value === 'number' && value.toString().includes(values)
       )
@@ -80,10 +83,10 @@ const Header = ({title, users, data, setSearchData}:HeaderProps) => {
             <DropdownMenuSeparator />
 
             <DropdownMenuCheckboxItem
-              checked={sortBy === 'SAT'}
+              checked={sortBy === 'sat_score'}
               onCheckedChange={() => {
-                handleSortChange('SAT')
-                sortByKey(data, 'SAT')
+                handleSortChange('sat_score')
+                sortByKey(data, 'sat_score')
               }}
             >
               SAT
@@ -98,10 +101,10 @@ const Header = ({title, users, data, setSearchData}:HeaderProps) => {
               GPA
             </DropdownMenuCheckboxItem>
             <DropdownMenuCheckboxItem
-              checked={sortBy === 'ACT'}
+              checked={sortBy === 'act_score'}
               onCheckedChange={() => {
-                handleSortChange('ACT')
-                sortByKey(data, 'ACT')
+                handleSortChange('act_score')
+                sortByKey(data, 'act_score')
               }}
             >
               ACT

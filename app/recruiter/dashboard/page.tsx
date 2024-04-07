@@ -17,7 +17,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 export default function Page() {
   const session = useSession()
 
-  const [searchData, setSearchData] = useState([{}])
+  const [searchData, setSearchData] = useState([])
 
   const schoolId = session?.data?.user?.schoolID
   // const recruiterId = session?.data?.user?.roleId
@@ -68,12 +68,12 @@ export default function Page() {
   const {data, isLoading}  = useGetRecruitsQuery({schoolId, recruiterId, acceptedConnection, applicants})
 
   useEffect(()=>{
-    setSearchData(users)
-  },[users])
+    setSearchData(data?.data)
+  },[data])
 
   return (
     <div className="pi-container">
-      <Header title="Recruiter" users={users} setSearchData={(data)=>setSearchData(data)} data={searchData}/>
+      <Header title="Recruiter" recruites={data?.data} setSearchData={(data)=>setSearchData(data)} data={searchData}/>
       <h1 className="text-xl lg:text-2xl font-bold mb-">Hello {recruiter?.name}, welcome!</h1>
       <h2 className="text-[#8E8E8E]">Here are students that match your profile</h2>
 
@@ -86,15 +86,15 @@ export default function Page() {
         >
           <TBODY>
             {
-              searchData?.map((user, index) => (
+              searchData?.map((recruits:any, index) => (
                 <TR key={index}>
                   <TD><Checkbox/></TD>
-                  <TD>{user["ACT"]}</TD>
-                  <TD>{user['GPA']}</TD>
-                  <TD>{user['SAT']}</TD>
-                  <TD>{user['Major Interests']}</TD>
-                  <TD>{user["Extracurriculars"]}</TD>
-                  <TD>{user['Grad Year']}</TD>
+                  <TD>{recruits?.student?.act_score}</TD>
+                  <TD>3.7</TD>
+                  <TD>{recruits?.student?.sat_score}</TD>
+                  <TD>Business and Sports</TD>
+                  <TD>Student Government</TD>
+                  <TD>{recruits?.student?.graduation_year}</TD>
                   <TD><Button variant="outlinePrimary" className="text-[#A81D28] gap-x-1 text-sm h-7"><EyeIcon size={16}/> <span>View</span></Button></TD>
                 </TR>))
             }
