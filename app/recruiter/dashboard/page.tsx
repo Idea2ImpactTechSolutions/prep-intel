@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import Header from "./_components/Header";
 
 export default function Page() {
-  const session = useSession()
+  const session:any = useSession()
 
   const [searchData, setSearchData] = useState([])
 
