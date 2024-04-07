@@ -13,7 +13,7 @@ import Header from "./_components/Header";
 export default function Page() {
   const session:any = useSession()
 
-  const [searchData, setSearchData] = useState([])
+  const [searchData, setSearchData] = useState<[]>([]);
 
   const schoolId = session?.data?.user?.schoolID
   // const recruiterId = session?.data?.user?.roleId
