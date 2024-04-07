@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 
 
 const ROLE_ROUTE_MAPPER = {
-  "admin": "/admin/school",
+  "admin": "/admin",
   "manager": "school/123456/dashboard",
   "recruiter": "/recruiter/profile/welcome",
   "student": "/student/explore"
