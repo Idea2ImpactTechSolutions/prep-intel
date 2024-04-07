@@ -97,7 +97,7 @@ async function getRecruits(requestData) {
       include: [
         {
           model: Students,
-          attributes: ["high_school"],
+          attributes: ["act_score","sat_score","graduation_year","high_school"],
           include: { model: Users, attributes: ["first_name", "last_name"] },
         },
         {
@@ -117,7 +117,7 @@ async function getRecruits(requestData) {
       include: [
         {
           model: Students,
-          attributes: ["high_school"],
+          attributes: ["act_score","sat_score","graduation_year","high_school"],
           include: { model: Users, attributes: ["first_name", "last_name"] },
         },
         {
@@ -135,7 +135,7 @@ async function getRecruits(requestData) {
       include: [
         {
           model: Students,
-          attributes: ["high_school"],
+          attributes: ["act_score","sat_score","graduation_year","high_school"],
           include: { model: Users, attributes: ["first_name", "last_name"] },
         },
         {
