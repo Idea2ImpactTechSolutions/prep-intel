@@ -1,9 +1,6 @@
+import { Dictionary } from '@/types/dictionary'
 import { ChevronLeft, ChevronRight, CircleAlert } from 'lucide-react'
 import React from 'react'
-import StatusLabel from '../status-label'
-import { Button } from '../ui/button'
-import ConnectedLabel from '../connected-label'
-import { Dictionary } from '@/types/dictionary'
 
 interface TableProps {
     title:string;

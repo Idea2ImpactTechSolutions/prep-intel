@@ -1,5 +1,4 @@
-import React from "react";
-import { CircleAlert, CircleCheck } from "lucide-react";
+import {CircleCheck } from "lucide-react";
 
 const ConnectedLabel = () => {
   return <div className='flex gap-x-2 items-center'>
