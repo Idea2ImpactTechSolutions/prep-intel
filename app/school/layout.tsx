@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import Navbar from "components/ui/nav-bar"
+import { Navbar, TabLink} from "components/ui/nav-bar"
 import { useLazyGetSchoolProfileQuery } from '@/redux/services/school/managerApi'
 import { useAppDispatch, useAppSelector } from '@/redux/store'
 import { setSchoolInformation } from '@/redux/features/school/managerSlice'
@@ -31,7 +31,7 @@ const TABS = [
       url: (schoolId) => `/school/${schoolId}/admin`,
       icon: <Lock className="w-4 h-4" />
   },
-];
+] as TabLink[];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const [showSidebar, setShowSidebar] = useState<boolean>(true)

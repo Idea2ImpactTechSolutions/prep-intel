@@ -12,11 +12,11 @@ import { useEffect, useState } from "react";
 import { signOut } from "next-auth/react";
 import { managerReset } from "@/redux/features/school/managerSlice";
 
-interface TabLink
+export interface TabLink
 {
   title: string;
   url: (id: string) => string;
-  icon:React.ReactNode;
+  icon: React.ReactNode;
 }
 
 interface NavbarProps {
@@ -25,7 +25,7 @@ interface NavbarProps {
     tabs: TabLink[];
 }
 
-export default function Navbar({ setShowSidebar, showSidebar, tabs }: NavbarProps) {
+export function Navbar({ setShowSidebar, showSidebar, tabs }: NavbarProps) {
     const [showProfilePopover, setShowProfilePopover] = useState(false)
 
     const { width } = useWindowSize()

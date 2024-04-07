@@ -1,15 +1,15 @@
 "use client";
 import React, { useState } from 'react'
 import { LayoutGrid } from "lucide-react"
-import Navbar from "components/ui/nav-bar"
+import { Navbar, TabLink} from "components/ui/nav-bar"
 
-export const TABS = [
+const TABS = [
   {
       title: 'Dashboard',
       url: (id) => `/recruiter/${id}/dashboard`,
       icon: <LayoutGrid className="w-4 h-4" />
   },
-];
+] as TabLink[];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     const [showSidebar, setShowSidebar] = useState<boolean>(true)
