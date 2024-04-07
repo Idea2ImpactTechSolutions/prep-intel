@@ -18,23 +18,23 @@ import logger from 'lib/logger';
  *         schema:
  *           type: string
  *         description: The ID of the school to retrieve recruits for.
- *      - in: query
+ *       - in: query
  *         name: recruiterId
  *         schema:
  *           type: string
- *         description: The search query to filter recruits who are connected with a given recruiter .
+ *         description: The search query to filter recruits who are connected with a given recruiter.
  *         required: false
- *    - in: query
+ *       - in: query
  *         name: accepted_connection
  *         schema:
  *           type: string
- *         description: The search query to filter for students that have accepted a connection with the school .
+ *         description: The search query to filter for students that have accepted a connection with the school.
  *         required: false
- *  - in: query
+ *       - in: query
  *         name: applicants
  *         schema:
  *           type: string
- *         description: The search query to filter recruiters by who have applied to the school .
+ *         description: The search query to filter recruiters by who have applied to the school.
  *         required: false
  *     responses:
  *       '200':
@@ -59,15 +59,15 @@ export async function GET(
   { params }: { params: { schoolId: string } }
 ) {
   try {
-    const schoolId = params.schoolId;   
+    const schoolId = params.schoolId;
     const searchParams = req.nextUrl.searchParams
-    const requestData = { 
+    const requestData = {
       schoolId,
       accepted_connection :searchParams.get('accepted_connection') === 'true',
       applicants : searchParams.get('applicants') === 'true',
       recruiterId : searchParams.get('recruiterId')
     }
-  
+
     const getRecruitsRequest = await getRecruits(requestData);
     return Response.json(
       responseBody("Recruits successfully retrieved", 200, getRecruitsRequest)
@@ -85,7 +85,7 @@ export async function GET(
 async function getRecruits(requestData) {
 
   let recruits;
-  const { 
+  const {
     schoolId,
     accepted_connection,
     applicants,
