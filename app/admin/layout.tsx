@@ -6,7 +6,7 @@ import { Navbar, TabLink} from "components/ui/nav-bar"
 const TABS = [
   {
       title: 'Dashboard',
-      url: (id) => `/recruiter/${id}/dashboard`,
+      url: (id) => `/admin`,
       icon: <LayoutGrid className="w-4 h-4" />
   },
 ] as TabLink[];
