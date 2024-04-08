@@ -5,7 +5,7 @@ import UsMap from "@/components/UsMap"
 import { Button } from "@/components/ui/button";
 import { useSetTerritoriesMutation, useLazyGetRecruiterQuery } from "@/redux/services/recruiter/recruiterApi";
 import LoadingSpinner from "@/components/loading-spinner";
-import { useSession } from "next-auth/react";
+import PageTitleContainer from "@/components/page-title";
 
 const options = [
   { "value": "AL", "label": "Alabama" },
@@ -67,9 +67,10 @@ export default function Page() {
   const [setTerritories, { isLoading: isSaving }] = useSetTerritoriesMutation();
   const [getRecruiter, { isLoading }] = useLazyGetRecruiterQuery();
 
-  const session = useSession();
-
-  const recruiterId = session?.data?.user?.roleId || "57e2c5c8-a963-4713-a4d8-e832e79b48e4";
+  // TODO: Figure out why roleId when added to (interface DefaultSession), doesn't
+  // enable typed access and creates compile errors...
+  //const recruiterId = session?.data?.user?.roleId
+  const recruiterId = "57e2c5c8-a963-4713-a4d8-e832e79b48e4";
 
   async function handleSetTerritories() {
     const payload = {
@@ -115,9 +116,10 @@ export default function Page() {
   }
 
   return (
+    <>
+    <PageTitleContainer title="My Territories" />
+    <hr className="border-t border-gray-300 my-0" />
     <div className="pi-container mt-6">
-      <h1 className="text-2xl font-bold mb-4">My Territories</h1>
-
       <UsMap activeStates={activeStates} setActiveStates={setActiveStates} ></UsMap>
       { isLoading && <LoadingSpinner />}
       { !isLoading &&
@@ -146,5 +148,6 @@ export default function Page() {
       </>
       }
     </div>
+    </>
   );
 }
