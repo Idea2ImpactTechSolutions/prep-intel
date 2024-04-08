@@ -7,12 +7,21 @@ const recruiterApi = baseApi.injectEndpoints({
         url: `/schools/${schoolId}/recruits?recruiterId=${recruiterId}&accepted_connection=${acceptedConnection}&applicants=${applicants}`,
         method: "GET",
       }),
-      async onQueryStarted(_, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled;
-        } catch (error) {
-          console.log(error);
-        }
+    }),
+    getRecruiter: builder.query({
+      query: ({id}) => ({
+        url: `/recruiters/${id}/`,
+        method: "GET",
+      }),
+    }),
+    setTerritories: builder.mutation({
+      query: function(payload){
+        const { id } = payload;
+        return {
+          url: `/recruiters/${id}/` ,
+          method: "PATCH",
+          body: payload,
+        };
       },
     }),
   }),
@@ -20,4 +29,6 @@ const recruiterApi = baseApi.injectEndpoints({
 
 export const {
   useGetRecruitsQuery,
+  useSetTerritoriesMutation,
+  useLazyGetRecruiterQuery,
 } = recruiterApi;
