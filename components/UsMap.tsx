@@ -15,8 +15,7 @@ export default function USMap({ activeStates, setActiveStates }) {
       let items:string[];
 
       if (existingSelection > -1) {
-        activeStates.splice(existingSelection, 1);
-        items = [...activeStates];
+        items = activeStates.filter((_, index) => index !== existingSelection);
       } else {
         items = [...activeStates, stateID];
       }
