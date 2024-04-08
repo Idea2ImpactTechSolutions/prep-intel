@@ -1,13 +1,37 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import Sidebar from '../_components/side-bar'
+import { Navbar, TabLink} from "components/ui/nav-bar"
 import { useLazyGetSchoolProfileQuery } from '@/redux/services/school/managerApi'
 import { useAppDispatch, useAppSelector } from '@/redux/store'
 import { setSchoolInformation } from '@/redux/features/school/managerSlice'
 import EmptyStateContainer from '@/components/empty-state'
 import { usePathname, useRouter, useParams } from 'next/navigation'
-import LoadingSpinner from '../_components/loading-spinner'
+import LoadingSpinner from './_components/loading-spinner'
 import { Dictionary } from '@/types/dictionary'
+import { GraduationCap, LayoutGrid, Lock, UserPlus } from "lucide-react"
+
+const TABS = [
+  {
+      title: 'Dashboard',
+      url: (schoolId) => `/school/${schoolId}/dashboard`,
+      icon: <LayoutGrid className="w-4 h-4" />
+  },
+  {
+      title: 'Recruits',
+      url: (schoolId) => `/school/${schoolId}/recruits`,
+      icon: <UserPlus className="w-4 h-4" />
+  },
+  {
+      title: 'My School',
+      url: (schoolId) => `/school/${schoolId}/my-school`,
+      icon: <GraduationCap className="w-4 h-4" />
+  },
+  {
+      title: 'Admin',
+      url: (schoolId) => `/school/${schoolId}/admin`,
+      icon: <Lock className="w-4 h-4" />
+  },
+] as TabLink[];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const [showSidebar, setShowSidebar] = useState<boolean>(true)
@@ -42,9 +66,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <main className="overflow-y-hidden font-sans">
             <section className="">
-                <Sidebar
+                <Navbar
                     showSidebar={showSidebar}
                     setShowSidebar={setShowSidebar}
+                    tabs={TABS}
                 />
                 <section>
                     {

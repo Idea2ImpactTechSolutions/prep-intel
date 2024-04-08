@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("./sequelize");
-const Users  = require("./Users");
+const Users = require("./Users");
 
 const Students = sequelize.define(
     "students",
@@ -13,7 +13,15 @@ const Students = sequelize.define(
         },
         dob: {
             type: DataTypes.DATE,
-            allowNull: false,
+        },
+        postal: {
+            type: DataTypes.STRING,
+        }, sat_score: {
+            type: DataTypes.INTEGER,
+        }, act_score: {
+            type: DataTypes.INTEGER,
+        }, gpa: {
+            type: DataTypes.FLOAT,
         },
         city: {
             type: DataTypes.STRING,
@@ -58,7 +66,7 @@ const Students = sequelize.define(
 // Students.hasMany(Applicants, { foreignKey: "student_id", as: "applicants" })
 
 Students.belongsTo(Users, {
-  foreignKey: 'user_id', // This should match the foreignKey in the hasOne association
+    foreignKey: 'user_id', // This should match the foreignKey in the hasOne association
 });
 
 

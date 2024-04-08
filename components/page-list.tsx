@@ -6,6 +6,9 @@ interface PageProps {
 
 export default function PageList({ schoolId }: PageProps) {
   const [links, setLinks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [showLinks, setShowLinks] = useState(false);
+  const [collected, setCollected] = useState(false);
 
   function resolveIds(url) {
     return url.replace('[id]', schoolId);
@@ -15,21 +18,31 @@ export default function PageList({ schoolId }: PageProps) {
     if (process.env.NODE_ENV !== 'development') {
       return;
     }
-
-    //call api
-    fetch('/api/pagelist', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((r) => {
-        return r.json();
-      })
-      .then(data => {
-        setLinks(data);
-      });
   }, []);
+
+  function toggleLinks() {
+
+    if (!collected) {
+      setCollected(true);
+      setLoading(true);
+      //call api
+      fetch('/api/pagelist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((r) => {
+          return r.json();
+        })
+        .then(data => {
+          setLinks(data);
+          setLoading(false);
+        });
+    }
+
+    setShowLinks(!showLinks);
+  }
 
   if (process.env.NODE_ENV !== 'development') {
     return (<></>);
@@ -37,17 +50,24 @@ export default function PageList({ schoolId }: PageProps) {
 
   return (
     <div className="overflow-hidden">
-      <h1 className='text-xl font-bold mt-6'>Page List</h1>
-      <ul>
-        {
-          links.map((url, index) => (
-            <li key={index} className="m-2"><Link
-              href={resolveIds(url)}
-              className={`pb-1 text-sm transition-all hover:border-b-[4px] hover:border-b-primary md:ml-2 md:text-[1rem] `}
-            >{url}</Link></li>
-          ))
-        }
-      </ul>
+      <h1 className='text-xl font-bold mt-6' onClick={toggleLinks}>Page List</h1>
+
+      {
+        loading && <div>Loading...</div>
+      }
+
+      {
+        showLinks && <ul>
+          {
+            links.map((url, index) => (
+              <li key={index} className="m-2"><Link
+                href={resolveIds(url)}
+                className={`pb-1 text-sm transition-all hover:border-b-[4px] hover:border-b-primary md:ml-2 md:text-[1rem] `}
+              >{url}</Link></li>
+            ))
+          }
+        </ul>
+      }
     </div>
 
   )
