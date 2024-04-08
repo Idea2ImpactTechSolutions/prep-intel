@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight, CircleAlert } from 'lucide-react'
 import React from 'react'
 
 interface TableProps {
-    title:string;
+    title?:string;
     columns:Dictionary[];
     children:React.ReactNode
 }

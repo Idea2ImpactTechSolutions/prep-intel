@@ -33,8 +33,12 @@ const Header = ({title, recruites, data, setSearchData}:HeaderProps) => {
        Object.values(item?.student)?.some(value =>
         typeof value === 'string' && value.toLowerCase().includes(values?.toLowerCase())
         || typeof value === 'number' && value.toString().includes(values)
+      ) ||
+       Object.values(item?.student?.user)?.some(value =>
+        typeof value === 'string' && value.toLowerCase().includes(values?.toLowerCase())
       )
     );
+
     setSearchData(searchedValues)
   }
 
