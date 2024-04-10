@@ -57,6 +57,8 @@ async function getStudentSchools(jsonBody: any) {
     where: { student_id: studentId, school_id: recruiter.school_id },
   })
 
+  console.log("Recruiter")
+
   if (!recruits) {
     return Response.json(
       responseBody("Recruiter not found", 404, null),
