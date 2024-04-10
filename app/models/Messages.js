@@ -22,6 +22,10 @@ const Messages = sequelize.define(
             type: DataTypes.STRING,
             allowNull: true,
         },
+        status: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
         message_text: {
             type: DataTypes.TEXT,
             allowNull: false,

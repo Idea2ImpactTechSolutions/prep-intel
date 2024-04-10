@@ -120,8 +120,8 @@ export async function POST(req: Request) {
               recruiter_id: data.recruiter_id,
         student_id: data.student_id,
         message_text: data.message_text,
-        sender_role: "student",
-        recipient_role: "school",
+        sender_role: data.sender_role,
+        recipient_role: "student",
         create_date: Date.now(),
           })
       } else {
@@ -129,7 +129,7 @@ export async function POST(req: Request) {
 
           if (!school) {
                return Response.json(
-      responseBody("school with id not", 404, {  }),
+      responseBody("school not found", 404, {  }),
       {
         status: 404,
       }
@@ -139,8 +139,8 @@ export async function POST(req: Request) {
         student_id: data.student_id,
         school_id: data.school_id,
         message_text: data.message_text,
-        sender_role: "student",
-        recipient_role: "school",
+        sender_role: data.sender_role,
+        recipient_role: "recruiter",
         create_date: Date.now(),
           })
       }
