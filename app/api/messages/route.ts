@@ -5,7 +5,7 @@ const { Messages, Recruiters, School, Students } = models;
 
 /**
  * @openapi
- * /api/students/{studentId}/schools:
+ * /api/messages/routes:
  *   get:
  *       responses:
  *           '200':
@@ -14,7 +14,7 @@ const { Messages, Recruiters, School, Students } = models;
  *                       schema:
  *                           type: array
  *                           items: {}
- *       summary: Retrieves a list of student school interests
+ *       summary: Retrieves all messages for provided fields which inlcude recruiter_id, student_id, school_id
  */
 export async function GET(req: NextRequest,) {
   try {
@@ -69,13 +69,13 @@ export async function GET(req: NextRequest,) {
 
 /**
  * @swagger
- * /api/students/{studentId}/schools:
+ * /api/messages/routes:
  *   post:
- *     description: Returns the hello world
+ *     description: Posts the message to the required recipient
  *     summary: Creates a new recruiter
  *     responses:
  *       200:
- *         description: Hello World!
+ *         description: Message sent successfully
  */
 export async function POST(req: Request) {
   try {
