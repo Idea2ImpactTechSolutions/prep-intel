@@ -14,6 +14,7 @@ import BottomBar from "../../_components/bottom-bar";
 import LoadingSpinner from "../../_components/loading-spinner";
 import { useFormik } from "formik";
 import { toast } from "sonner";
+import ProfilePublishedLabel from "@/components/profile-published-label";
 
 export default function SchoolPreview() {
     const [isFetchedProfile, setIsFetchedProfile] = useState<boolean>(false)
@@ -75,7 +76,8 @@ export default function SchoolPreview() {
                 <form onSubmit={handleSubmit}>
                     <div className=" flex flex-col overflow-y-auto">
                         <div className="pi-container mx-auto">
-                            <CompletionPanel percentCompleted={100} title={"3/3"}></CompletionPanel>
+                        {!school_data?.publish_date && <CompletionPanel percentCompleted={67} title={"3/3"}></CompletionPanel>}
+                        {school_data?.publish_date && <div className="float-right"><ProfilePublishedLabel/></div>}
                             <h1 className="py-4 text-xl font-bold text-gray-800 mb-6 md:p-0">
                                 Preview of Your School’s Profile
                             </h1>

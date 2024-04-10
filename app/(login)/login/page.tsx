@@ -28,7 +28,7 @@ export default function LoginPage() {
     if (session?.user?.role && authCompleted) {
       switch (session.user.role) {
         case 'admin':
-          router.push('/admin/school');
+          router.push('/admin');
           break;
         case 'manager':
 
@@ -36,7 +36,7 @@ export default function LoginPage() {
           router.push(`school/${schoolId}/dashboard`);
           break;
         case 'recruiter':
-          router.push('/recruiter/profile/welcome')
+          router.push('/recruiter/dashboard')
           break;
         case 'student':
           router.push('/student/explore')

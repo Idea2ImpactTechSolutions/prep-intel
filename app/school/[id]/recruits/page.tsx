@@ -31,7 +31,7 @@ export default function Page() {
       <hr className="border-t border-gray-300" />
 
       <section className="pi-container pt-0 items-center justify-between">
-        <table className="table-auto">
+        <table className="table-auto simple">
           <thead>
             <tr>
               <th>Full Name</th>

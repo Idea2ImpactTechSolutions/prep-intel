@@ -1,8 +1,9 @@
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 const models = require("@/app/models");
-const { Users } = models.models;
+const { Users, Recruiters,Students, Managers } = models.models;
 import bcrypt from "bcryptjs";
+import logger from 'lib/logger';
 
 const handler = NextAuth({
   providers: [
@@ -32,10 +33,13 @@ const handler = NextAuth({
         const credentialsMatch = await bcrypt.compare(credentials.password, user.password);
         if (user && credentialsMatch) {
           // Any object returned will be saved in `user` property of the JWT
+          let roleId =  await getUsersRoleId(user.id,user.role);
           return {
-            id: user.email,
+            id: user.id,
             firstName: user.first_name,
+            email : user.email,
             role: user.role,
+            roleId : roleId,
             schoolID: user.school_id
           };
         } else {
@@ -45,7 +49,7 @@ const handler = NextAuth({
         }
       }
       catch(err) {
-        //console.log(err);
+        logger.error(err);
         return null;
       }
 
@@ -70,5 +74,48 @@ const handler = NextAuth({
     error: process.env.NEXTAUTH_FORM !== 'default' ? '/login' : '',
   },
 });
+
+
+async function getUsersRoleId(userId,role){
+  let roleId = '';
+  switch(role) {
+    case 'recruiter':
+      roleId = await getRecruiter(userId);
+      break;
+    case 'manager':
+      roleId = await getManager(userId);
+      break;
+    case 'student':
+      roleId = await getStudent(userId);
+      break;
+  }
+  return roleId;
+}
+async function getRecruiter(userId){
+  let recruiter = await Recruiters.findOne({
+    where: {
+      user_id: userId,
+    },
+  });
+  return recruiter.id;
+}
+
+async function getStudent(userId){
+  let student = await Students.findOne({
+    where: {
+      user_id: userId,
+    },
+  });
+  return student.id;
+}
+
+async function getManager(userId){
+  let manager = await Managers.findOne({
+    where: {
+      user_id: userId,
+    },
+  });
+  return manager.id;
+}
 
 export { handler as GET, handler as POST };

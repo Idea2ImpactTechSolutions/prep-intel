@@ -11,8 +11,8 @@ parser = argparse.ArgumentParser(
     description='Apply PREP-INTEL changes to a new database.')
 
 # Add arguments to the parser
-parser.add_argument('--ipeds', '-i', action='store_true',
-                    help='Download and import ipeds.HD data')
+parser.add_argument('--seed', '-s', action='store_true',
+                    help='Seed the db with ipeds.HD data and local seeders')
 parser.add_argument('--migrations', '-m', action='store_true',
                     help='Run migrations and seeders')
 parser.add_argument('--all', '-a', action='store_true',
@@ -45,15 +45,16 @@ if args.env_file:
 load_dotenv(dotenv_path=env_file)
 
 if args.all:
-    nces_tools.build_hd_table(env_file)
     run_command("npx sequelize db:migrate")
+    nces_tools.build_hd_table(env_file)
     run_command("npx sequelize db:seed:all")
+    print("http://localhost:3000/users/claim?auth_code=1234")
 else:
-    if args.ipeds:
+    if args.seed:
         nces_tools.build_hd_table(env_file)
+        run_command("npx sequelize db:seed:all")
     elif args.migrations:
         run_command("npx sequelize db:migrate")
-        run_command("npx sequelize db:seed:all")
 
 # Check if no arguments were provided and print the help message
 if len(sys.argv) == 1:
