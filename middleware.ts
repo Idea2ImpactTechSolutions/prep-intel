@@ -17,24 +17,8 @@ export async function middleware(req) {
   return NextResponse.next();
 }
 
-// Easier to maintain public path list
-const publicPaths = [
-    '_next/static',
-    '_next/image',
-    'api/auth/*',
-    'api/healthcheck',
-    'api/spec',
-    'api/users/claim',
-    'api/users/set-password',
-    'favicon.ico',
-    'login/*',
-    'public',
-    'users/claim',
-    'users/set-password',
-];
-
 export const config = {
   matcher: [
-    `/((?!${publicPaths.join('|')}|.*\\.png$).*)`,
+    "/((?!_next/static|api/ddbg|api/spec|login/*|api/auth/*|_next/image|favicon.ico|public|api/healthcheck|users/claim|users/set-password|api/users/claim|api/users/set-password|.*\\.png$).*)",
   ],
 };
