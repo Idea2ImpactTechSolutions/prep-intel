@@ -11,6 +11,11 @@ export const getApiDocs = async () => {
         title: "Prep-Intel API",
         version: "1.0.1",
       },
+      servers: [{
+          url: "http://localhost:3000/",
+          description: "Local development"
+      }
+      ],
       components: {
         securitySchemes: {
           BearerAuth: {
