@@ -9,8 +9,13 @@ export const getApiDocs = async () => {
       openapi: "3.0.0",
       info: {
         title: "Prep-Intel API",
-        version: "1.0",
+        version: "1.0.1",
       },
+      servers: [{
+          url: "http://localhost:3000/",
+          description: "Local development"
+      }
+      ],
       components: {
         securitySchemes: {
           BearerAuth: {
