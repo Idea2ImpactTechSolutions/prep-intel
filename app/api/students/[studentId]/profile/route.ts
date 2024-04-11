@@ -79,7 +79,7 @@ async function getStudentSchools(jsonBody: any) {
 
   let student_last_name = recruits.connection_date || recruits.interested !== null ? students.user.last_name : null;
   let student_first_name = recruits.connection_date || recruits.interested !== null ? students.user.first_name : null;
-  let student_phone_num = recruits.connection_date || recruits.interested !== null ? students.phone : null;
+  // let student_phone_num = recruits.connection_date || recruits.interested !== null ? students.phone : null;
 
   let student_extracurricular = await StudentsExtracurriculars.findAll({ where: { student_id: studentId } });
   let student_majors = await StudentsDepartmentInterests.findAll({ where: { student_id: studentId } });
