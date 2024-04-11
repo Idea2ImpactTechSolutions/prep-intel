@@ -1,4 +1,5 @@
-import { responseBody } from "app/config/helpers";import { models } from "app/models";
+import { responseBody } from "../../../../config/helpers";
+import { models } from "../../../../models";
 const { Recruits, Recruiters, Students, Users } = models;
 import { type NextRequest } from 'next/server'
 
@@ -57,7 +58,6 @@ async function getStudentSchools(jsonBody: any) {
     where: { student_id: studentId, school_id: recruiter.school_id },
   })
 
-  console.log("Recruiter")
 
   if (!recruits) {
     return Response.json(
