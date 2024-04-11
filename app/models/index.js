@@ -36,6 +36,12 @@ const models = {
   Department
 };
 
+
+StudentDepartmentInterest.belongsTo(Department, {
+  foreignKey: 'department_id',
+  as: 'department',
+});
+
 // Model associations
 Object.keys(models).forEach((key) => {
   if ("associate" in models[key]) {

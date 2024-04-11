@@ -7,21 +7,43 @@ const { Department, StudentDepartmentInterest, Students } = models;
  * @openapi
  * /api/students/{studentId}/majors:
  *   get:
- *       responses:
- *           '200':
- *               content:
- *                    application/json:
- *                       schema:
- *                           type: array
- *                           items: {}
- *       summary: Retrieves a list of student major interests
+ *     summary: Retrieves a list of student major interests
+ *     parameters:
+ *       - in: path
+ *         name: studentId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the student
+ *     responses:
+ *       '200':
+ *         description: A list of major interests for the specified student
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   majorName:
+ *                     type: string
+ *                     description: The name of the major
+ *                   interestLevel:
+ *                     type: integer
+ *                     description: The level of interest in the major
+ *       '404':
+ *         description: Major interests not found for the specified student
+ *       '500':
+ *         description: Internal Server Error
  */
 export async function GET(
   request: NextRequest,
   { params }: {params: {studentId: string}}
 ) {
   try {
-    const studentMajors: any = await getStudentMajors(params);
+    const { studentId } = params;
+
+    const studentMajors: any = await getStudentMajors(studentId);
     if (!studentMajors) {
       return Response.json(
         responseBody("Major interests not found", 404, null),
@@ -122,16 +144,17 @@ export async function POST(
   );
 }
 
-async function getStudentMajors(params) {
-  return Department.findAll({
-    attributes: ["name"],
+async function getStudentMajors(studentId) {
+  return await StudentDepartmentInterest.findAll({
+    where: {
+      student_id: studentId,
+    },
     include: [
       {
-        model: StudentDepartmentInterest,
-        where: {student_id: params.studentId}
-      }
+        model: Department, // Make sure to import the Department model
+        as: 'department',
+      },
     ],
-    raw: true
   });
 }
 
