@@ -113,7 +113,7 @@ export async function POST(
     // Collect
     const inputData : string[] = await req.json();
     if (inputData.length == 0) {
-      return new Response(null, { status: 204 });
+      return Response.json(responseBody("No Content", 204), { status: 204 });
     }
 
     const { count, rows } : any = await Recruits.findAndCountAll({
@@ -123,7 +123,7 @@ export async function POST(
     });
 
     if (count > 0 && rows.some(row => row.interested == true)) {
-      return new Response(null, { status: 400 });
+      return Response.json(responseBody("Bad Request", 400), { status: 400 });
     }
 
     // Create or Update
@@ -144,7 +144,7 @@ export async function POST(
     }
 
     // Report
-    return new Response(null, { status: 201 });
+    return Response.json(responseBody("Created", 201), { status: 201 });
   } catch (error: any) {
     // Report
     return Response.json(
@@ -194,7 +194,7 @@ export async function PATCH(
         { interested : false }, 
         { where : {student_id: params.studentId} }
       );
-      return new Response(null, { status: 204 });
+      return Response.json(responseBody("No Content", 204), { status: 204 });
     }
 
     let studentSchools = await Recruits.findAll({
@@ -202,7 +202,7 @@ export async function PATCH(
     });
 
     if (studentSchools.length == 0) {
-      return new Response(null, { status: 404 });
+      return Response.json(responseBody("Not Found", 404), { status: 404 });
     }
 
     const studentSchoolIds = studentSchools.map(school => school.school_id);
@@ -211,7 +211,7 @@ export async function PATCH(
         studentSchoolIds.every((schoolId) => inputData.includes(schoolId)) &&
         studentSchools.every((school) => school.interested == true)
     ) {
-      return new Response(null, { status: 304 });
+      return Response.json(responseBody("Not Modified", 304), { status: 304 });
     }
     
     // Create or Update
@@ -246,7 +246,7 @@ export async function PATCH(
     }
 
     //Report
-    return new Response(null, { status: 204 });
+    return Response.json(responseBody("No Content", 204), { status: 204 });
   } catch (error: any) {
     // Report
     return Response.json(
