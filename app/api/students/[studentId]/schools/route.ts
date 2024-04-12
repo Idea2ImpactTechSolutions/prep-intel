@@ -112,7 +112,6 @@ export async function POST(
   try {
     // Collect
     const inputData : string[] = await req.json();
-    console.log(inputData);
     if (inputData.length == 0) {
       return new Response(null, { status: 204 });
     }
