@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("./sequelize");
 
 const Messages = sequelize.define(
-    "messages",
+    "message",
     {
         // Define model attributes
         id: {
