@@ -9,10 +9,13 @@ type CustomCheckboxType = {
     labelClass?: string,
     hasBorder?: boolean,
     icon?: React.ReactElement,
-    className?: string
+    className?: string,
+    checkboxClass?: string,
+    disabled?: boolean,
+    checked?: boolean
 }
 
-export default function CustomCheckbox({ id, label, labelClass, hasBorder, icon, className }: CustomCheckboxType) {
+export default function CustomCheckbox({ id, label, labelClass, hasBorder, icon, className, checkboxClass, disabled, checked }: CustomCheckboxType) {
     return (
         <label className={cn(
             "items-top flex space-x-2 items-center transition-all cursor-pointer hover:border-primary",
@@ -20,7 +23,7 @@ export default function CustomCheckbox({ id, label, labelClass, hasBorder, icon,
             className
         )}>
             <div className="flex-1 flex items-center space-x-2">
-                <Checkbox id={id}/>
+                <Checkbox id={id} className={checkboxClass} disabled={disabled} checked={checked}/>
                 <div className="grid gap-1.5 leading-none">
                     <label
                         htmlFor={id}
