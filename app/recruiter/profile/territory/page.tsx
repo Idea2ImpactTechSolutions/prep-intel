@@ -89,7 +89,7 @@ export default function Page() {
   async function loadRecruiter() {
     const recruiter = await getRecruiter({id: recruiterId});
     const territories = recruiter.data?.data?.territories;
-    setActiveStates(territories);
+    setActiveStates(territories || []);
   }
 
   // Onload
