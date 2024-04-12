@@ -92,7 +92,7 @@ export async function POST(req: Request) {
     // TODO: Implement
     let data = await req.json();
 
-    if (!data.recruiter_id && !data.school_id) {
+    if (!(data.recruiter_id || data.school_id) || !data.student_id) {
       return Response.json(
         responseBody(
           "Kindly add a recruiter id or school id for this query",
