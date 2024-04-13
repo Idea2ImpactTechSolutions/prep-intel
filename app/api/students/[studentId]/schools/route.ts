@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { responseBody } from "app/config/helpers";
 import { models } from "@/app/models";
-const { Recruits, School } = models;
+const { Recruits, School, Students, Users } = models;
 
 const RECRUITS_SCHOOLS_FIELDS = ['school_id', 'school.name']
 
@@ -28,7 +28,7 @@ const RECRUITS_SCHOOLS_FIELDS = ['school_id', 'school.name']
  *                             type: string
  *                             description: Name of a school
  *             404:
- *              description: Schools of interest not found 
+ *              description: Student not found
  *             500:
  *              description: Internal server error       
  */
@@ -38,29 +38,40 @@ export async function GET(
   ) {
   try {
     // Collect
+    const userRole : {role: string} = await Students.findOne({ 
+      where: {
+        id: params.studentId,
+      },
+      attributes: ['user.role'],
+      include: [{
+        model: Users,
+        required: true,
+        attributes: [],
+        where: {
+          role: 'student'
+        }
+      }],
+      raw: true
+    });
+
+    if (userRole.role !== 'student') {
+      return Response.json(responseBody("Not Found", 404), { status: 404 });
+    }
+    
     const studentSchools: any = await Recruits.findAll({
       where: {
         student_id: params.studentId,
         interested: true
       },
       attributes: RECRUITS_SCHOOLS_FIELDS,
-      include: [{
+      include: {
           model: School,
           attributes: [],
           required: true,
-      }],
+      },
       raw: true,
     });
 
-    // Return
-    if (studentSchools.length == 0) {
-      return Response.json(
-        responseBody("School interests not found", 404, null),
-        {
-          status: 404,
-        }
-      );
-    }
     return Response.json(
       responseBody(
         "School interests retrieved successfully",
@@ -111,6 +122,26 @@ export async function POST(
 ) {
   try {
     // Collect
+    const userRole : {role: string} = await Students.findOne({ 
+      where: {
+        id: params.studentId,
+      },
+      attributes: ['user.role'],
+      include: [{
+        model: Users,
+        required: true,
+        attributes: [],
+        where: {
+          role: 'student'
+        }
+      }],
+      raw: true
+    });
+
+    if (userRole.role !== 'student') {
+      return Response.json(responseBody("Not Found", 404), { status: 404 });
+    }
+
     const inputData : string[] = await req.json();
     if (inputData.length == 0) {
       return Response.json(responseBody("No Content", 204), { status: 204 });
@@ -186,6 +217,26 @@ export async function PATCH(
   ) {
   try {
     // Collect
+    const userRole : {role: string} = await Students.findOne({ 
+      where: {
+        id: params.studentId,
+      },
+      attributes: ['user.role'],
+      include: [{
+        model: Users,
+        required: true,
+        attributes: [],
+        where: {
+          role: 'student'
+        }
+      }],
+      raw: true
+    });
+
+    if (userRole.role !== 'student') {
+      return Response.json(responseBody("Not Found", 404), { status: 404 });
+    }
+
     const inputData : string[] = await req.json();
     const inputDataRecords = inputData.length;
 
