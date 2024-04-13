@@ -267,19 +267,19 @@ export async function PATCH(
       return Response.json(responseBody("Bad Request", 400), { status: 400 });
     }
 
+    const { schoolId, ...updateAttributes } = Object.assign({}, inputData);
+
     let studentSchool = await Recruits.findOne({
       where: { 
         student_id: params.studentId, 
-        school_id: inputData.school_id
+        school_id: schoolId
       }
     });
-
     if (studentSchool === null) {
       return Response.json(responseBody("Not Found", 404), { status: 404 });
     }
 
     // Update
-    const { school_id, ...updateAttributes } = Object.assign({}, inputData);
     if (updateAttributes.hasOwnProperty('connection_initiator')) {
       updateAttributes['connection_date'] = new Date();
     }
