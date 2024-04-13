@@ -1,9 +1,22 @@
+import * as yup from 'yup';
 import type { NextRequest } from "next/server";
-import { responseBody } from "app/config/helpers";
-import { models } from "@/app/models";
+import { responseBody } from "../../../../../app/config/helpers";
+import { models } from "../../../../../app/models";
 const { Recruits, School, Students, Users } = models;
 
-const RECRUITS_SCHOOLS_FIELDS = ['school_id', 'school.name']
+const POST_VALIDATION_SCHEMA = yup.array().of(
+  yup.string().uuid().required()
+);
+
+const PATCH_VALIDATION_SCHEMA = yup.object({    
+  school_id: yup.string().uuid().required(),
+  criteria: yup.string().oneOf(['INTERESTED']).notRequired(),
+  interested: yup.boolean().notRequired(),
+  connection_initator: yup.string().oneOf(['student']).notRequired(),
+  is_viewable: yup.boolean().notRequired()
+});
+
+const RECRUITS_SCHOOLS_FIELDS = ['school_id', 'interested', 'school.name']
 
 /**
  * @openapi
@@ -113,6 +126,8 @@ export async function GET(
  *        description: Successful request
  *       400:
  *        description: Bad request
+ *       404:
+ *        description: Not found
  *       500:
  *        description: Internal server error
  */
@@ -147,15 +162,23 @@ export async function POST(
       return Response.json(responseBody("No Content", 204), { status: 200 });
     }
 
-    const { count, rows } : any = await Recruits.findAndCountAll({
-       where: { 
-        student_id: params.studentId, 
-      }
-    });
-
-    if (count > 0 && rows.some(row => row.interested == true)) {
+    const validInputData = validateRequestBody(req.method, inputData);
+    if (!validInputData) {
       return Response.json(responseBody("Bad Request", 400), { status: 400 });
     }
+
+    const schoolsCount : number = await School.count({
+      where: { id: inputData }
+    });
+    if (schoolsCount < inputData.length) {
+      return Response.json(responseBody("Not Found", 404), { status: 404 });
+    }
+
+    const { count, rows } : any = await Recruits.findAndCountAll({
+      where: { 
+       student_id: params.studentId, 
+     }
+   });
 
     // Create or Update
     if (count == 0) {
@@ -204,10 +227,10 @@ export async function POST(
  *     responses:
  *       200:
  *         description: Schools of interest updated
- *       304:
- *         description: No change to schools of interest
+ *       400:
+ *        description: Bad request
  *       404:
- *        description: Schools of interest not found
+ *        description: Not found
  *       500:
  *        description: Internal server error
  */
@@ -237,64 +260,30 @@ export async function PATCH(
       return Response.json(responseBody("Not Found", 404), { status: 404 });
     }
 
-    const inputData : string[] = await req.json();
-    const inputDataRecords = inputData.length;
-
-    if (inputDataRecords == 0) {
-      await Recruits.update(
-        { interested : false }, 
-        { where : {student_id: params.studentId} }
-      );
-      return Response.json(responseBody("No Content", 204), { status: 200 });
+    const inputData : any = await req.json();
+    
+    const validInputData = await validateRequestBody(req.method, inputData);
+    if (!validInputData) {
+      return Response.json(responseBody("Bad Request", 400), { status: 400 });
     }
 
-    let studentSchools = await Recruits.findAll({
-      where: { student_id: params.studentId }
+    let studentSchool = await Recruits.findOne({
+      where: { 
+        student_id: params.studentId, 
+        school_id: inputData.school_id
+      }
     });
 
-    if (studentSchools.length == 0) {
+    if (studentSchool === null) {
       return Response.json(responseBody("Not Found", 404), { status: 404 });
     }
 
-    const studentSchoolIds = studentSchools.map(school => school.school_id);
-
-    if (studentSchoolIds.length == inputDataRecords &&
-        studentSchoolIds.every((schoolId) => inputData.includes(schoolId)) &&
-        studentSchools.every((school) => school.interested == true)
-    ) {
-      return Response.json(responseBody("Not Modified", 304), { status: 304 });
+    // Update
+    const { school_id, ...updateAttributes } = Object.assign({}, inputData);
+    if (updateAttributes.hasOwnProperty('connection_initiator')) {
+      updateAttributes['connection_date'] = new Date();
     }
-    
-    // Create or Update
-    let newSchoolInterests = inputData.filter(
-      (schoolId) => studentSchoolIds.indexOf(schoolId) === -1
-    );
-    await addNewSchoolInterests(newSchoolInterests, params.studentId);
-
-    const schoolInterestsStatus = Object.assign(
-      {},
-      ...studentSchools.map(school => ({
-        [school.school_id]: school.interested
-      }))
-    );
-    let renewedSchoolInterests = studentSchoolIds.filter(
-      (schoolId) => inputData.includes(schoolId)
-      && schoolInterestsStatus[schoolId] == false
-    );
-    await renewSchoolInterests(renewedSchoolInterests, params.studentId);
-
-    let formerSchoolInterests = studentSchoolIds.filter(
-      (schoolId) => inputData.indexOf(schoolId) === -1
-    );
-    if (formerSchoolInterests.length > 0) {
-      await Recruits.update(
-        { interested: false },
-        { where: { 
-          student_id: params.studentId, 
-          school_id: formerSchoolInterests
-        } }
-      );
-    }
+    await studentSchool.update(updateAttributes);
 
     //Report
     return Response.json(responseBody("No Content", 204), { status: 200 });
@@ -314,7 +303,8 @@ function prepareNewRecruits(schoolIds, studentId) {
     student_id: studentId,
     school_id: schoolId,
     criteria: 'INTERESTED',
-    interested: true
+    interested: true,
+    is_viewable: true
   }));
 }
 
@@ -331,11 +321,29 @@ async function addNewSchoolInterests(schoolInterests, studentId) {
 async function renewSchoolInterests(schoolInterests, studentId) {
   if (schoolInterests.length > 0) {
     await Recruits.update(
-      { interested: true },
+      { 
+        criteria: 'INTERESTED',
+        interested: true,
+        is_viewable: true,
+      },
       { where: { 
         student_id: studentId, 
         school_id: schoolInterests
       } }
     );
+  }
+}
+
+function validateRequestBody(method: string, requestBody) {
+  switch (method) {
+    case 'POST':
+      return POST_VALIDATION_SCHEMA.isValidSync(requestBody, { strict: true });
+    case 'PATCH':
+      return PATCH_VALIDATION_SCHEMA.isValidSync(
+        requestBody,
+        { strict: true }
+      );
+    default:
+      return false;
   }
 }
