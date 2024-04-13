@@ -6,7 +6,7 @@ export async function middleware(req) {
 
   // Redirect to login if there is no session and the request is for a protected route
   const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  if (!session && path !== "/" && !path.startsWith("/api/auth")) {
+  if (!session && path !== "/" && path !== '/register' && !path.startsWith("/api/auth")) {
     const formUrl =
       process.env.NEXTAUTH_FORM === "default" ? "/api/auth/signin" : "/login";
     return NextResponse.redirect(

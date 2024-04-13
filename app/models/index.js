@@ -9,12 +9,15 @@ const Applicants = require("./Applicants");
 const Recruits = require("./Recruits");
 const Recruiters = require("./Recruiters")
 const SchoolAddress = require("./SchoolAddress");
+const StudentsDepartmentInterests = require("./StudentsDepartmentsInterests")
+const StudentsExtracurriculars = require("./StudentExtracurrilars")
 const Users = require("./Users")
 const SchoolSocialMedia = require("./SchoolSocialMedia");
 const Assets = require("./Assets");
 const Students = require("./Students");
 const HD2021 = require("./HD2021");
-
+const StudentDepartmentInterest = require("./StudentDepartmentInterest");
+const Department = require("./Department")
 const models = {
   SchoolDepartment,
   School,
@@ -23,6 +26,8 @@ const models = {
   SchoolResearchProgram,
   SchoolContact,
   SchoolAddress,
+  StudentsExtracurriculars,
+  StudentsDepartmentInterests,
   Students,
   Applicants,
   Recruits,
@@ -31,7 +36,15 @@ const models = {
   Managers,
   SchoolSocialMedia,
   HD2021,
+  StudentDepartmentInterest,
+  Department
 };
+
+
+StudentDepartmentInterest.belongsTo(Department, {
+  foreignKey: 'department_id',
+  as: 'department',
+});
 
 // Model associations
 Object.keys(models).forEach((key) => {

@@ -5,7 +5,7 @@ const Department = sequelize.define(
   "department",
   {
     // Define model attributes
-    _id: {
+    id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -21,6 +21,7 @@ const Department = sequelize.define(
   },
   {
     // Model options (optional)
+    timestamps: false,
   }
 );
 
