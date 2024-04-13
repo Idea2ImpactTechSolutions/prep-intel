@@ -109,7 +109,7 @@ export async function GET(
  *     responses:
  *       201:
  *        description: Schools added
- *       204:
+ *       200:
  *        description: Successful request
  *       400:
  *        description: Bad request
@@ -144,7 +144,7 @@ export async function POST(
 
     const inputData : string[] = await req.json();
     if (inputData.length == 0) {
-      return Response.json(responseBody("No Content", 204), { status: 204 });
+      return Response.json(responseBody("No Content", 204), { status: 200 });
     }
 
     const { count, rows } : any = await Recruits.findAndCountAll({
@@ -202,7 +202,7 @@ export async function POST(
  *              items: 
  *                type: string 
  *     responses:
- *       204:
+ *       200:
  *         description: Schools of interest updated
  *       304:
  *         description: No change to schools of interest
@@ -245,7 +245,7 @@ export async function PATCH(
         { interested : false }, 
         { where : {student_id: params.studentId} }
       );
-      return Response.json(responseBody("No Content", 204), { status: 204 });
+      return Response.json(responseBody("No Content", 204), { status: 200 });
     }
 
     let studentSchools = await Recruits.findAll({
@@ -297,7 +297,7 @@ export async function PATCH(
     }
 
     //Report
-    return Response.json(responseBody("No Content", 204), { status: 204 });
+    return Response.json(responseBody("No Content", 204), { status: 200 });
   } catch (error: any) {
     // Report
     return Response.json(
@@ -309,7 +309,7 @@ export async function PATCH(
   }
 }
 
-async function prepareNewRecruits(schoolIds, studentId) {
+function prepareNewRecruits(schoolIds, studentId) {
   return schoolIds.map((schoolId) => ({
     student_id: studentId,
     school_id: schoolId,
@@ -320,7 +320,7 @@ async function prepareNewRecruits(schoolIds, studentId) {
 
 async function addNewSchoolInterests(schoolInterests, studentId) {
   if (schoolInterests.length > 0) {
-    let newRecruitsData = await prepareNewRecruits(
+    let newRecruitsData = prepareNewRecruits(
       schoolInterests,
       studentId
     );
