@@ -1,7 +1,7 @@
 name: DB Migration
 
 on:
-  pull_request:
+  push:
     branches: [ create_migration_gha ]
 
 jobs:
