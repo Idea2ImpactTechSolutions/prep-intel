@@ -22,8 +22,14 @@ export async function GET(req: NextRequest) {
     let reqData = {
       recruiter_id: searchParams.get("recruiter_id"),
       student_id: searchParams.get("student_id"),
+      receiver_role: searchParams.get("receiver_role"),
       school_id: searchParams.get("school_id"),
     };
+
+    await Messages.update(
+      { status: "seen" },
+      { where: { recipient_role: reqData.receiver_role } }
+    );
     let response;
     if (reqData.recruiter_id && !reqData.student_id && !reqData.school_id) {
       response = await Messages.findAll({
@@ -87,12 +93,18 @@ export async function GET(req: NextRequest) {
  *       200:
  *         description: Message sent successfully
  */
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     // TODO: Implement
-    let data = await req.json();
+    // console.log({ req: req.nextUrl.searchParams });
 
-    if (!(data.recruiter_id || data.school_id) || !data.student_id) {
+    const recruiter_id = req.nextUrl.searchParams.get("recruiter_id");
+    const school_id = req.nextUrl.searchParams.get("school_id");
+    const student_id = req.nextUrl.searchParams.get("student_id");
+    const sender_role = req.nextUrl.searchParams.get("sender_role");
+    const message_text = req.nextUrl.searchParams.get("message_text");
+
+    if (!(recruiter_id || school_id) || !student_id) {
       return Response.json(
         responseBody(
           "Kindly add a recruiter id or school id for this query",
@@ -106,7 +118,7 @@ export async function POST(req: Request) {
     }
 
     let isStudentExist = await Students.findOne({
-      where: { id: data.student_id },
+      where: { id: student_id },
     });
 
     if (!isStudentExist) {
@@ -115,12 +127,12 @@ export async function POST(req: Request) {
       });
     }
 
-    let recruiter_check = data.recruiter_id ? true : false;
+    let recruiter_check = recruiter_id ? true : false;
 
-    if (data.sender_role === "recruiter") {
+    if (sender_role === "recruiter") {
       if (recruiter_check) {
         let recruiter = await Recruiters.findOne({
-          where: { id: data.recruiter_id },
+          where: { id: recruiter_id },
         });
 
         if (!recruiter) {
@@ -130,15 +142,15 @@ export async function POST(req: Request) {
         }
 
         await Messages.create({
-          recruiter_id: data.recruiter_id,
-          student_id: data.student_id,
-          message_text: data.message_text,
-          sender_role: data.sender_role,
+          recruiter_id: recruiter_id,
+          student_id: student_id,
+          message_text: message_text,
+          sender_role: sender_role,
           recipient_role: "student",
           create_date: Date.now(),
         });
       } else {
-        let school = await School.findOne({ where: { id: data.school_id } });
+        let school = await School.findOne({ where: { id: school_id } });
 
         if (!school) {
           return Response.json(responseBody("school not found", 404, {}), {
@@ -146,10 +158,10 @@ export async function POST(req: Request) {
           });
         }
         await Messages.create({
-          student_id: data.student_id,
-          school_id: data.school_id,
-          message_text: data.message_text,
-          sender_role: data.sender_role,
+          student_id: student_id,
+          school_id: school_id,
+          message_text: message_text,
+          sender_role: sender_role,
           recipient_role: "recruiter",
           create_date: Date.now(),
         });
@@ -157,7 +169,7 @@ export async function POST(req: Request) {
     } else {
       if (recruiter_check) {
         let recruiter = await Recruiters.findOne({
-          where: { id: data.recruiter_id },
+          where: { id: recruiter_id },
         });
 
         if (!recruiter) {
@@ -167,15 +179,15 @@ export async function POST(req: Request) {
         }
 
         await Messages.create({
-          recruiter_id: data.recruiter_id,
-          student_id: data.student_id,
-          message_text: data.message_text,
-          sender_role: data.sender_role,
+          recruiter_id: recruiter_id,
+          student_id: student_id,
+          message_text: message_text,
+          sender_role: sender_role,
           recipient_role: "recruiter",
           create_date: Date.now(),
         });
       } else {
-        let school = await School.findOne({ where: { id: data.school_id } });
+        let school = await School.findOne({ where: { id: school_id } });
 
         if (!school) {
           return Response.json(responseBody("school not found", 404, {}), {
@@ -183,10 +195,10 @@ export async function POST(req: Request) {
           });
         }
         await Messages.create({
-          student_id: data.student_id,
-          school_id: data.school_id,
-          message_text: data.message_text,
-          sender_role: data.sender_role,
+          student_id: student_id,
+          school_id: school_id,
+          message_text: message_text,
+          sender_role: sender_role,
           recipient_role: "school",
           create_date: Date.now(),
         });
