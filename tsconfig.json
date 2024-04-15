@@ -36,6 +36,6 @@
     "**/*.tsx",
     "types.d.ts",
     ".next/types/**/*.ts"
-  ],
+, "app/models/StudentExtracurrilars.js"  ],
   "exclude": ["node_modules"]
 }

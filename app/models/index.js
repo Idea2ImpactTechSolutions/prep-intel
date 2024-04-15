@@ -10,6 +10,8 @@ const Recruits = require("./Recruits");
 const Recruiters = require("./Recruiters")
 const SchoolAddress = require("./SchoolAddress");
 const Messages = require("./Messages");
+const StudentsDepartmentInterests = require("./StudentsDepartmentsInterests")
+const StudentsExtracurriculars = require("./StudentExtracurrilars")
 const Users = require("./Users")
 const SchoolSocialMedia = require("./SchoolSocialMedia");
 const Assets = require("./Assets");
@@ -26,6 +28,8 @@ const models = {
   SchoolResearchProgram,
   SchoolContact,
   SchoolAddress,
+  StudentsExtracurriculars,
+  StudentsDepartmentInterests,
   Students,
   Applicants,
   Recruits,
