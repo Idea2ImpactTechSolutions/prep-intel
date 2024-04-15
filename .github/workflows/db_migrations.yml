@@ -5,7 +5,7 @@ on:
     branches: [ create_migration_gha ]
 
 jobs:
-  build-lint-test:
+  db-migration-job:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,9 +30,9 @@ jobs:
 
 
     - name: Run DB migration
-      run: echo hello
+      run: python ./db/initialize-db.py -a
       env:
-        DB_USERNAME: ${{vars.DB_USERNAME}}
+        DB_USERNAME: ${{vars.DB_USERNAME_PROD}}
         DB_PASSWORD: ${{vars.DB_PASSWORD}}
         DB_NAME: ${{vars.DB_NAME}}
-        DB_HOST: ${{vars.DB_HOST}}
+        DB_HOST: prep-intele-development.cluster-c7ao62sg4xma.us-east-1.rds.amazonaws.com

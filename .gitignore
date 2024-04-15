@@ -40,4 +40,4 @@ error.log
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-db/.env.localdb
+db/.env copy.localdb
