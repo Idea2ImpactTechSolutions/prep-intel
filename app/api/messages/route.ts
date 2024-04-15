@@ -1,7 +1,7 @@
 import { responseBody } from "app/config/helpers";
 import { models } from "../../models";
 import { type NextRequest } from "next/server";
-const { Messages, Recruiters, School, Students } = models;
+const { Message, Recruiters, School, Students } = models;
 
 /**
  * @openapi
@@ -26,13 +26,13 @@ export async function GET(req: NextRequest) {
       school_id: searchParams.get("school_id"),
     };
 
-    await Messages.update(
+    await Message.update(
       { status: "seen" },
       { where: { recipient_role: reqData.receiver_role } }
     );
     let response;
     if (reqData.recruiter_id && !reqData.student_id && !reqData.school_id) {
-      response = await Messages.findAll({
+      response = await Message.findAll({
         where: {
           recruiter_id: reqData.recruiter_id,
         },
@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
       reqData.student_id &&
       !reqData.school_id
     ) {
-      response = await Messages.findAll({
+      response = await Message.findAll({
         where: {
           student_id: reqData.student_id,
         },
@@ -52,14 +52,14 @@ export async function GET(req: NextRequest) {
       reqData.student_id &&
       !reqData.school_id
     ) {
-      response = await Messages.findAll({
+      response = await Message.findAll({
         where: {
           recruiter_id: reqData.recruiter_id,
           student_id: reqData.student_id,
         },
       });
     } else {
-      response = await Messages.findAll({
+      response = await Message.findAll({
         where: {
           school_id: reqData.school_id,
           student_id: reqData.student_id,
@@ -141,7 +141,7 @@ export async function POST(req: NextRequest) {
           });
         }
 
-        await Messages.create({
+        await Message.create({
           recruiter_id: recruiter_id,
           student_id: student_id,
           message_text: message_text,
@@ -157,7 +157,7 @@ export async function POST(req: NextRequest) {
             status: 404,
           });
         }
-        await Messages.create({
+        await Message.create({
           student_id: student_id,
           school_id: school_id,
           message_text: message_text,
@@ -178,7 +178,7 @@ export async function POST(req: NextRequest) {
           });
         }
 
-        await Messages.create({
+        await Message.create({
           recruiter_id: recruiter_id,
           student_id: student_id,
           message_text: message_text,
@@ -194,7 +194,7 @@ export async function POST(req: NextRequest) {
             status: 404,
           });
         }
-        await Messages.create({
+        await Message.create({
           student_id: student_id,
           school_id: school_id,
           message_text: message_text,
@@ -204,8 +204,6 @@ export async function POST(req: NextRequest) {
         });
       }
     }
-    //   await Messages.
-
     return Response.json(responseBody("Message sent successfully", 201, {}), {
       status: 201,
     });

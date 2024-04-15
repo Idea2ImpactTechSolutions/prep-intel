@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("./sequelize");
 
-const Messages = sequelize.define(
+const Message = sequelize.define(
     "message",
     {
         // Define model attributes
@@ -49,4 +49,4 @@ const Messages = sequelize.define(
     }
 );
 
-module.exports = Messages;
+module.exports = Message;
