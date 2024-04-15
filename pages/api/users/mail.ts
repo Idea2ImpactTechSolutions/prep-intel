@@ -1,4 +1,5 @@
 const sgMail = require("@sendgrid/mail");
+import logger from 'lib/logger';
 
 export function sendClaimEmail(email, claimUrl) {
   // using Twilio SendGrid's v3 Node.js Library
@@ -16,10 +17,10 @@ export function sendClaimEmail(email, claimUrl) {
   sgMail
     .send(msg)
     .then(() => {
-      console.log("Email sent");
+        logger.info("Email sent");
     })
     .catch((error) => {
-      console.error(error);
+        logger.error(error);
     });
 }
 
@@ -39,10 +40,10 @@ export function sendResetPasswordEmail(email, claimUrl) {
   sgMail
     .send(msg)
     .then(() => {
-      console.log("Email sent");
+        logger.info("Email sent");
     })
     .catch((error) => {
-      console.error(error);
+        logger.error(error);
     });
 }
 
