@@ -21,6 +21,21 @@ export const authApi = baseApi.injectEndpoints({
         }
       },
     }),
+    register: builder.mutation({
+      query: (payload) => ({
+        url: `/register`,
+        method: "POST",
+        body: payload,
+      }),
+      async onQueryStarted(_, { queryFulfilled, dispatch }) {
+        try {
+          // const result = await queryFulfilled;
+          
+        } catch (error: any) {
+          // console.log(error)
+        }
+      },
+    }),
 
     logout: builder.mutation({
       query: () => ({
@@ -43,4 +58,5 @@ export const authApi = baseApi.injectEndpoints({
 export const {
   useLoginMutation,
   useLogoutMutation,
+  useRegisterMutation
 } = authApi;

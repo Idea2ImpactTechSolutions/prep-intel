@@ -5,6 +5,7 @@ import UsMap from "@/components/UsMap"
 import { Button } from "@/components/ui/button";
 import { useSetTerritoriesMutation, useLazyGetRecruiterQuery } from "@/redux/services/recruiter/recruiterApi";
 import LoadingSpinner from "@/components/loading-spinner";
+import { useSession } from "next-auth/react";
 import PageTitleContainer from "@/components/page-title";
 
 const options = [
@@ -67,10 +68,8 @@ export default function Page() {
   const [setTerritories, { isLoading: isSaving }] = useSetTerritoriesMutation();
   const [getRecruiter, { isLoading }] = useLazyGetRecruiterQuery();
 
-  // TODO: Figure out why roleId when added to (interface DefaultSession), doesn't
-  // enable typed access and creates compile errors...
-  //const recruiterId = session?.data?.user?.roleId
-  const recruiterId = "57e2c5c8-a963-4713-a4d8-e832e79b48e4";
+  const session = useSession();
+  const recruiterId = session?.data?.user?.roleId;
 
   async function handleSetTerritories() {
     const payload = {
@@ -90,7 +89,7 @@ export default function Page() {
   async function loadRecruiter() {
     const recruiter = await getRecruiter({id: recruiterId});
     const territories = recruiter.data?.data?.territories;
-    setActiveStates(territories);
+    setActiveStates(territories || []);
   }
 
   // Onload

@@ -77,6 +77,10 @@
   }
 }
 
+.primary-bg {
+  background-color: #A81D28
+}
+
 .pi-container {
   @apply container;
   @apply p-2;

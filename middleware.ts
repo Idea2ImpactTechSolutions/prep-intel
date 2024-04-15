@@ -6,7 +6,7 @@ export async function middleware(req) {
 
   // Redirect to login if there is no session and the request is for a protected route
   const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  if (!session && path !== "/" && !path.startsWith("/api/auth")) {
+  if (!session && path !== "/" && path !== '/register' && !path.startsWith("/api/auth")) {
     const formUrl =
       process.env.NEXTAUTH_FORM === "default" ? "/api/auth/signin" : "/login";
     return NextResponse.redirect(
@@ -19,6 +19,6 @@ export async function middleware(req) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|api/ddbg|login/*|api/auth/*|_next/image|favicon.ico|public|api/healthcheck|users/claim|users/set-password|api/users/claim|api/users/set-password|.*\\.png$).*)",
+    "/((?!_next/static|api/ddbg|api/spec|login/*|api/auth/*|_next/image|favicon.ico|public|api/healthcheck|users/claim|users/set-password|api/users/claim|api/users/set-password|.*\\.png$).*)",
   ],
 };
