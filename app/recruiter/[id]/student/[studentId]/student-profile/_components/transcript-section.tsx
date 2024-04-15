@@ -1,10 +1,5 @@
-import LoadingSpinner from '@/components/loading-spinner'
-import Table from '@/components/table'
-import { TBODY, TD, TR } from '@/components/table/table-element'
 import { Checkbox } from '@/components/ui/checkbox'
-import { FileQuestion } from 'lucide-react'
-import React from 'react'
-import { CircleAlert } from 'lucide-react'
+import { CircleAlert, FileQuestion } from 'lucide-react'
 
 const TranscriptSection = () => {
     const TRANSCRIPT_COLUMNS = [  

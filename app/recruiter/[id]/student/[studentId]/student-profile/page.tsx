@@ -1,11 +1,9 @@
 "use client"
-import React from 'react'
-import StudentInformation from './_components/student-information';
-import GoalAndSkills from './_components/goals-skills-section';
-import OtherInformation from './_components/other-information';
+import LoadingSpinner from '@/components/loading-spinner';
 import { useGetStudentProfileQuery } from '@/redux/services/recruiter/recruiterApi';
 import { useParams } from 'next/navigation';
-import LoadingSpinner from '@/components/loading-spinner';
+import GoalAndSkills from './_components/goals-skills-section';
+import StudentInformation from './_components/student-information';
 
 const StudentProfilePage = () => {
   const pageParams = useParams();
