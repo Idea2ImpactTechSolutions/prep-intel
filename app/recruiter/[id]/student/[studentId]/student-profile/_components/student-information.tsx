@@ -1,8 +1,8 @@
 "use client"
+import React from 'react'
 import { Button } from '@/components/ui/button'
 import { CircleUserRound, PencilLine } from 'lucide-react'
 import Image from 'next/image'
-import React from 'react'
 import UserInformation from './user-info'
 import TranscriptSection from './transcript-section'
 

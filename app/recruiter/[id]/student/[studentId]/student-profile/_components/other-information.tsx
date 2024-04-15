@@ -1,3 +1,5 @@
+import React from 'react'
+
 interface OtherInformationProps {
     student_details: {}
 }

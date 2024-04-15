@@ -1,5 +1,6 @@
-import { FileCheck } from 'lucide-react'
+"use client"
 import React from 'react'
+import { FileCheck } from 'lucide-react'
 
 const UserInformation = ({user_info}) => {
   return (

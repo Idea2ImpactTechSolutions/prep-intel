@@ -2,38 +2,37 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { CircleAlert, FileQuestion } from 'lucide-react'
 
 const TranscriptSection = () => {
-    const TRANSCRIPT_COLUMNS = [  
-        {
-            id: 1,
-            title: <Checkbox/>,
-        },
-        {
-            id: 2,
-            title:"NAME",
-        },
-        {
-            id: 3,
-            title:"MAJOR",
-        },
-        {
-            id: 4,
-            title:"GPA",
-        },
-        {
-            id: 5,
-            title:"INSTRUCTOR",
-        },
-        {
-            id: 6,
-            title:"GRADE",
-        },
-        {
-            id: 7,
-            title:"STATUS",
-        },
-        ]
+    // const TRANSCRIPT_COLUMNS = [  
+    //     {
+    //         id: 1,
+    //         title: <Checkbox/>,
+    //     },
+    //     {
+    //         id: 2,
+    //         title:"NAME",
+    //     },
+    //     {
+    //         id: 3,
+    //         title:"MAJOR",
+    //     },
+    //     {
+    //         id: 4,
+    //         title:"GPA",
+    //     },
+    //     {
+    //         id: 5,
+    //         title:"INSTRUCTOR",
+    //     },
+    //     {
+    //         id: 6,
+    //         title:"GRADE",
+    //     },
+    //     {
+    //         id: 7,
+    //         title:"STATUS",
+    //     },
+    //     ]
 
-    const isLoading = false
     const searchData = []
 
     return (
@@ -44,7 +43,6 @@ const TranscriptSection = () => {
                 <CircleAlert width={17} height={17} />
             </div>
             <div className='mt-5'>
-
                 {/* {<Table
                 title={'Transcript'}
                 columns={TRANSCRIPT_COLUMNS}
