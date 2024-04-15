@@ -24,6 +24,12 @@ const recruiterApi = baseApi.injectEndpoints({
         };
       },
     }),
+    getStudentProfile: builder.query({
+      query: ({studentId,recruiterId}) => ({
+        url: `/students/${studentId}/profile?recruiter_id=${recruiterId}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -31,4 +37,5 @@ export const {
   useGetRecruitsQuery,
   useSetTerritoriesMutation,
   useLazyGetRecruiterQuery,
+  useGetStudentProfileQuery
 } = recruiterApi;

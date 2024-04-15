@@ -10,6 +10,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Header from "./Header";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 interface SharedComponentProps {
   tableTitle?: string
@@ -48,19 +49,19 @@ export default function SharedComponent({tableTitle, headerTitle}:SharedComponen
       title:"SAT",
     },
     {
-      id: 4,
+      id: 5,
       title:"Major Interests",
     },
     {
-      id: 5,
+      id: 6,
       title:"Extracurriculars",
     },
     {
-      id: 6,
+      id: 7,
       title:"Grad Year",
     },
     {
-      id: 11,
+      id: 8,
       title:"",
     },
   ]
@@ -144,7 +145,13 @@ export default function SharedComponent({tableTitle, headerTitle}:SharedComponen
                   <TD>Business and Sports</TD>
                   <TD>Student Government</TD>
                   <TD>{recruits?.student?.graduation_year}</TD>
-                  <TD><Button variant="outlinePrimary" className="text-[#A81D28] gap-x-1 text-sm h-7"><EyeIcon size={16}/> <span>View</span></Button></TD>
+                  <TD>
+                    <Button variant="outlinePrimary" className="text-[#A81D28] gap-x-1 text-sm h-7" asChild>
+                      <Link href={`/recruiter/${recruiterId}/student/${recruits?.student_id}/student-profile`}>
+                        <EyeIcon size={16}/> <span>View</span>
+                      </Link>
+                    </Button>
+                  </TD>
                 </TR>))
             }
           </TBODY>

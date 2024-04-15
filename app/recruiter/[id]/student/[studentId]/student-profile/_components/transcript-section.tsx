@@ -1,0 +1,77 @@
+import LoadingSpinner from '@/components/loading-spinner'
+import Table from '@/components/table'
+import { TBODY, TD, TR } from '@/components/table/table-element'
+import { Checkbox } from '@/components/ui/checkbox'
+import { FileQuestion } from 'lucide-react'
+import React from 'react'
+
+const TranscriptSection = () => {
+    const TRANSCRIPT_COLUMNS = [  
+        {
+            id: 1,
+            title: <Checkbox/>,
+        },
+        {
+            id: 2,
+            title:"NAME",
+        },
+        {
+            id: 3,
+            title:"MAJOR",
+        },
+        {
+            id: 4,
+            title:"GPA",
+        },
+        {
+            id: 5,
+            title:"INSTRUCTOR",
+        },
+        {
+            id: 6,
+            title:"GRADE",
+        },
+        {
+            id: 7,
+            title:"STATUS",
+        },
+        ]
+
+    const isLoading = false
+    const searchData = []
+
+    return (
+        <div className='w-full shadow-lg'>
+            <div className='mt-5'>
+                {
+                !isLoading ?
+                (<Table
+                title={'Transcript'}
+                columns={TRANSCRIPT_COLUMNS}
+                columnHeaderStyle={'text-xl text-[#8E8E8E]'}
+                >
+                <TBODY>
+                    {searchData?.length ?
+                    searchData?.map((recruits:any, index) => (
+                        <TR key={index}>
+                        <TD>No Data</TD>
+                        </TR>)):null
+                    }
+                </TBODY>
+                </Table>): <LoadingSpinner/>
+                }
+                {/* {
+                    !searchData?.length && 
+                    
+                    <div className='w-full flex flex-col justify-center items-center py-10 space-y-2'>
+                        <div className='w-[176px] h-[176px] bg-[#F6F8FA] rounded-full flex justify-center items-center'><FileQuestion size={55} className="text-[#AAAAAA]"/></div>
+                        <p className='text-[#141111] text-[28px]'>No Results Found</p>
+                        <span className='text-2xl text-[#8E8E8E]'>No transcript data is available at this time.</span>
+                    </div>
+                } */}
+            </div>
+        </div>
+    )
+}
+
+export default TranscriptSection
