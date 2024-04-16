@@ -26,10 +26,6 @@ export async function GET(req: NextRequest) {
       school_id: searchParams.get("school_id"),
     };
 
-    await Messages.update(
-      { status: "seen" },
-      { where: { recipient_role: reqData.receiver_role } }
-    );
     let response;
     if (reqData.recruiter_id && !reqData.student_id && !reqData.school_id) {
       response = await Messages.findAll({
