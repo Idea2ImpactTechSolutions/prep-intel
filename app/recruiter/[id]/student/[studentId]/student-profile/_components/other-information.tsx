@@ -1,10 +1,6 @@
 import React from 'react'
 
-interface OtherInformationProps {
-    student_details: {}
-}
-
-const OtherInformation = ({student_details}:OtherInformationProps) => {
+const OtherInformation = ({student_details}) => {
   return (
     <div className='bg-white shadow-[-10px_-10px_30px_4px_rgba(0,0,0,0.1),_10px_10px_30px_4px_rgba(45,78,255,0.15)] rounded-xl p-10'>
         <h2 className="text-[24px] font-extrabold mb-10">Other Information</h2>

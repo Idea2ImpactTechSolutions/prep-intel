@@ -1,10 +1,9 @@
 "use client"
-import React from 'react'
 import { Button } from '@/components/ui/button'
-import { CircleUserRound, PencilLine } from 'lucide-react'
+import { CircleUserRound } from 'lucide-react'
 import Image from 'next/image'
-import UserInformation from './user-info'
 import TranscriptSection from './transcript-section'
+import UserInformation from './user-info'
 
 const StudentInformation = ({student_details}) => {
     
