@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup"
 import { signIn, useSession } from "next-auth/react";
+import ForgotPasswordPanel from './forgot-password';
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
 interface initialValues {
@@ -22,6 +23,7 @@ export default function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [authCompleted, setAuthCompleted] = useState(false);
+    const [forgotPassword, setForgotPassword] = useState(false);
     const {data: session}: any = useSession()
     const searchParams = useSearchParams();
     const callbackUrl = searchParams?.get("callbackUrl");
@@ -34,7 +36,6 @@ export default function LoginPage() {
               router.push('/admin');
               break;
             case 'manager':
-    
               let schoolId = session.user.schoolID;
               router.push(`school/${schoolId}/dashboard`);
               break;
@@ -47,7 +48,7 @@ export default function LoginPage() {
           }
         }
       }, [session, authCompleted]);
-    
+
       // handle login request
       const handleLogin = async (values: initialValues) => {
         try {
@@ -57,11 +58,11 @@ export default function LoginPage() {
             password: values.password,
             redirect: false
           });
-    
+
           if (res?.status == 200) {
             if (callbackUrl) {
               setLoading(false);
-    
+
               // Without some delay, router.push calls below fail, possibly due to session
               // or jwt not being ready
               window.setTimeout(function(){
@@ -83,7 +84,7 @@ export default function LoginPage() {
           setLoading(false)
         }
       };
-    
+
       // handle input change
       const { values, errors, handleSubmit, handleChange, touched } = useFormik({
         initialValues: {
@@ -107,6 +108,14 @@ export default function LoginPage() {
                 <p className="text-[#695959] text-xs md:text-sm md:mt-2">Enter your email address and password to join us.</p>
             </div>
             <div className="mt-5 lg:mt-10">
+            <>
+                {forgotPassword && (
+                    <ForgotPasswordPanel
+                        setForgotPassword={setForgotPassword}
+                    />
+                )}
+
+                {!forgotPassword && (
                 <form onSubmit={handleSubmit}>
                     <div>
                         <Input
@@ -149,6 +158,13 @@ export default function LoginPage() {
                         </span>
                     </div>
                     <div className="mt-5">
+                        <Link
+                            href='#'
+                            onClick={() => setForgotPassword(true)}
+                            className='text-primary font-semibold inline-block text-sm my-2'
+                        >
+                            Forgot Password?
+                        </Link>
                         <Button
                             className="primary-bg rounded-lg w-full p-[1.5rem]"
                             loading={loading}
@@ -162,7 +178,9 @@ export default function LoginPage() {
                         <span className="mt-4 block text-xs text-[#695959]">Do you already have an account? <Link href="/register" className="text-primary text-sm">Create Your Account</Link></span>
                     </div>
                 </form>
+                )}
+            </>
             </div>
         </section>
-    )
+    );
 }

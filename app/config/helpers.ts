@@ -1,3 +1,4 @@
+import { NextApiRequest } from "next";
 import { v4 as uuid } from "uuid";
 
 export const responseBody = (message: string, code: number, data: any = null) => {
@@ -16,4 +17,10 @@ export function getAuthCode() {
   expiresAt: new Date(currentDate.getTime() + minutes * 60 * 1000),
   authCode: uuid()
  }
+}
+
+export function getBaseUrl(req: NextApiRequest) {
+  const host = req.headers.host;
+  const protocol = host?.includes('localhost') ? 'http' : 'https';
+  return `${protocol}://${host}`;
 }

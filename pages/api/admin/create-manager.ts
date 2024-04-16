@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { models } from "../../../app/models";
+import { models } from "app/models";
 const { Managers, School, Users } = models;
-import { responseBody } from "../../../app/config/helpers";
+import { responseBody, getAuthCode, getBaseUrl } from "app/config/helpers";
 import { v4 } from "uuid";
+import {  sendClaimEmail } from "../users/mail"
 
 export default async function AuthHandler(
   req: NextApiRequest,
@@ -41,33 +42,34 @@ export default async function AuthHandler(
         );
     }
 
-    // Create a new Date object representing the current date and time
-    const currentDate = new Date();
-    // Add 30 minutes to the current date
-    const newDate = new Date(currentDate.getTime() + 60 * 600000); // 30 minutes * 60 seconds/minute * 1000 milliseconds/second
-
     const schoolId = v4();
-
     await School.create({
       id: schoolId,
       name: school_name,
     });
 
+    const {authCode, expiresAt } = getAuthCode();
+    const baseUrl = getBaseUrl(req);
+    const claimUrl = `${baseUrl}/users/claim?auth_code=${authCode}`;
+
     let user = await Users.create({
+      claimUrl,
       email: email,
-      auth_code: v4(),
+      auth_code: authCode,
       account_claimed: false,
       first_name: first_name,
       last_name: last_name,
       school_id: schoolId,
       role : 'manager',
-      auth_code_expiration: newDate,
+      auth_code_expiration: expiresAt,
       is_active : false
     });
 
     await Managers.create({
       user_id : user.id
     });
+
+    sendClaimEmail(email, claimUrl);
 
     return res
       .status(200)

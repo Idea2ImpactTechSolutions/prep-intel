@@ -34,6 +34,8 @@ async function handleSetPassword(req, res) {
 }
 
 async function setPassword(req: any) {
+
+  // TODO: we should perform the same validation of the auth_code that we do on the claim url
   const { auth_code, password, confirm_password } = req.body;
   let userExists = await Users.findOne({
     where: {
