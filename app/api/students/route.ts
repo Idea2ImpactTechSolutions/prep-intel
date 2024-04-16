@@ -43,10 +43,10 @@ async function createStudents(json) {
   try {
     const { email, password } = json;
 
-    let checkUserExists = await Users.findOne({ where: { email: email } });
-    if (checkUserExists) {
+    let existingUserInDb = await Users.findOne({ where: { email: email } });
+    if (existingUserInDb) {
       return {
-        message: "Student already exists",
+        message: `Account for a ${existingUserInDb.role} already exists using that email`,
         code: 409,
         data: [],
       };
@@ -74,7 +74,7 @@ async function createStudents(json) {
     // Handle any errors
     return {
       message: error.message,
-      code: 400,
+      code: 500,
       data: [],
     };
   }

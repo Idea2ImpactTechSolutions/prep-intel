@@ -15,7 +15,7 @@ const StudentDepartmentInterest = sequelize.define(
       allowNull: false,
     },
     department_id: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
     }
   },
   {
