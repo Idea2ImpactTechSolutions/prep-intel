@@ -1,6 +1,7 @@
 const { models } = require("app/models");
 import { responseBody } from "app/config/helpers";
 const { Users, Students } = models;
+import bcrypt from "bcryptjs";
 
 /**
  * @openapi
@@ -63,10 +64,11 @@ async function createStudents(json) {
         data: [],
       };
     }
+    const hash = bcrypt.hashSync(password);
 
     let user = await Users.create({
       email: email,
-      password: password,
+      password: hash,
       is_active: true,
       notification_method: '{"email"}',
       account_claimed: true,

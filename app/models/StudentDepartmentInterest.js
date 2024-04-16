@@ -11,11 +11,11 @@ const StudentDepartmentInterest = sequelize.define(
       autoIncrement: true,
     },
     student_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
     },
     department_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
     }
   },
   {
