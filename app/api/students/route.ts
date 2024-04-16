@@ -5,34 +5,21 @@ import bcrypt from "bcryptjs";
 
 /**
  * @openapi
- * /api/recruiters:
- *   get:
- *       summary: Retrieves a list of recruiters or a specific recruiter by ID
+ * /api/students
+ *   POST:
+ *       summary: creates a new student with email and password
  *       responses:
  *           '200':
  *               content:
  *                    application/json:
  *                       schema:
- *                           type: array
- *                           items: {}
+ *                           type: object
+ *                           items: {email: string, password: string}
  *                       examples:
  *                           One Sample:
- *                               value: '[{id: 1, first_name: "John"}]'
+ *                               value: '{email: "abelkelly6022@gmail.com", password: "abelkelly"}'
  */
-export async function GET() {
-  return Response.json(await Students.findAll());
-}
 
-/**
- * @swagger
- * /api/recruiters:
- *   post:
- *     description: Returns the hello world
- *     summary: Creates a new recruiter
- *     responses:
- *       200:
- *         description:
- */
 export async function POST(req: Request) {
   try {
     const jsonBody = await req.json();
