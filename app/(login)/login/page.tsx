@@ -22,8 +22,8 @@ export default function LoginPage() {
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [forgotPassword, setForgotPassword] = useState(false);
     const [authCompleted, setAuthCompleted] = useState(false);
+    const [forgotPassword, setForgotPassword] = useState(false);
     const {data: session}: any = useSession()
     const searchParams = useSearchParams();
     const callbackUrl = searchParams?.get("callbackUrl");
