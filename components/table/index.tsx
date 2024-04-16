@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import { Dictionary } from '@/types/dictionary'
 import { ChevronLeft, ChevronRight, CircleAlert } from 'lucide-react'
 import React from 'react'
@@ -6,9 +7,10 @@ interface TableProps {
     title?:string;
     columns:Dictionary[];
     children:React.ReactNode
+    columnHeaderStyle?:string
 }
 
-const Table = ({title, columns, children}:TableProps) => {
+const Table = ({title, columns, children, columnHeaderStyle}:TableProps) => {
   return (
     <><div className='overflow-x-auto sm:rounded-lg'>
             
@@ -22,8 +24,8 @@ const Table = ({title, columns, children}:TableProps) => {
       <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
         <thead className='text-xs text-gray-700 uppercase bg-[#F6F8FA] border-b border-[#E6EBF0] '>
           <tr className=''>
-            {columns?.map((column, key) =>(
-              <th scope='col' className='px-4 py-5 whitespace-nowrap' key={key}>
+            {columns?.map((column) =>(
+              <th scope='col' className={cn('px-4 py-5 whitespace-nowrap', columnHeaderStyle)} key={column?.id}>
                   {column?.title}
               </th>
             ))}
