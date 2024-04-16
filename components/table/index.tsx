@@ -24,8 +24,8 @@ const Table = ({title, columns, children, columnHeaderStyle}:TableProps) => {
       <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
         <thead className='text-xs text-gray-700 uppercase bg-[#F6F8FA] border-b border-[#E6EBF0] '>
           <tr className=''>
-            {columns?.map((column, key) =>(
-              <th scope='col' className={cn('px-4 py-5 whitespace-nowrap', columnHeaderStyle)} key={key}>
+            {columns?.map((column) =>(
+              <th scope='col' className={cn('px-4 py-5 whitespace-nowrap', columnHeaderStyle)} key={column?.id}>
                   {column?.title}
               </th>
             ))}

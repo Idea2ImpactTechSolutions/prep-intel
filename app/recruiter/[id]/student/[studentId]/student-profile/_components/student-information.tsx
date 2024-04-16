@@ -21,10 +21,6 @@ const StudentInformation = ({student_details}) => {
         <div className='p-10 bg-white shadow-xl rounded-b-xl'>
             <div className='flex justify-end'>
                 {!student_details?.connection_date &&  !student_details?.interested ? 
-                // (<Button variant="outline" className='gap-x-1.5 rounded-[10px]'>
-                //     <PencilLine size={18}/> 
-                //     <span className='text-xl'>Edit Profile</span>
-                // </Button>):
                 <Button variant="outline" className='text-xl'>Connect</Button> :null}
             </div>
             <UserInformation user_info ={student_details}/>

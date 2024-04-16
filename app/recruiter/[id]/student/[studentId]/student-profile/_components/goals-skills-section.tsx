@@ -22,33 +22,6 @@ const GoalAndSkills = ({student_details}) => {
                         </div>
                     ))
                 }
-                {/* <div className='flex py-1 gap-x-4'>
-                    <div className='relative h-[48px] w-[48px]'>
-                        <Image src={'/images/university-2.png'} fill objectFit='cover' alt="university" />
-                    </div>
-                    <div>
-                        <h3 className='text-base font-semibold'>Clark Atlanta University</h3>
-                        <p>Privat University</p>
-                    </div>
-                </div>
-                <div className='flex py-1 gap-x-4'>
-                    <div className='relative h-[48px] w-[48px]'>
-                        <Image src={'/images/university-3.png'} fill objectFit='cover' alt="university" />
-                    </div>
-                    <div>
-                        <h3 className='text-base font-semibold'>Clark Atlanta University</h3>
-                        <p>Privat University</p>
-                    </div>
-                </div>
-                <div className='flex py-1 gap-x-4'>
-                    <div className='relative h-[48px] w-[48px]'>
-                        <Image src={'/images/university-2.png'} fill objectFit='cover' alt="university" />
-                    </div>
-                    <div>
-                        <h3 className='text-base font-semibold'>Clark Atlanta University</h3>
-                        <p>Privat University</p>
-                    </div>
-                </div> */}
             </div>
             <div className=''>
                 <h2 className="text-[#8E8E8E] mb-3">Major Interest</h2>

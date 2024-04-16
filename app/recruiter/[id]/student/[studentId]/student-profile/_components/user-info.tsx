@@ -44,10 +44,6 @@ const UserInformation = ({user_info}) => {
                 <h3 className='text-[#8E8E8E] text-[22px]'>SAT Score</h3>
                 <p className='text-[#141111] text-xl'>{ user_info?.student_sat_score? user_info?.student_sat_score: "N/A"}</p>
             </div>
-            {/* <div className='space-y-1'>
-                <h3 className='text-[#8E8E8E] text-[22px]'>Dual Enrollment</h3>
-                <p className='text-[#141111] text-xl'>No</p>
-            </div> */}
         </div>
     </div>
   )
