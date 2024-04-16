@@ -55,6 +55,9 @@ const Students = sequelize.define(
         },
         user_id: {
             type: DataTypes.INTEGER,
+        },
+        publish_date: {
+            type: DataTypes.DATE,
         }
     },
     {

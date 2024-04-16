@@ -23,7 +23,7 @@ export const authApi = baseApi.injectEndpoints({
     }),
     register: builder.mutation({
       query: (payload) => ({
-        url: `/register`,
+        url: `/students`,
         method: "POST",
         body: payload,
       }),
