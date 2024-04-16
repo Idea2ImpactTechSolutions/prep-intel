@@ -1,7 +1,7 @@
 import { responseBody } from "app/config/helpers";
 import { models } from "../../models";
 import { type NextRequest } from "next/server";
-const { Messages, Recruiters, School, Students, Users } = models;
+const { Message, Recruiters, School, Students, Users } = models;
 
 // /**
 //  * @openapi
@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
 
     let response;
     if (reqData.recruiter_id && !reqData.student_id && !reqData.school_id) {
-      response = await Messages.findAll({
+      response = await Message.findAll({
         where: {
           recruiter_id: reqData.recruiter_id,
         },
@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
       reqData.student_id &&
       !reqData.school_id
     ) {
-      response = await Messages.findAll({
+      response = await Message.findAll({
         where: {
           student_id: reqData.student_id,
         },
@@ -48,14 +48,14 @@ export async function GET(req: NextRequest) {
       reqData.student_id &&
       !reqData.school_id
     ) {
-      response = await Messages.findAll({
+      response = await Message.findAll({
         where: {
           recruiter_id: reqData.recruiter_id,
           student_id: reqData.student_id,
         },
       });
     } else {
-      response = await Messages.findAll({
+      response = await Message.findAll({
         where: {
           school_id: reqData.school_id,
           student_id: reqData.student_id,
@@ -159,7 +159,7 @@ async function sendMessageFromRecruiter(data) {
       include: { model: Users, attributes: ["school_id"] },
     });
     if (recruiter) {
-      await Messages.create({
+      await Message.create({
         recruiter_id: data.recruiter_id,
         student_id: data.student_id,
         message_text: data.message_text,
@@ -203,7 +203,7 @@ async function sendMessageFromStudentToRecruiter(data) {
     include: { model: Users, attributes: ["school_id"] },
   });
   if (recruiter) {
-    await Messages.create({
+    await Message.create({
       recruiter_id: data.recruiter_id,
       student_id: data.student_id,
       message_text: data.message_text,
@@ -228,7 +228,7 @@ async function sendMessageFromStudentToSchool(data) {
       status: 404,
     });
   }
-  await Messages.create({
+  await Message.create({
     school_id: data.school_id,
     student_id: data.student_id,
     message_text: data.message_text,
