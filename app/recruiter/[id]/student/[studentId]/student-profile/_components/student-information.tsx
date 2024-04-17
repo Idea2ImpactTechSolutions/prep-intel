@@ -93,7 +93,7 @@ const StudentInformation = ({student_details}) => {
                 <Textarea 
                     id='message'
                     name="message"
-                    className='mt-3 rounded-2xl' 
+                    className='w-full mt-3 rounded-2xl' 
                     placeholder='Enter your message here' 
                     rows={5}
                     value={values.message}
@@ -101,7 +101,6 @@ const StudentInformation = ({student_details}) => {
                     touched={touched.message}
                     error={errors.message}
                 />
-
                 <div className='flex justify-end items-center gap-x-5 mt-9'>
                     <Button 
                         type='button' 
@@ -111,7 +110,7 @@ const StudentInformation = ({student_details}) => {
                             setShowModal(false)
                             resetForm()
                         }}
-                        className='px-10 rounded-lg font-[500] text-primary'
+                        className='w-full sm:w-fit md:px-10 rounded-lg font-[500] text-primary'
                     >
                             No, cancel
                     </Button>
@@ -119,7 +118,7 @@ const StudentInformation = ({student_details}) => {
                     <Button 
                         type='submit'
                         variant="orange" 
-                        className='px-10 rounded-lg font-[500]'
+                        className='w-full sm:w-fit md:px-10 rounded-lg font-[500]'
                         loading={isLoading}
                         disabled={isLoading}
                         loadingText={"Sending..."}

@@ -37,7 +37,7 @@ export default function ConfirmationModal({open, title, discription, loading = f
                         {discription}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
-                <AlertDialogFooter>
+                <AlertDialogFooter className="gap-y-4 md:gap-y-0 ">
                     <Button 
                         onClick={handleClose}
                         variant="outline"

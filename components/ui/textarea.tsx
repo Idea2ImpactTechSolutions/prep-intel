@@ -19,7 +19,7 @@ export interface TextareaProps
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, label, labelClass, id, name, onChange, error, value, touched, handleBlur, ...props }, ref) => {
     return (
-      <div>
+      <div className="w-full">
         {label && <Label htmlFor='' className={cn(
           "inline-block",
           labelClass
