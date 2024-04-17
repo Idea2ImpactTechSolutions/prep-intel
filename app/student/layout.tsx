@@ -28,7 +28,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                         <span> Complete Account Setup </span>
                     </div>
                     <div className="flex flex-grow-1"></div>
-                    <span className="absolute right-2 md:relative block border border-[#DEDEDE] cursor-pointer p-2 rounded-full text-[#000000]"> <X width={15} height={15}/> </span>
+                    {/* <span className="absolute right-2 md:relative block border border-[#DEDEDE] cursor-pointer p-2 rounded-full text-[#000000]"> <X width={15} height={15}/> </span> */}
                 </div>
             </nav>
             <section className="md:flex">
