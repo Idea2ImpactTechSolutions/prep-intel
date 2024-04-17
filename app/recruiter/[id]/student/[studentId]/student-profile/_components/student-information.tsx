@@ -16,9 +16,6 @@ import { useSession } from 'next-auth/react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 
-// import { toast } from "@/components/ui/use-toast"
-
-
 
 const StudentInformation = ({student_details}) => {
     const [showModal,setShowModal] = useState<boolean>(false) 
@@ -26,7 +23,7 @@ const StudentInformation = ({student_details}) => {
     const {data: session}: any = useSession() 
     const router = useRouter()
 
-    const [sendMessage, { isLoading, isSuccess }] = useSendMessageMutation()
+    const [sendMessage, { isLoading }] = useSendMessageMutation()
 
     const handleSubmitMessage = (values:any, resetForm:()=>void)=>{
         setShowConfirmationModal(false)
@@ -44,14 +41,11 @@ const StudentInformation = ({student_details}) => {
         })
         .catch((err) => {
             toast.error("Uh oh. Something went wrong. Please try again in a few minutes")
-            console.log(err)
         })
         .finally(()=>{
             setShowModal(false)
             resetForm()
             router.refresh()
-            // window.location.reload();
-            // router.replace('/', { scroll: true }))
         })
     }
 
@@ -98,6 +92,7 @@ const StudentInformation = ({student_details}) => {
                     rows={5}
                     value={values.message}
                     onChange={handleChange}
+                    handleBlur={handleBlur}
                     touched={touched.message}
                     error={errors.message}
                 />
