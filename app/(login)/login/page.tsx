@@ -43,7 +43,7 @@ export default function LoginPage() {
               router.push('/recruiter/dashboard')
               break;
             case 'student':
-              router.push('/student/explore')
+              router.push('/student/onboarding/vitals')
               break;
           }
         }
