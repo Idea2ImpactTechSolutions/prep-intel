@@ -1,7 +1,7 @@
 import { responseBody } from "app/config/helpers";
 import { NextRequest } from "next/server";
 import { models } from "@/app/models";
-const { Department, StudentDepartmentInterest, Students } = models;
+const { Students } = models;
 
 /**
  * @openapi
@@ -72,9 +72,9 @@ export async function GET(
 /**
  * @swagger
  * /api/students/{studentId}/majors:
- *   post:
- *     summary: Create student major interests
- *     description: Takes studentId and majors as params and create records of student major interests.
+ *   patch:
+ *     summary: Update students record with list of majors
+ *     description: Takes studentId and majors as params and updates "majors" field of students record.
  *     parameters:
  *       - in: path
  *         name: studentId
@@ -89,49 +89,41 @@ export async function GET(
  *           schema:
  *             type: object
  *     responses:
- *       201:
- *         description: Student major interests created successfully.
  *       200:
- *         description: No input data.
+ *         description: Student table updated successfully.
  *       404:
  *         description: Student not found.
  */
-export async function POST(
+export async function PATCH(
   req: NextRequest,
   { params }: { params: { studentId: string } }
 ) {
-  let responseCode = 400;
-  let responseMessage = "Bad Request";
+  let responseCode = 404;
+  let responseMessage = "Student not found.";
   let responseData: any;
-  const studentChecker = await Students.findOne({
+  const student = await Students.findOne({
     where: {
       id: params.studentId
     }
   });
-  if (!studentChecker) {
+  if (!student) {
     return Response.json(
       responseBody(
-        "Student not found.",
-        404
+        responseMessage,
+        responseCode
       ),
       {
-        status: 404,
+        status: responseCode,
       }
     );
   }
   const {majors} = await req.json()
-
-  const recordsToCreate = majors.map(major => ({
-    student_id: params.studentId,
-    department_id: major
-  }));
-  let studentMajorInterests = await updateStudentMajors(recordsToCreate);
+  responseCode = 200
+  const studentMajorInterests = await updateStudentMajors(student, majors);
   if (!studentMajorInterests) {
-    responseCode = 200
     responseMessage = "No majors selected"
   }
   else{
-    responseCode = 201
     responseMessage = "Student Major Interests created successfully."
     responseData = studentMajorInterests
   }
@@ -145,22 +137,22 @@ export async function POST(
 }
 
 async function getStudentMajors(studentId) {
-  return await StudentDepartmentInterest.findAll({
+  const student = await Students.findOne({
     where: {
-      student_id: studentId,
-    },
-    include: [
-      {
-        model: Department, // Make sure to import the Department model
-        as: 'department',
-      },
-    ],
+      id: studentId
+    }
   });
-}
-
-async function updateStudentMajors(studentMajorInterests) {
-  if (!studentMajorInterests) {
+  if (!student){
     return null;
   }
-  return StudentDepartmentInterest.bulkCreate(studentMajorInterests);
+  return student.majors;
+}
+
+async function updateStudentMajors(student, majors) {
+  if (!majors) {
+    return null;
+  }
+  return await student.update({
+    majors: majors
+  });
 }
