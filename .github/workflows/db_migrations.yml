@@ -1,8 +1,9 @@
 name: DB Migration
 
 on:
-  push:
-    branches: [ create_migration_gha ]
+  workflow_dispatch:
+  # push:
+  #   branches: [ create_migration_gha ]
 
 jobs:
   db-migration-job:
