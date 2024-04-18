@@ -70,15 +70,15 @@ const StudentInformation = ({student_details}) => {
         </div>
         <div className='p-10 bg-white shadow-xl rounded-b-xl'>
             <div className='flex justify-end'>
-                {/* {!student_details?.connection_date &&  !student_details?.interested ?  */}
-                <Button variant="outline" className='text-xl' onClick={()=>setShowModal(true)}>Connect</Button> 
-                {/* :null} */}
+                {(!student_details?.connection_date &&  !student_details?.interested) ? 
+                    <Button variant="outline" className='text-xl'>Connect To Unlock</Button>:<Button variant="outline" className='text-xl' onClick={()=>setShowModal(true)}>Message</Button>
+                } 
             </div>
             <UserInformation user_info ={student_details}/>
         </div>
+        
         <TranscriptSection />
 
-        {/* connect modal content starts here */}
         <CustomModal handleClose={()=>setShowModal(false)} show={showModal}   title="Connect with Student" modalClass="w-full max-w-[85%] lg:w-[750px] !rounded-2xl">
             <form onSubmit={handleSubmit}>
                 <div className='mt-[7px]'>
@@ -123,9 +123,7 @@ const StudentInformation = ({student_details}) => {
                 </div>
             </form>
         </CustomModal>
-        {/* modal content ends here */}
 
-        {/* confirmation modal start here */}
         <ConfirmationModal
             title='Confirm Send Message'
             discription ="Would you like to send the message?"
