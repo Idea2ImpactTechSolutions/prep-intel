@@ -1,9 +1,9 @@
 name: DB Migration
 
 on:
+  push:
+    branches: [ main ]
   workflow_dispatch:
-  # push:
-  #   branches: [ create_migration_gha ]
 
 jobs:
   db-migration-job:
@@ -35,9 +35,10 @@ jobs:
     - name: Run DB migration
       run: |
         cd db
-        python initialize-db.py -a
+        python initialize-db.py -m
       env:
-        DB_USERNAME: ${{vars.DB_USERNAME_PROD}}
+        DB_USERNAME: ${{vars.DB_USERNAME}}
         DB_PASSWORD: ${{vars.DB_PASSWORD}}
         DB_NAME: ${{vars.DB_NAME}}
         DB_HOST: prep-intele-development.cluster-c7ao62sg4xma.us-east-1.rds.amazonaws.com
+        LOCAL_DB: false
