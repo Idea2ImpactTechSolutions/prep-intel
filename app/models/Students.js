@@ -60,7 +60,7 @@ const Students = sequelize.define(
             type: DataTypes.DATE,
         },
         majors: {
-            type: DataTypes.ARRAY
+            type: DataTypes.ARRAY(DataTypes.STRING)
         }
     },
     {
