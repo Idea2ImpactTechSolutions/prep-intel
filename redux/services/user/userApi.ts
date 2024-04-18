@@ -31,7 +31,14 @@ const userApi = baseApi.injectEndpoints({
         }
       },
     }),
+    resetPassword: builder.mutation({
+      query: (payload) => ({
+        url: `/users/reset-password`,
+        method: "POST",
+        body: payload,
+      }),
+    }),
   }),
 });
 
-export const { useClaimAccountMutation, useSetPasswordMutation } = userApi;
+export const { useClaimAccountMutation, useSetPasswordMutation, useResetPasswordMutation } = userApi;
