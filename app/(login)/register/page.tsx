@@ -11,6 +11,7 @@ import { Space_Grotesk } from "next/font/google";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 import * as yup from "yup"
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
@@ -18,15 +19,23 @@ const SPECIAL_CHARS = ['#', '@', '/']
 
 export default function RegisterPage() {
     const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState("")
     const [register, {isLoading}] = useRegisterMutation()
 
     const router = useRouter()
 
     const handleSubmitForm = async (values) => {
+        setError("")
         register(values)
         .unwrap()
         .then((payload) => {
-            router.push('/student/onboarding/vitals')
+            toast.success('Account Created Successfully')
+            router.push('/login')
+        })
+        .catch((error) => {
+            if (error.data) {
+                setError(error.data.message)
+            }
         })
     }
 
@@ -128,12 +137,13 @@ export default function RegisterPage() {
                             )}
                         </span>
                     </div>
+                    <div className="text-red-500 text-sm">{error}</div>
                     <div className="mt-5">
                         <Button
                             className="primary-bg rounded-lg w-full p-[1.5rem]"
                             type="submit"
                             loading={isLoading}
-                            disabled={isLoading}
+                            disabled={isLoading || !containSpecialChar(values.password, SPECIAL_CHARS)}
                             loadingText="Create Account"
                         >Create Account</Button>
                     </div>

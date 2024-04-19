@@ -61,6 +61,9 @@ const Students = sequelize.define(
         },
         majors: {
             type: DataTypes.ARRAY(DataTypes.STRING)
+        },
+        extracurriculars: {
+            type: DataTypes.ARRAY(DataTypes.STRING)
         }
     },
     {
