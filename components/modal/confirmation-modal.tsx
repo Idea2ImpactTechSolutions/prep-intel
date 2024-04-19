@@ -7,40 +7,48 @@ import {
     AlertDialogTitle,
   } from "@/components/ui/alert-dialog"
   import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
   type AlertDialogType = {
     open: boolean,
     title?: string,
     loading?: boolean,
     discription?: string,
+    modalContentStyle?: string,
+    descriptionStyle?: string,
+    titleStyle?: string,
+    loadingText?: string,
+    variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | "outlinePrimary" | "orange" | null | undefined,
     onClick: () => void,
     handleClose: () => void
   }
 
-export default function ConfirmationModal({open, title, discription, loading = false, onClick, handleClose}:AlertDialogType) {
+export default function ConfirmationModal({open, title, discription, loading = false, modalContentStyle, titleStyle,descriptionStyle,variant, loadingText="Submitting", onClick, handleClose}:AlertDialogType) {
     return (
         <AlertDialog
             open={open}
         >
             <AlertDialogContent 
-                className="w-[90%] mx-auto p-8 font-sans"
+                className={cn("w-[90%] mx-auto p-8 font-sans", modalContentStyle)}
             >
                 <AlertDialogHeader>
-                    <AlertDialogTitle className="text-cente text-[1.2rem]">{title}</AlertDialogTitle>
-                    <AlertDialogDescription className="text-[.9ren]">
+                    <AlertDialogTitle className={cn("text-cente text-[1.2rem]", titleStyle)}>{title}</AlertDialogTitle>
+                    <AlertDialogDescription className={cn("text-[.9ren]", descriptionStyle)}>
                         {discription}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
-                <AlertDialogFooter>
+                <AlertDialogFooter className="gap-y-4 md:gap-y-0 ">
                     <Button 
                         onClick={handleClose}
                         variant="outline"
+                        disabled={loading}
                     >Close</Button>
                     <Button 
                         onClick={onClick}
                         loading={loading}
-                        loadingText="Submitting"
+                        loadingText={loadingText}
                         disabled={loading}
+                        variant={variant? variant:"default"}
                     >
                         Continue
                     </Button>
