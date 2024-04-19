@@ -27,7 +27,7 @@ export default function VitalsPage() {
             <div className="flex-1 px-6 md:px-12 lg:px-20">
               <SectionContainer
                 title="About You"
-                subTitle="Fill your data based on your real data"
+                subTitle=""
                 titleClass={cn(
                   spaceGrotesk.className,
                   "mb-0"
@@ -67,32 +67,13 @@ export default function VitalsPage() {
                       className="mb-4 rounded-lg p-[1.4rem] placeholder:text-[#AAAAAA]' md:mb-6"
                       placeholder="Enter your state"
                     />
-                    {/* <div className="mb-4 md:mb-6">
-                      <CustomSelect
-                        label='State'
-                        options={STATES}
-                        selected={state}
-                        setSelected={setState}
-                        error={""}
-                      />
-                       </div>
-                    <div className="mb-4 md:mb-6">
-                      <CustomSelect
-                        label="City"
-                        options={CITIES}
-                        selected={city}
-                        setSelected={setCity}
-                        disabled={state === ''}
-                        error={""}
-                      />
-                    </div> */}
                   </div>
                 </div>
               </SectionContainer>
 
               <SectionContainer
                 title="About Your Gaurdian"
-                subTitle="Fill your data based on your guardian data"
+                subTitle=""
                 titleClass={cn(
                   spaceGrotesk.className,
                   "mb-0"
