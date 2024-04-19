@@ -3,7 +3,6 @@ import UsMap from "@/components/UsMap";
 import { Button } from "@/components/ui/button";
 import { useLazyGetSchoolDataQuery } from "@/redux/services/student/studentApi";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useSession } from "next-auth/react";
 import { useEffect, useMemo, useState } from "react";
 import ReactPaginate from 'react-paginate';
 import Select from 'react-select';
@@ -72,7 +71,6 @@ export default function Page() {
   const [schools, setSchools] = useState<any[]>([]);
   const [itemOffset, setItemOffset] = useState(0);
   const itemsPerPage = 30
-  const {data: session}: any = useSession()
 
   const endOffset = itemOffset + itemsPerPage;
   const currentSchools = useMemo(()=>(schools?.slice(itemOffset, endOffset)), [schools]);
@@ -119,6 +117,10 @@ export default function Page() {
         </div>
       </div>
 
+      {schools?.length ? <div className="space-y-1 my-3">
+        <h2 className="font-semibold">{schools?.length} University Found</h2>
+        <p className="text-sm text-gray-500">Explore {schools?.length} top universit{schools?.length > 1? "ies":"y"}</p>
+      </div>:null}
       <div className="w-full md:w-fit flex flex-col md:flex-row items-end gap-2">
         <div className="w-full space-y-2">
           <h2>Select State</h2>
@@ -130,15 +132,17 @@ export default function Page() {
             className="w-full md:w-[400px]" 
           />
         </div>
-
-        <Button
-          type="button"
-          variant="default"
-          loading={isLoading ||isFetching}
-          onClick={() => fetchSchoolData(activeSelection.map(s => s.value).join(','))}
-        >
-          Search
-        </Button>
+        <div>
+          <Button
+            type="button"
+            variant="default"
+            loadingText="Search..."
+            loading={isLoading ||isFetching}
+            onClick={() => fetchSchoolData(activeSelection.map(s => s.value).join(','))}
+          >
+            Search
+          </Button>
+        </div>
 
       </div>
 
