@@ -1,15 +1,15 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("./sequelize");
-const Users = require("./Users");
+// const Users = require("./Users");
 
 const Recruiters = sequelize.define(
     "recruiters",
     {
         // Define model attributes
         id: {
-          type: DataTypes.INTEGER,
-          primaryKey: true,
-          autoIncrement: true,
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
         },
         school_id: {
             type: DataTypes.STRING,
@@ -31,8 +31,8 @@ const Recruiters = sequelize.define(
     }
 );
 
-Recruiters.belongsTo(Users, {
-    foreignKey: 'user_id', // This should match the foreignKey in the hasOne association
-});
-  
+// Recruiters.belongsTo(Users, {
+//     foreignKey: 'user_id', // This should match the foreignKey in the hasOne association
+// });
+
 module.exports = Recruiters;

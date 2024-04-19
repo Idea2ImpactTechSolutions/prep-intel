@@ -7,7 +7,7 @@ const Students = sequelize.define(
     {
         // Define model attributes
         id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.UUID,
             primaryKey: true,
             autoIncrement: true,
         },

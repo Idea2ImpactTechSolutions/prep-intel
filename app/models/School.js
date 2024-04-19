@@ -7,6 +7,8 @@ const SchoolSocialMedia = require("./SchoolSocialMedia");
 const Assets = require("./Assets");
 const SchoolContact = require("./SchoolContact");
 const SchoolAddress = require("./SchoolAddress");
+const Users = require("./Users");
+const Recruits = require("./Recruits");
 
 const School = sequelize.define(
   "school",
@@ -90,6 +92,7 @@ const School = sequelize.define(
 );
 
 School.hasMany(Assets, { foreignKey: "school_id", as: "assets" })
+School.hasMany(Users, { foreignKey: "school_id", as: "users" })
 School.hasMany(SchoolDepartment, {
   foreignKey: "school_id",
   as: "school_departments",
@@ -115,5 +118,10 @@ School.hasMany(SchoolSocialMedia, {
   foreignKey: "school_id",
   as: "school_social_medias",
 });
+
+School.hasMany(Recruits, {
+  foreignKey: "school_id",
+  as: "recruits",
+})
 
 module.exports = School;

@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("./sequelize");
+const Recruiters = require("./Recruiters");
 
 const Users = sequelize.define(
     "users",
@@ -14,6 +15,12 @@ const Users = sequelize.define(
             type: DataTypes.STRING,
         },
         last_name: {
+            type: DataTypes.STRING,
+        },
+        phone: {
+            type: DataTypes.STRING,
+        },
+        profile_img: {
             type: DataTypes.STRING,
         },
         email: {
@@ -58,5 +65,9 @@ const Users = sequelize.define(
         timestamps: false,
     }
 );
+
+
+Users.hasMany(Recruiters, { foreignKey: "user_id", as: "recruiters" })
+
 
 module.exports = Users;
