@@ -39,7 +39,7 @@ export default function Page() {
 
   return (
     <div className="pi-container mt-6">
-      <h1 className="text-2xl font-bold mb-8">Welcome { session.user.firstName }</h1>
+      <h1 className="text-2xl font-bold mb-8">Welcome { session?.user?.firstName }</h1>
 
       <h2 className="text-xl font-bold mb-1 mt-4">Schools that match your profile interests</h2>
       <ul className="flex flex-wrap">
