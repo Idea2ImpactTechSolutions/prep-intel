@@ -28,7 +28,15 @@ const recruiterApi = baseApi.injectEndpoints({
       query: ({studentId,recruiterId}) => ({
         url: `/students/${studentId}/profile?recruiter_id=${recruiterId}`,
       }),
+      providesTags:["STUDENT"]
     }),
+    sendMessage: builder.mutation({
+      query: ({studentId, recruiterId, schoolId, senderRole,message}) => ({
+        url: `/messages/?recruiter_id=${recruiterId}&student_id=${studentId}&school_id=${schoolId}&sender_role=${senderRole}&message_text=${message}`,
+        method: "POST",
+      }),
+      invalidatesTags:["STUDENT"]
+    })
   }),
 });
 
@@ -36,5 +44,6 @@ export const {
   useGetRecruitsQuery,
   useSetTerritoriesMutation,
   useLazyGetRecruiterQuery,
-  useGetStudentProfileQuery
+  useGetStudentProfileQuery,
+  useSendMessageMutation
 } = recruiterApi;
