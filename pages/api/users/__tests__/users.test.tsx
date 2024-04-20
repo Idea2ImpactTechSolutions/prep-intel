@@ -4,6 +4,7 @@ import { createMocks } from 'node-mocks-http';
 import type { NextApiRequest, NextApiResponse } from 'next';
 const sequelize = require("../../../../app/models/sequelize");
 import models from "../../../../app/models";
+
 const { Users } = models.models;
 
 const AUTH_CODE = '546a5374-ed66-4371-940f-8f17fe4d452b';
@@ -16,17 +17,24 @@ const userFindOneSpy = jest.spyOn(Users, 'findOne');
 const userUpdateSpy = jest.spyOn(Users, 'update');
 const bcryptSpy = jest.spyOn(bcrypt, 'hashSync');
 
+
 describe('Set Password API', () => {
   afterAll(() => {
     // Close down sequelize connection pool allowing jest to exit gracefully
     sequelize.close();
   });
   describe('POST requests', () => {
-    afterEach(() => {
+    afterEach(async () => {
       jest.clearAllMocks();
+     
     });
     it('Sets the user password', async () => {
       // Setup
+      Users.findOne.mockResolvedValue({
+        id: 1,
+        auth_code: AUTH_CODE,
+        update: jest.fn().mockResolvedValue({ /* simulated response */ })
+      });
       const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
         method: 'POST',
         body: {
@@ -51,23 +59,31 @@ describe('Set Password API', () => {
       );
     },15000);
     it('Mismatching passwords are provided', async () => {
-        const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
-          method: 'POST',
-          body: {
-              auth_code: AUTH_CODE,
-              password: PASSWORD,
-              confirm_password: MISMATCHED_PASSWORD
-          },
-        });
+      Users.findOne.mockResolvedValue({
+        id: 1,
+        auth_code: AUTH_CODE,
+        update: jest.fn().mockResolvedValue({ /* simulated response */ })
+      });
+      const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
+        method: 'POST',
+        body: {
+          auth_code: AUTH_CODE,
+          password: PASSWORD,
+          confirm_password: MISMATCHED_PASSWORD
+        },
+      });
   
-        // Test
-        await handler(req, res);
+      // Test
+      await handler(req, res);
   
         // Assert
         expect(res._getStatusCode()).toBe(400);
         expect(userUpdateSpy).not.toHaveBeenCalled();
     },15000);
     it('An invalid auth_code is provided', async () => {
+
+      Users.findOne.mockResolvedValue(null);
+
       const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
         method: 'POST',
         body: {
