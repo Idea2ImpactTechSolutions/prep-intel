@@ -15,9 +15,10 @@ const School = sequelize.define(
   {
     // Define model attributes
     id: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
+      autoIncrement: true
     },
     found_date: {
       type: DataTypes.DATE,
