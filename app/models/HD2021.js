@@ -4,7 +4,7 @@ const sequelize = require("./sequelize");
 // Datsource: https://nces.ed.gov/ipeds/datacenter/DataFiles.aspx
 // HD2021 = "Institutional Characteristics ->	Directory information"
 const ICDirectory = sequelize.define(
-  "hd_2021",
+  "HD2021",
   {
     // Define model attributes
     unitid: {
