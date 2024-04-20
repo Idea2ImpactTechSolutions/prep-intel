@@ -19,7 +19,6 @@ const bcryptSpy = jest.spyOn(bcrypt, 'hashSync');
 
 
 describe('Set Password API', () => {
-  let userId : number;
   afterAll(() => {
     // Close down sequelize connection pool allowing jest to exit gracefully
     sequelize.close();
