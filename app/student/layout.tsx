@@ -1,9 +1,6 @@
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Metadata } from "next";
-import StudentTabs from "./shared/student-tabs";
-import { FaBell } from "react-icons/fa";
-import { IoPersonCircle } from "react-icons/io5";
 
 export const metadata: Metadata = {
     title: "Prep Intel | Student Onboarding",
@@ -12,26 +9,25 @@ export const metadata: Metadata = {
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     return (
-        <main className="font-sans">
+        <main className="font-sans h-screen overflow-hidden">
             <nav className={`bg-panel p-2 border-b md:px-6 lg:px-6`}>
                 <div className="container p-2 px-6 flex flex-col items-center md:flex-row md:items-center md:justify-between pl-0">
-                    <Link
-                        href="/"
-                    >
-                        <Image
-                            src="/images/logo/text-logo.png"
-                            className=""
-                            width={160}
-                            height={0}
-                            alt="logo"
-                        />
-                    </Link>
-                    <div className=" flex flex-grow-1"></div>
-                    <div className="flex mt-4 md:mt-0 px-6">
-                        <StudentTabs />
-                        <IoPersonCircle size="1.5em" className="mx-4 w-8" />
-                        <FaBell  size="1.2em" className="w-4 mt-[2px]" />
+                    <div className="flex flex-col items-center md:flex-row md:items-center md:gap-x-8">
+                        <Link
+                            href="/"
+                            className="md:border-r md:pr-10"
+                        >
+                            <Image
+                                src='/images/logo/text-logo.png'
+                                width={100}
+                                height={100}
+                                alt="logo"
+                            />
+                        </Link>
+                        <span> Complete Account Setup </span>
                     </div>
+                    <div className="flex flex-grow-1"></div>
+                    {/* <span className="absolute right-2 md:relative block border border-[#DEDEDE] cursor-pointer p-2 rounded-full text-[#000000]"> <X width={15} height={15}/> </span> */}
                 </div>
             </nav>
             <section className="md:flex">

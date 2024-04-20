@@ -6,6 +6,7 @@ type DatePickerType = {
     label?: string,
     labelClass?: string
     className?: string,
+    inputClass?: string,
     selected?: string, 
     value?: string,
     handleChange: (event: any) => void,
@@ -14,7 +15,7 @@ type DatePickerType = {
     error?: any,
 }
 
-export default function CustomDatePicker({label, labelClass, className, touched, error, value, onOpenPickNewDate = false, selected, handleChange}: DatePickerType) {
+export default function CustomDatePicker({label, labelClass, className, inputClass, touched, error, value, onOpenPickNewDate = false, selected, handleChange}: DatePickerType) {
     return (
         <div className={cn(
             "mt-1",
@@ -28,6 +29,7 @@ export default function CustomDatePicker({label, labelClass, className, touched,
                 className="custom-calendar mb-4 md:mb-6"
                 inputClass={cn(
                     "p-2.5 w-full border border-gray-300 text-sm rounded-[4px] focus:border-primary focus:outline-none",
+                    inputClass,
                     error && "border-red-500"
                 )}
                 format="MM/DD/YYYY"

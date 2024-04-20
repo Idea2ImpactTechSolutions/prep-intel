@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import Link from "next/link";
 interface PageProps {
-  schoolId: string
+  schoolId: number;
+  studentId: number;
 }
 
-export default function PageList({ schoolId }: PageProps) {
+export default function PageList({ schoolId, studentId }: PageProps) {
   const [links, setLinks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showLinks, setShowLinks] = useState(false);
   const [collected, setCollected] = useState(false);
 
   function resolveIds(url) {
-    return url.replace('[id]', schoolId);
+    return url
+        .replace('[id]', schoolId)
+        .replace('[studentId]', studentId)
   }
 
   useEffect(() => {
