@@ -26,20 +26,8 @@ const Recruits = sequelize.define(
         criteria: {
             type: DataTypes.TEXT,
         },
-        connection_initiator: {
-            type: DataTypes.TEXT,
-        },
-        connection_date: {
-            type: DataTypes.DATE,
-        },
         create_date: {
             type: DataTypes.DATE,
-        },
-        contacted: {
-            type: DataTypes.BOOLEAN,
-        },
-        interested: {
-            type: DataTypes.BOOLEAN,
         },
         application_date: {
             type: DataTypes.DATE,
@@ -51,9 +39,6 @@ const Recruits = sequelize.define(
             type: DataTypes.STRING,
         },
         is_applicant: {
-            type: DataTypes.BOOLEAN,
-        },
-        is_viewable: {
             type: DataTypes.BOOLEAN,
         },
     },

@@ -18,7 +18,9 @@ const Assets = require("./Assets");
 const Students = require("./Students");
 const HD2021 = require("./HD2021");
 const StudentDepartmentInterest = require("./StudentDepartmentInterest");
-const Department = require("./Department")
+const Department = require("./Department");
+const ConnectionRequest = require("./ConnectionRequest");
+
 const models = {
   SchoolDepartment,
   School,
@@ -39,7 +41,8 @@ const models = {
   SchoolSocialMedia,
   HD2021,
   StudentDepartmentInterest,
-  Department
+  Department,
+  ConnectionRequest
 };
 
 
