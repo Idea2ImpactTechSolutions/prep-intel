@@ -4,6 +4,9 @@ import { createMocks } from 'node-mocks-http';
 import type { NextApiRequest, NextApiResponse } from 'next';
 const sequelize = require("../../../../app/models/sequelize");
 import models from "../../../../app/models";
+
+import { createSampleUser, deleteSampleUser } from '../../../../utils/helpers/userUtil';
+
 const { Users } = models.models;
 
 const AUTH_CODE = '546a5374-ed66-4371-940f-8f17fe4d452b';
@@ -16,15 +19,23 @@ const userFindOneSpy = jest.spyOn(Users, 'findOne');
 const userUpdateSpy = jest.spyOn(Users, 'update');
 const bcryptSpy = jest.spyOn(bcrypt, 'hashSync');
 
+
+const getUserSpy = jest.spyOn(Users, 'findByPk');
+
 describe('Set Password API', () => {
+  let userId : number;
   afterAll(() => {
     // Close down sequelize connection pool allowing jest to exit gracefully
     sequelize.close();
   });
   describe('POST requests', () => {
-    afterEach(() => {
+    afterEach(async () => {
       jest.clearAllMocks();
+     
     });
+    beforeEach(async () => {
+      userId = await createSampleUser(AUTH_CODE);
+      });
     it('Sets the user password', async () => {
       // Setup
       const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
