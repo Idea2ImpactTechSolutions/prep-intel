@@ -8,7 +8,7 @@ const VITALS_FIELDS = [
   "id",
   "dob",
   "state",
-  "country",
+  "city",
   "graduation_year",
   "high_school",
   "guardian_first_name",
