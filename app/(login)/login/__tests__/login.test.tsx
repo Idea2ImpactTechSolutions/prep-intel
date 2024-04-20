@@ -12,7 +12,7 @@ const ROLE_ROUTE_MAPPER = {
   "admin": "/admin",
   "manager": "school/123456/dashboard",
   "recruiter": "/recruiter/dashboard",
-  "student": "/student/explore"
+  "student": "/student/onboarding/vitals"
 };
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),

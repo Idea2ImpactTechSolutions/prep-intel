@@ -1,0 +1,44 @@
+name: DB Migration
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  db-migration-job:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout app code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '20'
+    
+    - name: Install dependencies
+      run: npm install
+      
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    
+    - name: run pip install
+      run: pip install -r ./db/docker/nces/requirements.txt
+
+    - name: install dotenv
+      run: pip install python-dotenv
+
+    - name: Run DB migration
+      run: |
+        cd db
+        python initialize-db.py -m
+      env:
+        DB_USERNAME: ${{vars.DB_USERNAME}}
+        DB_PASSWORD: ${{vars.DB_PASSWORD}}
+        DB_NAME: ${{vars.DB_NAME}}
+        DB_HOST: prep-intele-development.cluster-c7ao62sg4xma.us-east-1.rds.amazonaws.com
+        LOCAL_DB: false
