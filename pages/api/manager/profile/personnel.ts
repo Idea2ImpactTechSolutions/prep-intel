@@ -46,19 +46,14 @@ export default async function handler(req, res) {
         school_id: school_id,
         role: PERSONNEL_ROLES
       }});
-      if (!users.length) {
-        responseMessage = "Personnel not found";
-      }
-      else {
-        const personnelData = await finalizePersonnelData(users);
-        responseData = personnelData;
-        responseCode = 200;
-        responseMessage = "Personnel retrieved successfully";
-      }
-    }
-    else {
+
+      responseData = await finalizePersonnelData(users);
+      responseCode = 200;
+      responseMessage = "Personnel retrieved successfully";
+    } else {
       responseMessage = "School not found";
     }
+
     return {responseData, responseCode, responseMessage};
   }
 
