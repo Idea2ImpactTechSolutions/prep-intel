@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     return (
-        <main className="font-sans h-screen overflow-hidden">
+        <main className="font-sans h-screen">
             <nav className={`bg-panel p-2 border-b md:px-6 lg:px-6`}>
                 <div className="container p-2 px-6 flex flex-col items-center md:flex-row md:items-center md:justify-between pl-0">
                     <div className="flex flex-col items-center md:flex-row md:items-center md:gap-x-8">
