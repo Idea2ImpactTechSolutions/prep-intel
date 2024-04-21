@@ -77,37 +77,46 @@ import logger from "lib/logger";
  *               status: 400
  *               error: "Detailed error message"
  */
-
 export async function GET(req: NextRequest) {
-  try {
-    const searchParams = req.nextUrl.searchParams;
-    const stateString = searchParams.get("states");
-    const states = stateString?.split(",");
+    try {
+      const searchParams = req.nextUrl.searchParams;
+      const stateString = searchParams.get("states");
+      const states = stateString?.split(",");
 
-    // Pagination parameters
-    const page = parseInt(searchParams.get("page") || "1", 10);
-    const limit = parseInt(searchParams.get("limit") || "10", 10);
-    const offset = (page - 1) * limit;
+      // Pagination parameters
+      const page = parseInt(searchParams.get("page") || "1", 10);
+      const limit = parseInt(searchParams.get("pageSize") || "10", 10);
+      const offset = (page - 1) * limit;
 
-    return Response.json(
-      responseBody(
-        "Schools retrieved",
-        200,
-        await getSchoolsInStates(states, { limit, offset })
-      )
-    );
-  } catch (error:any) {
-    // Report
-    logger.error(error.message);
-    return Response.json(
-      responseBody("Error occurred", 400, { error: error.message }),
-      { status: 400 }
-    );
+      // Fetching data and count
+      const result = await getSchoolsInStates(states, { limit, offset });
+      const totalItems = result.count;
+      const totalPages = Math.ceil(totalItems / limit);
+
+      return Response.json(
+        responseBody(
+          "Recruits successfully retrieved",
+          200,
+          {
+            schools: result.rows,
+            totalItems,
+            totalPages,
+            currentPage: page,
+            pageSize: limit
+          }
+        )
+      );
+    } catch (error:any) {
+      logger.error(error.message);
+      return Response.json(
+        responseBody("Error occurred", 400, { error: error.message }),
+        { status: 400 }
+      );
+    }
   }
-}
 
 function getSchoolsInStates(states, { limit, offset }) {
-  return School.findAll({
+  return School.findAndCountAll({
     attributes: ["id", "name"],
     include: [
       {
