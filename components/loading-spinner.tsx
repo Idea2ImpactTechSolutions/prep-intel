@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 interface SpinnerProps {
-  className: string;
+  className?: string;
 }
 
 const LoadingSpinner = ({ className }: SpinnerProps) => {
