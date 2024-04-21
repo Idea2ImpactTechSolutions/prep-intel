@@ -17,7 +17,7 @@ export default function AdminPage() {
   const router = useRouter();
   const [schools, setSchools] = useState([]);
   const [getMatchingSchools, {isLoading}] = useLazyGetSchoolsQuery();
-  const [schooldId, setSchoolId] = useState(7001);
+  const [schoolId, setSchoolId] = useState(7001);
   const [studentId ] = useState(1);
 
   let filterTimeout;
@@ -66,7 +66,7 @@ export default function AdminPage() {
             Recruiter Portal
           </Button>
           <Button
-            onClick={() => router.push(`/school/${schooldId}/dashboard`)}
+            onClick={() => router.push(`/school/${schoolId}/dashboard`)}
             type="button"
             variant="outline"
           >
@@ -97,7 +97,7 @@ export default function AdminPage() {
                 <Link className="underline cursor-pointer " href={`/school/${id}/my-school`}>{name}</Link>
               </div>))
           }
-        <PageList schoolId={schooldId} studentId={studentId} />
+        <PageList schoolId={schoolId} studentId={studentId} />
       </div>
     </div>
   );
