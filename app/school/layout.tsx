@@ -52,17 +52,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             .then((payload) => {
                 const { data } = payload
                 dispatch(setSchoolInformation({ slug: 'school_data', data: {...data, create_count: 0} }))
-
-                const isAllowedPath = allowedPaths.some(p => location?.endsWith(p));
-                const isSchoolPublished:boolean = Boolean(data?.publish_date);
-
-                setAllowFullView(isAllowedPath || isSchoolPublished);
             })
     }
 
     useEffect(() => {
         handleGetSchoolInformation(schoolId);
     }, [schoolId])
+
+    useEffect(() => {
+        const isAllowedPath = allowedPaths.some(p => location?.endsWith(p));
+        const isSchoolPublished = Boolean(school_data?.publish_date);
+
+        setAllowFullView(isAllowedPath || isSchoolPublished);
+    }, [school_data])
 
     return (
         <main className="overflow-y-hidden font-sans">
