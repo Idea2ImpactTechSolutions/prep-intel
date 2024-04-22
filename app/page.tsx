@@ -51,7 +51,7 @@ export default function Home() {
             type="button"
             variant="outline"
           >
-            Sign Up
+            Log In
         </Button>
       </div>
 
@@ -74,7 +74,7 @@ export default function Home() {
         </div>
 
         <Button className="bg-[#FEBB0E] border-[#FEBB0E] text-black mt-12 mr-20"
-            onClick={() => router.push('/login')}
+            onClick={() => router.push('/register')}
             type="button"
             variant="outline"
           >
