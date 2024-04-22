@@ -52,7 +52,7 @@ export default function VitalsPage() {
     addStudentVitals({data: {...values}, studentId: studentId})
     .unwrap()
     .then(data => {
-      toast.success("Vitals added successfully")
+      toast.success(data.message)
       router.push("/student/onboarding/schools")
     })
   }
