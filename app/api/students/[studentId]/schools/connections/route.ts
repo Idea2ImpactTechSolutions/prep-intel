@@ -88,6 +88,8 @@ export async function GET(
       params.studentId
     );
 
+    const studentId = params.studentId;
+
     if (userData.role !== 'student') {
       return Response.json(responseBody("Not Found", 404), { status: 404 });
     }
@@ -95,8 +97,8 @@ export async function GET(
     const studentConnectionRequests: any = await ConnectionRequest.findAll({
       where: {
         [Op.or]: {
-          initiator_id: userData.id,
-          recipient_id: userData.id
+          initiator_id: studentId,
+          recipient_id: studentId,
         },
         connection_accepted: null
       },
