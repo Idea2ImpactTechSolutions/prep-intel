@@ -5,26 +5,26 @@ import { models } from "@/app/models";
 import { fn, col, Op } from 'sequelize';
 const { ConnectionRequest, Recruits, School, Students, Users } = models;
 
-// TODO: Change type in POST schema to string instead of number 
+// TODO: Change type in POST schema to string instead of number
 const POST_VALIDATION_SCHEMA = yup.array().of(
   yup.number().required()
 );
 
-const PATCH_VALIDATION_SCHEMA = yup.object({    
+const PATCH_VALIDATION_SCHEMA = yup.object({
   id: yup.number().required(),
   connection_accepted: yup.boolean().required(),
 });
 
 const GET_FIELDS = [
-  'id', 
+  'id',
   ['school_id', 'schoolId'],
-  ['school.name', 'schoolName'],
-  [ fn('CONCAT', 
+  // ['school.name', 'schoolName'], This errors, revised in include attribute on bound model
+  [ fn('CONCAT',
     col('initiator.first_name'), ' ', col('initiator.last_name')
      ), 'initiatorName'
   ],
   ['initiator_role', 'initiatorRole'],
-  [ fn('CONCAT', 
+  [ fn('CONCAT',
       col('recipient.first_name'), ' ', col('recipient.last_name')
     ), 'recipientName'
   ],
@@ -35,40 +35,48 @@ const GET_FIELDS = [
  * @openapi
  * /api/students/{studentId}/schools/connections:
  *   get:
- *    summary: Find open connection requests
- *    description: Returns open connection requests a student has sent or received
- *       responses:
- *            200:
- *             description: Connection requests found
- *             content:
- *               application/json:
- *                 schema:
- *                   type: array
- *                     items:
- *                       type: object
- *                         properties:
- *                           id:
- *                             type: number
- *                             description: Unique ID of a connection request
- *                           schoolId:
- *                             type: string
- *                             description: Unique ID of a school
- *                           schoolName:
- *                             type: string
- *                             description: School name
- *                           initiatorName:
- *                             type: string
- *                             description: Name of connection request sender
- *                           initiatorRole:
- *                             type: string
- *                             description: Role of connection request sender
- *                           requestDate:
- *                             type: date
- *                             description: Connection request date
- *             404:
- *              description: Student not found
- *             500:
- *              description: Internal server error       
+ *     summary: Find open connection requests
+ *     description: Returns open connection requests a student has sent or received
+ *     parameters:
+ *       - in: path
+ *         name: studentId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the student
+ *     responses:
+ *       200:
+ *         description: Connection requests found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: number
+ *                     description: Unique ID of a connection request
+ *                   schoolId:
+ *                     type: string
+ *                     description: Unique ID of a school
+ *                   schoolName:
+ *                     type: string
+ *                     description: School name
+ *                   initiatorName:
+ *                     type: string
+ *                     description: Name of connection request sender
+ *                   initiatorRole:
+ *                     type: string
+ *                     description: Role of connection request sender
+ *                   requestDate:
+ *                     type: string
+ *                     format: date
+ *                     description: Connection request date
+ *       404:
+ *         description: Student not found
+ *       500:
+ *         description: Internal server error
  */
 export async function GET(
     req: Request,
@@ -83,7 +91,7 @@ export async function GET(
     if (userData.role !== 'student') {
       return Response.json(responseBody("Not Found", 404), { status: 404 });
     }
-    
+
     const studentConnectionRequests: any = await ConnectionRequest.findAll({
       where: {
         [Op.or]: {
@@ -96,7 +104,7 @@ export async function GET(
       include: [
         {
           model: School,
-          attributes: [],
+          attributes: ["name"],
           required: true,
         },
         {
@@ -142,24 +150,25 @@ export async function GET(
  *     summary: Add new connection requests
  *     description: Creates a new connection request
  *     requestBody:
- *      description: An list of schools a student wants to connect with
- *      content:
- *        application/json:
- *          schema:
- *            type: array
- *              items: 
- *                type: string 
+ *       description: A list of schools a student wants to connect with
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: string
  *     responses:
  *       201:
- *        description: Created
+ *         description: Created
  *       200:
- *        description: Successful request
+ *         description: Successful request
  *       400:
- *        description: Bad request
+ *         description: Bad request
  *       404:
- *        description: Not found
+ *         description: Not found
  *       500:
- *        description: Internal server error
+ *         description: Internal server error
  */
 export async function POST(
   req: NextRequest,
@@ -192,11 +201,11 @@ export async function POST(
     }
 
     const { count, rows } : any = await ConnectionRequest.findAndCountAll({
-      where: { 
-       initiator_id: userData.id, 
+      where: {
+       initiator_id: userData.id,
      }
     });
-    
+
     // Create
     if (count == 0) {
       await addNewConnections(inputData, params.studentId);
@@ -229,25 +238,28 @@ export async function POST(
  *     summary: Update a connection request with a student's response
  *     description: Updates a connection request initiated by a recruiter
  *     requestBody:
- *      description: An object with a connection request id and response
- *      content:
- *        application/json:
- *          schema:
- *            type: object
- *              properties:
- *                id:
- *                  type: string
- *                response:
- *                  type: boolean
+ *       description: An object with a connection request id and response
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: The unique identifier of the connection request
+ *               response:
+ *                 type: boolean
+ *                 description: The student's response to the connection request
  *     responses:
  *       200:
  *         description: Connection request updated
  *       400:
- *        description: Bad request
+ *         description: Bad request
  *       404:
- *        description: Not found
+ *         description: Not found
  *       500:
- *        description: Internal server error
+ *         description: Internal server error
  */
 export async function PATCH(
     req: NextRequest,
@@ -299,7 +311,7 @@ export async function PATCH(
 }
 
 async function getUserData(studentId) {
-  return await Students.findOne({ 
+  return await Students.findOne({
     where: {
       id: studentId,
     },

@@ -21,7 +21,7 @@ module.exports = {
                 allowNull: false,
             },
             school_id: {
-                type: Sequelize.UUID,
+                type: Sequelize.INTEGER,
                 allowNull: false,
                 references: {
                   model: 'schools',

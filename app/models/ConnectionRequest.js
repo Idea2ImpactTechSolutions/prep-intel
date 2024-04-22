@@ -3,8 +3,6 @@ const sequelize = require("./sequelize");
 const School = require("./School");
 const Users = require("./Users");
 
-// TODO: Change school_id type to UUID
-
 const ConnectionRequest = sequelize.define(
     'connection_request',
     {
@@ -52,9 +50,9 @@ const ConnectionRequest = sequelize.define(
             {
                 unique: true,
                 fields: [
-                    'school_id', 
-                    'initiator_id', 
-                    'initiator_role', 
+                    'school_id',
+                    'initiator_id',
+                    'initiator_role',
                     'recipient_id'
                 ]
             }
@@ -79,6 +77,7 @@ ConnectionRequest.belongsTo(Users, {
     as: 'recipient'
 });
 
+/*
 Users.hasMany(ConnectionRequest, {
     foreign_key: 'initiator_id',
     constraints: false,
@@ -90,5 +89,6 @@ Users.hasMany(ConnectionRequest, {
     constraints: false,
     as: 'recipient'
 });
+*/
 
 module.exports = ConnectionRequest;
