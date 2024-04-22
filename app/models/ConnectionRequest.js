@@ -1,11 +1,12 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("./sequelize");
-const Recruiters = require("./Recruiters");
 const School = require("./School");
-const Students = require("./Students");
+const Users = require("./Users");
+
+// TODO: Change school_id type to UUID
 
 const ConnectionRequest = sequelize.define(
-    "connection_requests",
+    'connection_request',
     {
         // Define model attributes
         id: {
@@ -15,7 +16,7 @@ const ConnectionRequest = sequelize.define(
             allowNull: false,
         },
         school_id: {
-            type: DataTypes.UUID,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         initiator_id: {
@@ -34,7 +35,7 @@ const ConnectionRequest = sequelize.define(
         },
         create_date: {
             type: DataTypes.DATE,
-            allowNull: false,
+            defaultValue: DataTypes.NOW
         },
         connection_accepted: {
             type: DataTypes.BOOLEAN
@@ -46,7 +47,18 @@ const ConnectionRequest = sequelize.define(
     {
         timestamps: true,
         createdAt: 'create_date',
-        updatedAt: 'response_date'
+        updatedAt: 'response_date',
+        indexes: [
+            {
+                unique: true,
+                fields: [
+                    'school_id', 
+                    'initiator_id', 
+                    'initiator_role', 
+                    'recipient_id'
+                ]
+            }
+        ]
     }
 );
 
@@ -55,38 +67,28 @@ ConnectionRequest.belongsTo(School, {
     constraints: false
 });
 
-ConnectionRequest.belongsTo(Students, {
+ConnectionRequest.belongsTo(Users, {
     foreignKey: 'initiator_id',
-    constraints: false
+    constraints: false,
+    as: 'initiator'
 });
 
-ConnectionRequest.belongsTo(Recruiters, {
-    foreignKey: 'initiator_id',
-    constraints: false
+ConnectionRequest.belongsTo(Users, {
+    foreignKey: 'recipient_id',
+    constraints: false,
+    as: 'recipient'
 });
 
-School.hasMany(ConnectionRequest, {
-    foreignKey: 'school_id',
+Users.hasMany(ConnectionRequest, {
+    foreign_key: 'initiator_id',
     constraints: false,
-    scope: {
-      initiator_role: 'student',
-    }
-  });
+    as: 'initiator'
+});
 
-Students.hasMany(ConnectionRequest, {
-    foreignKey: 'initiator_id',
+Users.hasMany(ConnectionRequest, {
+    foreign_key: 'recipient_id',
     constraints: false,
-    scope: {
-      initiator_role: 'student',
-    }
-  });
-
-Recruiters.hasMany(ConnectionRequest, {
-    foreignKey: 'initiator_id',
-    constraints: false,
-    scope: {
-        initiator_role: 'recruiter',
-    }
+    as: 'recipient'
 });
 
 module.exports = ConnectionRequest;

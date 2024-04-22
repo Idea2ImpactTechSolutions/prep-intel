@@ -28,6 +28,7 @@ const Recruits = sequelize.define(
         },
         create_date: {
             type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW
         },
         application_date: {
             type: DataTypes.DATE,
@@ -43,7 +44,19 @@ const Recruits = sequelize.define(
         },
     },
     {
-        timestamps: false,
+        timestamps: true,
+        createdAt: 'create_date',
+        updatedAt: false,
+        indexes: [
+            {
+                unique: true,
+                fields: [
+                    'school_id',
+                    'student_id',
+                    'recruiter_id'
+                ]
+            }
+        ]
     }
 );
 
