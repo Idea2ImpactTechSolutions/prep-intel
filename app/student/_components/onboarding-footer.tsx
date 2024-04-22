@@ -8,10 +8,11 @@ type OnboardingFooterType = {
     prevPageHandler: () => void,
     nextPageHandler: () => void,
     nextBtnLabel?: string,
-    preventGoBack?: boolean
+    preventGoBack?: boolean,
+    loading?: boolean
 }
 
-export default function OnboardingFooter({prevPageHandler, nextPageHandler, nextBtnLabel, preventGoBack = true}: OnboardingFooterType) {
+export default function OnboardingFooter({prevPageHandler, nextPageHandler, nextBtnLabel, preventGoBack = true, loading = false}: OnboardingFooterType) {
     return (
         <div className="mt-16 flex gap-x-6 items-center justify-end h-[4rem] p-5 md:px-12 lg:px-20">
             <Button
@@ -30,6 +31,9 @@ export default function OnboardingFooter({prevPageHandler, nextPageHandler, next
                 type="button"
                 variant="default"
                 onClick={() => nextPageHandler()}
+                loading={loading}
+                loadingText={nextBtnLabel ? nextBtnLabel : "Next Step"}
+                disabled={loading}
                 className={cn(
                     spaceGrotesk.className,
                     "bg-[#FEBB0E] text-[#141111] hover:bg-[#FEBB0E]/80"
