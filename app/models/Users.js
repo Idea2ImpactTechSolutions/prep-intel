@@ -20,7 +20,7 @@ const Users = sequelize.define(
         phone: {
             type: DataTypes.STRING,
         },
-        profile_img: {
+        profile_image_id: {
             type: DataTypes.STRING,
         },
         email: {
