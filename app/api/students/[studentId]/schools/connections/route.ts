@@ -2,34 +2,31 @@ import * as yup from 'yup';
 import type { NextRequest } from "next/server";
 import { responseBody } from "app/config/helpers";
 import { models } from "@/app/models";
-import { fn, col, Op } from 'sequelize';
-const { ConnectionRequest, Recruits, School, Students, Users } = models;
-
-// TODO: Change type in POST schema to string instead of number 
-const POST_VALIDATION_SCHEMA = yup.array().of(
-  yup.number().required()
-);
+import { fn, col } from 'sequelize';
+const { 
+  ConnectionRequest, 
+  Recruiters, 
+  Recruits, 
+  School, 
+  Students, 
+  Users 
+} = models;
 
 const PATCH_VALIDATION_SCHEMA = yup.object({    
-  id: yup.number().required(),
+  connectionReqId: yup.number().required(),
   connection_accepted: yup.boolean().required(),
 });
 
 const GET_FIELDS = [
   'id', 
-  ['school_id', 'schoolId'],
-  ['school.name', 'schoolName'],
-  [ fn('CONCAT', 
-    col('initiator.first_name'), ' ', col('initiator.last_name')
-     ), 'initiatorName'
+  [ 'school_id', 'schoolId' ],
+  [ col('school.name'), 'schoolName'],
+  [ fn('CONCAT',
+       col('recruiter->user.first_name'), ' ', col('recruiter->user.last_name')
+    ), 'recruiterName'
   ],
-  ['initiator_role', 'initiatorRole'],
-  [ fn('CONCAT', 
-      col('recipient.first_name'), ' ', col('recipient.last_name')
-    ), 'recipientName'
-  ],
-  ['create_date', 'requestDate']
-]
+  [ 'create_date', 'requestDate' ]
+];
 
 /**
  * @openapi
@@ -56,12 +53,9 @@ const GET_FIELDS = [
  *                           schoolName:
  *                             type: string
  *                             description: School name
- *                           initiatorName:
+ *                           recruiterName:
  *                             type: string
- *                             description: Name of connection request sender
- *                           initiatorRole:
- *                             type: string
- *                             description: Role of connection request sender
+ *                             description: Name of recruiter who sent request
  *                           requestDate:
  *                             type: date
  *                             description: Connection request date
@@ -72,24 +66,21 @@ const GET_FIELDS = [
  */
 export async function GET(
     req: Request,
-    { params }: { params: { studentId: string } }
+    { params }: { params: { studentId: number } }
   ) {
   try {
     // Collect
-    const userData : {role: string, id: number} = await getUserData(
+    const userRole : {role: string} = await getUserRole(
       params.studentId
     );
 
-    if (userData.role !== 'student') {
+    if (userRole.role !== 'student') {
       return Response.json(responseBody("Not Found", 404), { status: 404 });
     }
     
     const studentConnectionRequests: any = await ConnectionRequest.findAll({
       where: {
-        [Op.or]: {
-          initiator_id: userData.id,
-          recipient_id: userData.id
-        },
+        student_id: params.studentId,
         connection_accepted: null
       },
       attributes: GET_FIELDS,
@@ -100,24 +91,22 @@ export async function GET(
           required: true,
         },
         {
-          model: Users,
-          as: 'initiator',
+          model: Recruiters,
           attributes: [],
-          required: true
+          include: [{
+            model: Users,
+            attributes: [],
+            required: true,
+          }],
+          required: true,
         },
-        {
-          model: Users,
-          as: 'recipient',
-          attributes: [],
-          required: false
-        }
       ],
       raw: true,
     });
 
     return Response.json(
       responseBody(
-        "School interests retrieved successfully",
+        "Recruiter connection requests retrieved successfully",
         200,
         studentConnectionRequests
       ),
@@ -126,93 +115,6 @@ export async function GET(
       }
     );
   } catch (error: any) {
-    return Response.json(
-      responseBody("Internal Server Error", 500, { error: error.message }),
-      {
-        status: 500,
-      }
-    );
-  }
-}
-
-/**
- * @swagger
- * /api/students/{studentId}/schools/connections:
- *   post:
- *     summary: Add new connection requests
- *     description: Creates a new connection request
- *     requestBody:
- *      description: An list of schools a student wants to connect with
- *      content:
- *        application/json:
- *          schema:
- *            type: array
- *              items: 
- *                type: string 
- *     responses:
- *       201:
- *        description: Created
- *       200:
- *        description: Successful request
- *       400:
- *        description: Bad request
- *       404:
- *        description: Not found
- *       500:
- *        description: Internal server error
- */
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { studentId: string } },
-) {
-  try {
-    // Collect
-    const userData : {role: string, id: number} = await getUserData(
-      params.studentId
-    );
-    if (userData.role !== 'student') {
-      return Response.json(responseBody("Not Found", 404), { status: 404 });
-    }
-
-    const inputData : string[] = await req.json();
-    if (inputData.length == 0) {
-      return Response.json(responseBody("No Content", 204), { status: 200 });
-    }
-
-    const validInputData = validateRequestBody(req.method, inputData);
-    if (!validInputData) {
-      return Response.json(responseBody("Bad Request", 400), { status: 400 });
-    }
-
-    const schoolsCount : number = await School.count({
-      where: { id: inputData }
-    });
-    if (schoolsCount < inputData.length) {
-      return Response.json(responseBody("Not Found", 404), { status: 404 });
-    }
-
-    const { count, rows } : any = await ConnectionRequest.findAndCountAll({
-      where: { 
-       initiator_id: userData.id, 
-     }
-    });
-    
-    // Create
-    if (count == 0) {
-      await addNewConnections(inputData, params.studentId);
-    } else {
-      const connectionRequests = rows.map(row => row.school_id);
-
-      let newConnections = inputData.filter(
-        (schoolId) => connectionRequests.indexOf(schoolId) === -1
-      );
-      await addNewConnections(newConnections, params.studentId);
-    }
-
-    // Report
-    return Response.json(responseBody("Created", 201), { status: 201 });
-  } catch (error: any) {
-    // Report
     return Response.json(
       responseBody("Internal Server Error", 500, { error: error.message }),
       {
@@ -251,31 +153,30 @@ export async function POST(
  */
 export async function PATCH(
     req: NextRequest,
-    { params }: { params: { studentId: string } }
+    { params }: { params: { studentId: number } }
   ) {
   try {
     // Collect
-    const userData : {role: string, id: number} = await getUserData(
+    const userRole : {role: string} = await getUserRole(
       params.studentId
     );
-    if (userData.role !== 'student') {
+    if (userRole.role !== 'student') {
       return Response.json(responseBody("Not Found", 404), { status: 404 });
     }
 
     const inputData : any = await req.json();
 
-    const validInputData = await validateRequestBody(req.method, inputData);
+    const validInputData = validateRequestBody(req.method, inputData);
     if (!validInputData) {
       return Response.json(responseBody("Bad Request", 400), { status: 400 });
     }
 
-    const { connectionRequestId, ...updateAttributes } = Object.assign({}, inputData);
+    const { connectionReqId, ...updateAttributes } = Object.assign({}, inputData);
 
     let connectionRequest = await ConnectionRequest.findOne({
       where: {
-        id: connectionRequestId,
-        recipient_id: userData.id,
-        initiator_role: 'recruiter'
+        id: connectionReqId,
+        student_id: params.studentId
       }
     });
     if (connectionRequest === null) {
@@ -298,12 +199,12 @@ export async function PATCH(
   }
 }
 
-async function getUserData(studentId) {
+async function getUserRole(studentId) {
   return await Students.findOne({ 
     where: {
       id: studentId,
     },
-    attributes: ['user.role', 'user.id'],
+    attributes: ['user.role'],
     include: [{
       model: Users,
       required: true,
@@ -316,36 +217,11 @@ async function getUserData(studentId) {
   });
 }
 
-function prepareNewConnections(schoolIds, studentId) {
-  return schoolIds.map((schoolId) => ({
-    school_id: schoolId,
-    initiator_id: studentId,
-    initiator_role: 'student',
-  }));
-}
-
-async function addNewConnections(schoolInterests, studentId) {
-  if (schoolInterests.length > 0) {
-    let newConnections = prepareNewConnections(
-      schoolInterests,
-      studentId
-    );
-    await Recruits.bulkCreate(newConnections);
-  }
-}
-
 function validateRequestBody(method: string, requestBody) {
-  switch (method) {
-    case 'POST':
-      return POST_VALIDATION_SCHEMA.isValidSync(requestBody, { strict: true });
-    case 'PATCH':
-      return PATCH_VALIDATION_SCHEMA.isValidSync(
-        requestBody,
-        { strict: true }
-      );
-    default:
-      return false;
-  }
+  return PATCH_VALIDATION_SCHEMA.isValidSync(
+    requestBody,
+    { strict: true }
+  );
 }
 
 async function addStudentResponse(connectionRequest, updateAttributes) {
@@ -353,10 +229,10 @@ async function addStudentResponse(connectionRequest, updateAttributes) {
     if (connectionRequest.connection_accepted == true) {
       let newRecruitData : object = {
         school_id: connectionRequest.dataValues.school_id,
-        student_id: connectionRequest.dataValues.recipient_id,
-        recruiter_id: connectionRequest.dataValues.initiator_id
+        student_id: connectionRequest.dataValues.student_id,
+        recruiter_id: connectionRequest.dataValues.recruiter_id
       }
-      Recruits.Create(newRecruitData);
+      Recruits.create(newRecruitData);
     }
   });
   await connectionRequest.update(updateAttributes);

@@ -8,9 +8,17 @@ module.exports = {
      */
     await queryInterface.removeColumn('recruits', 'connection_initiator');
     await queryInterface.removeColumn('recruits', 'connection_date');
-    await queryInterface.removeColumn('recruits', 'contacted');
     await queryInterface.removeColumn('recruits', 'interested');
     await queryInterface.removeColumn('recruits', 'is_viewable');
+    await queryInterface.addConstraint('recruits', {
+        type: 'unique',
+        fields: [
+            'school_id', 
+            'student_id', 
+            'recruiter_id'
+        ],
+        name: 'unique_recruit_school_student_recruiter'
+    });
 
     await queryInterface.createTable('connection_requests', 
         {
@@ -21,26 +29,28 @@ module.exports = {
                 allowNull: false,
             },
             school_id: {
-                type: Sequelize.UUID,
+                type: Sequelize.INTEGER,
                 allowNull: false,
                 references: {
                   model: 'schools',
                   key: 'id'
                 }
             },
-            initiator_id: {
+            student_id: {
                 type: Sequelize.INTEGER,
-                allowNull: false
-            },
-            initiator_role: {
-                type: Sequelize.STRING,
                 allowNull: false,
-                validate: {
-                    isIn: [['student', 'recruiter']]
+                references: {
+                    model: 'students',
+                    key: 'id'
                 }
             },
-            recipient_id: {
-                type: Sequelize.INTEGER
+            recruiter_id: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                references: {
+                    models: 'recruiters',
+                    key: 'id'
+                }
             },
             create_date: {
                 type: Sequelize.DATE,
@@ -59,20 +69,12 @@ module.exports = {
         type: 'unique',
         fields: [
             'school_id', 
-            'initiator_id', 
-            'initiator_role',
-            'recipient_id'
+            'student_id', 
+            'recruiter_id'
         ],
-        name: 'unique_school_initiator_role_recipient'
+        name: 'unique_connection_school_student_recruiter'
     });
-    await queryInterface.addConstraint('connection_requests', {
-        'type': 'check',
-        fields: ['initiator_role'],
-        name: 'check_initiator_role',
-        where: {
-            initiator_role: ['student', 'recruiter']
-        }
-    });
+
   },
 
   async down (queryInterface, Sequelize) {
@@ -85,24 +87,21 @@ module.exports = {
     await queryInterface.addColumn('recruits', 'connection_date', {
         type: Sequelize.DATE
     });
-    await queryInterface.addColumn('recruits', 'contacted', {
-        type: Sequelize.BOOLEAN
-    });
     await queryInterface.addColumn('recruits', 'interested', {
         type: Sequelize.BOOLEAN
     });
     await queryInterface.addColumn('recruits', 'is_viewable', {
         type: Sequelize.BOOLEAN
     });
+    await queryInterface.removeConstraint(
+        'recruits',
+        'unique_recruit_school_student_recruiter'
+    );
 
     await queryInterface.dropTable('connection_requests');
     await queryInterface.removeConstraint(
         'connection_requests',
-        'unique_school_initiator_role_recipient'
-    );
-    await queryInterface.removeConstraint(
-        'connection_requests',
-        'check_initiator_role'
+        'unique_connection_school_student_recruiter'
     );
   }
 };

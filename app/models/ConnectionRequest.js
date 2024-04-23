@@ -1,9 +1,9 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("./sequelize");
+const Recruiters = require("./Recruiters");
 const School = require("./School");
+const Students = require("./Students");
 const Users = require("./Users");
-
-// TODO: Change school_id type to UUID
 
 const ConnectionRequest = sequelize.define(
     'connection_request',
@@ -19,19 +19,13 @@ const ConnectionRequest = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        initiator_id: {
+        student_id: {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        initiator_role: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                isIn: [['student', 'recruiter']]
-            }
-        },
-        recipient_id: {
-            type: DataTypes.INTEGER
+        recruiter_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false
         },
         create_date: {
             type: DataTypes.DATE,
@@ -53,9 +47,8 @@ const ConnectionRequest = sequelize.define(
                 unique: true,
                 fields: [
                     'school_id', 
-                    'initiator_id', 
-                    'initiator_role', 
-                    'recipient_id'
+                    'student_id',
+                    'recruiter_id'
                 ]
             }
         ]
@@ -67,28 +60,14 @@ ConnectionRequest.belongsTo(School, {
     constraints: false
 });
 
-ConnectionRequest.belongsTo(Users, {
-    foreignKey: 'initiator_id',
+ConnectionRequest.belongsTo(Recruiters, {
+    foreignKey: 'recruiter_id',
     constraints: false,
-    as: 'initiator'
 });
 
-ConnectionRequest.belongsTo(Users, {
-    foreignKey: 'recipient_id',
+ConnectionRequest.belongsTo(Students, {
+    foreignKey: 'student_id',
     constraints: false,
-    as: 'recipient'
-});
-
-Users.hasMany(ConnectionRequest, {
-    foreign_key: 'initiator_id',
-    constraints: false,
-    as: 'initiator'
-});
-
-Users.hasMany(ConnectionRequest, {
-    foreign_key: 'recipient_id',
-    constraints: false,
-    as: 'recipient'
 });
 
 module.exports = ConnectionRequest;
