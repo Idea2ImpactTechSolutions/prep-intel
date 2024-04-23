@@ -18,6 +18,7 @@ module.exports = {
   ],
   rules: {
     "react/no-unescaped-entities": "off",
+    "react-hooks/exhaustive-deps": "off", // I've never seen these addressed or fixed, disable the noise
     "@next/next/no-img-element": "off",
     "no-unused-vars": "off",  // Disable the base rule as it can report incorrect errors, use TS specific below
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "warn",

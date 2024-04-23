@@ -5,21 +5,43 @@ import bcrypt from "bcryptjs";
 
 /**
  * @openapi
- * /api/students
- *   POST:
- *       summary: creates a new student with email and password
- *       responses:
- *           '200':
- *               content:
- *                    application/json:
- *                       schema:
- *                           type: object
- *                           items: {email: string, password: string}
- *                       examples:
- *                           One Sample:
- *                               value: '{email: "abelkelly6022@gmail.com", password: "abelkelly"}'
+ * /api/students:
+ *   post:
+ *     summary: Creates a new student with email and password
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *           examples:
+ *             One Sample:
+ *               value:
+ *                 email: "abelkelly6022@gmail.com"
+ *                 password: "abelkelly"
+ *     responses:
+ *       200:
+ *         description: Successfully created new student
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 email:
+ *                   type: string
+ *                 password:
+ *                   type: string
+ *             examples:
+ *               One Sample:
+ *                 value:
+ *                   email: "abelkelly6022@gmail.com"
+ *                   password: "abelkelly"
  */
-
 export async function POST(req: Request) {
   try {
     const jsonBody = await req.json();
