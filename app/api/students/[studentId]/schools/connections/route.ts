@@ -199,7 +199,7 @@ export async function PATCH(
   }
 }
 
-async function getUserRole(studentId) {
+export async function getUserRole(studentId) {
   return await Students.findOne({ 
     where: {
       id: studentId,
@@ -228,11 +228,21 @@ async function addStudentResponse(connectionRequest, updateAttributes) {
   ConnectionRequest.afterUpdate(connectionRequest => {
     if (connectionRequest.connection_accepted == true) {
       let newRecruitData : object = {
-        school_id: connectionRequest.dataValues.school_id,
-        student_id: connectionRequest.dataValues.student_id,
-        recruiter_id: connectionRequest.dataValues.recruiter_id
+        interested: true,
+        is_viewable: true
       }
-      Recruits.create(newRecruitData);
+      let [savedRecruit, newRecruit] = Recruits.findOrCreate({
+        where: {
+          school_id: connectionRequest.dataValues.school_id,
+          student_id: connectionRequest.dataValues.student_id,
+          recruiter_id: connectionRequest.dataValues.recruiter_id
+        },
+        defaults: newRecruitData
+      },
+      );
+      if (!newRecruit) {
+        savedRecruit.update(newRecruitData);
+      }
     }
   });
   await connectionRequest.update(updateAttributes);

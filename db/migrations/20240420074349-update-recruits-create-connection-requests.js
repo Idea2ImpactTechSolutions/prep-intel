@@ -8,8 +8,6 @@ module.exports = {
      */
     await queryInterface.removeColumn('recruits', 'connection_initiator');
     await queryInterface.removeColumn('recruits', 'connection_date');
-    await queryInterface.removeColumn('recruits', 'interested');
-    await queryInterface.removeColumn('recruits', 'is_viewable');
     await queryInterface.addConstraint('recruits', {
         type: 'unique',
         fields: [
@@ -86,12 +84,6 @@ module.exports = {
     });
     await queryInterface.addColumn('recruits', 'connection_date', {
         type: Sequelize.DATE
-    });
-    await queryInterface.addColumn('recruits', 'interested', {
-        type: Sequelize.BOOLEAN
-    });
-    await queryInterface.addColumn('recruits', 'is_viewable', {
-        type: Sequelize.BOOLEAN
     });
     await queryInterface.removeConstraint(
         'recruits',
