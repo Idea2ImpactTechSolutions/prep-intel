@@ -3,7 +3,6 @@ const sequelize = require("./sequelize");
 const Recruiters = require("./Recruiters");
 const School = require("./School");
 const Students = require("./Students");
-const Users = require("./Users");
 
 const ConnectionRequest = sequelize.define(
     'connection_request',
