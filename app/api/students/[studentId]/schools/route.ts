@@ -8,7 +8,7 @@ const POST_VALIDATION_SCHEMA = yup.array().of(
   yup.string().uuid().required()
 );
 
-const PATCH_VALIDATION_SCHEMA = yup.object({    
+const PATCH_VALIDATION_SCHEMA = yup.object({
   school_id: yup.string().uuid().required(),
   criteria: yup.string().oneOf(['INTERESTED']).notRequired(),
   interested: yup.boolean().notRequired(),
@@ -22,28 +22,28 @@ const RECRUITS_SCHOOLS_FIELDS = ['school_id', 'interested', 'school.name']
  * @openapi
  * /api/students/{studentId}/schools:
  *   get:
- *    summary: Find schools of interest by student ID
- *    description: Returns all schools a student has indicated interest in
- *       responses:
- *            200:
- *             description: Schools found
- *             content:
- *               application/json:
- *                 schema:
- *                   type: array
- *                     items:
- *                       type: object
- *                         properties:
- *                           id:
- *                             type: string
- *                             description: Unique ID of a school
- *                           name:
- *                             type: string
- *                             description: Name of a school
- *             404:
- *              description: Student not found
- *             500:
- *              description: Internal server error       
+ *     summary: Find schools of interest by student ID
+ *     description: Returns all schools a student has indicated interest in
+ *     responses:
+ *       200:
+ *         description: Schools found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     description: Unique ID of a school
+ *                   name:
+ *                     type: string
+ *                     description: Name of a school
+ *       404:
+ *         description: Student not found
+ *       500:
+ *         description: Internal server error
  */
 export async function GET(
     req: Request,
@@ -51,7 +51,7 @@ export async function GET(
   ) {
   try {
     // Collect
-    const userRole : {role: string} = await Students.findOne({ 
+    const userRole : {role: string} = await Students.findOne({
       where: {
         id: params.studentId,
       },
@@ -70,7 +70,7 @@ export async function GET(
     if (userRole.role !== 'student') {
       return Response.json(responseBody("Not Found", 404), { status: 404 });
     }
-    
+
     const studentSchools: any = await Recruits.findAll({
       where: {
         student_id: params.studentId,
@@ -112,24 +112,24 @@ export async function GET(
  *     summary: Add new schools of interest by student ID
  *     description: Sets a student as a recruit for each school of interest
  *     requestBody:
- *      description: A list of schools a student is interested in
- *      content:
- *        application/json:
- *          schema:
- *            type: array
- *              items: 
- *                type: string 
+ *       description: A list of schools a student is interested in
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: string
  *     responses:
  *       201:
- *        description: Schools added
+ *         description: Schools added
  *       200:
- *        description: Successful request
+ *         description: Successful request
  *       400:
- *        description: Bad request
+ *         description: Bad request
  *       404:
- *        description: Not found
+ *         description: Not found
  *       500:
- *        description: Internal server error
+ *         description: Internal server error
  */
 export async function POST(
   req: NextRequest,
@@ -137,7 +137,7 @@ export async function POST(
 ) {
   try {
     // Collect
-    const userRole : {role: string} = await Students.findOne({ 
+    const userRole : {role: string} = await Students.findOne({
       where: {
         id: params.studentId,
       },
@@ -175,8 +175,8 @@ export async function POST(
     }
 
     const { count, rows } : any = await Recruits.findAndCountAll({
-      where: { 
-       student_id: params.studentId, 
+      where: {
+       student_id: params.studentId,
      }
    });
 
@@ -217,22 +217,23 @@ export async function POST(
  *     summary: Update a student's schools of interest
  *     description: Updates the list of schools a student is interested in
  *     requestBody:
- *      description: A list of schools a student is interested in
- *      content:
- *        application/json:
- *          schema:
- *            type: array
- *              items: 
- *                type: string 
+ *       description: A list of schools a student is interested in
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: string
  *     responses:
  *       200:
  *         description: Schools of interest updated
  *       400:
- *        description: Bad request
+ *         description: Bad request
  *       404:
- *        description: Not found
+ *         description: Not found
  *       500:
- *        description: Internal server error
+ *         description: Internal server error
  */
 export async function PATCH(
     req: NextRequest,
@@ -240,7 +241,7 @@ export async function PATCH(
   ) {
   try {
     // Collect
-    const userRole : {role: string} = await Students.findOne({ 
+    const userRole : {role: string} = await Students.findOne({
       where: {
         id: params.studentId,
       },
@@ -261,7 +262,7 @@ export async function PATCH(
     }
 
     const inputData : any = await req.json();
-    
+
     const validInputData = await validateRequestBody(req.method, inputData);
     if (!validInputData) {
       return Response.json(responseBody("Bad Request", 400), { status: 400 });
@@ -270,8 +271,8 @@ export async function PATCH(
     const { schoolId, ...updateAttributes } = Object.assign({}, inputData);
 
     let studentSchool = await Recruits.findOne({
-      where: { 
-        student_id: params.studentId, 
+      where: {
+        student_id: params.studentId,
         school_id: schoolId
       }
     });
@@ -321,13 +322,13 @@ async function addNewSchoolInterests(schoolInterests, studentId) {
 async function renewSchoolInterests(schoolInterests, studentId) {
   if (schoolInterests.length > 0) {
     await Recruits.update(
-      { 
+      {
         criteria: 'INTERESTED',
         interested: true,
         is_viewable: true,
       },
-      { where: { 
-        student_id: studentId, 
+      { where: {
+        student_id: studentId,
         school_id: schoolInterests
       } }
     );

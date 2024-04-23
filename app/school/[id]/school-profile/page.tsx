@@ -291,9 +291,9 @@ export default function Page() {
                               errors.school_image && touched.school_image && "border-red-500"
                             )}
                             >
-                              {selectedImage ? <img src={selectedImage && URL.createObjectURL(selectedImage)} />
+                              {selectedImage ? <img src={selectedImage && URL.createObjectURL(selectedImage)} alt="" />
                                 :
-                                values.school_image ? <img src={values.school_image}/> :
+                                values.school_image ? <img src={values.school_image} alt=""/> :
                                 <ImagePlus className="w-10 h-10 text-gray-400" />
                               }
                             </div>
