@@ -62,7 +62,7 @@ export default function AdminPage() {
                                 <span
                                     onClick={() => setCurrentProgress("CREATE_RECRUITER")}
                                     className="flex border border-primary text-primary text-xs p-2 px-4 rounded-md cursor-pointer"
-                                ><UserPlus width={14} height={14} className="mr-1" /> <span className="font-bold">Create New User</span> </span>
+                                ><UserPlus width={14} height={14} className="mr-1" /> <span className="font-bold">Create Recruiter</span> </span>
                             </div>
                         }
                     />

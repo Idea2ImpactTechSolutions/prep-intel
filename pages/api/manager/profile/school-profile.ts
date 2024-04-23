@@ -196,7 +196,7 @@ async function updateSchoolAddress(schoolId : string, schoolAddressFormData) {
   };
 
 
-  if (!schoolAddressData.id || schoolAddressData.id.trim() === '') {
+  if (!schoolAddressData.id) {
     delete schoolAddressData.id; // Remove the id key if it's empty or invalid
   }
 

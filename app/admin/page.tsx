@@ -17,9 +17,9 @@ export default function AdminPage() {
   const router = useRouter();
   const [schools, setSchools] = useState([]);
   const [getMatchingSchools, {isLoading}] = useLazyGetSchoolsQuery();
+  const [schoolId, setSchoolId] = useState(7001);
+  const [studentId ] = useState(1);
 
-  // School is hard-coded and decoupled from sign-in; links give admin users a starting point
-  const defaultSampleSchool = "2e0f768e-c887-4945-8cd7-96f96a07a3eb";
   let filterTimeout;
 
   function handleOnChange (e){
@@ -66,7 +66,7 @@ export default function AdminPage() {
             Recruiter Portal
           </Button>
           <Button
-            onClick={() => router.push(`/school/${defaultSampleSchool}/dashboard`)}
+            onClick={() => router.push(`/school/${schoolId}/dashboard`)}
             type="button"
             variant="outline"
           >
@@ -93,11 +93,11 @@ export default function AdminPage() {
           { isLoading && <div className="my-2 py-3 px-4 rounded bg-gray-100 ">Loading..</div>}
           {
             schools && schools.map(({id, name}, index) => (
-              <div key={index} className="my-2 py-3 px-4 rounded bg-gray-100 hover:bg-blue-100">
+              <div key={index} className="my-2 py-3 px-4 rounded bg-gray-100 hover:bg-blue-100" onClick={() => setSchoolId(id)}>
                 <Link className="underline cursor-pointer " href={`/school/${id}/my-school`}>{name}</Link>
               </div>))
           }
-        <PageList schoolId={defaultSampleSchool} />
+        <PageList schoolId={schoolId} studentId={studentId} />
       </div>
     </div>
   );

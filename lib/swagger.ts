@@ -1,6 +1,6 @@
-import { createSwaggerSpec } from "next-swagger-doc"
+import { createSwaggerSpec } from "next-swagger-doc";
 
-import "server-only"
+import "server-only";
 
 export const getApiDocs = async () => {
   const spec = createSwaggerSpec({
@@ -11,10 +11,16 @@ export const getApiDocs = async () => {
         title: "Prep-Intel API",
         version: "1.0.1",
       },
-      servers: [{
+      servers: [
+        {
           url: "http://localhost:3000/",
-          description: "Local development"
-      }
+          description: "Local development",
+        },
+        {
+            url: "http://prep-intele-development.cluster-c7ao62sg4xma.us-east-1.rds.amazonaws.com/",
+            description: "AWS dev",
+          },
+
       ],
       components: {
         securitySchemes: {
@@ -24,9 +30,34 @@ export const getApiDocs = async () => {
             bearerFormat: "JWT",
           },
         },
+        schemas: {
+          School: {
+            type: "object",
+            properties: {
+              id: {
+                type: "integer",
+                format: "int64",
+                description: "Unique identifier for the school.",
+              },
+              name: {
+                type: "string",
+                description: "Name of the school.",
+              },
+              school_address: {
+                type: "object",
+                properties: {
+                  state: {
+                    type: "string",
+                    description: "The state where the school is located.",
+                  },
+                },
+              },
+            },
+          },
+        },
       },
       security: [],
     },
-  })
-  return spec
-}
+  });
+  return spec;
+};

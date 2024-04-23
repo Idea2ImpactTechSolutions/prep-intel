@@ -59,6 +59,9 @@ const Students = sequelize.define(
         publish_date: {
             type: DataTypes.DATE,
         },
+        majors: {
+            type: DataTypes.ARRAY(DataTypes.STRING)
+        },
         extracurriculars: {
             type: DataTypes.ARRAY(DataTypes.STRING)
         }

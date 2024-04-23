@@ -1,6 +1,15 @@
-const LoadingSpinner = () => {
+import { cn } from "@/lib/utils";
+
+interface SpinnerProps {
+  className?: string;
+}
+
+const LoadingSpinner = ({ className }: SpinnerProps) => {
   return (
-    <div role="status" className="flex justify-center items-center h-screen">
+    <div role="status" className={cn(
+        "flex justify-center items-center h-screen",
+        className
+    )}>
       <svg
         aria-hidden="true"
         className="w-20 h-20 text-gray-200 animate-spin dark:text-gray-600 fill-pink-800"
