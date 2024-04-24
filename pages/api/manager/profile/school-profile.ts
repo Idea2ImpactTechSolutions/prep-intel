@@ -1,7 +1,7 @@
 import { responseBody } from "../../../../app/config/helpers";
 const { models } = require("../../../../app/models");
-const { School, SchoolAddress, Assets, SchoolContact, SchoolSocialMedia } = models;
-
+const { School, SchoolAddress, Assets, SchoolContact, SchoolSocialMedia } =
+  models;
 
 export default async function handler(req, res) {
   switch (req.method) {
@@ -121,7 +121,10 @@ async function updateSchoolProfile(req: any) {
   }
 
   if (school && school.dataValues) {
-    const schoolNeedsUpdate = await checkForChangedAttributes(schoolData, school.dataValues);
+    const schoolNeedsUpdate = await checkForChangedAttributes(
+      schoolData,
+      school.dataValues
+    );
     if (schoolNeedsUpdate) {
       school = await school.update(schoolData);
     }
@@ -131,11 +134,17 @@ async function updateSchoolProfile(req: any) {
     school.dataValues.school_address = savedAddress;
 
     // Check if school contact records need to be created, removed, or updated
-    const savedContacts = await updateSchoolContacts(school.id, school_contacts)
+    const savedContacts = await updateSchoolContacts(
+      school.id,
+      school_contacts
+    );
     school.dataValues.school_contacts = savedContacts;
 
     // Check if school social media records need to be created, removed, or updated
-    const savedSocialMediaRecords = await updateSchoolSocialMediaRecords(school.id, school_social_medias);
+    const savedSocialMediaRecords = await updateSchoolSocialMediaRecords(
+      school.id,
+      school_social_medias
+    );
     school.dataValues.school_social_medias = savedSocialMediaRecords;
   }
   return school;
@@ -184,8 +193,7 @@ export async function checkForChangedAttributes(formData, savedDataValues) {
   return needsUpdate;
 }
 
-async function updateSchoolAddress(schoolId : string, schoolAddressFormData) {
-
+async function updateSchoolAddress(schoolId: string, schoolAddressFormData) {
   const schoolAddressData = {
     school_id: schoolId,
     id: schoolAddressFormData.address_id,
@@ -195,7 +203,6 @@ async function updateSchoolAddress(schoolId : string, schoolAddressFormData) {
     postal: schoolAddressFormData.school_zip,
   };
 
-
   if (!schoolAddressData.id) {
     delete schoolAddressData.id; // Remove the id key if it's empty or invalid
   }
@@ -203,10 +210,10 @@ async function updateSchoolAddress(schoolId : string, schoolAddressFormData) {
   // Now schoolAddressData no longer has the 'id' key if it was invalid
   let [savedAddress, newAddressCreated] = await SchoolAddress.findOrCreate({
     where: schoolAddressData.id ? { id: schoolAddressData.id } : {},
-    defaults: schoolAddressData
+    defaults: schoolAddressData,
   });
 
-  if (! newAddressCreated) {
+  if (!newAddressCreated) {
     const addressNeedsUpdate = await checkForChangedAttributes(
       schoolAddressData,
       savedAddress.dataValues
@@ -219,12 +226,11 @@ async function updateSchoolAddress(schoolId : string, schoolAddressFormData) {
 }
 
 async function reconcileRecordsLists(schoolId: string, formRecords, dbModel) {
-
   let savedRecords = await dbModel.findAll({ where: { school_id: schoolId } });
-  const formRecordsIds = formRecords.map(formRecord => formRecord.id);
+  const formRecordsIds = formRecords.map((formRecord) => formRecord.id);
 
   for (let i = savedRecords.length - 1; i >= 0; i--) {
-    if (! formRecordsIds.includes(savedRecords[i].id)) {
+    if (!formRecordsIds.includes(savedRecords[i].id)) {
       await savedRecords[i].destroy();
       savedRecords.splice(i, 1);
     }
@@ -235,12 +241,13 @@ async function reconcileRecordsLists(schoolId: string, formRecords, dbModel) {
     if (formRecords[i].id == undefined) {
       const newRecord = await dbModel.create(formRecords[i]);
       newRecords.push(newRecord);
-    }
-    else {
+    } else {
       for (let j = 0; j < savedRecords.length; j++) {
         if (savedRecords[j].id == formRecords[i].id) {
-          const recordNeedsUpdate = await checkForChangedAttributes(formRecords[i],
-            savedRecords[j].dataValues);
+          const recordNeedsUpdate = await checkForChangedAttributes(
+            formRecords[i],
+            savedRecords[j].dataValues
+          );
           if (recordNeedsUpdate) {
             await savedRecords[j].update(formRecords[i]);
           }
@@ -251,7 +258,7 @@ async function reconcileRecordsLists(schoolId: string, formRecords, dbModel) {
   }
   newRecords.forEach((newRecord) => {
     savedRecords.push(newRecord);
-  })
+  });
   return savedRecords;
 }
 
@@ -264,16 +271,29 @@ async function updateSchoolContacts(schoolId: string, schoolContactsFormData) {
     email: schoolContact.email,
   }));
 
-  return await reconcileRecordsLists(schoolId, schoolContactsData, SchoolContact);
+  return await reconcileRecordsLists(
+    schoolId,
+    schoolContactsData,
+    SchoolContact
+  );
 }
 
-async function updateSchoolSocialMediaRecords(schoolId: string, schoolSocialMediaFormData) {
-  const schoolSocialMediaData = schoolSocialMediaFormData?.map((schoolSocialMedia) => ({
-    school_id: schoolId,
-    id: schoolSocialMedia.social_media_id,
-    social_media: schoolSocialMedia.social_media,
-    url: schoolSocialMedia.url,
-  }));
+async function updateSchoolSocialMediaRecords(
+  schoolId: string,
+  schoolSocialMediaFormData
+) {
+  const schoolSocialMediaData = schoolSocialMediaFormData?.map(
+    (schoolSocialMedia) => ({
+      school_id: schoolId,
+      id: schoolSocialMedia.social_media_id,
+      social_media: schoolSocialMedia.social_media,
+      url: schoolSocialMedia.url,
+    })
+  );
 
-  return await reconcileRecordsLists(schoolId, schoolSocialMediaData, SchoolSocialMedia);
+  return await reconcileRecordsLists(
+    schoolId,
+    schoolSocialMediaData,
+    SchoolSocialMedia
+  );
 }

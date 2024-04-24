@@ -37,7 +37,7 @@ export default async function handler(
     const schoolId: any = fData.fields.school_id;
     const category: any = fData.fields.category;
 
-    const school = await School.findOne({ where: { id: schoolId } });
+    const school = await School.findOne({ where: { id: schoolId[0] } });
 
     if (!school) {
       responseBody("school with id not found", 404, {});
