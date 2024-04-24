@@ -23,7 +23,11 @@ export default function DataTable({ title, isLoading, columns, data }: PageProps
           {
             data?.map((row, index) => (
               <TR key={index}>
-                { columns.map((col) => <TD key={index}>{row[col.field]}</TD>   ) }
+                { columns.map(function(col) {
+                    // Conditionally invoke the custom render function, or the given field
+                    let cellValue = col.render ? col.render(row) : row[col.field];
+                    return (<TD key={index}>{cellValue}</TD>)
+                })}
               </TR>))
           }
         </TBODY>

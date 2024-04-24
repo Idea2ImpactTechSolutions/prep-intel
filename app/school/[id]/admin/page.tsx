@@ -101,13 +101,12 @@ export default function AdminPage() {
                     "pi-container",
                     currentView === "VIEW_ADMIN" ? "block" : 'hidden'
                 )}>
-                              <InviteLink claimUrl={claimUrl} className="mb-4" />
+                    <InviteLink claimUrl={claimUrl} className="mb-4" />
 
-          <DataTable title="Personnel"
-            columns={PERSONNEL_COLUMNS}
-            data={personnel}
-            isLoading={isLoading || isFetching} />
-
+                    <DataTable title="Personnel"
+                        columns={PERSONNEL_COLUMNS}
+                        data={personnel}
+                        isLoading={isLoading || isFetching} />
                 </div>
                 <section className={cn(
                     "hidden",
