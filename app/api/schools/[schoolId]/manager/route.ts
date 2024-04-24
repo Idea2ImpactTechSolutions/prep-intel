@@ -1,6 +1,6 @@
 import { models } from "app/models";
 const { School, Managers, Users } = models;
-import { responseBody } from "app/config/helpers";
+import { responseBody, getAuthCode } from "app/config/helpers";
 import { type NextRequest } from "next/server";
 
 /**
@@ -23,7 +23,7 @@ import { type NextRequest } from "next/server";
  *                     {"first_name": "First Name", "last_name": "Last Name", "email": "john@example.com"}
  *
  *     responses:
- *       '200':
+ *       '201':
  *         description: a string stating the status of the request
  *         content:
  *           application/json:
@@ -46,15 +46,17 @@ export async function POST(
     const { email, first_name, last_name } = await req.json();
     let school_id = params.schoolId;
 
-    let createManagerResponse: any = await createManager({
+    const { message, code, data } = await createManager({
       email,
       first_name,
       last_name,
       school_id,
     });
     return Response.json(
-      responseBody(createManagerResponse.message, createManagerResponse.code),
-      createManagerResponse.data
+      responseBody(message, code, { school: data }),
+      {
+        status: code
+      }
     );
   } catch (error: any) {
     return Response.json(
@@ -68,11 +70,10 @@ export async function POST(
   }
 }
 
-let createManager = async (data: any) => {
-  const { email, first_name, last_name, school_id } = data;
-  let isSchoolExists = await School.findOne({ where: { id: school_id } });
+let createManager = async ({ email, first_name, last_name, school_id }) => {
+  let schoolExists = await School.findOne({ where: { id: school_id } });
 
-  if (!isSchoolExists) {
+  if (!schoolExists) {
     return {
       code: 404,
       message: "School not found",
@@ -92,13 +93,20 @@ let createManager = async (data: any) => {
     };
   }
 
+  const {authCode, expiresAt } = getAuthCode();
+
   let user = await Users.create({
-    email: email,
+    school_id: school_id,
     first_name: first_name,
     last_name: last_name,
-    is_active: true,
-    school_id: school_id,
+    email: email,
+    notification_method: '{"email"}',
+    account_claimed: false,
     role: "manager",
+    auth_code_expiration: expiresAt,
+    is_active: false,
+    auth_code: authCode,
+    status: "pending",
   });
 
   await Managers.create({
@@ -108,6 +116,6 @@ let createManager = async (data: any) => {
   return {
     code: 201,
     message: "Manager created successfully",
-    data: [],
+    data: [{ auth_code: user.auth_code }],
   };
 };

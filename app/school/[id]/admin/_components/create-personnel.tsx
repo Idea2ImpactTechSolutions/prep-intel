@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { useCreateRecruiterMutation, useLazyGetAllAdminQuery } from "@/redux/services/school/managerApi";
+import { useCreateRecruiterMutation, useCreateManagerMutation } from "@/redux/services/school/managerApi";
 import { Dictionary } from "@/types/dictionary";
 import copy from "copy-to-clipboard";
 import { useFormik } from "formik";
@@ -13,15 +13,19 @@ import { LuCopy, LuCopyCheck } from "react-icons/lu";
 import { toast } from "sonner";
 import * as yup from "yup"
 
-interface CreateRecruiterProps {
-    setCurrentProgress: (arg: any) => void;
-    setAdmin: (arg: any) => void;
-    schoolId: string | null;
+interface CreatePersonnelProps {
+    onCancel: () => void;
+    onSuccess: () => void;
+    schoolId: string;
+    role: string;
 }
 
-export default function CreateRecruiter({ setCurrentProgress, setAdmin, schoolId }: CreateRecruiterProps) {
-    const [createRecruiter, { isLoading: isCreatingRecruiter, isSuccess }] = useCreateRecruiterMutation()
-    const [getAllAdmin] = useLazyGetAllAdminQuery()
+export default function CreatePersonnel({ onCancel, onSuccess, schoolId, role }: CreatePersonnelProps) {
+    const [createRecruiter, { isLoading: isCreatingRecruiter, isSuccess: isRecruiterSuccess }] = useCreateRecruiterMutation()
+    const [createManager, { isLoading: isCreatingManager, isSuccess: isManagerSuccess }] = useCreateManagerMutation()
+
+    console.log("IsMgrSuccess: ", isManagerSuccess);
+
     const [isCopied, setIsCopied] = useState(false)
     const [claimUrl, setClaimUrl] = useState("")
 
@@ -30,16 +34,9 @@ export default function CreateRecruiter({ setCurrentProgress, setAdmin, schoolId
         setIsCopied(true);
     }
 
-    const handleGetAllAdmin = async (payload) => {
-        getAllAdmin(payload)
-            .unwrap()
-            .then((payload) => {
-                setAdmin(payload?.data)
-            })
-    }
-
-    const handleFormSubmit = async (values: Dictionary) => {
-        createRecruiter(values)
+    const handleFormSubmit = (values: Dictionary) => {
+        const generator = role === "admin" ? createManager : createRecruiter;
+        generator(values)
             .unwrap()
             .then((payload) => {
                 if (payload?.status === 201) {
@@ -48,8 +45,7 @@ export default function CreateRecruiter({ setCurrentProgress, setAdmin, schoolId
                     setClaimUrl(`${pageUrl.origin}/users/claim?auth_code=${authCode}`);
 
                     toast.success(payload?.message)
-                    // setCurrentProgress("VIEW_ADMIN")
-                    // handleGetAllAdmin({ school_id: userData?.user?.schoolID })
+                    onSuccess();
                 }
             })
     }
@@ -73,7 +69,7 @@ export default function CreateRecruiter({ setCurrentProgress, setAdmin, schoolId
         <>
             <div className={cn(
                 "hidden",
-                isSuccess && "block")}>
+                (isRecruiterSuccess || isManagerSuccess) && "block")}>
 
                 <h3 className="text-xl font-bold">Invite Sent</h3>
                 <div className="pb-28">
@@ -105,15 +101,14 @@ export default function CreateRecruiter({ setCurrentProgress, setAdmin, schoolId
                     className="text-xs h-8 rounded-sm px-8"
                     type="button"
                     onClick={() => {
-                        handleGetAllAdmin({ school_id: schoolId })
                         resetForm()
-                        setCurrentProgress("VIEW_ADMIN")
+                        onCancel()
                     }}
                 ><ArrowLeft  className="w-3 h-3 mr-1" /> Go back</Button>
             </div>
 
             <div className={cn(
-                isSuccess && "hidden"
+                (isRecruiterSuccess || isManagerSuccess) && "hidden"
             )}>
                 <form onSubmit={handleSubmit}>
                     <div className="flex flex-col md:w-[36rem] p-6 bg-gray-100 rounded-md">
@@ -213,9 +208,8 @@ export default function CreateRecruiter({ setCurrentProgress, setAdmin, schoolId
                                 className="text-xs h-8 rounded-sm px-3"
                                 type="button"
                                 onClick={() => {
-                                    handleGetAllAdmin({ school_id: schoolId})
-                                    resetForm()
-                                    setCurrentProgress("VIEW_ADMIN")
+                                    resetForm();
+                                    onCancel();
                                 }}
                             ><X className="w-3 h-3 mr-1" /> Discard</Button>
                         </div>
@@ -223,9 +217,9 @@ export default function CreateRecruiter({ setCurrentProgress, setAdmin, schoolId
                             <Button
                                 className="text-xs h-8 rounded-sm px-6"
                                 type="submit"
-                                loading={isCreatingRecruiter}
+                                loading={isCreatingRecruiter || isCreatingManager}
                                 loadingText="Create User"
-                                disabled={isCreatingRecruiter}
+                                disabled={isCreatingRecruiter || isCreatingManager}
                             >Create User </Button>
                         </div>
                     </div>
