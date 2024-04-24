@@ -1,7 +1,7 @@
 "use client";
 import React, {useState, useEffect } from "react";
 import { useFormik } from "formik";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ImagePlus, Upload } from "lucide-react";
 import { Input } from "@/components/ui/input";
