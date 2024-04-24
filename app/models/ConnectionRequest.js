@@ -69,4 +69,9 @@ ConnectionRequest.belongsTo(Students, {
     constraints: false,
 });
 
+Students.hasMany(ConnectionRequest, {
+    foreignKey: 'student_id',
+    constraints: false
+});
+
 module.exports = ConnectionRequest;

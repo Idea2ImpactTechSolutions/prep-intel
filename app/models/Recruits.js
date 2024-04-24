@@ -26,6 +26,12 @@ const Recruits = sequelize.define(
         criteria: {
             type: DataTypes.TEXT,
         },
+        contacted: {
+            type: DataTypes.BOOLEAN
+        },
+        interested: {
+            type: DataTypes.BOOLEAN
+        },
         create_date: {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW
@@ -42,6 +48,9 @@ const Recruits = sequelize.define(
         is_applicant: {
             type: DataTypes.BOOLEAN,
         },
+        is_viewable: {
+            type: DataTypes.BOOLEAN
+        }
     },
     {
         timestamps: true,

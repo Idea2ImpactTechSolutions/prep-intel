@@ -33,7 +33,7 @@ const GET_FIELDS = [
  * /api/students/{studentId}/schools/connections:
  *   get:
  *    summary: Find open connection requests
- *    description: Returns open connection requests a student has sent or received
+ *    description: Returns open connection requests sent to a student
  *       responses:
  *            200:
  *             description: Connection requests found
@@ -126,7 +126,7 @@ export async function GET(
 
 /**
  * @swagger
- * /api/students/{studentId}/schools:
+ * /api/students/{studentId}/schools/connections:
  *   patch:
  *     summary: Update a connection request with a student's response
  *     description: Updates a connection request initiated by a recruiter
