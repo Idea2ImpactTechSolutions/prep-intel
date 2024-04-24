@@ -1,7 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import { IoMdEye } from "react-icons/io";
-import { FaEdit } from "react-icons/fa";
 import PageTitleContainer from "@/components/page-title";
 import { useParams } from "next/navigation";
 import { useLazyGetRecruitsQuery } from "@/redux/services/school/managerApi";
