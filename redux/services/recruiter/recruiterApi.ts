@@ -13,6 +13,7 @@ const recruiterApi = baseApi.injectEndpoints({
         url: `/recruiters/${id}/`,
         method: "GET",
       }),
+      providesTags:['RECRUITER_INFO']
     }),
     setTerritories: builder.mutation({
       query: function(payload){
@@ -46,6 +47,7 @@ const recruiterApi = baseApi.injectEndpoints({
           body: payload,
         };
       },
+      invalidatesTags:["RECRUITER_INFO"]
     }),
     uploadRecruiterProfileImage: builder.mutation({
       query: (profile_img) => ({

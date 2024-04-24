@@ -33,14 +33,20 @@ export default function Page() {
   const [selectedImage, setSelectedImage] = useState<File>();
 
   const handleSubmitForm = async (values: InitialValues) => {
-    updateRecruiterPersonalInfo({ ...values, id:recruiterId})
-      .unwrap()
-      .then((payload:any) => {
-        if (payload.status === 200) {
-          toast.success(payload.message);
-          router.refresh();
-        }
-      });
+    try {
+      updateRecruiterPersonalInfo({ ...values, id:recruiterId})
+        .unwrap()
+        .then((payload:any) => {
+          if (payload.status === 200) {
+            toast.success(payload.message);
+            router.push('/recruiter/dashboard')
+          }
+        }).catch((errors: any) => {
+          toast.error(errors?.data?.message);
+        });
+    } catch (error:any) {
+      toast.error(error?.message);
+    }
   };
 
   const { values, errors, touched, handleChange, handleSubmit, handleBlur, setFieldValue} = useFormik({
@@ -61,13 +67,17 @@ export default function Page() {
   });
 
   const handleUploadRecruiterProfileImage = async (payload) => {
-    uploadRecruiterProfileImg(payload)
-      .unwrap()
-      .then((payload) => {
-        if (payload?.data?.profile_img) {
-          setFieldValue("profile_img", payload.data.image_url )
-        }
-      })
+    try{
+      uploadRecruiterProfileImg(payload)
+        .unwrap()
+        .then((payload) => {
+          if (payload?.data?.profile_img) {
+            setFieldValue("profile_img", payload.data.image_url )
+          }
+        })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   useEffect(()=>{
@@ -91,7 +101,7 @@ export default function Page() {
   return (
     <div className="pi-container">
         <div className="w-full bg-white">
-            <div className="w-full px-5 md:px-0 md:w-[65%] mx-auto">
+            <div className="w-full px-5 md:px-0 md:w-[50%] mx-auto">
               <h1 className="text-2xl md:text-3xl text-center font-bold mb-2">Let's Get to Know You</h1>
               <p className="text-sm md:text-lg text-gray-500 text-center">Please take a few minutes to fill in your profile so we can customize the opportunities for you.</p>
 
@@ -161,19 +171,21 @@ export default function Page() {
                       />                    
                     </div>
 
-                    <Input
-                      type="number"
-                      id='phone'
-                      label='Phone Number'
-                      name='phone'
-                      value={values.phone}
-                      className="placeholder:text-gray-300"
-                      onChange={handleChange}
-                      handleBlur={handleBlur}
-                      touched={touched.phone}
-                      placeholder="Enter your phone number"
-                      error={errors.phone}
-                    />
+                    <div className="mt-2">
+                      <Input
+                        type="number"
+                        id='phone'
+                        label='Phone Number'
+                        name='phone'
+                        value={values.phone}
+                        className="placeholder:text-gray-300"
+                        onChange={handleChange}
+                        handleBlur={handleBlur}
+                        touched={touched.phone}
+                        placeholder="Enter your phone number"
+                        error={errors.phone}
+                      />
+                    </div>
 
                     <div className='my-4 mt-7 flex justify-end'>
                     <Button 
