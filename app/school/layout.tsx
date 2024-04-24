@@ -44,7 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     const schoolId = pageParams?.id;
     const location = usePathname()
     const dispatch = useAppDispatch()
-    const allowedPaths = ["/admin", "/my-school", "/school-profile", "/academic-info", "/preview-school"]
+    const allowedPaths = ["/admin", "/my-school", "/school-profile", "/academic-info", "/preview-school", "/recruits"]
 
     const handleGetSchoolInformation = async (schoolId) => {
         getSchoolProfile(schoolId)
