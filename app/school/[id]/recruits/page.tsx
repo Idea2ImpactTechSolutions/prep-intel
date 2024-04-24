@@ -62,7 +62,7 @@ export default function Page() {
 
       <section className="pi-container pt-0 items-center justify-between">
         <DataTable
-          title="Personnel"
+          title="Recruits"
           columns={RECRUITER_COLUMNS}
           data={recruits}
           isLoading={isLoading}

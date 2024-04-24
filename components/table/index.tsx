@@ -17,9 +17,6 @@ const Table = ({title, columns, children, columnHeaderStyle}:TableProps) => {
     <div className='border p-'>
       <div className='flex items-center p-4 bg-[#F6F8FA] border border-[#E6EBF0] gap-x-2'>
         <span className='text-[#141111] '>{title}</span>
-        <span>
-          <CircleAlert width={17} height={17} />
-        </span>
       </div>
       <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
         <thead className='text-xs text-gray-700 uppercase bg-[#F6F8FA] border-b border-[#E6EBF0] '>
