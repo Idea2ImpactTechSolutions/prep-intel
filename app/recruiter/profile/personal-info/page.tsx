@@ -74,9 +74,9 @@ export default function Page() {
           if (payload?.data?.profile_img) {
             setFieldValue("profile_img", payload.data.image_url )
           }
-        })
-    } catch (err) {
-      console.log(err)
+        }).catch((errors)=>toast.error(errors.data.message))
+    } catch (err:any) {
+      toast.error(err.message)
     }
   }
 
