@@ -1,116 +1,197 @@
 "use client";
-import React from "react";
-import { Formik, Field, ErrorMessage } from "formik";
-import BottomBar from "../shared/bottom-bar";
-import { useRouter } from "next/navigation";
-import { FaUser } from "react-icons/fa";
+import React, {useState, useEffect } from "react";
+import { useFormik } from "formik";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { ImagePlus, Upload } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import * as yup from "yup"
+import { useLazyGetRecruiterQuery, useUpdateRecruiterPersonalInfoMutation, useUploadRecruiterProfileImageMutation } from "@/redux/services/recruiter/recruiterApi";
+import { toast } from "sonner";
+import { useSession } from "next-auth/react";
+import LoadingSpinner from "@/components/loading-spinner";
+import CustomFileInput from "@/components/custom-file-input";
+import { cn } from "@/lib/utils";
 
-const handleSubmit = async () => {
-  // Placeholder
+
+interface InitialValues {
+  phone:string,
+  first_name:string,
+  last_name:string,
+  profile_img?:string
 }
 
 export default function Page() {
   const router = useRouter();
-  // Placeholder
-  let isSubmitting = false;
+  const session = useSession()
+  const recruiterId = session?.data?.user?.roleId
 
-  const initialValues = {
-    school_email: '',
+  const [getData, {data}] = useLazyGetRecruiterQuery()
+  const [updateRecruiterPersonalInfo, { isLoading }] = useUpdateRecruiterPersonalInfoMutation();
+  const [uploadRecruiterProfileImg, { isLoading:uploading }] = useUploadRecruiterProfileImageMutation();
+
+  const [selectedImage, setSelectedImage] = useState<File>();
+
+  const handleSubmitForm = async (values: InitialValues) => {
+    updateRecruiterPersonalInfo({ ...values, id:recruiterId})
+      .unwrap()
+      .then((payload:any) => {
+        if (payload.status === 200) {
+          toast.success(payload.message);
+          router.refresh();
+        }
+      });
   };
 
+  const { values, errors, touched, handleChange, handleSubmit, handleBlur, setFieldValue} = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      first_name: data?.data?.user?.first_name,
+      last_name: data?.data?.user?.last_name,
+      phone: data?.data?.user?.phone,
+      profile_img: data?.data?.user?.profile_img
+    },
+    validationSchema: yup.object().shape({
+      first_name: yup.string().required("first name is required."),
+      last_name: yup.string().required("last name is required."),
+      phone: yup.string().required("Phone number is required."),
+    }),
+
+    onSubmit:handleSubmitForm
+  });
+
+  const handleUploadRecruiterProfileImage = async (payload) => {
+    uploadRecruiterProfileImg(payload)
+      .unwrap()
+      .then((payload) => {
+        if (payload?.data?.profile_img) {
+          setFieldValue("profile_img", payload.data.image_url )
+        }
+      })
+  }
+
+  useEffect(()=>{
+    if(recruiterId){
+      getData({id:recruiterId})
+    }
+  }, [recruiterId])
+
+  useEffect(() => {
+    if (selectedImage) {
+      const payload = new FormData()
+      payload.append('profile_img', selectedImage)
+      handleUploadRecruiterProfileImage(payload)
+    }
+  }, [selectedImage])
+
+  if(!data){
+    return <LoadingSpinner/>
+  }
+
   return (
-    <Formik
-      onSubmit={handleSubmit}
-      initialValues={initialValues}
-    >
     <div className="pi-container">
-        <h1 className="text-2xl font-bold mb-4">Recruiter</h1>
-        <div className="flex w-full justify-center rows bg-gray-100 p-6 mt-2 self-center rounded-tl-md rounded-tr-md pb-20">
-            <div className="flex flex-col items-center justify-center rows bg-gray-150 p-6 mt-20 self-center w-[600px] center">
+        <div className="w-full bg-white">
+            <div className="w-full px-5 md:px-0 md:w-[65%] mx-auto">
+              <h1 className="text-2xl md:text-3xl text-center font-bold mb-2">Let's Get to Know You</h1>
+              <p className="text-sm md:text-lg text-gray-500 text-center">Please take a few minutes to fill in your profile so we can customize the opportunities for you.</p>
 
-                <div className="border-solid w-full border-red-100">
-                  <h1 className="text-2xl font-bold mb-8">Lets Get to Know You</h1>
-
-                  <div className="flex items-center justify-items-center">
-                    <div className="bg-red-200 border-2 border-dashed border-primary p-4 mr-4 rounded-full"><FaUser /></div>
-
-                    <div className="text-sm text-primary font-bold">
-                      Add a Profile Picture
-                    </div>
+                <div className="mt-10 mb-5">
+                  <h3 className="mb-3 font-semibold">Add Profile Picture</h3>
+                  <div className="flex gap-x-4 items-center">
+                    <CustomFileInput
+                      handleFileChange={(file) => {
+                        setSelectedImage(file)
+                      }}
+                      uploading={uploading}
+                    >
+                      <div id="imageInput" className={cn(
+                        "border border-dashed border-gray-400 w-32 h-32 grid place-content-center rounded-full overflow-hidden"
+                      )}
+                      >
+                        {selectedImage ? <img src={selectedImage && URL.createObjectURL(selectedImage)} alt="" />
+                          :
+                          values.profile_img ? <img src={values.profile_img} alt=""/> :
+                          <ImagePlus className="w-10 h-10 text-gray-400" />
+                        }
+                      </div>
+                    </CustomFileInput>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="border-neutral-300 rounded-xl flex flex-row gap-x-2 text-black/80 hover:bg-[#FEBB0E]"
+                      onClick={() => {
+                        document.getElementById('imageInput')?.click();
+                      }}
+                    >
+                      <Upload size={18} className="" />
+                      <span className="font-[500]">Upload</span>
+                    </Button>
                   </div>
+                </div>
+              <div className="flex gap-x-4 items-center">
 
+                <div className='w-full mt-4'>
+                  <form onSubmit={handleSubmit} className="w-full">
+                    <div className="w-full flex flex-col md:flex-row justify-between gap-x-6">
+                      <Input
+                          type={"text"}
+                          id='first_name'
+                          label='First Name'
+                          name='first_name'
+                          value={values.first_name}
+                          onChange={handleChange}
+                          handleBlur={handleBlur}
+                          touched={touched.first_name}
+                          className="placeholder:text-gray-300"
+                          placeholder="Enter your first name"
+                          error={errors.first_name}
+                      />
+                      <Input
+                          type={"text"}
+                          id='last_name'
+                          label='Last Name'
+                          name='last_name'
+                          value={values.last_name}
+                          onChange={handleChange}
+                          handleBlur={handleBlur}
+                          className="placeholder:text-gray-300"
+                          touched={touched.last_name}
+                          placeholder="Enter your last name"
+                          error={errors.last_name}
+                      />                    
+                    </div>
 
+                    <Input
+                      type="number"
+                      id='phone'
+                      label='Phone Number'
+                      name='phone'
+                      value={values.phone}
+                      className="placeholder:text-gray-300"
+                      onChange={handleChange}
+                      handleBlur={handleBlur}
+                      touched={touched.phone}
+                      placeholder="Enter your phone number"
+                      error={errors.phone}
+                    />
 
-                  <div className="w-full mt-5">
-                  <label
-                      htmlFor="school_email"
-                      className="p-1 block text-sm font-medium text-gray-700"
-                  >
-                      First Name
-                  </label>
-                  <Field
-                      name="school_email"
-                      type="text"
-                      placeholder=""
-                      className="border-2 w-full p-2 rounded-md"
-                  />
-                  <ErrorMessage
-                      name="school_email"
-                      component="div"
-                      className="text-red-500"
-                  />
-              </div>
-
-              <div className="w-full mt-5">
-                  <label
-                      htmlFor="school_email"
-                      className="p-1 block text-sm font-medium text-gray-700"
-                  >
-                      Last Name
-                  </label>
-                  <Field
-                      name="school_email"
-                      type="text"
-                      placeholder=""
-                      className="border-2 w-full p-2 rounded-md"
-                  />
-                  <ErrorMessage
-                      name="school_email"
-                      component="div"
-                      className="text-red-500"
-                  />
-              </div>
-
-              <div className="w-full mt-5">
-                  <label
-                      htmlFor="school_email"
-                      className="p-1 block text-sm font-medium text-gray-700"
-                  >
-                      Phone Number
-                  </label>
-                  <Field
-                      name="school_email"
-                      type="text"
-                      placeholder=""
-                      className="border-2 w-full p-2 rounded-md"
-                  />
-                  <ErrorMessage
-                      name="school_email"
-                      component="div"
-                      className="text-red-500"
-                  />
-              </div>
-
+                    <div className='my-4 mt-7 flex justify-end'>
+                    <Button 
+                        type='submit'
+                        variant="orange" 
+                        className='w-full sm:w-fit md:px-10 rounded-lg font-[500]'
+                        loading={isLoading}
+                        disabled={isLoading}
+                        loadingText={"Saving..."}
+                    >
+                        Save
+                    </Button>
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
         </div>
-        <BottomBar
-            isBackDisabled={true}
-            isSubmitting={isSubmitting}
-            onBack={() => {}}
-            onNext={() => router.push("/recruiter/profile/territory")}
-          />
     </div>
-    </Formik>
   );
 }

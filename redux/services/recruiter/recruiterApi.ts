@@ -36,6 +36,24 @@ const recruiterApi = baseApi.injectEndpoints({
         method: "POST",
       }),
       invalidatesTags:["STUDENT"]
+    }),
+    updateRecruiterPersonalInfo: builder.mutation({
+      query: function(payload){
+        const { id } = payload;
+        return {
+          url: `/recruiters/${id}` ,
+          method: "PATCH",
+          body: payload,
+        };
+      },
+    }),
+    uploadRecruiterProfileImage: builder.mutation({
+      query: (profile_img) => ({
+        url: `/recruiter/profile/upload-image`,
+        method: "POST",
+        body: profile_img,
+        formData: true,
+      }),
     })
   }),
 });
@@ -44,6 +62,9 @@ export const {
   useGetRecruitsQuery,
   useSetTerritoriesMutation,
   useLazyGetRecruiterQuery,
+  useGetRecruiterQuery,
   useGetStudentProfileQuery,
-  useSendMessageMutation
+  useUploadRecruiterProfileImageMutation,
+  useSendMessageMutation, 
+  useUpdateRecruiterPersonalInfoMutation
 } = recruiterApi;
