@@ -9,13 +9,37 @@ import LoadingSpinner from "../../_components/loading-spinner"
 import { useLazyGetPersonnelQuery } from "@/redux/services/school/managerApi"
 import {TitlebarButton } from "@/components/ui/titlebar-button"
 import InviteLink from "components/ui/invite-link";
+import DataTable from "components/ui/data-table";
 
 type CURRENT_TAB_TYPES = 'VIEW_ADMIN' | 'CREATE_RECRUITER' | 'CREATE_ADMIN';
+
+const PERSONNEL_COLUMNS = [
+  {
+    title: "First Name",
+    field: "first_name"
+  },
+  {
+    title: "Last Name",
+    field: "last_name"
+  },
+  {
+    title: "Email Address",
+    field: "email"
+  },
+  {
+    title: "Role",
+    field: "role"
+  },
+  {
+    title: "Status",
+    field: "is_active"
+  },
+];
 
 export default function AdminPage() {
     const [isFetchedProfile, setIsFetchedProfile] = useState<boolean>(false)
     const [currentView, setCurrentView] = useState<CURRENT_TAB_TYPES>("VIEW_ADMIN")
-    const [admin, setAdmin] = useState<any[]>([]);
+    const [personnel, setPersonnel] = useState<any[]>([]);
     const [getPersonnel, { isLoading, isFetching }] = useLazyGetPersonnelQuery()
     const pageParams = useParams();
     const schoolId = pageParams?.id as string;
@@ -26,7 +50,7 @@ export default function AdminPage() {
             .unwrap()
             .then((payload) => {
                 setIsFetchedProfile(true)
-                setAdmin(payload?.data)
+                setPersonnel(payload?.data)
             })
     }
 
@@ -77,30 +101,12 @@ export default function AdminPage() {
                     "pi-container",
                     currentView === "VIEW_ADMIN" ? "block" : 'hidden'
                 )}>
-                    <InviteLink claimUrl={claimUrl} />
-                    <table className="table-auto simple">
-                        <thead>
-                            <tr>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Email Address</th>
-                                <th>Role</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                admin.map((user, index) => (
-                                    <tr key={index}>
-                                        <td>{user['first_name']}</td>
-                                        <td>{user['last_name']}</td>
-                                        <td>{user['email']}</td>
-                                        <td>{user['role']}</td>
-                                        <td>{user['is_active']}</td>
-                                    </tr>))
-                            }
-                        </tbody>
-                    </table>
+                    <InviteLink claimUrl={claimUrl} className="mb-4" />
+
+                    <DataTable title="Personnel"
+                        columns={PERSONNEL_COLUMNS}
+                        data={personnel}
+                        isLoading={isLoading || isFetching} />
                 </div>
                 <section className={cn(
                     "hidden",

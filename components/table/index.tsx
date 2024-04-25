@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Dictionary } from '@/types/dictionary'
-import { ChevronLeft, ChevronRight, CircleAlert } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import React from 'react'
 
 interface TableProps {
@@ -13,13 +13,10 @@ interface TableProps {
 const Table = ({title, columns, children, columnHeaderStyle}:TableProps) => {
   return (
     <><div className='overflow-x-auto sm:rounded-lg'>
-            
+
     <div className='border p-'>
       <div className='flex items-center p-4 bg-[#F6F8FA] border border-[#E6EBF0] gap-x-2'>
         <span className='text-[#141111] '>{title}</span>
-        <span>
-          <CircleAlert width={17} height={17} />
-        </span>
       </div>
       <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
         <thead className='text-xs text-gray-700 uppercase bg-[#F6F8FA] border-b border-[#E6EBF0] '>
@@ -46,7 +43,7 @@ const Table = ({title, columns, children, columnHeaderStyle}:TableProps) => {
         </span>
         <ul className='inline-flex -space-x-px rtl:space-x-reverse text-sm h-8 gap-x-2'>
           <ChevronLeft className="text-gray-400 bg-gray-200 rounded-md p-0.5" size={18}/>
-         
+
           <ChevronRight className="text-gray-400 bg-gray-200 rounded-md p-0.5" size={18}/>
         </ul>
       </nav>
