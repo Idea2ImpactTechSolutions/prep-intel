@@ -67,7 +67,9 @@ const Users = sequelize.define(
 );
 
 
-Users.hasMany(Recruiters, { foreignKey: "user_id", as: "recruiters" })
-
+Users.hasMany(Recruiters, { foreignKey: "user_id", constraints: false, as: "recruiters" })
+Recruiters.belongsTo(Users, {
+    foreignKey: 'user_id', // This should match the foreignKey in the hasOne association
+});
 
 module.exports = Users;

@@ -31,8 +31,6 @@ const Recruiters = sequelize.define(
     }
 );
 
-// Recruiters.belongsTo(Users, {
-//     foreignKey: 'user_id', // This should match the foreignKey in the hasOne association
-// });
+
 
 module.exports = Recruiters;
