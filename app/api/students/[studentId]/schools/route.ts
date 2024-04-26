@@ -5,15 +5,14 @@ import { models } from "../../../../../app/models";
 const { Recruits, School, Students, Users } = models;
 
 const POST_VALIDATION_SCHEMA = yup.array().of(
-  yup.string().uuid().required()
+  yup.number().required()
 );
 
-const PATCH_VALIDATION_SCHEMA = yup.object({
-  school_id: yup.string().uuid().required(),
+const PATCH_VALIDATION_SCHEMA = yup.object({    
+  school_id: yup.number().required(),
   criteria: yup.string().oneOf(['INTERESTED']).notRequired(),
   interested: yup.boolean().notRequired(),
-  connection_initator: yup.string().oneOf(['student']).notRequired(),
-  is_viewable: yup.boolean().notRequired()
+  is_viewable: yup.boolean().notRequired(),
 });
 
 const RECRUITS_SCHOOLS_FIELDS = ['school_id', 'interested', 'school.name']
@@ -47,25 +46,11 @@ const RECRUITS_SCHOOLS_FIELDS = ['school_id', 'interested', 'school.name']
  */
 export async function GET(
     req: Request,
-    { params }: { params: { studentId: string } }
+    { params }: { params: { studentId: number } }
   ) {
   try {
     // Collect
-    const userRole : {role: string} = await Students.findOne({
-      where: {
-        id: params.studentId,
-      },
-      attributes: ['user.role'],
-      include: [{
-        model: Users,
-        required: true,
-        attributes: [],
-        where: {
-          role: 'student'
-        }
-      }],
-      raw: true
-    });
+    const userRole : {role: string} = await getUserRole(params.studentId);
 
     if (userRole.role !== 'student') {
       return Response.json(responseBody("Not Found", 404), { status: 404 });
@@ -133,31 +118,17 @@ export async function GET(
  */
 export async function POST(
   req: NextRequest,
-  { params }: { params: { studentId: string } },
+  { params }: { params: { studentId: number } },
 ) {
   try {
     // Collect
-    const userRole : {role: string} = await Students.findOne({
-      where: {
-        id: params.studentId,
-      },
-      attributes: ['user.role'],
-      include: [{
-        model: Users,
-        required: true,
-        attributes: [],
-        where: {
-          role: 'student'
-        }
-      }],
-      raw: true
-    });
+    const userRole : { role: string } = await getUserRole(params.studentId);
 
     if (userRole.role !== 'student') {
       return Response.json(responseBody("Not Found", 404), { status: 404 });
     }
 
-    const inputData : string[] = await req.json();
+    const inputData : number[] = await req.json();
     if (inputData.length == 0) {
       return Response.json(responseBody("No Content", 204), { status: 200 });
     }
@@ -237,25 +208,11 @@ export async function POST(
  */
 export async function PATCH(
     req: NextRequest,
-    { params }: { params: { studentId: string } }
+    { params }: { params: { studentId: number } }
   ) {
   try {
     // Collect
-    const userRole : {role: string} = await Students.findOne({
-      where: {
-        id: params.studentId,
-      },
-      attributes: ['user.role'],
-      include: [{
-        model: Users,
-        required: true,
-        attributes: [],
-        where: {
-          role: 'student'
-        }
-      }],
-      raw: true
-    });
+    const userRole : { role: string } = await getUserRole(params.studentId);
 
     if (userRole.role !== 'student') {
       return Response.json(responseBody("Not Found", 404), { status: 404 });
@@ -299,7 +256,25 @@ export async function PATCH(
   }
 }
 
-function prepareNewRecruits(schoolIds, studentId) {
+async function getUserRole(studentId) {
+  return await Students.findOne({ 
+    where: {
+      id: studentId,
+    },
+    attributes: ['user.role'],
+    include: [{
+      model: Users,
+      required: true,
+      attributes: [],
+      where: {
+        role: 'student'
+      }
+    }],
+    raw: true
+  });
+}
+
+function prepareNewRecruits(schoolIds: number[], studentId: number) {
   return schoolIds.map((schoolId) => ({
     student_id: studentId,
     school_id: schoolId,
@@ -309,7 +284,10 @@ function prepareNewRecruits(schoolIds, studentId) {
   }));
 }
 
-async function addNewSchoolInterests(schoolInterests, studentId) {
+async function addNewSchoolInterests(
+  schoolInterests: number[], 
+  studentId: number
+) {
   if (schoolInterests.length > 0) {
     let newRecruitsData = prepareNewRecruits(
       schoolInterests,
@@ -319,7 +297,10 @@ async function addNewSchoolInterests(schoolInterests, studentId) {
   }
 }
 
-async function renewSchoolInterests(schoolInterests, studentId) {
+async function renewSchoolInterests(
+  schoolInterests: number[], 
+  studentId : number
+) {
   if (schoolInterests.length > 0) {
     await Recruits.update(
       {
