@@ -15,7 +15,7 @@ const managerApi = baseApi.injectEndpoints({
         }
       },
     }),
-    getAllAdmin: builder.query({
+    getPersonnel: builder.query({
       query: ({ school_id }) => ({
         url: `/manager/profile/personnel?school_id=${school_id}`,
         method: "GET",
@@ -103,6 +103,13 @@ const managerApi = baseApi.injectEndpoints({
         }
       },
     }),
+    createManager: builder.mutation({
+        query: (payload) => ({
+          url: `/schools/${payload.school_id}/manager`,
+          method: "POST",
+          body: payload,
+        }),
+    }),
   }),
 });
 
@@ -111,7 +118,8 @@ export const {
   useManagerCreateSchoolProfileMutation,
   useUploadSchoolImageMutation,
   usePublishSchoolProfileMutation,
-  useLazyGetAllAdminQuery,
+  useLazyGetPersonnelQuery,
   useCreateRecruiterMutation,
+  useCreateManagerMutation,
   useLazyGetRecruitsQuery,
 } = managerApi;

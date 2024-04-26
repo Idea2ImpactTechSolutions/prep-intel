@@ -35,7 +35,7 @@ const TABS = [
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const [showSidebar, setShowSidebar] = useState<boolean>(true)
-    const [isProfileCompleted, setIsProfileCompleted] = useState<boolean>(false)
+    const [allowFullView, setAllowFullView] = useState(false);
     const [getSchoolProfile, { isLoading }] = useLazyGetSchoolProfileQuery()
     const { manager: { school_information: { school_data } } }: Dictionary = useAppSelector((state) => state.manager)
 
@@ -44,6 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     const schoolId = pageParams?.id;
     const location = usePathname()
     const dispatch = useAppDispatch()
+    const allowedPaths = ["/admin", "/my-school", "/school-profile", "/academic-info", "/preview-school", "/recruits"]
 
     const handleGetSchoolInformation = async (schoolId) => {
         getSchoolProfile(schoolId)
@@ -51,16 +52,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             .then((payload) => {
                 const { data } = payload
                 dispatch(setSchoolInformation({ slug: 'school_data', data: {...data, create_count: 0} }))
-                !data?.publish_date ? setIsProfileCompleted(false) : setIsProfileCompleted(true)
             })
     }
 
     useEffect(() => {
-        handleGetSchoolInformation(schoolId)
+        handleGetSchoolInformation(schoolId);
     }, [schoolId])
 
     useEffect(() => {
-        !school_data?.publish_date ? setIsProfileCompleted(false) : setIsProfileCompleted(true)
+        const isAllowedPath = allowedPaths.some(p => location?.endsWith(p));
+        const isSchoolPublished = Boolean(school_data?.publish_date);
+
+        setAllowFullView(isAllowedPath || isSchoolPublished);
     }, [school_data])
 
     return (
@@ -75,13 +78,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     {
                         isLoading ?
                             <LoadingSpinner/>
-                            : isProfileCompleted ? children :
-                                (location === `/school/${schoolId}/school-profile` || location === `/school/${schoolId}/claim` || location === `/school/${schoolId}/set-password` || (location ===
-                                `/school/${schoolId}/preview-school` && school_data?.create_count === 2) ||
-                                location === `/school/${schoolId}/academic-info`
-                                ) ?
-                                    children
-                                    :
+                            : allowFullView ? children :
                                     <EmptyStateContainer
                                         show={true}
                                         pageTitle="Complete Profile Setup"
@@ -90,7 +87,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                         onClick={() => router.push(`/school/${schoolId}/school-profile`)}
                                     />
                     }
-                    {/* {children} */}
                 </section>
             </section>
         </main>

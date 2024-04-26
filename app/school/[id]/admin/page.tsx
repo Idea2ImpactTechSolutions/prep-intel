@@ -1,35 +1,62 @@
 "use client"
 import PageTitleContainer from "@/components/page-title"
-import CreateRecruiter from "./_components/create-recruiter"
+import CreatePersonnel from "./_components/create-personnel"
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { LucideChevronLeft, UserPlus } from "lucide-react"
+import { LucideChevronLeft } from "lucide-react"
 import LoadingSpinner from "../../_components/loading-spinner"
-import { useLazyGetAllAdminQuery } from "@/redux/services/school/managerApi"
+import { useLazyGetPersonnelQuery } from "@/redux/services/school/managerApi"
+import {TitlebarButton } from "@/components/ui/titlebar-button"
+import InviteLink from "components/ui/invite-link";
+import DataTable from "components/ui/data-table";
 
-type CURRENT_TAB_TYPES = 'VIEW_ADMIN' | 'CREATE_RECRUITER'
+type CURRENT_TAB_TYPES = 'VIEW_ADMIN' | 'CREATE_RECRUITER' | 'CREATE_ADMIN';
+
+const PERSONNEL_COLUMNS = [
+  {
+    title: "First Name",
+    field: "first_name"
+  },
+  {
+    title: "Last Name",
+    field: "last_name"
+  },
+  {
+    title: "Email Address",
+    field: "email"
+  },
+  {
+    title: "Role",
+    field: "role"
+  },
+  {
+    title: "Status",
+    field: "is_active"
+  },
+];
 
 export default function AdminPage() {
     const [isFetchedProfile, setIsFetchedProfile] = useState<boolean>(false)
-    const [currentProgress, setCurrentProgress] = useState<CURRENT_TAB_TYPES>("VIEW_ADMIN")
-    const [admin, setAdmin] = useState<any[]>([]);
-    const [getAllAdmin, { isLoading, isFetching }] = useLazyGetAllAdminQuery()
+    const [currentView, setCurrentView] = useState<CURRENT_TAB_TYPES>("VIEW_ADMIN")
+    const [personnel, setPersonnel] = useState<any[]>([]);
+    const [getPersonnel, { isLoading, isFetching }] = useLazyGetPersonnelQuery()
     const pageParams = useParams();
     const schoolId = pageParams?.id as string;
+    const [claimUrl, setClaimUrl] = useState("")
 
-    const handleGetAllAdmin = async (payload) => {
-        getAllAdmin(payload)
+    const loadPersonnel = () => {
+        getPersonnel({school_id: schoolId })
             .unwrap()
             .then((payload) => {
                 setIsFetchedProfile(true)
-                setAdmin(payload?.data)
+                setPersonnel(payload?.data)
             })
     }
 
     useEffect(() => {
-        if (schoolId) {
-            !isFetchedProfile && handleGetAllAdmin({ school_id: schoolId })
+        if (schoolId && !isFetchedProfile) {
+            loadPersonnel()
         }
     }, [])
 
@@ -44,25 +71,27 @@ export default function AdminPage() {
                     <PageTitleContainer
                         title={
                             <>
-                                {currentProgress === "VIEW_ADMIN" && 'Admin'}
-                                {currentProgress === "CREATE_RECRUITER" && (
-                                    <>
-                                        <div className="flex items-center cursor-pointer"
-                                            onClick={() => setCurrentProgress('VIEW_ADMIN')}
-                                        > <LucideChevronLeft width={20} height={20}/> <span> Admin </span> </div>
-                                    </>
+                                {currentView === "VIEW_ADMIN" && 'Admin'}
+                                {(currentView === "CREATE_RECRUITER" || currentView === "CREATE_ADMIN") && (
+                                    <div className="flex items-center cursor-pointer"
+                                        onClick={() => setCurrentView('VIEW_ADMIN')}
+                                    > <LucideChevronLeft width={20} height={20}/> <span> Admin </span> </div>
                                 )}
                             </>
                         }
                         rightContent={
                             <div className={cn(
-                                currentProgress === "CREATE_RECRUITER"
+                                (currentView === "CREATE_RECRUITER" ||
+                                 currentView === "CREATE_ADMIN")
                                 && 'hidden'
                             )}>
-                                <span
-                                    onClick={() => setCurrentProgress("CREATE_RECRUITER")}
-                                    className="flex border border-primary text-primary text-xs p-2 px-4 rounded-md cursor-pointer"
-                                ><UserPlus width={14} height={14} className="mr-1" /> <span className="font-bold">Create New User</span> </span>
+                            <TitlebarButton
+                                title="Create Admin"
+                                onClick={() => setCurrentView("CREATE_ADMIN")} />
+
+                            <TitlebarButton
+                                title="Create Recruiter"
+                                onClick={() => setCurrentView("CREATE_RECRUITER")} />
                             </div>
                         }
                     />
@@ -70,43 +99,27 @@ export default function AdminPage() {
                 <div className={cn(
                     "p-4",
                     "pi-container",
-                    currentProgress === "VIEW_ADMIN" ? "block" : 'hidden'
+                    currentView === "VIEW_ADMIN" ? "block" : 'hidden'
                 )}>
-                    <table className="table-auto simple">
-                        <thead>
-                            <tr>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Email Address</th>
-                                <th>Role</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                admin.map((user, index) => (
-                                    <tr key={index}>
-                                        <td>{user['first_name']}</td>
-                                        <td>{user['last_name']}</td>
-                                        <td>{user['email']}</td>
-                                        <td>{user['role']}</td>
-                                        <td>{user['is_active']}</td>
-                                    </tr>))
-                            }
-                        </tbody>
-                    </table>
+                    <InviteLink claimUrl={claimUrl} className="mb-4" />
+
+                    <DataTable title="Personnel"
+                        columns={PERSONNEL_COLUMNS}
+                        data={personnel}
+                        isLoading={isLoading || isFetching} />
                 </div>
                 <section className={cn(
                     "hidden",
-                    currentProgress === "CREATE_RECRUITER" && "block"
+                    (currentView === "CREATE_RECRUITER" || currentView === "CREATE_ADMIN") && "block"
                 )}>
                     <section className="pi-container">
-                        <h2 className="font-bold md:text-lg text-sm mb-2">Create Recruiter</h2>
-                        {currentProgress === 'CREATE_RECRUITER' &&
-                        <CreateRecruiter
-                            setCurrentProgress={setCurrentProgress}
-                            setAdmin={setAdmin}
+                        <h2 className="font-bold md:text-lg text-sm mb-2">{currentView === "CREATE_RECRUITER"  ? "Create Recruiter" : "Create Admin"}</h2>
+                        {(currentView === 'CREATE_RECRUITER' || currentView === 'CREATE_ADMIN') &&
+                        <CreatePersonnel
+                            role={(currentView === "CREATE_ADMIN") ? "admin" : "recruiter"}
                             schoolId={schoolId}
+                            onCancel={()=> setCurrentView("VIEW_ADMIN")}
+                            onSuccess={(claimUrl) => { setCurrentView("VIEW_ADMIN"); setClaimUrl(claimUrl); loadPersonnel() }}
                         />}
                     </section>
                 </section>

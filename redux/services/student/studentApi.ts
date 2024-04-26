@@ -8,9 +8,22 @@ const studentApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    getStudentVitals: builder.query({
+      query: (studentId) => ({
+        url: `/students/${studentId}/vitals`,
+        method: "GET",
+      }),
+    }),
+    addStudentVitals: builder.mutation({
+      query: (payload) => ({
+        url: `/students/${payload.studentId}/vitals`,
+        method: "POST",
+        body: payload.data
+      }),
+    }),
   }),
 });
 
 export const {
-  useLazyGetSchoolDataQuery
+  useLazyGetSchoolDataQuery, useLazyGetStudentVitalsQuery, useAddStudentVitalsMutation
 } = studentApi;

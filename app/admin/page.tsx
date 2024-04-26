@@ -3,7 +3,7 @@
 import { useState } from "react";
 import CreateSchoolManagerForm from "./_components/CreateSchoolAdmin";
 import CreateSiteAdmin from "./_components/CreateSiteAdmin";
-import InviteLink from "./_components/InviteLink";
+import InviteLink from "components/ui/invite-link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import PageList  from "@/components/page-list"
