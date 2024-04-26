@@ -82,6 +82,8 @@ const GET_FIELDS = [
  *                           requestDate:
  *                              type: date
  *                              description: Connection request date
+*              400:
+ *              description: Bad request
  *             404:
  *              description: Student not found
  *             500:

@@ -195,7 +195,7 @@ export async function PATCH(
   }
 }
 
-export async function getUserRole(studentId) {
+async function getUserRole(studentId) {
   return await Students.findOne({ 
     where: {
       id: studentId,

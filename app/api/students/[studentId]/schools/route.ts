@@ -2,8 +2,7 @@ import * as yup from 'yup';
 import type { NextRequest } from "next/server";
 import { responseBody } from "../../../../../app/config/helpers";
 import { models } from "../../../../../app/models";
-const { Recruits, School } = models;
-import { getUserRole } from './connectionRequests/route'
+const { Recruits, School, Students, Users } = models;
 
 const POST_VALIDATION_SCHEMA = yup.array().of(
   yup.number().required()
@@ -255,6 +254,24 @@ export async function PATCH(
       }
     );
   }
+}
+
+async function getUserRole(studentId) {
+  return await Students.findOne({ 
+    where: {
+      id: studentId,
+    },
+    attributes: ['user.role'],
+    include: [{
+      model: Users,
+      required: true,
+      attributes: [],
+      where: {
+        role: 'student'
+      }
+    }],
+    raw: true
+  });
 }
 
 function prepareNewRecruits(schoolIds: number[], studentId: number) {
