@@ -1,12 +1,14 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Select from 'react-select'
-import UsMap from "@/components/UsMap"
-import { Button } from "@/components/ui/button";
-import { useSetTerritoriesMutation, useLazyGetRecruiterQuery } from "@/redux/services/recruiter/recruiterApi";
+import UsMap from "@/components/UsMap";
 import LoadingSpinner from "@/components/loading-spinner";
-import { useSession } from "next-auth/react";
 import PageTitleContainer from "@/components/page-title";
+import { Button } from "@/components/ui/button";
+import { useLazyGetRecruiterQuery, useSetTerritoriesMutation } from "@/redux/services/recruiter/recruiterApi";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import Select from 'react-select';
+import { toast } from "sonner";
 
 const options = [
   { "value": "AL", "label": "Alabama" },
@@ -67,6 +69,7 @@ export default function Page() {
   const [activeStates, setActiveStates] = useState<string[]>([]);
   const [setTerritories, { isLoading: isSaving }] = useSetTerritoriesMutation();
   const [getRecruiter, { isLoading }] = useLazyGetRecruiterQuery();
+  const router = useRouter()
 
   const session = useSession();
   const recruiterId = session?.data?.user?.roleId;
@@ -81,9 +84,12 @@ export default function Page() {
     setTerritories(payload)
       .unwrap()
       .then((payload) => {
-        // Reload to confirm
-        loadRecruiter()
-      })
+        if(payload?.status === 200){
+          toast.success(payload.message)
+          loadRecruiter()         
+          router.refresh()
+        }
+      }).catch((error:any) => {toast.error(error.message)})
   }
 
   async function loadRecruiter() {
@@ -94,8 +100,10 @@ export default function Page() {
 
   // Onload
   useEffect(()=> {
-    loadRecruiter();
-  },[]);
+    if(recruiterId){
+      loadRecruiter();
+    }
+  },[recruiterId]);
 
 
   useEffect(()=> {
@@ -119,25 +127,31 @@ export default function Page() {
     <PageTitleContainer title="My Territories" />
     <hr className="border-t border-gray-300 my-0" />
     <div className="pi-container mt-6">
-      <UsMap activeStates={activeStates} setActiveStates={setActiveStates} ></UsMap>
-      { isLoading && <LoadingSpinner />}
+      <div className="w-full overflow-x-auto">
+        <UsMap activeStates={activeStates} setActiveStates={setActiveStates} ></UsMap>
+      </div>
+      <div className="h-fit w-full">
+        { isLoading && <LoadingSpinner className="mt-5 h-full"/>}
+      </div>
       { !isLoading &&
       <>
         <h2>Select State</h2>
-        <div className="flex">
+        <div className="flex flex-col md:flex-row gap-y-3">
           <Select instanceId="state-select"
             options={options}
             isMulti
             value={activeSelection}
             isDisabled={isSaving}
             onChange={selectChanged}
-            className="w-[400px]" />
+            className="w-full md:w-[400px]" />
 
           <div className="flex-grow"></div>
 
           <Button
             type="button"
             variant="default"
+            loading={isSaving}
+            loadingText="Updating..."
             onClick={handleSetTerritories}
           >
             Save
