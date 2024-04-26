@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { responseBody } from "../../../../../app/config/helpers";
 import { models } from "../../../../../app/models";
 const { Recruits, School } = models;
-import { getUserRole } from '../schools/connections/route'
+import { getUserRole } from './connectionRequests/route'
 
 const POST_VALIDATION_SCHEMA = yup.array().of(
   yup.number().required()

@@ -2,14 +2,24 @@ import * as yup from 'yup';
 import type { NextRequest } from "next/server";
 import { responseBody } from "app/config/helpers";
 import { models } from "@/app/models";
-import { fn, col } from 'sequelize';
+import { col, Op } from 'sequelize';
+
 const { 
   ConnectionRequest, 
-  Recruiters, 
+  Recruiters,
+  Recruits, 
   School, 
   Students, 
-  Users 
 } = models;
+
+const GET_VALIDATION_SCHEMA = yup.object({    
+  sat_score: yup.number().notRequired(),
+  act_score: yup.number().notRequired(),
+  gpa: yup.number().notRequired(),
+  state: yup.array().of(yup.string().matches(/^[A-Z][A-Z]$/, {
+    excludeEmptyString: true,
+  })).notRequired()
+});
 
 const POST_VALIDATION_SCHEMA = yup.object({    
     studentId: yup.number().required(),
@@ -18,28 +28,26 @@ const POST_VALIDATION_SCHEMA = yup.object({
   });
 
 const GET_FIELDS = [
-  'id', 
-  [ col('student.act_score'), 'studentActScore' ],
-  [ col('student.sat_score'), 'studentSatScore' ],
-  [ col('student.gpa'), 'studentGpa' ],
-  [ col('student.graduation_year'), 'studentGradYear' ],
-  [ col('student.high_school'), 'studentHighSchool' ],
-  [ fn('CONCAT',
-       col('recruiter->user.first_name'), ' ', col('recruiter->user.last_name')
-    ), 'recruiterName'
-  ],
-  [ 'create_date', 'requestDate' ]
+  [ 'id', 'studentId'],
+  [ 'act_score', 'studentActScore' ],
+  [ 'sat_score', 'studentSatScore' ],
+  [ 'gpa', 'studentGpa' ],
+  [ 'graduation_year', 'studentGradYear' ],
+  [ 'high_school', 'studentHighSchool' ],
+  [ col('connection_requests.id'), 'connectionRequestId' ],
+  [ col('connection_requests.connection_accepted'), 'connectionRequestAccepted' ],
+  [ col('connection_requests.create_date'), 'requestData' ]
 ];
 
 /**
  * @openapi
- * /api/schools/{schoolId}/recruits/connections:
+ * /api/schools/{schoolId}/recruits/explorer:
  *   get:
- *    summary: Find open connection requests
- *    description: Returns open connection requests sent to students
+ *    summary: Find students to recruit
+ *    description: Returns students
  *       responses:
  *            200:
- *             description: Connection requests found
+ *             description: Students found
  *             content:
  *               application/json:
  *                 schema:
@@ -47,9 +55,9 @@ const GET_FIELDS = [
  *                     items:
  *                       type: object
  *                         properties:
- *                           id:
+ *                           studentId:
  *                              type: number
- *                              description: Unique ID of a connection request
+ *                              description: Unique ID of a student
  *                           studentActScore:
  *                              type: number
  *                              description: Student ACT score
@@ -65,9 +73,12 @@ const GET_FIELDS = [
  *                           studentHighSchool:
  *                              type: string
  *                              description: Name of high school student attends
- *                           recruiterName:
+ *                           connectionRequestId:
  *                              type: string
- *                              description: Name of recruiter who sent request
+ *                              description: Unique ID of a connection request
+ *                           connectionRequestStatus:
+ *                              type: boolean
+ *                              description: Connection request status
  *                           requestDate:
  *                              type: date
  *                              description: Connection request date
@@ -77,7 +88,7 @@ const GET_FIELDS = [
  *              description: Internal server error       
  */
 export async function GET(
-    req: Request,
+    req: NextRequest,
     { params }: { params: { schoolId: number } }
   ) {
   try {
@@ -87,38 +98,44 @@ export async function GET(
     if (!school) {
       return Response.json(responseBody("Not Found", 404), { status: 404 });
     }
+
+    const searchParams = req.nextUrl.searchParams
+    const filters = getFilters(searchParams);
+
+    if (filters) {
+      const validFilters = validateRequestBody(req.method, filters);
+      if ( !validFilters ) {
+        return Response.json(responseBody("Bad Request", 400), { status: 400 });
+      }
+    }
+
+    const whereConditions = prepareQueryFilters(
+      filters, 
+      school
+    );
     
-    const openConnectionRequests: any = await ConnectionRequest.findAll({
-      where: {
-        school_id: params.schoolId,
-        connection_accepted: null
-      },
+    const students: any = await Students.findAll({
+      where: whereConditions,
+      order: ['connectionRequestId'],
       attributes: GET_FIELDS,
       include: [
         {
-            model: Students,
-            attributes: [],
-            required: true
-        },
-        {
-            model: Recruiters,
-            attributes: [],
-            include: [{
-                model: Users,
-                attributes: [],
-                required: true,
-            }],
-            required: true,
+          model: ConnectionRequest,
+          where: {
+            school_id: params.schoolId,
+          },
+          attributes: [],
+          required: false
         },
       ],
-      raw: true,
+      raw: true
     });
 
     return Response.json(
       responseBody(
-        "Open connection requests retrieved successfully",
+        "Students retrieved successfully",
         200,
-        openConnectionRequests
+        students
       ),
       {
         status: 200,
@@ -136,7 +153,7 @@ export async function GET(
 
 /**
  * @swagger
- * /api/schools/{schoolId}/recruits/connections:
+ * /api/schools/{schoolId}/recruits/explorer:
  *   post:
  *     summary: Add new connection requests
  *     description: Creates a new connection request
@@ -157,6 +174,8 @@ export async function GET(
  *        description: Bad request
  *       404:
  *        description: Not found
+ *       409:
+ *        description: Conflict
  *       500:
  *        description: Internal server error
  */
@@ -166,7 +185,7 @@ export async function POST(
   ) {
     try {
       // Collect
-      const school = await School.getByPk(params.schoolId);
+      const school = await School.findByPk(params.schoolId);
 
       if ( !school ) {
         return Response.json(responseBody("Not Found", 404), { status: 404 });
@@ -184,18 +203,27 @@ export async function POST(
   
       const student = await Students.findByPk(inputData.studentId);
       const recruiter = await Recruiters.findByPk(inputData.recruiterId);
-
+      
       if ( !student || !recruiter ) {
         return Response.json(responseBody("Not Found", 404), { status: 404 });
       }
-      
+
+      const whereConditions = {
+        school_id: params.schoolId,
+        student_id: inputData.studentId,
+        recruiter_id: inputData.recruiterId
+      };
+
+      const existingRecruit = await Recruits.findOne({
+        where: whereConditions
+      });
+      if (existingRecruit) {
+        return Response.json(responseBody("Conflict", 409), { status: 409 });
+      }
+
       // Create
       const [connectionRequest, newRequest] : any = await ConnectionRequest.findOrCreate({
-        where: { 
-         school_id: params.schoolId,
-         student_id: inputData.studentId,
-         recruiter_id: inputData.recruiterId
-       }
+        where: whereConditions
       });
 
       if (!newRequest) {
@@ -203,7 +231,6 @@ export async function POST(
             connection_accepted: null
         });
       }
-  
       // Report
       return Response.json(responseBody("Created", 201), { status: 201 });
     } catch (error: any) {
@@ -217,10 +244,62 @@ export async function POST(
     }
   }
 
+function getFilters(searchParams) {
+  if (searchParams.size > 0) {
+    const searchParamsMappings = {
+      'minGpa': 'gpa',
+      'minAct': 'act_score',
+      'minSat': 'sat_score',
+      'states': 'state'
+    };
+    let filters : object = {};
+    for (const [key, value] of searchParams.entries()) {
+      if ( value !== null) {
+        if (key !== 'states') {
+          filters[searchParamsMappings[key]] = Number(value);
+        } else {
+          filters[searchParamsMappings[key]] = value.toUpperCase().split(",");
+        }
+      }
+    }
+    return filters;
+  }
+  return false;
+}
 
-function validateRequestBody(method: string, requestBody) {
-  return POST_VALIDATION_SCHEMA.isValidSync(
-    requestBody,
-    { strict: true }
-  );
+function prepareQueryFilters(filters, school) {
+  let filterConditions: object = {};
+
+  if ( filters ) {
+    Object.entries(filters).forEach(([key, value]) => {
+      if (key !== 'state') {
+        filterConditions[key] = { [Op.gte]: value }
+      } else {
+        filterConditions[key] = value;
+      }
+    });
+  } else {
+    filterConditions = {
+      sat_score: { [Op.gte]: school.min_sat_score },
+      act_score: { [Op.gte]: school.min_act_score },
+      gpa: { [Op.gte]: school.gpa_requirement },
+    };
+  }
+
+  Object.assign(filterConditions, {
+    '$connection_requests.connection_accepted$' : { [Op.or]: [null, false] }
+  });
+
+  return filterConditions;
+}
+
+function validateRequestBody(method: string, testObject) {
+  switch (method) {
+    case "GET": 
+      return GET_VALIDATION_SCHEMA.isValidSync(testObject, { strict: true });
+    case "POST":
+      return POST_VALIDATION_SCHEMA.isValidSync(testObject, { strict: true });
+    default:
+      return false;
+  }
 }

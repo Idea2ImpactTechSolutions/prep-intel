@@ -16,15 +16,27 @@ const ConnectionRequest = sequelize.define(
         },
         school_id: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            references: {
+                model: School,
+                key: "id"
+            }
         },
         student_id: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            references: {
+                model: Students,
+                key: "id"
+            }
         },
         recruiter_id: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            references: {
+                model: Recruiters,
+                key: "id"
+            }
         },
         create_date: {
             type: DataTypes.DATE,
@@ -61,16 +73,6 @@ ConnectionRequest.belongsTo(School, {
 
 ConnectionRequest.belongsTo(Recruiters, {
     foreignKey: 'recruiter_id',
-    constraints: false,
-});
-
-ConnectionRequest.belongsTo(Students, {
-    foreignKey: 'student_id',
-    constraints: false,
-});
-
-Students.hasMany(ConnectionRequest, {
-    foreignKey: 'student_id',
     constraints: false
 });
 

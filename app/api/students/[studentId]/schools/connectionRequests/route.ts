@@ -19,7 +19,6 @@ const PATCH_VALIDATION_SCHEMA = yup.object({
 
 const GET_FIELDS = [
   'id', 
-  [ 'school_id', 'schoolId' ],
   [ col('school.name'), 'schoolName'],
   [ fn('CONCAT',
        col('recruiter->user.first_name'), ' ', col('recruiter->user.last_name')
@@ -47,9 +46,6 @@ const GET_FIELDS = [
  *                           id:
  *                             type: number
  *                             description: Unique ID of a connection request
- *                           schoolId:
- *                             type: string
- *                             description: Unique ID of a school
  *                           schoolName:
  *                             type: string
  *                             description: School name
@@ -131,7 +127,7 @@ export async function GET(
  *     summary: Update a connection request with a student's response
  *     description: Updates a connection request initiated by a recruiter
  *     requestBody:
- *      description: An object with a connection request id and response
+ *      description: An object with a connection request ID and response
  *      content:
  *        application/json:
  *          schema:
@@ -225,25 +221,24 @@ function validateRequestBody(method: string, requestBody) {
 }
 
 async function addStudentResponse(connectionRequest, updateAttributes) {
-  ConnectionRequest.afterUpdate(connectionRequest => {
+  ConnectionRequest.afterUpdate( async (connectionRequest) => {
     if (connectionRequest.connection_accepted == true) {
       let newRecruitData : object = {
         interested: true,
         is_viewable: true
       }
-      let [savedRecruit, newRecruit] = Recruits.findOrCreate({
+      let [resultingRecruit, isNew] = await Recruits.findOrCreate({
         where: {
           school_id: connectionRequest.dataValues.school_id,
           student_id: connectionRequest.dataValues.student_id,
           recruiter_id: connectionRequest.dataValues.recruiter_id
         },
-        defaults: newRecruitData
-      },
-      );
-      if (!newRecruit) {
-        savedRecruit.update(newRecruitData);
+        defaults: newRecruitData,
+      });
+      if (!isNew) {
+        await resultingRecruit.update(newRecruitData);
       }
     }
   });
-  await connectionRequest.update(updateAttributes);
+  await connectionRequest.update(updateAttributes, { individualHooks: true });
 }
