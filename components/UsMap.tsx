@@ -41,10 +41,10 @@ export default function USMap({ activeStates, setActiveStates }) {
       hoveredLocation.current = content;
 
       bubbleElement.current.innerHTML = content.name;
-      bubbleElement.current.style.opacity = "100%";
+      bubbleElement.current.style.display = "block";
     }
     else {
-      bubbleElement.current.style.opacity = "0%";
+      bubbleElement.current.style.display = "none";
     }
   }
 
