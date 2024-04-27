@@ -1,23 +1,22 @@
 "use client"
 import { cn } from "@/lib/utils";
-import { EyeIcon, EyeOffIcon, AlertCircle} from "lucide-react";
+import { useFormik } from "formik";
+import { AlertCircle, EyeIcon, EyeOffIcon } from "lucide-react";
+import { signIn, useSession } from "next-auth/react";
 import { Space_Grotesk } from "next/font/google";
 import Link from "next/link";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useFormik } from "formik";
-import * as yup from "yup"
-import { signIn, useSession } from "next-auth/react";
+import * as yup from "yup";
 import ForgotPasswordPanel from './forgot-password';
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert"
+  AlertDescription
+} from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface initialValues {
   email: string;
