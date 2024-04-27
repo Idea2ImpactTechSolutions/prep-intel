@@ -26,7 +26,6 @@ describe('Set Password API', () => {
   describe('POST requests', () => {
     afterEach(async () => {
       jest.clearAllMocks();
-     
     });
     it('Sets the user password', async () => {
       // Setup
@@ -35,6 +34,7 @@ describe('Set Password API', () => {
         auth_code: AUTH_CODE,
         update: jest.fn().mockResolvedValue({ /* simulated response */ })
       });
+      Users.update.mockResolvedValue();
       const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
         method: 'POST',
         body: {
@@ -72,10 +72,10 @@ describe('Set Password API', () => {
           confirm_password: MISMATCHED_PASSWORD
         },
       });
-  
+
       // Test
       await handler(req, res);
-  
+
         // Assert
         expect(res._getStatusCode()).toBe(400);
         expect(userUpdateSpy).not.toHaveBeenCalled();
