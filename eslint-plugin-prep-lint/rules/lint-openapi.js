@@ -34,7 +34,7 @@ module.exports = {
             } catch (error) {
               context.report({
                 node: comment,
-                message: 'Invalid YAML: ' + error.message + "\n" + yamlContent,
+                message: 'Invalid YAML: ' + error.message,
               });
             }
           }
