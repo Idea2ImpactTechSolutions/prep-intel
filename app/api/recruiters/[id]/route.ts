@@ -15,20 +15,16 @@ const { Users, Recruiters } = models;
  *           type: string
  *         description: The recruiter's ID
  *     responses:
- *       200:
+ *       '200':
  *         description: Recruiter found
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Recruiter'
- *       404:
+ *       '404':
  *         description: No recruiter found
- *       400:
+ *       '400':
  *         description: Error occurred
- * components:
- *   schemas:
- *     Recruiter:
- *       type: object
  */
 export async function GET(
   req: Request,

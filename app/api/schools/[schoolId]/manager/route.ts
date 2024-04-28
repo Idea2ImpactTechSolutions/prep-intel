@@ -6,37 +6,48 @@ import { type NextRequest } from "next/server";
 /**
  * @openapi
  * /api/schools/{schoolId}/manager:
- *   get:
+ *   post:
  *     summary: Allow creation of school manager
- *     description: ""
+ *     description: Create a new school manager with the provided details.
  *     parameters:
  *       - in: path
  *         name: schoolId
  *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the school to you want to create manager
- *     body:
- *         schema:
- *               type: object
- *               items:
- *                     {"first_name": "First Name", "last_name": "Last Name", "email": "john@example.com"}
- *
+ *         description: The ID of the school where you want to create a manager.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               first_name:
+ *                 type: string
+ *               last_name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *           example:
+ *             first_name: "John"
+ *             last_name: "Doe"
+ *             email: "john@example.com"
  *     responses:
  *       '201':
- *         description: a string stating the status of the request
+ *         description: A string stating the status of the request.
  *         content:
  *           application/json:
  *             schema:
  *               type: object
- *                 properties:
- *                   response_code:
- *                     type: integer
- *                   message:
- *                     type: string
+ *               properties:
+ *                 response_code:
+ *                   type: integer
+ *                 message:
+ *                   type: string
  *             examples:
- *               One Sample:
- *                 value: '[{"id": 1, "first_name": "John"}]'
+ *               oneSample:
+ *                 value: {"id": 1, "first_name": "John"}
  */
 export async function POST(
   req: NextRequest,

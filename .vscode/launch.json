@@ -33,6 +33,23 @@
         "host": "localhost",
         "port": 5678
       }
-    }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug ESLint",
+      "program": "${workspaceFolder}/node_modules/eslint/bin/eslint.js",
+      "args": [
+          "app/api/students/[studentId]/schools/connectionRequests/route.ts" // Specify the file you want to lint
+      ],
+      "stopOnEntry": false,
+      "cwd": "${workspaceFolder}",
+      "runtimeArgs": [
+          "--nolazy",
+          "--inspect-brk"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+  }
   ]
 }
