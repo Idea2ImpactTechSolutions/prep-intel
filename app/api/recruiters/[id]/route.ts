@@ -1,4 +1,4 @@
-import { responseBody } from "app/config/helpers";
+import { apiResponse } from "app/config/helpers";
 const { models } = require("app/models");
 const { Users, Recruiters } = models;
 
@@ -46,18 +46,13 @@ export async function GET(
     });
 
     if (recruiter) {
-      return Response.json(responseBody("Recruiter found", 200, recruiter));
+      return apiResponse("Recruiter found", 200, recruiter);
     } else {
-      return Response.json(responseBody("No recruiter found", 404), {
-        status: 404,
-      });
+      return apiResponse("No recruiter found", 404);
     }
   } catch (error: any) {
     // Report
-    return Response.json(
-      responseBody("Error occurred", 400, { error: error.message }),
-      { status: 400 }
-    );
+    return apiResponse("Error occurred", 400, { error: error.message });
   }
 }
 
@@ -106,7 +101,7 @@ export async function PATCH(
     const recruiter = await Recruiters.findOne({ where: { id: params.id } });
 
     if (!recruiter) {
-      return Response.json({ message: "Recruiter not found" }, { status: 404 });
+      return apiResponse("Recruiter not found", 404 );
     }
 
     // Update fields
@@ -116,14 +111,9 @@ export async function PATCH(
     const updatedRecruiter = await recruiter.save();
 
     // Response
-    return Response.json(
-      responseBody("Recruiter updated", 200, updatedRecruiter)
-    );
+    return apiResponse("Recruiter updated", 200, updatedRecruiter);
   } catch (error: any) {
     // Notify
-    return Response.json(
-      responseBody("Errors occurred", 400, { error: error.message }),
-      { status: 400 }
-    );
+    return apiResponse("Errors occurred", 400, { error: error.message });
   }
 }
