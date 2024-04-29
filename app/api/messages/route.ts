@@ -14,7 +14,7 @@ const { Messages, Recruiters, School, Students, Users } = models;
 //  *                       schema:
 //  *                           type: array
 //  *                           items: {}
-//  *       summary: Retrieves all messages for provided fields which inlcude recruiter_id, student_id, school_id
+//  *       summary: Retrieves all messages for provided fields which include recruiter_id, student_id, school_id
 //  */
 export async function GET(req: NextRequest) {
   try {
@@ -62,9 +62,8 @@ export async function GET(req: NextRequest) {
         },
       });
     }
-
     return Response.json(
-      responseBody("Messages retreived successfully", 200, { response }),
+      responseBody("Messages retrieved successfully", 200, { response }),
       {
         status: 200,
       }
@@ -80,11 +79,13 @@ export async function GET(req: NextRequest) {
 }
 
 /**
- * @swagger
+ * @openapi
  * /api/messages/routes:
  *   post:
  *     description: Posts the message to the required recipient
  *     summary: Creates a new recruiter
+ *     tags:
+ *       - message
  *     responses:
  *       200:
  *         description: Message sent successfully

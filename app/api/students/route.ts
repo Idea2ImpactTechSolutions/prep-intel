@@ -8,6 +8,8 @@ import bcrypt from "bcryptjs";
  * /api/students:
  *   post:
  *     summary: Creates a new student with email and password
+ *     tags:
+ *       - student
  *     requestBody:
  *       required: true
  *       content:

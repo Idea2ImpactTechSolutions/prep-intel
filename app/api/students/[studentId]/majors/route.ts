@@ -8,6 +8,8 @@ const { Students } = models;
  * /api/students/{studentId}/majors:
  *   get:
  *     summary: Retrieves a list of student major interests
+ *     tags:
+ *       - student
  *     parameters:
  *       - in: path
  *         name: studentId
@@ -70,11 +72,13 @@ export async function GET(
 }
 
 /**
- * @swagger
+ * @openapi
  * /api/students/{studentId}/majors:
  *   patch:
  *     summary: Update students record with list of majors
  *     description: Takes studentId and majors as params and updates "majors" field of students record.
+ *     tags:
+ *       - student
  *     parameters:
  *       - in: path
  *         name: studentId

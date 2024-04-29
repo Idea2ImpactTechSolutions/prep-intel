@@ -106,11 +106,14 @@ export async function GET(
 }
 
 /**
- * @swagger
+ * @openapi
  * /api/students/{studentId}/schools/connections:
  *   patch:
  *     summary: Update a connection request with a student's response
  *     description: Updates a connection request initiated by a recruiter
+ *     tags:
+ *       - student
+ *       - school
  *     requestBody:
  *      description: An object with a connection request ID and response
  *      content:

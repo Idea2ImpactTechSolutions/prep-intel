@@ -23,6 +23,8 @@ const RECRUITS_SCHOOLS_FIELDS = ['school_id', 'interested', 'school.name']
  *   get:
  *     summary: Find schools of interest by student ID
  *     description: Returns all schools a student has indicated interest in
+ *     tags:
+ *       - student
  *     responses:
  *       200:
  *         description: Schools found
@@ -91,11 +93,14 @@ export async function GET(
 }
 
 /**
- * @swagger
+ * @openapi
  * /api/students/{studentId}/schools:
  *   post:
  *     summary: Add new schools of interest by student ID
  *     description: Sets a student as a recruit for each school of interest
+ *     tags:
+ *       - student
+ *       - school
  *     requestBody:
  *       description: A list of schools a student is interested in
  *       content:
@@ -182,11 +187,14 @@ export async function POST(
 }
 
 /**
- * @swagger
+ * @openapi
  * /api/students/{studentId}/schools:
  *   patch:
  *     summary: Update a student's schools of interest
  *     description: Updates the list of schools a student is interested in
+ *     tags:
+ *       - student
+ *       - school
  *     requestBody:
  *       description: A list of schools a student is interested in
  *       required: true

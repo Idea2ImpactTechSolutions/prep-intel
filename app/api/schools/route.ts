@@ -11,6 +11,8 @@ import logger from "lib/logger";
  *   get:
  *     summary: Retrieve schools based on state parameters
  *     description: Returns a paginated list of schools filtered by the states provided as a comma-separated list in the query parameter 'states'.
+ *     tags:
+ *       - school
  *     parameters:
  *       - in: query
  *         name: states

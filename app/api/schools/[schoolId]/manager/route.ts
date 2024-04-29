@@ -9,6 +9,8 @@ import { type NextRequest } from "next/server";
  *   post:
  *     summary: Allow creation of school manager
  *     description: Create a new school manager with the provided details.
+ *     tags:
+ *       - school
  *     parameters:
  *       - in: path
  *         name: schoolId
