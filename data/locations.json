@@ -1,0 +1,251 @@
+{
+    "AL": {
+      "cityZipPairs": [
+        { "city": "Birmingham", "zip": "35201" },
+        { "city": "Montgomery", "zip": "36101" }
+      ]
+    },
+    "AK": {
+      "cityZipPairs": [
+        { "city": "Anchorage", "zip": "99501" },
+        { "city": "Fairbanks", "zip": "99701" }
+      ]
+    },
+    "AZ": {
+      "cityZipPairs": [
+        { "city": "Phoenix", "zip": "85001" },
+        { "city": "Tucson", "zip": "85701" }
+      ]
+    },
+    "AR": {
+      "cityZipPairs": [
+        { "city": "Little Rock", "zip": "72201" },
+        { "city": "Fayetteville", "zip": "72701" }
+      ]
+    },
+    "CA": {
+      "cityZipPairs": [
+        { "city": "Los Angeles", "zip": "90001" },
+        { "city": "San Francisco", "zip": "94102" },
+        { "city": "San Diego", "zip": "92101" },
+        { "city": "Sacramento", "zip": "95814" },
+        { "city": "Fresno", "zip": "93701" },
+        { "city": "San Jose", "zip": "95112" },
+        { "city": "Oakland", "zip": "94601" },
+        { "city": "Long Beach", "zip": "90802" },
+        { "city": "Santa Ana", "zip": "92701" },
+        { "city": "Bakersfield", "zip": "93301" }
+      ]
+    },
+    "CO": {
+      "cityZipPairs": [
+        { "city": "Denver", "zip": "80201" },
+        { "city": "Colorado Springs", "zip": "80901" }
+      ]
+    },
+    "CT": {
+      "cityZipPairs": [
+        { "city": "Hartford", "zip": "06101" },
+        { "city": "New Haven", "zip": "06501" }
+      ]
+    },
+    "DE": {
+      "cityZipPairs": [
+        { "city": "Wilmington", "zip": "19801" },
+        { "city": "Dover", "zip": "19901" }
+      ]
+    },
+    "FL": {
+      "cityZipPairs": [
+        { "city": "Miami", "zip": "33101" },
+        { "city": "Orlando", "zip": "32801" }
+      ]
+    },
+    "GA": {
+      "cityZipPairs": [
+        { "city": "Atlanta", "zip": "30301" },
+        { "city": "Savannah", "zip": "31401" }
+      ]
+    },
+    "HI": {
+      "cityZipPairs": [
+        { "city": "Honolulu", "zip": "96801" },
+        { "city": "Hilo", "zip": "96720" }
+      ]
+    },
+    "ID": {
+      "cityZipPairs": [
+        { "city": "Boise", "zip": "83701" },
+        { "city": "Idaho Falls", "zip": "83401" }
+      ]
+    },
+    "IL": {
+      "cityZipPairs": [
+        { "city": "Chicago", "zip": "60601" },
+        { "city": "Springfield", "zip": "62701" }
+      ]
+    },
+    "IN": {
+      "cityZipPairs": [
+        { "city": "Indianapolis", "zip": "46201" },
+        { "city": "Fort Wayne", "zip": "46801" }
+      ]
+    },
+    "IA": {
+      "cityZipPairs": [
+        { "city": "Des Moines", "zip": "50301" },
+        { "city": "Cedar Rapids", "zip": "52401" }
+      ]
+    },
+    "KS": {
+      "cityZipPairs": [
+        { "city": "Wichita", "zip": "67201" },
+        { "city": "Topeka", "zip": "66601" }
+      ]
+    },
+    "KY": {
+      "cityZipPairs": [
+        { "city": "Louisville", "zip": "40201" },
+        { "city": "Lexington", "zip": "40501" }
+      ]
+    },
+    "LA": {
+      "cityZipPairs": [
+        { "city": "New Orleans", "zip": "70101" },
+        { "city": "Baton Rouge", "zip": "70801" }
+      ]
+    },
+    "ME": {
+      "cityZipPairs": [
+        { "city": "Portland", "zip": "04101" },
+        { "city": "Bangor", "zip": "04401" }
+      ]
+    },
+    "MD": {
+      "cityZipPairs": [
+        { "city": "Baltimore", "zip": "21201" },
+        { "city": "Annapolis", "zip": "21401" }
+      ]
+    },
+    "MA": {
+      "cityZipPairs": [
+        { "city": "Boston", "zip": "02101" },
+        { "city": "Worcester", "zip": "01601" }
+      ]
+    },
+    "MI": {
+      "cityZipPairs": [
+        { "city": "Detroit", "zip": "48201" },
+        { "city": "Grand Rapids", "zip": "49501" }
+      ]
+    },
+    "MN": {
+      "cityZipPairs": [
+        { "city": "Minneapolis", "zip": "55401" },
+        { "city": "Saint Paul", "zip": "55101" }
+      ]
+    },
+    "MS": {
+      "cityZipPairs": [
+        { "city": "Jackson", "zip": "39201" },
+        { "city": "Gulfport", "zip": "39501" }
+      ]
+    },
+    "MO": {
+      "cityZipPairs": [
+        { "city": "Saint Louis", "zip": "63101" },
+        { "city": "Kansas City", "zip": "64101" }
+      ]
+    },
+    "MT": {
+      "cityZipPairs": [
+        { "city": "Billings", "zip": "59101" },
+        { "city": "Missoula", "zip": "59801" }
+      ]
+    },
+    "NE": {
+      "cityZipPairs": [
+        { "city": "Omaha", "zip": "68101" },
+        { "city": "Lincoln", "zip": "68501" }
+      ]
+    },
+    "NV": {
+      "cityZipPairs": [
+        { "city": "Las Vegas", "zip": "89101" },
+        { "city": "Reno", "zip": "89501" }
+      ]
+    },
+    "NH": {
+      "cityZipPairs": [
+        { "city": "Manchester", "zip": "03101" },
+        { "city": "Nashua", "zip": "03060" }
+      ]
+    },
+    "NJ": {
+      "cityZipPairs": [
+        { "city": "Newark", "zip": "07101" },
+        { "city": "Jersey City", "zip": "07301" }
+      ]
+    },
+    "NM": {
+      "cityZipPairs": [
+        { "city": "Albuquerque", "zip": "87101" },
+        { "city": "Santa Fe", "zip": "87501" }
+      ]
+    },
+    "NY": {
+      "cityZipPairs": [
+        { "city": "New York", "zip": "10001" },
+        { "city": "Buffalo", "zip": "14201" }
+      ]
+    },
+    "NC": {
+      "cityZipPairs": [
+        { "city": "Charlotte", "zip": "28201" },
+        { "city": "Raleigh", "zip": "27601" }
+      ]
+    },
+    "ND": {
+      "cityZipPairs": [
+        { "city": "Fargo", "zip": "58101" },
+        { "city": "Bismarck", "zip": "58501" }
+      ]
+    },
+    "OH": {
+      "cityZipPairs": [
+        { "city": "Columbus", "zip": "43201" },
+        { "city": "Cleveland", "zip": "44101" }
+      ]
+    },
+    "OK": {
+      "cityZipPairs": [
+        { "city": "Oklahoma City", "zip": "73101" },
+        { "city": "Tulsa", "zip": "74101" }
+      ]
+    },
+    "OR": {
+      "cityZipPairs": [
+        { "city": "Portland", "zip": "97201" },
+        { "city": "Eugene", "zip": "97401" }
+      ]
+    },
+    "PA": {
+      "cityZipPairs": [
+        { "city": "Philadelphia", "zip": "19101" },
+        { "city": "Pittsburgh", "zip": "15201" }
+      ]
+    },
+    "RI": {
+      "cityZipPairs": [
+        { "city": "Providence", "zip": "02901" },
+        { "city": "Newport", "zip": "02840" }
+      ]
+    },
+    "SC": {
+      "cityZipPairs": [
+        { "city": "Charleston", "zip": "29401" },
+        { "city": "Columbia", "zip": "29201" }
+      ]
+    }
+}
+    
