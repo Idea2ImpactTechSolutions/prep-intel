@@ -31,7 +31,13 @@ export const getApiDocs = async () => {
           },
         },
         schemas: {
-          School: {
+          "string-array": {
+            "type": "array",
+            "items": {
+              "type": "string",
+            }
+          },
+          "School": {
             type: "object",
             properties: {
               id: {
@@ -53,6 +59,90 @@ export const getApiDocs = async () => {
                 },
               },
             },
+          },
+          "Recruiter": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The unique identifier for the recruiter"
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the recruiter"
+              }
+            }
+          },
+          "student-recruit-response": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "studentId": {
+                  "type": "integer",
+                  "description": "Unique ID of a student"
+                },
+                "studentActScore": {
+                  "type": "integer",
+                  "description": "Student ACT score"
+                },
+                "studentSatScore": {
+                  "type": "integer",
+                  "description": "Student SAT score"
+                },
+                "studentGpa": {
+                  "type": "number",
+                  "description": "Student GPA"
+                },
+                "studentGradYear": {
+                  "type": "integer",
+                  "description": "Student expected graduation year"
+                },
+                "studentHighSchool": {
+                  "type": "string",
+                  "description": "Name of the high school student attends"
+                },
+                "connectionRequestId": {
+                  "type": "string",
+                  "description": "Unique ID of a connection request"
+                },
+                "connectionRequestStatus": {
+                  "type": "boolean",
+                  "description": "Connection request status"
+                },
+                "requestDate": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "Connection request date"
+                }
+              }
+            }
+          },
+
+          "student-connection-response": {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                id: {
+                  type: "integer",
+                  description: "Unique ID of a connection request"
+                },
+                schoolName: {
+                  type: "string",
+                  description: "School name"
+                },
+                recruiterName: {
+                  type: "string",
+                  description: "Name of recruiter who sent request"
+                },
+                requestDate: {
+                  type: "string",
+                  format: "date",
+                  description: "Connection request date"
+                }
+              }
+            }
           },
         },
       },

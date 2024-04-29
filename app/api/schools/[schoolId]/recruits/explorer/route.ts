@@ -4,15 +4,15 @@ import { responseBody } from "app/config/helpers";
 import { models } from "@/app/models";
 import { col, Op } from 'sequelize';
 
-const { 
-  ConnectionRequest, 
+const {
+  ConnectionRequest,
   Recruiters,
-  Recruits, 
-  School, 
-  Students, 
+  Recruits,
+  School,
+  Students,
 } = models;
 
-const GET_VALIDATION_SCHEMA = yup.object({    
+const GET_VALIDATION_SCHEMA = yup.object({
   sat_score: yup.number().notRequired(),
   act_score: yup.number().notRequired(),
   gpa: yup.number().notRequired(),
@@ -21,7 +21,7 @@ const GET_VALIDATION_SCHEMA = yup.object({
   })).notRequired()
 });
 
-const POST_VALIDATION_SCHEMA = yup.object({    
+const POST_VALIDATION_SCHEMA = yup.object({
     studentId: yup.number().required(),
     recruiterId: yup.number().required(),
     requestMessage: yup.string().notRequired()
@@ -43,51 +43,21 @@ const GET_FIELDS = [
  * @openapi
  * /api/schools/{schoolId}/recruits/explorer:
  *   get:
- *    summary: Find students to recruit
- *    description: Returns students
- *       responses:
- *            200:
- *             description: Students found
- *             content:
- *               application/json:
- *                 schema:
- *                   type: array
- *                     items:
- *                       type: object
- *                         properties:
- *                           studentId:
- *                              type: number
- *                              description: Unique ID of a student
- *                           studentActScore:
- *                              type: number
- *                              description: Student ACT score
- *                           studentSatScore:
- *                              type: number
- *                              description: Student SAT Score
- *                           studentGpa:
- *                              type: number
- *                              description: Student GPA
- *                           studentGradYear:
- *                              type: number
- *                              description: Student expected graduation year
- *                           studentHighSchool:
- *                              type: string
- *                              description: Name of high school student attends
- *                           connectionRequestId:
- *                              type: string
- *                              description: Unique ID of a connection request
- *                           connectionRequestStatus:
- *                              type: boolean
- *                              description: Connection request status
- *                           requestDate:
- *                              type: date
- *                              description: Connection request date
-*              400:
- *              description: Bad request
- *             404:
- *              description: Student not found
- *             500:
- *              description: Internal server error       
+ *     summary: Find students to recruit
+ *     description: Returns students
+ *     responses:
+ *       '200':
+ *         description: Students found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/student-recruit-response'
+ *       '400':
+ *         description: Bad request
+ *       '404':
+ *         description: Student not found
+ *       '500':
+ *         description: Internal server error
  */
 export async function GET(
     req: NextRequest,
@@ -112,10 +82,10 @@ export async function GET(
     }
 
     const whereConditions = prepareQueryFilters(
-      filters, 
+      filters,
       school
     );
-    
+
     const students: any = await Students.findAll({
       where: whereConditions,
       order: ['connectionRequestId'],
@@ -164,9 +134,7 @@ export async function GET(
  *      content:
  *        application/json:
  *          schema:
- *            type: array
- *              items: 
- *                type: string 
+ *            $ref: '#/components/schemas/string-array'
  *     responses:
  *       201:
  *        description: Created
@@ -192,20 +160,20 @@ export async function POST(
       if ( !school ) {
         return Response.json(responseBody("Not Found", 404), { status: 404 });
       }
-  
+
       const inputData = await req.json();
       if (Object.keys(inputData).length == 0) {
         return Response.json(responseBody("No Content", 204), { status: 200 });
       }
-  
+
       const validInputData = validateRequestBody(req.method, inputData);
       if ( !validInputData ) {
         return Response.json(responseBody("Bad Request", 400), { status: 400 });
       }
-  
+
       const student = await Students.findByPk(inputData.studentId);
       const recruiter = await Recruiters.findByPk(inputData.recruiterId);
-      
+
       if ( !student || !recruiter ) {
         return Response.json(responseBody("Not Found", 404), { status: 404 });
       }
@@ -297,7 +265,7 @@ function prepareQueryFilters(filters, school) {
 
 function validateRequestBody(method: string, testObject) {
   switch (method) {
-    case "GET": 
+    case "GET":
       return GET_VALIDATION_SCHEMA.isValidSync(testObject, { strict: true });
     case "POST":
       return POST_VALIDATION_SCHEMA.isValidSync(testObject, { strict: true });

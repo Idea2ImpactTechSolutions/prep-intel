@@ -3,22 +3,22 @@ import type { NextRequest } from "next/server";
 import { responseBody } from "app/config/helpers";
 import { models } from "@/app/models";
 import { fn, col } from 'sequelize';
-const { 
-  ConnectionRequest, 
-  Recruiters, 
-  Recruits, 
-  School, 
-  Students, 
-  Users 
+const {
+  ConnectionRequest,
+  Recruiters,
+  Recruits,
+  School,
+  Students,
+  Users
 } = models;
 
-const PATCH_VALIDATION_SCHEMA = yup.object({    
+const PATCH_VALIDATION_SCHEMA = yup.object({
   connectionReqId: yup.number().required(),
   connection_accepted: yup.boolean().required(),
 });
 
 const GET_FIELDS = [
-  'id', 
+  'id',
   [ col('school.name'), 'schoolName'],
   [ fn('CONCAT',
        col('recruiter->user.first_name'), ' ', col('recruiter->user.last_name')
@@ -31,34 +31,19 @@ const GET_FIELDS = [
  * @openapi
  * /api/students/{studentId}/schools/connections:
  *   get:
- *    summary: Find open connection requests
- *    description: Returns open connection requests sent to a student
- *       responses:
- *            200:
- *             description: Connection requests found
- *             content:
- *               application/json:
- *                 schema:
- *                   type: array
- *                     items:
- *                       type: object
- *                         properties:
- *                           id:
- *                             type: number
- *                             description: Unique ID of a connection request
- *                           schoolName:
- *                             type: string
- *                             description: School name
- *                           recruiterName:
- *                             type: string
- *                             description: Name of recruiter who sent request
- *                           requestDate:
- *                             type: date
- *                             description: Connection request date
- *             404:
- *              description: Student not found
- *             500:
- *              description: Internal server error       
+ *     summary: Find open connection requests
+ *     description: Returns open connection requests sent to a student
+ *     responses:
+ *       '200':
+ *         description: Connection requests found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/student-connection-response'
+ *       '404':
+ *         description: Student not found
+ *       '500':
+ *         description: Internal server error
  */
 export async function GET(
     req: Request,
@@ -73,7 +58,7 @@ export async function GET(
     if (userRole.role !== 'student') {
       return Response.json(responseBody("Not Found", 404), { status: 404 });
     }
-    
+
     const studentConnectionRequests: any = await ConnectionRequest.findAll({
       where: {
         student_id: params.studentId,
@@ -132,11 +117,11 @@ export async function GET(
  *        application/json:
  *          schema:
  *            type: object
- *              properties:
- *                id:
- *                  type: string
- *                response:
- *                  type: boolean
+ *            properties:
+ *              id:
+ *                type: string
+ *              response:
+ *                type: boolean
  *     responses:
  *       200:
  *         description: Connection request updated
@@ -196,7 +181,7 @@ export async function PATCH(
 }
 
 async function getUserRole(studentId) {
-  return await Students.findOne({ 
+  return await Students.findOne({
     where: {
       id: studentId,
     },
