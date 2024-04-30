@@ -24,6 +24,8 @@ module.exports = {
       "Swimming", "Knitting", "Singing", "Chess", "Drawing"
     ];
 
+    const pwd = bcrypt.hashSync('password');
+
     // Utility functions
     const getRandomItems = (array) => {
       const count = Math.floor(Math.random() * 5) + 1; // Between 1 and 5 items
@@ -45,7 +47,7 @@ module.exports = {
           first_name,
           last_name,
           email: `${first_name}.${last_name}@example.com`.toLowerCase(), // Example email format
-          password: bcrypt.hashSync('password'), // Replace with secure hashing
+          password: pwd,
           role: "student",
           account_claimed: true,
           date_claimed: faker.date.between({ from: '2024-01-01', to: '2024-04-29' }),
