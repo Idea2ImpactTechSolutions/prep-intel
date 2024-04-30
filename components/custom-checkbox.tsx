@@ -1,7 +1,5 @@
 "use client"
-
 import { cn } from "@/lib/utils"
-import { Checkbox } from "./ui/checkbox"
 import { LucideCheck } from "lucide-react"
 
 type CustomCheckboxType = {
@@ -30,8 +28,6 @@ export default function CustomCheckbox({ id, label, labelClass, hasBorder, icon,
             }}
         >
             <div className="flex-1 flex items-center space-x-2" >
-                {/* <Checkbox id={id} className={checkboxClass} disabled={disabled} checked={checked} /> */}
-                {/* <input type="checkbox" /> */}
                 <span className={cn(
                     "peer h-4 w-4 rounded-sm border border-primary grid place-content-center",
                     checked && "bg-primary"
