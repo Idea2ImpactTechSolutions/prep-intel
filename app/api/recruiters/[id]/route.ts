@@ -7,6 +7,8 @@ const { Users, Recruiters } = models;
  * /api/recruiters/{id}:
  *   get:
  *     summary: Get a recruiter by ID
+ *     tags:
+ *       - recruiter
  *     parameters:
  *       - in: path
  *         name: id
@@ -62,6 +64,8 @@ export async function GET(
  *   patch:
  *     summary: Update a recruiter's information
  *     description: Updates the information of the recruiter with the specified ID.
+ *     tags:
+ *       - recruiter
  *     parameters:
  *       - in: path
  *         name: id

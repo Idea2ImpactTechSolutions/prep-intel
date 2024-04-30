@@ -103,5 +103,24 @@
     "printWidth": 80,
     "tabWidth": 2,
     "useTabs": false
+  },
+  "cspell": {
+    "version": "0.2",
+    "ignorePaths": [
+      "package.json"
+    ],
+    "dictionaryDefinitions": [
+      {
+        "name": "custom-dictionary",
+        "path": "./.cspell/custom-dictionary.txt",
+        "addWords": true
+      }
+    ],
+    "dictionaries": [
+      "custom-dictionary"
+    ],
+    "words": [],
+    "ignoreWords": [],
+    "import": []
   }
 }

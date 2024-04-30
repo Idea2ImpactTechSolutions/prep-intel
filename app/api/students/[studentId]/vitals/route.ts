@@ -18,11 +18,13 @@ const VITALS_FIELDS = [
 const VITALS_FIELDS_FROM_USERS = ["user.first_name", "user.last_name"];
 
 /**
- * @swagger
+ * @openapi
  * /api/students/{studentId}/vitals:
  *   get:
  *     summary: Retrieve student vitals information
  *     description: Fetches the vital information of a student by their ID.
+ *     tags:
+ *       - student
  *     parameters:
  *       - in: path
  *         name: studentId
@@ -72,11 +74,13 @@ export async function GET(
 }
 
 /**
- * @swagger
+ * @openapi
  * /api/students/{studentId}/vitals:
  *   post:
  *     summary: Updates student vitals
  *     description: Takes form field values posted in the body and updates them in the database.
+ *     tags:
+ *       - student
  *     parameters:
  *       - in: path
  *         name: studentId

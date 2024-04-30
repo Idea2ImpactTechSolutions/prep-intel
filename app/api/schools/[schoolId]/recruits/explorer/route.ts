@@ -45,6 +45,9 @@ const GET_FIELDS = [
  *   get:
  *     summary: Find students to recruit
  *     description: Returns students
+ *     tags:
+ *       - school
+ *       - recruit
  *     responses:
  *       '200':
  *         description: Students found
@@ -124,11 +127,14 @@ export async function GET(
 }
 
 /**
- * @swagger
+ * @openapi
  * /api/schools/{schoolId}/recruits/explorer:
  *   post:
  *     summary: Add new connection requests
  *     description: Creates a new connection request
+ *     tags:
+ *       - school
+ *       - recruit
  *     requestBody:
  *      description: An list of schools a student wants to connect with
  *      content:
