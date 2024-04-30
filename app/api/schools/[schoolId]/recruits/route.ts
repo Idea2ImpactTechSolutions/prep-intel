@@ -23,7 +23,9 @@ const USERS_MODEL_AND_ATTRIBUTES = {
  * /api/schools/{schoolId}/recruits:
  *   get:
  *     summary: Retrieves a list of recruits for the given school
- *     description: ""
+ *     tags:
+ *       - school
+ *       - recruit
  *     parameters:
  *       - in: path
  *         name: schoolId

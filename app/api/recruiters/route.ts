@@ -7,6 +7,8 @@ const { School, Recruiters, Users } = models;
  * /api/recruiters:
  *   get:
  *       summary: Retrieves a list of recruiters or a specific recruiter by ID
+ *       tags:
+ *           - recruiter
  *       responses:
  *           '200':
  *               content:
@@ -23,11 +25,13 @@ export async function GET() {
 }
 
 /**
- * @swagger
+ * @openapi
  * /api/recruiters:
  *   post:
  *     description: Returns the hello world
  *     summary: Creates a new recruiter
+ *     tags:
+ *       - recruiter
  *     responses:
  *       200:
  *         description:
