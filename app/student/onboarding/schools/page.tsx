@@ -4,7 +4,7 @@ import CustomCheckbox from "@/components/custom-checkbox";
 import SectionContainer from "@/components/section-container";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { POPULAR_UNIVERSITIES, UNIVERSITIES_NEAR_BY } from "../data";
 import OnboardingTabs from "../../_components/onboarding-tabs";
 import OnboardingTitle from "../../_components/onboarding-title";
@@ -16,7 +16,7 @@ import useDelayedFunction from "@/utils/hooks/useDelayedFunction";
 import { Dictionary } from "@/types/dictionary";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
-import { useAddStudentSchoolsMutation } from "@/redux/services/student/studentApi";
+import { useAddStudentSchoolsMutation, useLazyGetStudentSchoolsQuery } from "@/redux/services/student/studentApi";
 import LoadingSpinner from "@/components/loading-spinner";
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
@@ -32,7 +32,24 @@ export default function SchoolPage() {
 
     const [getMatchingSchools, { isLoading, isFetching }] = useLazyGetSchoolsQuery();
     const [addStudentSchools, { isLoading: isAddingStudentSchool }] = useAddStudentSchoolsMutation()
+    const [getStudentSchools, { isLoading: isGettingStudentSchool, isFetching: isFetchingStudentSchool }] = useLazyGetStudentSchoolsQuery()
 
+    // fetch student interested schools
+    const handleGetStudentSchools = async (studentId) => {
+        getStudentSchools(studentId)
+          .unwrap()
+          .then(data => {
+              const default_schools = data.data.map((school) => {
+                return {
+                    ...school,
+                    selected: true
+                }
+            })
+            setSelectedSchools([...selectedSchools, ...default_schools])
+          })
+      }
+
+    // submit student school of interest
     const handleSubmitSchool = async () => {
         if (selectedSchools.length === 0) {
             toast.error("Please select a school")
@@ -47,6 +64,7 @@ export default function SchoolPage() {
             })
     }
 
+    // handle school change
     const handleSelectSchool = useCallback((school) => {
         const index = selectedSchools.findIndex((s) => s.id === school.id);
         if (index === -1) {
@@ -59,6 +77,7 @@ export default function SchoolPage() {
         }
     }, [selectedSchools]);
 
+    // search for interested schools
     const handleGetMatchingSchools = async (matchText) => {
         setSchools([])
         await getMatchingSchools(matchText)
@@ -69,6 +88,7 @@ export default function SchoolPage() {
             })
     }
 
+    // set a delay for the search
     function handleOnChange(e) {
 
         const matchText = e.target.value;
@@ -79,6 +99,16 @@ export default function SchoolPage() {
         }
         delayedFunction(() => handleGetMatchingSchools(matchText))
     }
+
+    useEffect(() => {
+        if (studentId) {
+          handleGetStudentSchools(studentId)
+        }
+      }, [studentId])
+    
+      if (isGettingStudentSchool || isFetchingStudentSchool) {
+        return <LoadingSpinner/>
+      }
 
     return (
         <>
