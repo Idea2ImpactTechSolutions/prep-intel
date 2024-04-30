@@ -3,17 +3,19 @@ import { getToken } from "next-auth/jwt";
 
 export async function middleware(req) {
   const path = req.nextUrl.pathname;
-
-  // Redirect to login if there is no session and the request is for a protected route
   const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  if (
-    !session &&
-    path !== "/" &&
-    path !== "/register" &&
-    !path.startsWith("/api/auth")
-  ) {
-    const formUrl =
-      process.env.NEXTAUTH_FORM === "default" ? "/api/auth/signin" : "/login";
+  const invalidSession = !session;
+
+  // Allowed Anonymous access
+  const allowedPaths = ["/", "/register"]
+  const isAllowedPath = allowedPaths.includes(path);
+  const isRegisterPost = path === "/api/students" && req.method === "POST";
+  const isAuthRequest = path.startsWith("/api/auth")
+
+  // Redirect to login if there is no session and the request is not to an anonymous endpoint
+  if (invalidSession && !isAllowedPath && !isRegisterPost && !isAuthRequest) {
+    const formUrl = process.env.NEXTAUTH_FORM === "default" ? "/api/auth/signin" : "/login";
+
     return NextResponse.redirect(
       new URL(`${formUrl}?callbackUrl=${req.url}`, req.url)
     );
