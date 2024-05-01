@@ -35,7 +35,10 @@ const GET_FIELDS = [
   [ 'graduation_year', 'studentGradYear' ],
   [ 'high_school', 'studentHighSchool' ],
   [ col('connection_requests.id'), 'connectionRequestId' ],
-  [ col('connection_requests.connection_accepted'), 'connectionRequestAccepted' ],
+  [ 
+    col('connection_requests.connection_accepted'), 
+    'connectionRequestAccepted' 
+  ],
   [ col('connection_requests.create_date'), 'requestData' ]
 ];
 
@@ -246,6 +249,7 @@ function getFilters(searchParams) {
     };
     const ignoreList = ['page', 'pageSize'];
     let filters : object = {};
+
     for (const [key, value] of searchParams.entries()) {
       if ( value !== null) {
         if (ignoreList.includes(key)) {
@@ -290,7 +294,9 @@ function prepareQueryFilters(filters, school) {
       schoolMins,
       {
         [Op.not]: { '$connection_requests.id$': null },
-        '$connection_requests.connection_accepted$' : { [Op.or]: [null, false] }
+        '$connection_requests.connection_accepted$' : { 
+          [Op.or]: [null, false] 
+        }
       }
     ]
   };
