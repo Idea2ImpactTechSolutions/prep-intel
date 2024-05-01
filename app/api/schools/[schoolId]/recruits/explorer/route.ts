@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 import type { NextRequest } from "next/server";
-import { responseBody } from "app/config/helpers";
+import { apiResponse } from "app/config/helpers";
 import { models } from "@/app/models";
 import { col, Op } from 'sequelize';
 
@@ -35,7 +35,10 @@ const GET_FIELDS = [
   [ 'graduation_year', 'studentGradYear' ],
   [ 'high_school', 'studentHighSchool' ],
   [ col('connection_requests.id'), 'connectionRequestId' ],
-  [ col('connection_requests.connection_accepted'), 'connectionRequestAccepted' ],
+  [
+    col('connection_requests.connection_accepted'),
+    'connectionRequestAccepted'
+  ],
   [ col('connection_requests.create_date'), 'requestData' ]
 ];
 
@@ -43,11 +46,51 @@ const GET_FIELDS = [
  * @openapi
  * /api/schools/{schoolId}/recruits/explorer:
  *   get:
- *     summary: Find students to recruit
- *     description: Returns students
+ *     summary: Find students to recruit based on filters
+ *     description: |
+ *         Returns students based on filters such as GPA, ACT score, SAT score, and state.
+ *         If no filters are provided, default filters based on the school's minimum requirements
+ *         are applied. Filters for GPA, ACT, and SAT scores return students with scores greater
+ *         than or equal to the provided values. The state filter supports a comma-separated list
+ *         of state abbreviations.
  *     tags:
  *       - school
  *       - recruit
+ *     parameters:
+ *       - in: path
+ *         name: schoolId
+ *         required: true
+ *         description: Unique identifier of the school
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: page
+ *         description: The page to fetch
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: minGpa
+ *         description: Minimum GPA of students to filter
+ *         schema:
+ *           type: number
+ *           format: float
+ *       - in: query
+ *         name: minAct
+ *         description: Minimum ACT score of students to filter
+ *         schema:
+ *           type: number
+ *           format: float
+ *       - in: query
+ *         name: minSat
+ *         description: Minimum SAT score of students to filter
+ *         schema:
+ *           type: number
+ *           format: float
+ *       - in: query
+ *         name: states
+ *         description: Comma-separated list of state abbreviations to filter students by location
+ *         schema:
+ *           type: string
  *     responses:
  *       '200':
  *         description: Students found
@@ -56,9 +99,9 @@ const GET_FIELDS = [
  *             schema:
  *               $ref: '#/components/schemas/student-recruit-response'
  *       '400':
- *         description: Bad request
+ *         description: Bad request due to invalid request parameters
  *       '404':
- *         description: Student not found
+ *         description: School not found
  *       '500':
  *         description: Internal server error
  */
@@ -71,7 +114,7 @@ export async function GET(
     const school = await School.findByPk(params.schoolId)
 
     if (!school) {
-      return Response.json(responseBody("Not Found", 404), { status: 404 });
+      return apiResponse("Not Found", 404);
     }
 
     const searchParams = req.nextUrl.searchParams
@@ -80,7 +123,7 @@ export async function GET(
     if (filters) {
       const validFilters = validateRequestBody(req.method, filters);
       if ( !validFilters ) {
-        return Response.json(responseBody("Bad Request", 400), { status: 400 });
+        return apiResponse("Bad Request", 400);
       }
     }
 
@@ -89,8 +132,15 @@ export async function GET(
       school
     );
 
-    const students: any = await Students.findAll({
+    // Pagination parameters
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const limit = parseInt(searchParams.get("pageSize") || "10", 10);
+    const offset = (page - 1) * limit;
+
+    const {count, rows} : any = await Students.findAndCountAll({
       where: whereConditions,
+      limit: limit,
+      offset: offset,
       order: ['connectionRequestId'],
       attributes: GET_FIELDS,
       include: [
@@ -103,26 +153,25 @@ export async function GET(
           required: false
         },
       ],
+      subQuery: false,
       raw: true
     });
 
-    return Response.json(
-      responseBody(
-        "Students retrieved successfully",
-        200,
-        students
-      ),
+    const totalItems = count;
+    const totalPages = Math.ceil(totalItems / limit);
+
+    return apiResponse(
+      "Students retrieved successfully",
+      200,
       {
-        status: 200,
-      }
-    );
+        students: rows,
+        totalItems,
+        totalPages,
+        currentPage: page,
+        pageSize: limit
+      });
   } catch (error: any) {
-    return Response.json(
-      responseBody("Internal Server Error", 500, { error: error.message }),
-      {
-        status: 500,
-      }
-    );
+    return apiResponse("Internal Server Error", 500, { error: error.message });
   }
 }
 
@@ -164,24 +213,24 @@ export async function POST(
       const school = await School.findByPk(params.schoolId);
 
       if ( !school ) {
-        return Response.json(responseBody("Not Found", 404), { status: 404 });
+        return apiResponse("Not Found", 404);
       }
 
       const inputData = await req.json();
       if (Object.keys(inputData).length == 0) {
-        return Response.json(responseBody("No Content", 204), { status: 200 });
+        return apiResponse("No Content", 204);
       }
 
       const validInputData = validateRequestBody(req.method, inputData);
       if ( !validInputData ) {
-        return Response.json(responseBody("Bad Request", 400), { status: 400 });
+        return apiResponse("Bad Request", 400);
       }
 
       const student = await Students.findByPk(inputData.studentId);
       const recruiter = await Recruiters.findByPk(inputData.recruiterId);
 
       if ( !student || !recruiter ) {
-        return Response.json(responseBody("Not Found", 404), { status: 404 });
+        return apiResponse("Not Found", 404);
       }
 
       const whereConditions = {
@@ -194,7 +243,7 @@ export async function POST(
         where: whereConditions
       });
       if (existingRecruit) {
-        return Response.json(responseBody("Conflict", 409), { status: 409 });
+        return apiResponse("Conflict", 409);
       }
 
       // Create
@@ -208,15 +257,10 @@ export async function POST(
         });
       }
       // Report
-      return Response.json(responseBody("Created", 201), { status: 201 });
+      return apiResponse("Created", 201);
     } catch (error: any) {
       // Report
-      return Response.json(
-        responseBody("Internal Server Error", 500, { error: error.message }),
-        {
-          status: 500,
-        }
-      );
+      return apiResponse("Internal Server Error", 500, { error: error.message });
     }
   }
 
@@ -228,15 +272,23 @@ function getFilters(searchParams) {
       'minSat': 'sat_score',
       'states': 'state'
     };
+    const ignoreList = ['page', 'pageSize'];
     let filters : object = {};
+
     for (const [key, value] of searchParams.entries()) {
       if ( value !== null) {
-        if (key !== 'states') {
+        if (ignoreList.includes(key)) {
+          continue;
+        }
+        else if (key !== 'states') {
           filters[searchParamsMappings[key]] = Number(value);
         } else {
           filters[searchParamsMappings[key]] = value.toUpperCase().split(",");
         }
       }
+    }
+    if (Object.keys(filters).length === 0) {
+      return false;
     }
     return filters;
   }
@@ -244,28 +296,35 @@ function getFilters(searchParams) {
 }
 
 function prepareQueryFilters(filters, school) {
-  let filterConditions: object = {};
+  let schoolMins: object = {};
 
   if ( filters ) {
     Object.entries(filters).forEach(([key, value]) => {
       if (key !== 'state') {
-        filterConditions[key] = { [Op.gte]: value }
+        schoolMins[key] = { [Op.gte]: value }
       } else {
-        filterConditions[key] = value;
+        schoolMins[key] = value;
       }
     });
   } else {
-    filterConditions = {
+    schoolMins = {
       sat_score: { [Op.gte]: school.min_sat_score },
       act_score: { [Op.gte]: school.min_act_score },
       gpa: { [Op.gte]: school.gpa_requirement },
     };
   }
 
-  Object.assign(filterConditions, {
-    '$connection_requests.connection_accepted$' : { [Op.or]: [null, false] }
-  });
-
+  const filterConditions: object = {
+    [Op.or]: [
+      schoolMins,
+      {
+        [Op.not]: { '$connection_requests.id$': null },
+        '$connection_requests.connection_accepted$' : {
+          [Op.or]: [null, false]
+        }
+      }
+    ]
+  };
   return filterConditions;
 }
 
