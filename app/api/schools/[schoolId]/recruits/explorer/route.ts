@@ -35,7 +35,10 @@ const GET_FIELDS = [
   [ 'graduation_year', 'studentGradYear' ],
   [ 'high_school', 'studentHighSchool' ],
   [ col('connection_requests.id'), 'connectionRequestId' ],
-  [ col('connection_requests.connection_accepted'), 'connectionRequestAccepted' ],
+  [ 
+    col('connection_requests.connection_accepted'), 
+    'connectionRequestAccepted' 
+  ],
   [ col('connection_requests.create_date'), 'requestData' ]
 ];
 
@@ -89,8 +92,14 @@ export async function GET(
       school
     );
 
-    const students: any = await Students.findAll({
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const limit = parseInt(searchParams.get("pageSize") || "10", 10);
+    const offset = (page - 1) * limit;
+
+    const {count, rows} : any = await Students.findAndCountAll({
       where: whereConditions,
+      limit: limit,
+      offset: offset,
       order: ['connectionRequestId'],
       attributes: GET_FIELDS,
       include: [
@@ -103,14 +112,24 @@ export async function GET(
           required: false
         },
       ],
+      subQuery: false,
       raw: true
     });
+
+    const totalItems = count;
+    const totalPages = Math.ceil(totalItems / limit);
 
     return Response.json(
       responseBody(
         "Students retrieved successfully",
         200,
-        students
+        {
+          students: rows,
+          totalItems,
+          totalPages,
+          currentPage: page,
+          pageSize: limit
+        }
       ),
       {
         status: 200,
@@ -228,15 +247,23 @@ function getFilters(searchParams) {
       'minSat': 'sat_score',
       'states': 'state'
     };
+    const ignoreList = ['page', 'pageSize'];
     let filters : object = {};
+
     for (const [key, value] of searchParams.entries()) {
       if ( value !== null) {
-        if (key !== 'states') {
+        if (ignoreList.includes(key)) {
+          continue;
+        }
+        else if (key !== 'states') {
           filters[searchParamsMappings[key]] = Number(value);
         } else {
           filters[searchParamsMappings[key]] = value.toUpperCase().split(",");
         }
       }
+    }
+    if (Object.keys(filters).length === 0) {
+      return false;
     }
     return filters;
   }
@@ -244,28 +271,35 @@ function getFilters(searchParams) {
 }
 
 function prepareQueryFilters(filters, school) {
-  let filterConditions: object = {};
+  let schoolMins: object = {};
 
   if ( filters ) {
     Object.entries(filters).forEach(([key, value]) => {
       if (key !== 'state') {
-        filterConditions[key] = { [Op.gte]: value }
+        schoolMins[key] = { [Op.gte]: value }
       } else {
-        filterConditions[key] = value;
+        schoolMins[key] = value;
       }
     });
   } else {
-    filterConditions = {
+    schoolMins = {
       sat_score: { [Op.gte]: school.min_sat_score },
       act_score: { [Op.gte]: school.min_act_score },
       gpa: { [Op.gte]: school.gpa_requirement },
     };
   }
 
-  Object.assign(filterConditions, {
-    '$connection_requests.connection_accepted$' : { [Op.or]: [null, false] }
-  });
-
+  const filterConditions: object = {
+    [Op.or]: [
+      schoolMins,
+      {
+        [Op.not]: { '$connection_requests.id$': null },
+        '$connection_requests.connection_accepted$' : { 
+          [Op.or]: [null, false] 
+        }
+      }
+    ]
+  };
   return filterConditions;
 }
 
