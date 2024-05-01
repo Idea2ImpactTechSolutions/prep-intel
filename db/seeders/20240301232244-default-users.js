@@ -1,5 +1,8 @@
 'use strict';
+const { password } = require("../../app/config/config");
 const { models } = require("../../app/models");
+const bcrypt = require('bcryptjs');
+
 const { School, Managers, Users } = models;
 const DEFAULT_SCHOOL = 7001;
 
@@ -33,6 +36,7 @@ module.exports = {
                 last_name: user.lastName,
                 school_id: user.schoolId,
                 role: 'admin',
+                password: bcrypt.hashSync('password'),
                 auth_code: user.auth_code,
                 account_claimed: true,
                 is_active: true,

@@ -26,20 +26,15 @@ const Recruits = sequelize.define(
         criteria: {
             type: DataTypes.TEXT,
         },
-        connection_initiator: {
-            type: DataTypes.TEXT,
+        contacted: {
+            type: DataTypes.BOOLEAN
         },
-        connection_date: {
-            type: DataTypes.DATE,
+        interested: {
+            type: DataTypes.BOOLEAN
         },
         create_date: {
             type: DataTypes.DATE,
-        },
-        contacted: {
-            type: DataTypes.BOOLEAN,
-        },
-        interested: {
-            type: DataTypes.BOOLEAN,
+            defaultValue: DataTypes.NOW
         },
         application_date: {
             type: DataTypes.DATE,
@@ -54,11 +49,23 @@ const Recruits = sequelize.define(
             type: DataTypes.BOOLEAN,
         },
         is_viewable: {
-            type: DataTypes.BOOLEAN,
-        },
+            type: DataTypes.BOOLEAN
+        }
     },
     {
-        timestamps: false,
+        timestamps: true,
+        createdAt: 'create_date',
+        updatedAt: false,
+        indexes: [
+            {
+                unique: true,
+                fields: [
+                    'school_id',
+                    'student_id',
+                    'recruiter_id'
+                ]
+            }
+        ]
     }
 );
 

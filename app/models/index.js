@@ -18,7 +18,9 @@ const Assets = require("./Assets");
 const Students = require("./Students");
 const HD2021 = require("./HD2021");
 const StudentDepartmentInterest = require("./StudentDepartmentInterest");
-const Department = require("./Department")
+const Department = require("./Department");
+const ConnectionRequest = require("./ConnectionRequest");
+
 const models = {
   SchoolDepartment,
   School,
@@ -39,9 +41,38 @@ const models = {
   SchoolSocialMedia,
   HD2021,
   StudentDepartmentInterest,
-  Department
+  Department,
+  ConnectionRequest
 };
 
+// references: {   model: Recruiters, key: "id" }
+ConnectionRequest.belongsTo(Recruiters, {
+  foreignKey: 'recruiter_id',
+  constraints: false
+});
+
+// references: {   model: Students,   key: "id"
+ConnectionRequest.belongsTo(Students, {
+  foreignKey: 'student_id',
+  constraints: false
+});
+
+// references: {   model: School,     key: "id" }
+ConnectionRequest.belongsTo(School, {
+  foreignKey: 'school_id',
+  constraints: false
+});
+
+// Students.hasMany(Recruits, { foreignKey: "student_id", as: "recruits" })
+// Students.hasMany(Applicants, { foreignKey: "student_id", as: "applicants" })
+
+Students.belongsTo(Users, {
+  foreignKey: 'user_id', // This should match the foreignKey in the hasOne association
+});
+
+Students.hasMany(ConnectionRequest, {
+  foreignKey: 'student_id',
+});
 
 StudentDepartmentInterest.belongsTo(Department, {
   foreignKey: 'department_id',

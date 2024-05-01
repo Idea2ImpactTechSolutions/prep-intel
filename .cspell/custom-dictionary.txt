@@ -1,0 +1,16 @@
+# Custom Dictionary Words
+accreditations
+clsx
+CURRICULARS
+extracurriculars
+formik
+iclevel
+ipeds
+lucide
+openapi
+persistor
+pypeds
+sequelize
+siteadmin
+sonner
+unitid

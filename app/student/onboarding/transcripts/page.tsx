@@ -94,6 +94,7 @@ export default function TranscriptsPage() {
           }).then(() => {
             setShowConfirmationModal(false)
             toast.success('Account Created')
+            router.push('/student/explore')
           })
         }}
       />

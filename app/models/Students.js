@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("./sequelize");
-const Users = require("./Users");
 
 const Students = sequelize.define(
     "students",
@@ -70,13 +69,5 @@ const Students = sequelize.define(
         timestamps: false,
     }
 );
-
-// Students.hasMany(Recruits, { foreignKey: "student_id", as: "recruits" })
-// Students.hasMany(Applicants, { foreignKey: "student_id", as: "applicants" })
-
-Students.belongsTo(Users, {
-    foreignKey: 'user_id', // This should match the foreignKey in the hasOne association
-});
-
 
 module.exports = Students;

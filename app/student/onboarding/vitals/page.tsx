@@ -15,7 +15,9 @@ import * as yup from "yup";
 import OnboardingTabs from "../../_components/onboarding-tabs";
 import OnboardingTitle from "../../_components/onboarding-title";
 import LoadingSpinner from "@/components/loading-spinner";
+import { STATE_CITY_DATA } from "@/utils/data";
 import { toast } from "sonner";
+import CustomSelect from "@/components/custom-select";
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
 export default function VitalsPage() {
@@ -49,12 +51,12 @@ export default function VitalsPage() {
   }
 
   const handleFormSubmit = async (values) => {
-    addStudentVitals({data: {...values}, studentId: studentId})
-    .unwrap()
-    .then(data => {
-      toast.success(data.message)
-      router.push("/student/onboarding/schools")
-    })
+    addStudentVitals({ data: { ...values }, studentId: studentId })
+      .unwrap()
+      .then(data => {
+        toast.success(data.message)
+        router.push("/student/onboarding/schools")
+      })
   }
 
   const router = useRouter()
@@ -81,7 +83,7 @@ export default function VitalsPage() {
   }, [studentId])
 
   if (isLoading || isFetching) {
-    return <LoadingSpinner/>
+    return <LoadingSpinner />
   }
 
   return (
@@ -145,10 +147,10 @@ export default function VitalsPage() {
                       name="expected_graduation_year"
                       value={values.expected_graduation_year}
                       onChange={(e) => {
-                        if (!isNaN(Number(e.target.value))){
-                            setFieldValue('expected_graduation_year', e.target.value)
+                        if (!isNaN(Number(e.target.value))) {
+                          setFieldValue('expected_graduation_year', e.target.value)
                         }
-                    }}
+                      }}
                       touched={touched.expected_graduation_year}
                       error={errors.expected_graduation_year}
                       labelClass="mt-3"
@@ -164,16 +166,22 @@ export default function VitalsPage() {
                       error={errors.city}
                       labelClass="mt-3"
                     />
-                    <Input
+                    <CustomSelect
                       label="State"
-                      className="rounded-lg p-[1.4rem] placeholder:text-[#AAAAAA]"
-                      placeholder="Enter your state"
+                      labelClass="mt-3 text-xs font-normal text-[#61646B]"
                       name="state"
-                      value={values.state}
-                      onChange={handleChange}
-                      touched={touched.state}
-                      error={errors.state}
-                      labelClass="mt-3"
+                      touched={touched?.state}
+                      error={errors?.state}
+                      options={
+                        STATE_CITY_DATA.map((state) => (
+                          {
+                            label: state.name,
+                            value: state.name,
+                          }
+                        ))
+                      }
+                      selected={values?.state}
+                      setSelected={(selected) => setFieldValue('state', selected)}
                     />
                   </div>
                   <div className="mt-3">

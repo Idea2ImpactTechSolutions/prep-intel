@@ -6,9 +6,10 @@ import { LuCopy, LuCopyCheck } from "react-icons/lu";
 
 interface PageProps {
   claimUrl: string
+  className?: string
 }
 
-export default function InviteLink({ claimUrl }: PageProps) {
+export default function InviteLink({ claimUrl, className }: PageProps) {
   const [isCopied, setIsCopied] = useState(false);
 
   function copyToClipboard() {
@@ -20,7 +21,8 @@ export default function InviteLink({ claimUrl }: PageProps) {
     <div className={cn(
       "hidden",
       "mt-6",
-      claimUrl && "block")}>
+      claimUrl && "block",
+      className)}>
       <h3 className="text-xl font-bold">Invite Sent</h3>
 
       <pre className="max-h-[650px] w-[800px] overflow-x-auto rounded-lg border bg-zinc-400 text-zinc-50 py-4 pl-4">

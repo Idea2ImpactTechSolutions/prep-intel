@@ -1,18 +1,5 @@
 {
-  "cSpell.words": [
-    "accreditations",
-    "clsx",
-    "CURRICULARS",
-    "formik",
-    "iclevel",
-    "ipeds",
-    "lucide",
-    "siteadmin",
-    "unitid"
-    "pypeds",
-    "sequelize",
-    "sonner"
-],
+"editor.tabSize": 2,
 "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
 "editor.formatOnType": false, // required
 "editor.formatOnPaste": false, // optional

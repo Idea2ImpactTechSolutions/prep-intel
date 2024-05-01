@@ -26,12 +26,15 @@ module.exports = {
     "@typescript-eslint/no-unused-vars": ['error', { "args": "none" }], // { argsIgnorePattern: '^_' } -Enable the TypeScript-specific rule
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-var-requires": "off",
+    "prep-lint/lint-openapi": "error",
     "prefer-const": "off", // "warn"
+
   },
   plugins: [
     "@typescript-eslint",
     "jest",
     "react",
     "promise",
+    "prep-lint",
   ],
 };

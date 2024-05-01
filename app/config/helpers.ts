@@ -24,3 +24,17 @@ export function getBaseUrl(req: NextApiRequest) {
   const protocol = host?.includes('localhost') ? 'http' : 'https';
   return `${protocol}://${host}`;
 }
+
+// Implements a convention based apiResponse with a message, status, and data object
+export function apiResponse(
+  message: string,
+  status: number,
+  data: object = {} // TODO: determine if null or empty is preferred
+) {
+  return Response.json(
+    { status, message, data },
+    {
+      status,
+    }
+  );
+}

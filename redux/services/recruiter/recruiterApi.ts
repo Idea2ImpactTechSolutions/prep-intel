@@ -8,11 +8,18 @@ const recruiterApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    exploreRecruits: builder.query({
+      query: ({schoolId, minGpa, minAct, minSat, states, page}) => ({
+        url: `/schools/${schoolId}/recruits/explorer?states=${states}&page=${page}&minGpa=${minGpa}&minAct=${minAct}&minSat=${minSat}`,
+        method: "GET",
+      }),
+    }),
     getRecruiter: builder.query({
       query: ({id}) => ({
         url: `/recruiters/${id}/`,
         method: "GET",
       }),
+      providesTags:['RECRUITER_INFO']
     }),
     setTerritories: builder.mutation({
       query: function(payload){
@@ -36,6 +43,25 @@ const recruiterApi = baseApi.injectEndpoints({
         method: "POST",
       }),
       invalidatesTags:["STUDENT"]
+    }),
+    updateRecruiterPersonalInfo: builder.mutation({
+      query: function(payload){
+        const { id } = payload;
+        return {
+          url: `/recruiters/${id}` ,
+          method: "PATCH",
+          body: payload,
+        };
+      },
+      invalidatesTags:["RECRUITER_INFO"]
+    }),
+    uploadRecruiterProfileImage: builder.mutation({
+      query: (profile_img) => ({
+        url: `/recruiter/profile/upload-image`,
+        method: "POST",
+        body: profile_img,
+        formData: true,
+      }),
     })
   }),
 });
@@ -44,6 +70,10 @@ export const {
   useGetRecruitsQuery,
   useSetTerritoriesMutation,
   useLazyGetRecruiterQuery,
+  useGetRecruiterQuery,
   useGetStudentProfileQuery,
-  useSendMessageMutation
+  useUploadRecruiterProfileImageMutation,
+  useSendMessageMutation,
+  useLazyExploreRecruitsQuery,
+  useUpdateRecruiterPersonalInfoMutation
 } = recruiterApi;

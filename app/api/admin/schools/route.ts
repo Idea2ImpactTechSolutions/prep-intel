@@ -1,6 +1,6 @@
 import { models } from "app/models";
 const { School } = models;
-import { responseBody } from "app/config/helpers";
+import { apiResponse } from "app/config/helpers";
 const { Op } = require("sequelize");
 import logger from 'lib/logger';
 
@@ -10,6 +10,8 @@ import logger from 'lib/logger';
  *   get:
  *     summary: Search for schools
  *     description: Returns a list of schools that match the search query.
+ *     tags:
+ *       - school
  *     parameters:
  *       - in: query
  *         name: q
@@ -100,19 +102,13 @@ export async function GET(req: Request) {
     }
 
     // Respond
-    return Response.json(
-      responseBody("schools data returned successfully", 200, schools)
-    );
+    return apiResponse("schools data returned successfully", 200, schools)
   } catch (error: any) {
     logger.error(error);
-    
+
     // Report
-    return Response.json(
-      {
-        status: 500,
-        error: error.message, //error: 'Internal Server Error'
-      },
-      { status: 500 }
-    );
+    // TODO: determine which of these two styles is preferred and implement consistently
+    // return apiResponse("Internal Server Error", 500, {error: error.message});
+    return apiResponse(error.message, 500);
   }
 }

@@ -1,17 +1,22 @@
 "use client"
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { useFormik } from "formik";
+import { AlertCircle, EyeIcon, EyeOffIcon } from "lucide-react";
+import { signIn, useSession } from "next-auth/react";
 import { Space_Grotesk } from "next/font/google";
 import Link from "next/link";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useFormik } from "formik";
-import * as yup from "yup"
-import { signIn, useSession } from "next-auth/react";
+import * as yup from "yup";
 import ForgotPasswordPanel from './forgot-password';
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
+
+import {
+  Alert,
+  AlertDescription
+} from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface initialValues {
   email: string;
@@ -24,6 +29,7 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false);
     const [authCompleted, setAuthCompleted] = useState(false);
     const [forgotPassword, setForgotPassword] = useState(false);
+    const [error, setError] = useState<string>("");
     const {data: session}: any = useSession()
     const searchParams = useSearchParams();
     const callbackUrl = searchParams?.get("callbackUrl");
@@ -53,6 +59,7 @@ export default function LoginPage() {
       const handleLogin = async (values: initialValues) => {
         try {
           setLoading(true)
+          setError("")
           const res: any  = await signIn("credentials", {
             email: values.email,
             password: values.password,
@@ -80,8 +87,11 @@ export default function LoginPage() {
               // TODO: What effect does throwing have here?
               throw new Error(res?.error)
           }
-        } catch (error) {
+        } catch (error:any) {
           setLoading(false)
+          if(error?.message === "CredentialsSignin"){
+            setError("The email or password you entered is invalid. Please try again")
+          }
         }
       };
 
@@ -117,6 +127,12 @@ export default function LoginPage() {
 
                 {!forgotPassword && (
                 <form onSubmit={handleSubmit}>
+                    {error?<Alert variant="destructive" className="flex gap-x-3 mb-4 p-2 items-center">
+                      <span><AlertCircle className="h-4 w-4" /></span>
+                      <AlertDescription>
+                        {error}
+                      </AlertDescription>
+                    </Alert>:null}
                     <div>
                         <Input
                             label="E-mail"

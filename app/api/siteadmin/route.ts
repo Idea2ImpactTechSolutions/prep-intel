@@ -4,10 +4,12 @@ const {  Users } = models;
 import { responseBody, getAuthCode } from "app/config/helpers";
 
 /**
- * @swagger
+ * @openapi
  * /api/siteadmin:
  *   post:
  *     summary: Creates a new site admin
+ *     tags:
+ *       - account
  *     requestBody:
  *       required: true
  *       content:

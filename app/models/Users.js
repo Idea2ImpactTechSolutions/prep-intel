@@ -34,12 +34,6 @@ const Users = sequelize.define(
         role: {
             type: DataTypes.STRING,
         },
-        first_name: {
-            type: DataTypes.STRING,
-        },
-        last_name: {
-            type: DataTypes.STRING,
-        },
         school_id: {
             type: DataTypes.STRING,
         },

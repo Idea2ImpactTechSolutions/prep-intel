@@ -1,4 +1,4 @@
-import { responseBody } from "app/config/helpers";
+import { apiResponse } from "app/config/helpers";
 const { models } = require("app/models");
 const { Users, Recruiters } = models;
 
@@ -7,6 +7,8 @@ const { Users, Recruiters } = models;
  * /api/recruiters/{id}:
  *   get:
  *     summary: Get a recruiter by ID
+ *     tags:
+ *       - recruiter
  *     parameters:
  *       - in: path
  *         name: id
@@ -15,20 +17,16 @@ const { Users, Recruiters } = models;
  *           type: string
  *         description: The recruiter's ID
  *     responses:
- *       200:
+ *       '200':
  *         description: Recruiter found
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Recruiter'
- *       404:
+ *       '404':
  *         description: No recruiter found
- *       400:
+ *       '400':
  *         description: Error occurred
- * components:
- *   schemas:
- *     Recruiter:
- *       type: object
  */
 export async function GET(
   req: Request,
@@ -50,18 +48,13 @@ export async function GET(
     });
 
     if (recruiter) {
-      return Response.json(responseBody("Recruiter found", 200, recruiter));
+      return apiResponse("Recruiter found", 200, recruiter);
     } else {
-      return Response.json(responseBody("No recruiter found", 404), {
-        status: 404,
-      });
+      return apiResponse("No recruiter found", 404);
     }
   } catch (error: any) {
     // Report
-    return Response.json(
-      responseBody("Error occurred", 400, { error: error.message }),
-      { status: 400 }
-    );
+    return apiResponse("Error occurred", 400, { error: error.message });
   }
 }
 
@@ -71,6 +64,8 @@ export async function GET(
  *   patch:
  *     summary: Update a recruiter's information
  *     description: Updates the information of the recruiter with the specified ID.
+ *     tags:
+ *       - recruiter
  *     parameters:
  *       - in: path
  *         name: id
@@ -110,7 +105,7 @@ export async function PATCH(
     const recruiter = await Recruiters.findOne({ where: { id: params.id } });
 
     if (!recruiter) {
-      return Response.json({ message: "Recruiter not found" }, { status: 404 });
+      return apiResponse("Recruiter not found", 404 );
     }
 
     // Update fields
@@ -120,14 +115,9 @@ export async function PATCH(
     const updatedRecruiter = await recruiter.save();
 
     // Response
-    return Response.json(
-      responseBody("Recruiter updated", 200, updatedRecruiter)
-    );
+    return apiResponse("Recruiter updated", 200, updatedRecruiter);
   } catch (error: any) {
     // Notify
-    return Response.json(
-      responseBody("Errors occurred", 400, { error: error.message }),
-      { status: 400 }
-    );
+    return apiResponse("Errors occurred", 400, { error: error.message });
   }
 }

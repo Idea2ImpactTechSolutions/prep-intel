@@ -8,6 +8,8 @@ const { Students } = models;
  * /api/students/{studentId}/extracurriculars:
  *   get:
  *     summary: Retrieves a list of a student's extracurriculars
+ *     tags:
+ *       - student
  *     parameters:
  *       - in: path
  *         name: studentId
@@ -63,11 +65,13 @@ export async function GET(
 }
 
 /**
- * @swagger
+ * @openapi
  * /api/students/{studentId}/extracurriculars:
  *   patch:
  *     summary: Update students record with list of extracurriculars
  *     description: Takes studentId and extracurriculars as params and updates "extracurriculars" field of students record.
+ *     tags:
+ *       - student
  *     parameters:
  *       - in: path
  *         name: studentId

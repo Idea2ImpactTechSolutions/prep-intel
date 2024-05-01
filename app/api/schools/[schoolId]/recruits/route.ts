@@ -1,16 +1,31 @@
 import { models } from "app/models";
 import { Op } from "sequelize";
-const { Recruits, Recruiters, Students, Users } = models;
+const { ConnectionRequest, Recruits, Recruiters, Students, Users } = models;
 import { responseBody } from "app/config/helpers";
 import { type NextRequest } from 'next/server'
 import logger from 'lib/logger';
+
+const STUDENT_STATS = [
+  "act_score",
+  "sat_score",
+  "graduation_year",
+  "high_school"
+];
+
+const USERS_MODEL_AND_ATTRIBUTES = { 
+  model: Users,
+  attributes: ["first_name", "last_name"],
+  required: true
+};
 
 /**
  * @openapi
  * /api/schools/{schoolId}/recruits:
  *   get:
  *     summary: Retrieves a list of recruits for the given school
- *     description: ""
+ *     tags:
+ *       - school
+ *       - recruit
  *     parameters:
  *       - in: path
  *         name: schoolId
@@ -97,51 +112,61 @@ async function getRecruits(requestData) {
       include: [
         {
           model: Students,
-          attributes: ["act_score","sat_score","graduation_year","high_school"],
-          include: { model: Users, attributes: ["first_name", "last_name"] },
+          attributes: STUDENT_STATS,
+          include: USERS_MODEL_AND_ATTRIBUTES,
         },
         {
           model: Recruiters,
-          where: { id: recruiterId.toString() },
+          where: { id: Number(recruiterId) },
           required: true,
           attributes: [],
-          include: { model: Users, attributes: ["first_name", "last_name"] },
+          include: USERS_MODEL_AND_ATTRIBUTES,
         },
       ],
       raw: true,
       nest: true,
-    });
+    }); 
   } else if (accepted_connection) {
-    recruits = await Recruits.findAll({
-      where: { school_id: schoolId, connection_date: { [Op.not]: null } },
-      include: [
-        {
-          model: Students,
-          attributes: ["act_score","sat_score","graduation_year","high_school"],
-          include: { model: Users, attributes: ["first_name", "last_name"] },
-        },
-        {
-          model: Recruiters,
-          attributes: [],
-          include: { model: Users, attributes: ["first_name", "last_name"] },
-        },
-      ],
-      raw: true,
-      nest: true,
-    });
+      recruits = await Recruits.findAll({
+        where: { school_id: schoolId },
+        include: [
+          {
+            model: Students,
+            attributes: STUDENT_STATS,
+            required: true,
+            include: [
+              USERS_MODEL_AND_ATTRIBUTES,
+              { 
+                model: ConnectionRequest, 
+                attributes: [], 
+                required: true,
+                where: { connection_accepted: true } 
+              }
+            ],
+          },
+          {
+            model: Recruiters,
+            attributes: [],
+            include: USERS_MODEL_AND_ATTRIBUTES,
+          },
+        ],
+        raw: true,
+        nest: true,
+      });
   } else if (applicants) {
     recruits = await Recruits.findAll({
       where: { school_id: schoolId, is_applicant: true },
       include: [
         {
           model: Students,
-          attributes: ["act_score","sat_score","graduation_year","high_school"],
-          include: { model: Users, attributes: ["first_name", "last_name"] },
+          attributes: STUDENT_STATS,
+          required: true,
+          include: USERS_MODEL_AND_ATTRIBUTES,
         },
         {
           model: Recruiters,
           attributes: [],
-          include: { model: Users, attributes: ["first_name", "last_name"] },
+          include: USERS_MODEL_AND_ATTRIBUTES,
         },
       ],
       raw: true,
@@ -149,12 +174,23 @@ async function getRecruits(requestData) {
     });
   } else {
     recruits = await Recruits.findAll({
-      where: { school_id: schoolId, connection_date: null },
+      where: { 
+        school_id: schoolId, 
+        [Op.or]: [
+          { is_applicant: null},
+          { contacted: null }
+        ]
+      },
       include: [
         {
           model: Students,
-          attributes: ["high_school"],
+          attributes: STUDENT_STATS,
         },
+        {
+          model: Recruiters,
+          attributes: [],
+          include: USERS_MODEL_AND_ATTRIBUTES
+        }
       ],
       raw: true,
       nest: true,
