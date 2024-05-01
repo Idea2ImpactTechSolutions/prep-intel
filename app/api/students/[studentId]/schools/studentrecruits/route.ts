@@ -1,19 +1,6 @@
-import * as yup from "yup";
-import type { NextRequest } from "next/server";
 import { responseBody } from "../../../../../../app/config/helpers";
 import { models } from "../../../../../../app/models";
-const { Recruits, School, Students, Users } = models;
-
-const POST_VALIDATION_SCHEMA = yup.array().of(yup.number().required());
-
-const PATCH_VALIDATION_SCHEMA = yup.object({
-  school_id: yup.number().required(),
-  criteria: yup.string().oneOf(["INTERESTED"]).notRequired(),
-  interested: yup.boolean().notRequired(),
-  is_viewable: yup.boolean().notRequired(),
-});
-
-const RECRUITS_SCHOOLS_FIELDS = ["school_id", "interested", "school.name"];
+const { Recruits, Students } = models;
 
 /**
  * @openapi
