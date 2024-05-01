@@ -86,7 +86,7 @@ export default function Page() {
       .then((payload) => {
         if(payload?.status === 200){
           toast.success(payload.message)
-          loadRecruiter()         
+          loadRecruiter()
           router.refresh()
         }
       }).catch((error:any) => {toast.error(error.message)})
