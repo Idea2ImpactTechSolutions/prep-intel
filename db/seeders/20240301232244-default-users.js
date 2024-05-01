@@ -17,11 +17,8 @@ module.exports = {
             firstName: 'sample',
             lastName: 'admin',
             email: 'admin@x',
-            password: bcrypt.hashSync('dbpass'),
             auth_code: '1234',
             role: 'admin',
-            account_claimed: true,
-            is_active: true,
         }];
 
         await School.create({
