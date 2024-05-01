@@ -41,7 +41,8 @@ export default function SchoolPage() {
           .then(data => {
               const default_schools = data.data.map((school) => {
                 return {
-                    ...school,
+                    id: school.school_id,
+                    name: school.name,
                     selected: true
                 }
             })
