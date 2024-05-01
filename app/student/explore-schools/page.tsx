@@ -58,7 +58,7 @@ export default function Page() {
       <h2  className="text-xl font-bold mb-1 mt-4">Browse</h2>
       <ul className="flex flex-wrap ">
         {
-          schools.map((school, index) => (
+          schools?.map((school, index) => (
             <li key={index} className="flex rounded bg-slate-50 relative justify-center items-center text-sm w-[200px] h-[150px] p-6 m-1 border border-red" >
               <Link href={`/school/${school.id}/dashboard`}>{school.name}</Link>
               <div className="absolute right-3 bottom-3 text-slate-400">{school.school_address.state}</div>

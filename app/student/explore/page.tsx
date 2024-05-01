@@ -159,14 +159,14 @@ export default function Page() {
         <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-3 mt-5">
         {schools?.length
           ? schools.map((school, index) => (
-              <li key={index} className="flex rounded bg-slate-50 relative justify-center items-center text-sm w-[200px] h-[150px] p-6 m-1 border border-red">
-                <Link href={`/school/${school.id}/dashboard`}>
-                  {school.name}
+                <Link href={`/school/${school.id}/my-school`}>
+                  <li key={index} className="flex rounded bg-slate-50 relative justify-center items-center text-sm w-[200px] h-[150px] p-6 m-1 border border-red">
+                      {school.name}
+                    <div className="absolute right-3 bottom-3 text-slate-400">
+                      {school.school_address.state}
+                    </div>
+                  </li>
                 </Link>
-                <div className="absolute right-3 bottom-3 text-slate-400">
-                  {school.school_address.state}
-                </div>
-              </li>
             ))
           : null}
       </ul>

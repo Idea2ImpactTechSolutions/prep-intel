@@ -21,9 +21,16 @@ const studentApi = baseApi.injectEndpoints({
         body: payload.data
       }),
     }),
+    connectWithRecruiter: builder.mutation({
+      query:(payload)=>({
+        url:`/students/${payload.studentId}/schools`,
+        method: "POST",
+        body: payload,
+      })
+    })
   }),
 });
 
 export const {
-  useLazyGetSchoolDataQuery, useLazyGetStudentVitalsQuery, useAddStudentVitalsMutation
+  useLazyGetSchoolDataQuery, useLazyGetStudentVitalsQuery, useAddStudentVitalsMutation, useConnectWithRecruiterMutation
 } = studentApi;
