@@ -73,6 +73,7 @@ export default function MajorPage() {
       <OnboardingFooter
         prevPageHandler={() => router.push('/student/onboarding/schools')}
         nextPageHandler={() => router.push('/student/onboarding/extracurricular')}
+        preventGoBack={false}
       />
     </form>
   )

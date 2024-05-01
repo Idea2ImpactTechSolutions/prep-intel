@@ -8,6 +8,12 @@ const recruiterApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    exploreRecruits: builder.query({
+      query: ({schoolId, minGpa, minAct, minSat, states, page}) => ({
+        url: `/schools/${schoolId}/recruits/explorer?states=${states}&page=${page}&minGpa=${minGpa}&minAct=${minAct}&minSat=${minSat}`,
+        method: "GET",
+      }),
+    }),
     getRecruiter: builder.query({
       query: ({id}) => ({
         url: `/recruiters/${id}/`,
@@ -67,6 +73,7 @@ export const {
   useGetRecruiterQuery,
   useGetStudentProfileQuery,
   useUploadRecruiterProfileImageMutation,
-  useSendMessageMutation, 
+  useSendMessageMutation,
+  useLazyExploreRecruitsQuery,
   useUpdateRecruiterPersonalInfoMutation
 } = recruiterApi;

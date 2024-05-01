@@ -4,20 +4,30 @@ import { TBODY, TD, TR } from "@/components/table/table-element";
 import LoadingSpinner from "components/loading-spinner";
 
 interface PageProps {
-    title: string;
+  title?: string;
+  titleNode?: React.ReactNode;
   isLoading: boolean;
   columns: any[];
   data: any[];
+  page?: number;
+  totalPages?: number;
+  nextPage?: ()=>void;
+  prevPage?: ()=>void;
 }
 
-export default function DataTable({ title, isLoading, columns, data }: PageProps) {
+export default function DataTable({ title, titleNode, isLoading, columns, data, page, totalPages, nextPage, prevPage }: PageProps) {
   return (
     <>
     {
       isLoading ? <LoadingSpinner/> :
       (<Table
-      title={title}
-      columns={columns}
+        title={title}
+        titleNode={titleNode}
+        columns={columns}
+        page={page}
+        totalPages={totalPages}
+        nextPage={nextPage}
+        prevPage={prevPage}
       >
         <TBODY>
           {
