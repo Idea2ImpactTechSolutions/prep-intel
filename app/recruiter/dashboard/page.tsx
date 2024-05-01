@@ -53,7 +53,9 @@ export default function Page() {
     }).unwrap();
 
     if (response.status !== 200) {
-      console.log("errors loading page..."); // How do we imagine handling this case?
+      // TODO: How do we imagine handling this case?
+      setTotalPages(0);
+      setCandidates([]);
       return;
     }
 

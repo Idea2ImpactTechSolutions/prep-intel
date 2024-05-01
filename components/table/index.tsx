@@ -1,7 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Dictionary } from '@/types/dictionary'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { off } from 'process';
 import React from 'react'
 
 interface TableProps {
@@ -11,13 +10,13 @@ interface TableProps {
     children:React.ReactNode
     columnHeaderStyle?:string
     page?: number;
+    offset?: number;
     totalPages?: number;
     nextPage?: ()=>void;
     prevPage?: ()=>void;
-    offset: number;
 }
 
-const Table = ({title, columns, children, columnHeaderStyle, titleNode, page, totalPages, nextPage, prevPage, offset=10}:TableProps) => {
+const Table = ({title, columns, children, columnHeaderStyle, titleNode, page=1, totalPages=0, nextPage, prevPage, offset=10}:TableProps) => {
 
   const minusOne = page-1;
   const start = minusOne * offset + 1;
