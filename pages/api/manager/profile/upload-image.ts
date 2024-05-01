@@ -1,12 +1,14 @@
-import { responseBody } from "../../../../app/config/helpers";
+import { responseBody } from "@/app/config/helpers";
 import { NextApiRequest, NextApiResponse } from "next";
 import { IncomingForm, Fields, Files } from "formidable";
 import fs from "fs";
 import { S3Client } from "@aws-sdk/client-s3";
 const { Upload } = require("@aws-sdk/lib-storage");
-const { models } = require("../../../../app/models");
+const { models } = require("@/app/models");
 const { Assets, School } = models;
+import logger from 'lib/logger';
 
+// REQUIRED: this seemingly unused export disables nextjs body parsing, allowing formidable to do its work
 export const config = { api: { bodyParser: false } };
 
 const parseFormData = (
@@ -40,18 +42,18 @@ export default async function handler(
     const school = await School.findOne({ where: { id: schoolId } });
 
     if (!school) {
-      responseBody("school with id not found", 404, {});
+      return res.status(200).json(
+        responseBody("school with id not found", 404, {}));
     }
 
     let buffer = Buffer.from(fs.readFileSync(imageFile[0].filepath));
-
     let name = school.name.replace(/ /g, "_");
 
     const params = {
       Bucket: "prep-bucket-upload",
       Key: `${name}/${imageFile[0].newFilename}`,
       Body: buffer,
-      conntentType: "image/png",
+      contentType: "image/png",
     };
 
     try {
@@ -78,7 +80,7 @@ export default async function handler(
         });
 
         return res.status(200).json(
-          responseBody("image uplooaded successfully", 201, {
+          responseBody("image uploaded successfully", 201, {
             image_url: data.Location,
           })
         );
@@ -89,10 +91,11 @@ export default async function handler(
         })
       );
     } catch (error: any) {
+      logger.error(error);
       res.status(500).json({ error: error.message });
     }
   } catch (error: any) {
-    // onsole.log("error", error);
+    logger.error(error);
     res.status(500).json(error.message);
   }
 }

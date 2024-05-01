@@ -54,7 +54,7 @@ interface initialValues {
 }
 
 export default function Page() {
-  const [isFetchedProfile, setIsFetechProfile] = useState<boolean>(false)
+  const [isFetchedProfile, setIsFetchProfile] = useState<boolean>(false)
   const [selectedImage, setSelectedImage] = useState<File>()
   const [schoolImgUrl, setSchoolImgUrl] = useState('')
   const [getSchoolProfile, {isLoading: isLoadingGetProfile, isFetching: isFetchingSchoolProfile, isSuccess:isSuccessGetProfile}] = useLazyGetSchoolProfileQuery()
@@ -132,7 +132,7 @@ export default function Page() {
       .unwrap()
       .then((payload) => {
         if (payload.status === 201) {
-          setIsFetechProfile(false)
+          setIsFetchProfile(false)
           dispatch(setSchoolInformation({ slug: 'school_data', data: {...payload.data.school, create_count: 1} }))
           toast.success("School Profile Submitted Successfully ")
           router.push(`/school/${schoolId}/academic-info`);
@@ -145,7 +145,7 @@ export default function Page() {
         .unwrap()
         .then((payload) => {
             const { data } = payload
-            setIsFetechProfile(true)
+            setIsFetchProfile(true)
             dispatch(setSchoolInformation({ slug: 'school_data', data: data }))
         })
   }
@@ -393,7 +393,7 @@ export default function Page() {
                           />
                           </div>
                         </div>
-                        <div className="flex gap-x-4 items-cente">
+                        <div className="flex gap-x-4 items-center">
                           <div className="flex-1 md:w-[20rem]">
                             <CustomSelect
                               label="State"

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import OnboardingFooter from "@/app/student/_components/onboarding-footer";
 import CustomFileInput from "@/components/custom-file-input";
 import CustomSelect from "@/components/custom-select";
@@ -10,18 +10,16 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export default function TranscriptsPage() {
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [documentType, setDocumentType] = useState('')
-  const [file, setFile] = useState<File>()
-  const router = useRouter()
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [documentType, setDocumentType] = useState("");
+  const [file, setFile] = useState<File>();
+  const router = useRouter();
 
   return (
     <>
       <div className="flex-1 px-6 md:px-12 lg:px-20">
-        <SectionContainer
-          title="Upload Important Documents"
-        >
+        <SectionContainer title="Upload Important Documents">
           <>
             <p>Important Documents include:</p>
             <div className="flex flex-col gap-y-2 my-4">
@@ -36,16 +34,16 @@ export default function TranscriptsPage() {
                   label="Choose document type"
                   options={[
                     {
-                      label: 'Transcript',
-                      value: 'transcript',
+                      label: "Transcript",
+                      value: "transcript",
                     },
                     {
-                      label: 'Test Result',
-                      value: 'test_result',
+                      label: "Test Result",
+                      value: "test_result",
                     },
                     {
-                      label: 'Letter of Recommendation',
-                      value: 'letter_of_recommendation',
+                      label: "Letter of Recommendation",
+                      value: "letter_of_recommendation",
                     },
                   ]}
                   selected={documentType}
@@ -55,7 +53,7 @@ export default function TranscriptsPage() {
                 <CustomFileInput
                   className="grid place-content-center mt-6 border border-gray-400 border-dashed p-8 bg-gray-50"
                   handleFileChange={(e) => {
-                    setFile(e.target.files[0])
+                    setFile(e.target.files[0]);
                   }}
                 >
                   <div className="text-sm text-center flex flex-col justify-center items-center gap-y-3">
@@ -79,25 +77,24 @@ export default function TranscriptsPage() {
       />
       <ConfirmationModal
         title="Are you absolutely sure?"
-        discription="This action cannot be undone. This will permanently submit your
-      record."
+        description="This action cannot be undone. This will permanently submit your record."
         open={showConfirmationModal}
         handleClose={() => setShowConfirmationModal(false)}
         loading={loading}
         onClick={() => {
-          setLoading(true)
+          setLoading(true);
           new Promise((resolve) => {
             setTimeout(() => {
-              setLoading(false)
-              resolve('')
-            }, 2000)
+              setLoading(false);
+              resolve("");
+            }, 2000);
           }).then(() => {
-            setShowConfirmationModal(false)
-            toast.success('Account Created')
-            router.push('/student/explore')
-          })
+            setShowConfirmationModal(false);
+            toast.success("Account Created");
+            router.push("/student/explore");
+          });
         }}
       />
     </>
-  )
+  );
 }
