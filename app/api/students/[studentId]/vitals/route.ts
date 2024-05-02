@@ -1,10 +1,9 @@
 import type { NextRequest } from "next/server";
-import { checkForChangedAttributes } from "@/pages/api/manager/profile/school-profile";
 import { models } from "@/app/models";
-import { responseBody } from "@/app/config/helpers";
+import { apiResponse } from "@/app/config/helpers";
 const { Users, Students } = models;
 
-const VITALS_FIELDS = [
+const STUDENT_FIELDS = [
   "id",
   "dob",
   "state",
@@ -15,7 +14,7 @@ const VITALS_FIELDS = [
   "guardian_last_name",
   "guardian_email",
 ];
-const VITALS_FIELDS_FROM_USERS = ["user.first_name", "user.last_name"];
+const USER_FIELDS = ["id", "first_name", "last_name"];
 
 /**
  * @openapi
@@ -40,37 +39,29 @@ const VITALS_FIELDS_FROM_USERS = ["user.first_name", "user.last_name"];
  *             schema:
  *               type: object
  */
-
 export async function GET(
   request: NextRequest,
   { params }: { params: { studentId: string } }
 ) {
   const studentVitals = await Students.findOne({
     where: { id: params.studentId },
-    attributes: VITALS_FIELDS.concat(VITALS_FIELDS_FROM_USERS),
+    attributes: STUDENT_FIELDS,
     include: [
       {
         model: Users,
-        attributes: [],
+        attributes: USER_FIELDS,
         required: true,
       },
     ],
     raw: true,
+    nest: true,
   });
 
   if (studentVitals === null) {
-    return Response.json(responseBody("Student not found", 404, null), {
-      status: 404,
-    });
+    return apiResponse("Student not found", 404);
   }
 
-  return Response.json(
-    responseBody(
-      "Student Vitals information retrieved successfully.",
-      200,
-      studentVitals
-    )
-  );
+  return apiResponse("Student Vitals information retrieved successfully.", 200, studentVitals)
 }
 
 /**
@@ -106,37 +97,31 @@ export async function POST(
   req: NextRequest,
   { params }: { params: { studentId: string } }
 ) {
-  let responseCode = 400;
-  let responseMessage = "Bad Request";
-  let responseData: any;
-
   const formData = await req.json();
 
   let studentVitals = await Students.findOne({
     where: { id: params.studentId },
-    attributes: VITALS_FIELDS,
+    include: [{
+      model: Users,
+      attributes: USER_FIELDS,
+      required: true,
+     }],
+    attributes: STUDENT_FIELDS,
   });
 
   if (studentVitals === null) {
-    responseCode = 404;
-    responseMessage = "Student not found";
+    return apiResponse("Student not found", 404);
   } else {
-    const needsUpdate = await checkForChangedAttributes(
-      formData,
-      studentVitals.dataValues
-    );
-    if (needsUpdate) {
+    studentVitals.set(formData)
+
+    if (studentVitals.user.changed)
+    {
+      await studentVitals.user.save();
+    }
+
+    if (studentVitals.changed) {
       await studentVitals.update(formData);
     }
-    responseCode = 200;
-    responseMessage = "Student Vitals information saved successfully";
-    responseData = studentVitals;
+    return apiResponse("Student Vitals information saved successfully", 200, studentVitals);
   }
-
-  return Response.json(
-    responseBody(responseMessage, responseCode, responseData),
-    {
-      status: responseCode,
-    }
-  );
 }
