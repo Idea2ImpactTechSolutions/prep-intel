@@ -10,32 +10,59 @@ import { type NextRequest } from "next/server";
  * @openapi
  * /api/assets:
  *   get:
- *       summary: Retrieves a list of recruiters or a specific recruiter by ID
- *       tags:
- *           - recruiter
- *       responses:
- *           '200':
- *               content:
- *                    application/json:
- *                       schema:
- *                           type: array
- *                           items: {}
- *                       examples:
- *                           One Sample:
- *                               value: '[{id: 1, first_name: "John"}]'
+ *     summary: Retrieves a list of assets
+ *     tags:
+ *       - Assets
+ *     parameters:
+ *       - in: query
+ *         name: schoolId
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Unique identifier of the school
+ *       - in: query
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Unique identifier of the user
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Category of the assets to retrieve
+ *     responses:
+ *       '200':
+ *         description: A JSON array of assets
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   first_name:
+ *                     type: string
+ *               examples:
+ *                 One Sample:
+ *                   value: '[{"id": 1, "first_name": "John"}]'
  */
 export async function GET(req: NextRequest) {
   try {
     const searchParams = req.nextUrl.searchParams;
     const school_id = searchParams.get("schoolId");
     const user_id = searchParams.get("userId");
+    const category = searchParams.get("category");
 
     const constraint = school_id ? { school_id } : { user_id };
 
     const assets = await Assets.findAll({
       where: {
         ...constraint,
-        category: searchParams.get("category"),
+        category,
       },
     });
     return apiResponse("Success", 200, assets);
@@ -51,12 +78,47 @@ export async function GET(req: NextRequest) {
  * /api/assets:
  *   post:
  *     description: Upload an asset
- *     summary: na
  *     tags:
  *       - asset
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: File to be uploaded
+ *               category:
+ *                 type: string
+ *                 description: Category of the asset
+ *               schoolId:
+ *                 type: string
+ *                 description: Unique identifier for the school (required for school-related assets)
+ *               userId:
+ *                 type: string
+ *                 description: Unique identifier for the user (required for user-related assets)
+ *             required:
+ *               - file
+ *               - category
  *     responses:
  *       200:
- *         description:
+ *         description: Asset uploaded successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 assetId:
+ *                   type: string
+ *       400:
+ *         description: Invalid request
+ *       500:
+ *         description: Server error
  */
 export async function POST(req: Request) {
   try {
@@ -89,7 +151,7 @@ export async function POST(req: Request) {
   }
 }
 
-async function getBufferedViewFromFile(assetFile: File) {
+async function getBufferedView(assetFile: File) {
   const buffer = await assetFile.arrayBuffer();
   return new Uint8Array(buffer);
 }
@@ -116,36 +178,60 @@ async function uploadUserDocument(
     return apiResponse("No user found", 404);
   }
 
-  return await uploadDocument(assetFile, `user/${userId}/${assetFile.name}`, {
-    user_id: userId,
-    category,
-  });
+  // Currently only 'recruiter-profile-image' is singular, revise/expand as needed
+  const singleInstance = category === "recruiter-profile-image";
+
+  return await uploadDocument(
+    assetFile,
+    `user/${userId}/${  singleInstance ? category : assetFile.name}`,
+    singleInstance,
+    {
+      user_id: userId,
+      category,
+    }
+  );
 }
 
 async function uploadDocument(
   assetFile: File,
   documentPath: string,
+  singleInstance: boolean,
   assetFields
 ) {
   try {
-    const bufferedView = await getBufferedViewFromFile(assetFile);
-    const data = await uploadFileToS3({
+    const bufferedView = await getBufferedView(assetFile);
+    const response = await uploadFileToS3({
       Bucket: "prep-bucket-upload",
       Key: documentPath,
       Body: bufferedView,
     });
 
-    // Create a new asset for the upload
-    await Assets.create({
-      description: assetFile.name,
-      location: data.Location,
-      fileName: assetFile.name,
-      is_active: true,
-      ...assetFields,
-    });
+    let existingAsset:any = null
+
+    if (singleInstance)
+    {
+      existingAsset = await Assets.findOne({where: assetFields});
+
+      if (existingAsset) {
+        existingAsset.location = response.location;
+        existingAsset.save();
+      }
+    }
+
+    // In the singleinstance case, if no record exist to update, create - otherwise always create
+    if (!existingAsset) {
+      // Create a new asset for the upload
+      await Assets.create({
+        description: assetFile.name,
+        location: response.Location,
+        fileName: assetFile.name,
+        is_active: true,
+        ...assetFields,
+      });
+    }
 
     return apiResponse("uploaded successfully", 201, {
-      assetUrl: data.Location,
+      assetUrl: response.Location,
     });
   } catch (error: any) {
     logger.error(error);

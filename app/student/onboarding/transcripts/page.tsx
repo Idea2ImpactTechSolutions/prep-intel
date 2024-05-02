@@ -26,16 +26,12 @@ export default function TranscriptsPage() {
 
   const { data: assets, isLoading:isLoadingAssets, refetch } = useGetAssetsQuery({ userId: userId, category: "user-document" });
 
-  async function handleUploadSchoolImage(bodyContent){
-    const response = await uploadAsset(bodyContent).unwrap()
-    if (response?.data?.assetUrl) {
-      console.log(response.data);
-      //setSchoolImgUrl(response.data.assetUrl)
-    }
+  async function handleUploadFile(bodyContent){
+    await uploadAsset(bodyContent).unwrap()
   }
 
   useEffect(() => {
-    // Reload assets on succesful upload
+    // Reload assets on successful upload
     refetch();
   }, [isSuccess])
 
@@ -47,7 +43,7 @@ export default function TranscriptsPage() {
       payload.append('userId', userId as string)
       payload.append('category', 'user-document')
 
-      handleUploadSchoolImage(payload)
+      handleUploadFile(payload)
     }
   }, [insertedFile])
 

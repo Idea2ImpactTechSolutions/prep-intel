@@ -115,7 +115,7 @@ export default function Page() {
     ],
   })
 
-  const handleUploadSchoolImage = async (payload) => {
+  const handleUploadImage = async (payload) => {
     uploadSchoolImage(payload)
       .unwrap()
       .then((payload) => {
@@ -193,7 +193,8 @@ export default function Page() {
       payload.append('file', selectedImage)
       payload.append('schoolId', school_data.id)
       payload.append('category', 'logo')
-      handleUploadSchoolImage(payload)
+
+      handleUploadImage(payload)
     }
   }, [selectedImage])
 

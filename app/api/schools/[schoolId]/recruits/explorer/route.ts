@@ -184,6 +184,7 @@ export async function GET(
  *     tags:
  *       - school
  *       - recruit
+ *       - recruiter
  *     requestBody:
  *      description: An list of schools a student wants to connect with
  *      content:
