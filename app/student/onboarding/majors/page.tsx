@@ -38,7 +38,6 @@ export default function MajorPage() {
     getStudentMajors(studentId)
       .unwrap()
       .then(data => {
-        console.log(data)
           const default_majors = data.data.map((major) => {
             return {
                 ...major,
