@@ -1,6 +1,6 @@
 import { apiResponse } from "app/config/helpers";
 const { models } = require("app/models");
-const { Users, Recruiters } = models;
+const { Users, Recruiters, Assets } = models;
 
 /**
  * @openapi
@@ -46,6 +46,19 @@ export async function GET(
         },
       ],
     });
+
+    // Collect the profile image and merge it into the response. Could be done with
+    // more effort and a join, but this is very low cost as is...
+    const assets = await Assets.findOne({
+      where: {
+        user_id: recruiter.user.id,
+        category: "recruiter-profile-image",
+      },
+    });
+
+    if (assets) {
+      recruiter.dataValues['profile_img'] = assets.location;
+    }
 
     if (recruiter) {
       return apiResponse("Recruiter found", 200, recruiter);

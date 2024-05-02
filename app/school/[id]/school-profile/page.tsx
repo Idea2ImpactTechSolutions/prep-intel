@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { useLazyGetSchoolProfileQuery, useManagerCreateSchoolProfileMutation, useUploadSchoolImageMutation } from "@/redux/services/school/managerApi";
+import { useLazyGetSchoolProfileQuery, useManagerCreateSchoolProfileMutation } from "@/redux/services/school/managerApi";
+import { useUploadAssetMutation  } from "@/redux/services/assets/assetApi";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { Dictionary } from "@/types/dictionary";
 import { STATE_CITY_DATA } from "@/utils/data";
@@ -58,7 +59,7 @@ export default function Page() {
   const [selectedImage, setSelectedImage] = useState<File>()
   const [schoolImgUrl, setSchoolImgUrl] = useState('')
   const [getSchoolProfile, {isLoading: isLoadingGetProfile, isFetching: isFetchingSchoolProfile, isSuccess:isSuccessGetProfile}] = useLazyGetSchoolProfileQuery()
-  const [uploadSchoolImage, { isLoading }] = useUploadSchoolImageMutation()
+  const [uploadSchoolImage, { isLoading }] = useUploadAssetMutation()
   const [managerCreateSchoolProfile, { isLoading: isCreatingSchoolProfile }] = useManagerCreateSchoolProfileMutation()
 
   const dispatch = useAppDispatch()
@@ -118,9 +119,9 @@ export default function Page() {
     uploadSchoolImage(payload)
       .unwrap()
       .then((payload) => {
-        if (payload?.data?.image_url) {
-          setInitialSchoolData({ ...initialSchoolData, school_image: payload.data.image_url })
-          setSchoolImgUrl(payload.data.image_url)
+        if (payload?.data?.assetUrl) {
+          setInitialSchoolData({ ...initialSchoolData, school_image: payload.data.assetUrl })
+          setSchoolImgUrl(payload.data.assetUrl)
         }
       })
   }
@@ -189,8 +190,8 @@ export default function Page() {
   useEffect(() => {
     if (selectedImage) {
       const payload = new FormData()
-      payload.append('image', selectedImage)
-      payload.append('school_id', school_data.id)
+      payload.append('file', selectedImage)
+      payload.append('schoolId', school_data.id)
       payload.append('category', 'logo')
       handleUploadSchoolImage(payload)
     }
