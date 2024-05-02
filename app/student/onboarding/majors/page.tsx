@@ -39,14 +39,13 @@ export default function MajorPage() {
       .unwrap()
       .then(data => {
         console.log(data)
-        //   const default_majors = data.data.map((school) => {
-        //     return {
-        //         id: school.school_id,
-        //         name: school.name,
-        //         selected: true
-        //     }
-        // })
-        // setSelectedMajors([...selectedMajors, ...default_majors])
+          const default_majors = data.data.map((major) => {
+            return {
+                ...major,
+                selected: true
+            }
+        })
+        setSelectedMajors([...selectedMajors, ...default_majors])
       })
   }
 
@@ -60,7 +59,7 @@ export default function MajorPage() {
     addStudentMajors({ data: majors, studentId: studentId })
       .unwrap()
       .then(data => {
-        toast.success(data.message)
+        toast.success('Record submitted successfully')
         router.push('/student/onboarding/extracurricular')
       })
   }
