@@ -1,15 +1,15 @@
 "use client";
 import UsMap from "@/components/UsMap";
+import LoadingSpinner from "@/components/loading-spinner";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useLazyGetSchoolDataQuery } from "@/redux/services/student/studentApi";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import Select from "react-select";
 import { toast } from "sonner";
-import Link from "next/link";
-import LoadingSpinner from "@/components/loading-spinner";
-import { Input } from "@/components/ui/input";
 
 const options = [
   { value: "AL", label: "Alabama" },
