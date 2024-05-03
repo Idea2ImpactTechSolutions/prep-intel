@@ -25,10 +25,12 @@ export default function VitalsPage() {
   const studentId = data?.user?.roleId
 
   const [studentData, setStudentData] = useState({
-    first_name: "",
-    last_name: "",
-    birth_date: "",
-    expected_graduation_year: "",
+    user: {
+      first_name: "",
+      last_name: "",
+    },
+    dob: "",
+    graduation_year: "",
     state: "",
     city: "",
     high_school: "",
@@ -37,7 +39,6 @@ export default function VitalsPage() {
     guardian_email: "",
   })
 
-
   const [getStudentVitals, { isLoading, isFetching }] = useLazyGetStudentVitalsQuery()
   const [addStudentVitals, { isLoading: isAddingVitals }] = useAddStudentVitalsMutation()
 
@@ -45,8 +46,7 @@ export default function VitalsPage() {
     getStudentVitals(studentId)
       .unwrap()
       .then(data => {
-        const { city, dob, first_name, graduation_year, guardian_email, guardian_first_name, guardian_last_name, high_school, last_name, state } = data.data
-        setStudentData({ ...studentData, city, birth_date: dob, first_name, last_name, expected_graduation_year: graduation_year, state, guardian_email, guardian_first_name, guardian_last_name, high_school })
+        setStudentData({ ...studentData, ...data.data })
       })
   }
 
@@ -64,10 +64,12 @@ export default function VitalsPage() {
   const { values, errors, handleSubmit, handleChange, touched, setFieldValue } = useFormik({
     initialValues: studentData,
     validationSchema: yup.object().shape({
-      first_name: yup.string().required('first name is required'),
-      last_name: yup.string().required('last name is required'),
-      birth_date: yup.string().required('date of birth is required'),
-      expected_graduation_year: yup.string().min(4, "graduation year must be 4 digits").max(4, "graduation year must be 4 digits").required('graduation year is required'),
+      user: yup.object().shape({
+        first_name: yup.string().required('first name is required'),
+        last_name: yup.string().required('last name is required'),
+      }),
+      dob: yup.string().required('date of birth is required'),
+      graduation_year: yup.string().min(4, "graduation year must be 4 digits").max(4, "graduation year must be 4 digits").required('graduation year is required'),
       state: yup.string().required('state is required'),
       city: yup.string().required('city is required'),
       high_school: yup.string().required('high school name is required'),
@@ -111,32 +113,32 @@ export default function VitalsPage() {
                       label="First Name"
                       className="rounded-lg p-[1.4rem] placeholder:text-[#AAAAAA]'"
                       placeholder="Enter your first name"
-                      name="first_name"
-                      value={values.first_name}
+                      name="user.first_name"
+                      value={values.user.first_name}
                       onChange={handleChange}
-                      touched={touched.first_name}
-                      error={errors.first_name}
+                      touched={touched.user?.first_name}
+                      error={errors.user?.first_name}
                     />
                     <Input
                       label="Last Name"
                       className="rounded-lg p-[1.4rem] placeholder:text-[#AAAAAA]"
                       placeholder="Enter your last name"
-                      name="last_name"
-                      value={values.last_name}
+                      name="user.last_name"
+                      value={values.user.last_name}
                       onChange={handleChange}
-                      touched={touched.last_name}
-                      error={errors.last_name}
+                      touched={touched.user?.last_name}
+                      error={errors.user?.last_name}
                     />
                     <CustomDatePicker
                       label="Birth Date"
                       className=""
                       inputClass="rounded-lg p-[.8rem] placeholder:text-[#AAAAAA]"
                       handleChange={(selected) => {
-                        setFieldValue('birth_date', formatRMDatePicker(selected))
+                        setFieldValue('dob', formatRMDatePicker(selected))
                       }}
-                      value={values.birth_date}
-                      touched={touched.birth_date}
-                      error={errors.birth_date}
+                      value={values.dob}
+                      touched={touched.dob}
+                      error={errors.dob}
                       labelClass="mt-3"
                     />
                     <Input
@@ -144,15 +146,15 @@ export default function VitalsPage() {
                       className="rounded-lg p-[1.4rem] placeholder:text-[#AAAAAA]"
                       placeholder="2023"
                       type=""
-                      name="expected_graduation_year"
-                      value={values.expected_graduation_year}
+                      name="graduation_year"
+                      value={values.graduation_year}
                       onChange={(e) => {
                         if (!isNaN(Number(e.target.value))) {
-                          setFieldValue('expected_graduation_year', e.target.value)
+                          setFieldValue('graduation_year', e.target.value)
                         }
                       }}
-                      touched={touched.expected_graduation_year}
-                      error={errors.expected_graduation_year}
+                      touched={touched.graduation_year}
+                      error={errors.graduation_year}
                       labelClass="mt-3"
                     />
                     <Input
@@ -200,7 +202,7 @@ export default function VitalsPage() {
               </SectionContainer>
 
               <SectionContainer
-                title="About Your Gaurdian"
+                title="About Your Guardian"
                 subTitle=""
                 titleClass={cn(
                   spaceGrotesk.className,
