@@ -5,6 +5,14 @@ const { models } = require("@/app/models");
 const { Assets, School, Users } = models;
 import logger from "lib/logger";
 import { type NextRequest } from "next/server";
+import {
+  SCHOOL_PROFILE_IMAGE,
+  SCHOOL_BANNER_IMAGE,
+  SCHOOL_IMAGE,
+  SCHOOL_DOCUMENT,
+  USER_DOCUMENT,
+  RECRUITER_PROFILE_IMAGE,
+} from "types/assetTypes";
 
 /**
  * @openapi
@@ -123,26 +131,55 @@ export async function GET(req: NextRequest) {
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
-    const assetType = formData.get("category");
+    const category = formData.get("category") as string;
+    const file = formData.get("file") as File;
+    const singleInstanceTypes = [
+      RECRUITER_PROFILE_IMAGE,
+      SCHOOL_PROFILE_IMAGE,
+      SCHOOL_BANNER_IMAGE,
+    ];
+    const singleInstanceAsset = singleInstanceTypes.includes(category);
 
-    switch (assetType) {
-      case "logo":
-        return uploadLogo(
-          formData.get("file") as File,
-          formData.get("schoolId") as string
+    switch (category) {
+      case USER_DOCUMENT:
+      case RECRUITER_PROFILE_IMAGE: {
+        const userId = formData.get("userId") as string;
+        const user = await Users.findByPk(userId);
+        if (!user) {
+          return apiResponse("No user found", 404);
+        }
+
+        return await uploadDocument(
+          file,
+          `user/${userId}/${singleInstanceAsset ? category : file.name}`,
+          singleInstanceAsset,
+          {
+            user_id: userId,
+            category,
+          }
         );
-      case "user-document":
-      case "recruiter-profile-image":
-        return uploadUserDocument(
-          formData.get("file") as File,
-          formData.get("userId") as string,
-          assetType
+      }
+
+      case SCHOOL_IMAGE:
+      case SCHOOL_BANNER_IMAGE:
+      case SCHOOL_PROFILE_IMAGE:
+      case SCHOOL_DOCUMENT: {
+        const schoolId = formData.get("schoolId") as string;
+        const school = await School.findByPk(schoolId);
+        if (!school) {
+          return apiResponse("No school found", 404);
+        }
+
+        return await uploadDocument(
+          file,
+          `school/${schoolId}/${singleInstanceAsset ? category : file.name}`,
+          singleInstanceAsset,
+          {
+            category,
+            school_id: schoolId,
+          }
         );
-      case "school-document":
-        return uploadSchoolDocument(
-          formData.get("file") as File,
-          formData.get("schoolId") as string
-        );
+      }
     }
   } catch (error: any) {
     return apiResponse("An unknown error occurred", 500, {
@@ -156,46 +193,10 @@ async function getBufferedView(assetFile: File) {
   return new Uint8Array(buffer);
 }
 
-async function uploadSchoolDocument(assetFile: File, schoolId: string) {
-  const school = await School.findByPk(schoolId);
-  if (!school) {
-    return apiResponse("No school found", 404);
-  }
-
-  return await uploadDocument(assetFile, `user/${assetFile.name}`, {
-    category: "user-document",
-    school_id: schoolId,
-  });
-}
-
-async function uploadUserDocument(
-  assetFile: File,
-  userId: string,
-  category: string
-) {
-  const user = await Users.findByPk(userId);
-  if (!user) {
-    return apiResponse("No user found", 404);
-  }
-
-  // Currently only 'recruiter-profile-image' is singular, revise/expand as needed
-  const singleInstance = category === "recruiter-profile-image";
-
-  return await uploadDocument(
-    assetFile,
-    `user/${userId}/${  singleInstance ? category : assetFile.name}`,
-    singleInstance,
-    {
-      user_id: userId,
-      category,
-    }
-  );
-}
-
 async function uploadDocument(
   assetFile: File,
   documentPath: string,
-  singleInstance: boolean,
+  singleInstanceAsset: boolean,
   assetFields
 ) {
   try {
@@ -206,19 +207,18 @@ async function uploadDocument(
       Body: bufferedView,
     });
 
-    let existingAsset:any = null
+    let existingAsset: any = null;
 
-    if (singleInstance)
-    {
-      existingAsset = await Assets.findOne({where: assetFields});
+    if (singleInstanceAsset) {
+      existingAsset = await Assets.findOne({ where: assetFields });
 
       if (existingAsset) {
-        existingAsset.location = response.location;
+        existingAsset.location = response.Location;
         existingAsset.save();
       }
     }
 
-    // In the singleinstance case, if no record exist to update, create - otherwise always create
+    // In the single-instance case, if no record exist to update, create - otherwise always create
     if (!existingAsset) {
       // Create a new asset for the upload
       await Assets.create({
@@ -232,55 +232,6 @@ async function uploadDocument(
 
     return apiResponse("uploaded successfully", 201, {
       assetUrl: response.Location,
-    });
-  } catch (error: any) {
-    logger.error(error);
-    return apiResponse("An unexpected error occurred", 500, {
-      error: error.message,
-    });
-  }
-}
-
-async function uploadLogo(imageFile: File, schoolId: string) {
-  const assetType = "logo";
-  const school = await School.findByPk(schoolId);
-  if (!school) {
-    return apiResponse("school with id not found", 404);
-  }
-
-  const buff = await imageFile.arrayBuffer();
-  const buffView = new Uint8Array(buff);
-
-  try {
-    const data = await uploadFileToS3({
-      Bucket: "prep-bucket-upload",
-      Key: `school/${schoolId}/logo`,
-      Body: buffView,
-    });
-
-    let assetExists = await Assets.findOne({
-      where: { school_id: schoolId, category: assetType },
-    });
-
-    if (assetExists) {
-      // Set active to false on all existing records with schoolId & category
-      await Assets.update(
-        { is_active: false },
-        { where: { school_id: schoolId, category: assetType } }
-      );
-    }
-
-    // Create a new asset, for the upload, with path and active set
-    await Assets.create({
-      description: "logo",
-      school_id: schoolId,
-      category: assetType,
-      location: data.Location,
-      is_active: true,
-    });
-
-    return apiResponse("image uploaded successfully", 201, {
-      assetUrl: data.Location,
     });
   } catch (error: any) {
     logger.error(error);

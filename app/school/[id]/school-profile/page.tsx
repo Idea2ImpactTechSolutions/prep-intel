@@ -23,10 +23,13 @@ import BottomBar from "../../_components/bottom-bar";
 import { setSchoolInformation } from "@/redux/features/school/managerSlice";
 import LoadingSpinner from "../../_components/loading-spinner";
 import ProfilePublishedLabel from "@/components/profile-published-label";
+import {
+  SCHOOL_PROFILE_IMAGE,
+  SCHOOL_BANNER_IMAGE,
+} from "types/assetTypes";
 
 interface initialValues {
   school_id: string,
-  school_image: string;
   school_details: {
     name: string,
     institution_type: string,
@@ -57,9 +60,11 @@ interface initialValues {
 export default function Page() {
   const [isFetchedProfile, setIsFetchProfile] = useState<boolean>(false)
   const [selectedImage, setSelectedImage] = useState<File>()
-  const [schoolImgUrl, setSchoolImgUrl] = useState('')
-  const [getSchoolProfile, {isLoading: isLoadingGetProfile, isFetching: isFetchingSchoolProfile, isSuccess:isSuccessGetProfile}] = useLazyGetSchoolProfileQuery()
-  const [uploadSchoolImage, { isLoading }] = useUploadAssetMutation()
+  const [bannerImage, setBannerImage] = useState<File>()
+  const [profileImageUrl, setProfileImageUrl] = useState('')
+  const [bannerImageUrl, setBannerImageUrl] = useState('')
+  const [getSchoolProfile, { isLoading: isLoadingGetProfile, isFetching: isFetchingSchoolProfile, isSuccess:isSuccessGetProfile}] = useLazyGetSchoolProfileQuery()
+  const [uploadImage, { isLoading }] = useUploadAssetMutation()
   const [managerCreateSchoolProfile, { isLoading: isCreatingSchoolProfile }] = useManagerCreateSchoolProfileMutation()
 
   const dispatch = useAppDispatch()
@@ -70,7 +75,6 @@ export default function Page() {
   const { manager: { school_information: { school_data } } }: Dictionary = useAppSelector((state) => state.manager)
   const [initialSchoolData, setInitialSchoolData] = useState<initialValues>({
     school_id: school_data?.id || '',
-    school_image: school_data?.assets?.filter((f) => f.category === 'logo')?.[0]?.location || '',
     school_details: {
       name: school_data?.name || '',
       institution_type: school_data?.institution_type || '',
@@ -116,24 +120,36 @@ export default function Page() {
   })
 
   const handleUploadImage = async (payload) => {
-    uploadSchoolImage(payload)
-      .unwrap()
-      .then((payload) => {
-        if (payload?.data?.assetUrl) {
-          setInitialSchoolData({ ...initialSchoolData, school_image: payload.data.assetUrl })
-          setSchoolImgUrl(payload.data.assetUrl)
+    const category = payload.get('category');
+
+    if (category === SCHOOL_PROFILE_IMAGE) {
+      setProfileImageUrl('');
+    } else {
+      setBannerImageUrl('');
+    }
+
+  uploadImage(payload)
+    .unwrap()
+    .then((payload) => {
+      if (payload?.data?.assetUrl) {
+        const assetUrl = `${payload.data.assetUrl}?v=${(new Date()).getTime()}`;
+        if (category === SCHOOL_PROFILE_IMAGE) {
+          setProfileImageUrl(assetUrl);
+        } else {
+          setBannerImageUrl(assetUrl);
         }
-      })
+      }
+    });
   }
 
   const handleCreateSchoolProfile = async (payload: Dictionary) => {
     let schoolData = { ...payload }
-    schoolData.school_image = schoolImgUrl
     managerCreateSchoolProfile(schoolData)
       .unwrap()
       .then((payload) => {
         if (payload.status === 201) {
           setIsFetchProfile(false)
+
           dispatch(setSchoolInformation({ slug: 'school_data', data: {...payload.data.school, create_count: 1} }))
           toast.success("School Profile Submitted Successfully ")
           router.push(`/school/${schoolId}/academic-info`);
@@ -182,9 +198,7 @@ export default function Page() {
   })
 
   const handleFormSubmit = (values: initialValues) => {
-    let payload = { ...values }
-    payload = { ...payload, school_image: schoolImgUrl }
-    handleCreateSchoolProfile(payload)
+    handleCreateSchoolProfile(values)
   }
 
   useEffect(() => {
@@ -192,11 +206,22 @@ export default function Page() {
       const payload = new FormData()
       payload.append('file', selectedImage)
       payload.append('schoolId', school_data.id)
-      payload.append('category', 'logo')
+      payload.append('category', SCHOOL_PROFILE_IMAGE)
 
       handleUploadImage(payload)
     }
   }, [selectedImage])
+
+  useEffect(() => {
+    if (bannerImage) {
+      const payload = new FormData()
+      payload.append('file', bannerImage)
+      payload.append('schoolId', school_data.id)
+      payload.append('category', SCHOOL_BANNER_IMAGE)
+
+      handleUploadImage(payload)
+    }
+  }, [bannerImage])
 
   useEffect(() => {
       if(schoolId){
@@ -204,10 +229,20 @@ export default function Page() {
       }
   }, [])
 
+  function cachedBust(url) {
+      if (!url) {
+        return '';
+      }
+      return  `${url}?v=${(new Date()).getTime()}`;
+  }
+
   useEffect(() => {
+    // TODO: Add these simple props to the data returned by the endpoint
+    setBannerImageUrl(cachedBust(school_data?.assets?.filter((f) => f.category === SCHOOL_BANNER_IMAGE)?.[0]?.location));
+    setProfileImageUrl(cachedBust(school_data?.assets?.filter((f) => f.category === SCHOOL_PROFILE_IMAGE)?.[0]?.location));
+
     setInitialSchoolData({
       school_id: school_data?.id || '',
-      school_image: school_data?.assets?.filter((f) => f.category === 'logo')?.[0]?.location || '',
       school_details: {
         name: school_data?.name || '',
         institution_type: school_data?.institution_type || '',
@@ -286,20 +321,34 @@ export default function Page() {
                             handleFileChange={(file) => {
                               setSelectedImage(file)
                             }}
-                            uploading={isLoading}
+                            uploading={isLoading && Boolean(selectedImage)}
                           >
                             <div className={cn(
                               "border border-dashed border-gray-400 w-32 h-32 grid place-content-center rounded-[5px]",
-                              errors.school_image && touched.school_image && "border-red-500"
                             )}
                             >
-                              {selectedImage ? <img src={selectedImage && URL.createObjectURL(selectedImage)} alt="" />
-                                :
-                                values.school_image ? <img src={values.school_image} alt=""/> :
+                              {profileImageUrl ? <img src={profileImageUrl} alt=""/> :
                                 <ImagePlus className="w-10 h-10 text-gray-400" />
                               }
                             </div>
                           </CustomFileInput>
+
+                          <div className="hidden">
+                            <label htmlFor="logo" className="text-sm font-bold">Banner</label>
+                            <CustomFileInput
+                              handleFileChange={(file) => {setBannerImage(file)}}
+                              uploading={isLoading && Boolean(bannerImage)}
+                            >
+                              <div className={cn(
+                                "border border-dashed border-gray-400 w-32 h-32 grid place-content-center rounded-[5px]",
+                              )}
+                              >
+                                { bannerImageUrl ? <img src={bannerImageUrl} alt=""/> :
+                                  <ImagePlus className="w-10 h-10 text-gray-400" />
+                                }
+                              </div>
+                            </CustomFileInput>
+                          </div>
                         </div>
                         <div className="flex-1">
                           <label htmlFor="school_details" className="text-sm font-bold">School Details</label>
