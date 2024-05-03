@@ -326,6 +326,7 @@ export default function Page() {
                           </div>
                         </div>
                       </div>
+                      
                       <div className="flex-1">
                         <div className="grid grid-cols-1 gap-y-3 gap-x-4 md:grid-cols-2 md:mt-5">
                           <CustomDatePicker
@@ -346,7 +347,7 @@ export default function Page() {
                               { label: 'University', value: 'University' },
                               { label: 'Community College', value: 'Community College' },
                             ]}
-                            selected={school_data?.institution_type || values.school_details.institution_type}
+                            selected={values.school_details.institution_type || school_data?.institution_type}
                             setSelected={(selected) => setFieldValue('school_details.institution_type', selected)}
                           />
                         </div>
