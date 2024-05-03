@@ -1,40 +1,50 @@
-import { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
+"use client"
+import React, { useState } from 'react'
+import { Navbar, TabLink} from "components/ui/nav-bar"
+import { GraduationCap, LayoutGrid, UserPlus } from "lucide-react"
+import { usePathname } from "next/navigation";
 
-export const metadata: Metadata = {
-    title: "Prep Intel | Student Onboarding",
-    description: 'Some description here'
-}
+const TABS = [
+  {
+      title: 'Dashboard',
+      url: (schoolId) => `/student/explore`,
+      icon: <LayoutGrid className="w-4 h-4" />
+  },
+  {
+      title: 'Connections',
+      url: (schoolId) => `/student/connections`,
+      icon: <UserPlus className="w-4 h-4" />
+  },
+  {
+      title: 'Schools',
+      url: (schoolId) => `/student/schools`,
+      icon: <GraduationCap className="w-4 h-4" />
+  },
+] as TabLink[];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+    const [showSidebar, setShowSidebar] = useState<boolean>(true);
+    const location = usePathname() as string;
+
+
     return (
-        <main className="font-sans h-screen">
-            <nav className={`bg-panel p-2 border-b md:px-6 lg:px-6`}>
-                <div className="container p-2 px-6 flex flex-col items-center md:flex-row md:items-center md:justify-between pl-0">
-                    <div className="flex flex-col items-center md:flex-row md:items-center md:gap-x-8">
-                        <Link
-                            href="/"
-                            className="md:border-r md:pr-10"
-                        >
-                            <Image
-                                src='/images/logo/text-logo.png'
-                                width={100}
-                                height={100}
-                                alt="logo"
-                            />
-                        </Link>
-                        <span> Complete Account Setup </span>
-                    </div>
-                    <div className="flex flex-grow-1"></div>
-                    {/* <span className="absolute right-2 md:relative block border border-[#DEDEDE] cursor-pointer p-2 rounded-full text-[#000000]"> <X width={15} height={15}/> </span> */}
-                </div>
-            </nav>
-            <section className="md:flex">
-            <div className="flex flex-col flex-grow">
+      <main className="overflow-y-hidden font-sans">
+        <section className="">
+            <Navbar
+                showTabs={!location.includes('onboarding')}
+                leftContent={
+                  location.includes('onboarding') && <span className="ml-10 md:border-l md:pl-10">Complete Account Setup</span>
+                }
+                showSidebar={showSidebar}
+                setShowSidebar={setShowSidebar}
+                tabs={TABS}
+            />
+            <section>
                {children}
-            </div>
             </section>
+        </section>
         </main>
+
+
     )
 }
