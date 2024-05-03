@@ -1,14 +1,14 @@
 "use client"
-import CustomProfilePopover from "@/components/custom-profile-popover";
+import UserMenu from "@/components/user-menu";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAppDispatch } from "@/redux/store";
 import useWindowSize from "@/utils/hooks/useWindowSize";
-import { AlignJustify, Bell, LogOut, User } from "lucide-react";
+import { AlignJustify, Bell, LogOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { signOut } from "next-auth/react";
 import { managerReset } from "@/redux/features/school/managerSlice";
 
@@ -26,8 +26,6 @@ interface NavbarProps {
 }
 
 export function Navbar({ setShowSidebar, showSidebar, tabs }: NavbarProps) {
-    const [showProfilePopover, setShowProfilePopover] = useState(false)
-
     const { width } = useWindowSize()
 
     const normal = 'relative p-1.5 mb-2 block flex items-center gap-x-2 text-sm'
@@ -151,11 +149,7 @@ export function Navbar({ setShowSidebar, showSidebar, tabs }: NavbarProps) {
 
                             <div className="flex gap-x-4">
                                 <Bell className="w-4 h-4 cursor-pointer" />
-                                <User className="w-4 h-4 cursor-pointer" onClick={() => setShowProfilePopover(!showProfilePopover)}/>
-                                <CustomProfilePopover
-                                    show={showProfilePopover}
-                                    handleClose={() => setShowProfilePopover(false)}
-                                />
+                                <UserMenu />
                             </div>
                         </div>
 
