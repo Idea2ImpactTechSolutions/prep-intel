@@ -15,7 +15,7 @@ const UserProfileMenu = () => {
     const router = useRouter();
     const [loggingOff, setLoggingOff] = useState(false);
 
-    //const name = session?.data?.user?.firstName;
+    const name = session?.data?.user?.firstName;
 
     function logoutUser(){
       setLoggingOff(true);
@@ -58,10 +58,20 @@ const UserProfileMenu = () => {
           className="min-w-[220px] bg-white rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.15),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade"
           sideOffset={5}
         >
+          <DropdownMenu.Label className="pl-1 text-sm leading-[24px] text-gray">
+            <div className="all-small-caps ml-0 text-gray-400">Account</div>
+            <div>
+              <div className="rounded-full w-[32px] h-[32px] mr-2 mb-1 mt-1 inline-flex items-center justify-center bg-orange-100">
+                {name?.substr(0,1)}
+              </div>
+              <span>{name}</span>
+            </div>
+
+          </DropdownMenu.Label>
+          <DropdownMenu.Separator className={separator} />
           <DropdownMenu.Item className={cn(menuItem, "pl-1")} onClick={openProfilePage}>
             <User className="w-4 h-4 mr-1" /> Profile
           </DropdownMenu.Item>
-          <DropdownMenu.Item className={menuItem}>Settings</DropdownMenu.Item>
           <DropdownMenu.Separator className={separator} />
           <DropdownMenu.Item className={cn(menuItem, "pl-1")} onClick={logoutUser}>
             <BiLogOut className="w-4 h-4 mr-1" />Logout
