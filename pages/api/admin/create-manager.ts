@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { models } from "app/models";
 const { Managers, School, Users } = models;
 import { responseBody, getAuthCode, getBaseUrl } from "app/config/helpers";
-import { v4 } from "uuid";
 import {  sendClaimEmail } from "../users/mail"
 
 export default async function AuthHandler(
@@ -42,9 +41,7 @@ export default async function AuthHandler(
         );
     }
 
-    const schoolId = v4();
-    await School.create({
-      id: schoolId,
+    school =   await School.create({
       name: school_name,
     });
 
@@ -59,7 +56,7 @@ export default async function AuthHandler(
       account_claimed: false,
       first_name: first_name,
       last_name: last_name,
-      school_id: schoolId,
+      school_id: school.id,
       role : 'manager',
       auth_code_expiration: expiresAt,
       is_active : false
