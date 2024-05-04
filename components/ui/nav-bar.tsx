@@ -1,4 +1,5 @@
 "use client"
+import { useState } from 'react'
 import UserMenu from "@/components/user-menu";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -20,15 +21,14 @@ export interface TabLink
 }
 
 interface NavbarProps {
-    showSidebar: any;
-    setShowSidebar: (state: any) => any;
     tabs: TabLink[];
     leftContent?: React.ReactNode;
     showTabs?: boolean;
 }
 
-export function Navbar({ setShowSidebar, showSidebar, tabs, leftContent, showTabs=true }: NavbarProps) {
+export function Navbar({ tabs, leftContent, showTabs=true }: NavbarProps) {
     const { width } = useWindowSize()
+    const [showSidebar, setShowSidebar] = useState<boolean>(true);
 
     const normal = 'relative p-1.5 mb-2 block flex items-center gap-x-2 text-sm'
     const defaultLink = normal + ' text-grey-500 pl-4 dark:text-slate-400 dark:hover:text-slate-300 hover:text-primary hover:p-1.5 hover:pl-4'
@@ -78,7 +78,7 @@ export function Navbar({ setShowSidebar, showSidebar, tabs, leftContent, showTab
                 </Link>
                 {/* Sidebar */}
                 <section className="md:hidden">
-                    <AlignJustify className="w-6 h-6 cursor-pointer" onClick={() => setShowSidebar(true)} />)
+                    <AlignJustify className="w-6 h-6 cursor-pointer" onClick={() => setShowSidebar(true)} />
                     <div className={`fixed top-0 left-0 h-screen bg-white w-[12rem] pt-4 z-30 transition-all duration-500 ease-in-out border-r border-r-gray-100 md:relative md:x-7 lg:w-[16rem] ${showSidebar || width >= 768 ? 'translate-x-0' : '-translate-x-full'} dark:bg-gray-800`}>
                         <div className="flex justify-center border-b border-b-gray-100 pb-4">
                             <Image

@@ -1,7 +1,6 @@
 "use client";
-//import RecruiterTabs from "./shared/recruiter-tabs";
 import { Navbar, TabLink} from "components/ui/nav-bar"
-import React, { useState } from 'react'
+import React from 'react'
 import { LayoutGrid, UserPlus } from "lucide-react"
 
 const TABS = [
@@ -27,16 +26,10 @@ const TABS = [
 ] as TabLink[];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-    const [showSidebar, setShowSidebar] = useState<boolean>(true)
-
     return (
         <main className="font-sans">
           <section>
-            <Navbar
-                showSidebar={showSidebar}
-                setShowSidebar={setShowSidebar}
-                tabs={TABS}
-            />
+            <Navbar tabs={TABS} />
           </section>
           <section className="md:flex">
             <div className="flex flex-col flex-grow">
