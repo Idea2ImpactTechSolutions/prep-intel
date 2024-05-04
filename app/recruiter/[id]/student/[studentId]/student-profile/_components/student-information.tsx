@@ -126,7 +126,7 @@ const StudentInformation = ({student_details}) => {
 
         <ConfirmationModal
             title='Confirm Send Message'
-            discription ="Would you like to send the message?"
+            description ="Would you like to send the message?"
             variant={"orange"}
             open={showConfirmationModal}
             handleClose={()=>setShowConfirmationModal(false)}

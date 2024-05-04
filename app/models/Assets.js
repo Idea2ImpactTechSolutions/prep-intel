@@ -12,7 +12,9 @@ const Assets = sequelize.define(
         },
         school_id: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+        },
+        user_id: {
+          type: DataTypes.INTEGER,
         },
         category: {
             type: DataTypes.STRING,
@@ -20,7 +22,6 @@ const Assets = sequelize.define(
         },
         description: {
             type: DataTypes.STRING,
-            allowNull: false,
         },
         location: {
             type: DataTypes.STRING,
