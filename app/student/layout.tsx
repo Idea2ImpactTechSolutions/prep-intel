@@ -1,6 +1,9 @@
+import SheetPanel from "@/components/custom-sheet";
+import { Bell } from "lucide-react";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import NavItems from "./_components/nav-items";
 
 export const metadata: Metadata = {
     title: "Prep Intel | Student Onboarding",
@@ -26,7 +29,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                         </Link>
                         <span> Complete Account Setup </span>
                     </div>
-                    <div className="flex flex-grow-1"></div>
+                    <div className="flex flex-grow-1">
+                        <NavItems />
+                    </div>
                     {/* <span className="absolute right-2 md:relative block border border-[#DEDEDE] cursor-pointer p-2 rounded-full text-[#000000]"> <X width={15} height={15}/> </span> */}
                 </div>
             </nav>
