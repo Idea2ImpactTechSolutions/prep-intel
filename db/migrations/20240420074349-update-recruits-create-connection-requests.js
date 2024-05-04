@@ -6,8 +6,9 @@ module.exports = {
     /**
      * Add altering commands here.
      */
-    await queryInterface.removeColumn('recruits', 'connection_initiator');
-    await queryInterface.removeColumn('recruits', 'connection_date');
+    //THIS IS A WORKAROUND WE MAY NOT WANT THIS ON PROD
+    //await queryInterface.removeColumn('recruits', 'connection_initiator');
+    //await queryInterface.removeColumn('recruits', 'connection_date');
     await queryInterface.addConstraint('recruits', {
         type: 'unique',
         fields: [
