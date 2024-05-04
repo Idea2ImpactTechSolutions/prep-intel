@@ -10,12 +10,19 @@ interface SchoolInformationProps {
 }
 
 export default function SchoolInformation({ schoolData }: SchoolInformationProps) {
+  function cachedBust(url) {
+    if (!url) {
+      return '';
+    }
+    return  `${url}?v=${(new Date()).getTime()}`;
+}
     return (
         <section>
             <div className="rounded-lg shadow-md">
-                <div className="relative bg-gray-200 h-32 rounded-ss-lg rounded-se-lg lg:h-44 xl:h-52">
+                <div className="relative bg-gray-200 h-32 rounded-ss-lg rounded-se-lg lg:h-44 xl:h-52"
+                  style={{backgroundImage: `url("${cachedBust( schoolData?.assets?.filter((f) => f.category === 'school-banner-image')?.[0]?.location)}")`}}>
                     <div className="absolute left-8 -bottom-10 w-24 h-24 bg-white rounded-full border grid place-content-center md:w-28 md:h-28 md:-bottom-12 lg:w-32 lg:h-32">
-                        <Image src={schoolData?.assets?.filter((f) => f.category === 'logo')?.[0]?.location || ''}
+                        <Image src={cachedBust(schoolData?.assets?.filter((f) => f.category === 'school-profile-image')?.[0]?.location)}
                             alt="logo"
                             width={0}
                             height={0}

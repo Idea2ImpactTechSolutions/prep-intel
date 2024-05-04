@@ -1,6 +1,12 @@
 import { responseBody } from "../../../../app/config/helpers";
 const { models } = require("../../../../app/models");
 const { School, SchoolAddress, Assets, SchoolContact, SchoolSocialMedia } = models;
+const { Op } = require('sequelize');
+import {
+  SCHOOL_PROFILE_IMAGE,
+  SCHOOL_BANNER_IMAGE,
+  SCHOOL_DOCUMENT,
+} from "@/types/assetTypes";
 
 
 export default async function handler(req, res) {
@@ -152,7 +158,11 @@ async function getSchool(req: any) {
         {
           model: Assets,
           as: "assets",
-          where: { is_active: true },
+          where: {
+            category: {
+              [Op.in]: [SCHOOL_PROFILE_IMAGE, SCHOOL_BANNER_IMAGE, SCHOOL_DOCUMENT]
+            }
+          },
           required: false, // Make the inclusion of assets optional
         },
         { model: SchoolSocialMedia, as: "school_social_medias" },

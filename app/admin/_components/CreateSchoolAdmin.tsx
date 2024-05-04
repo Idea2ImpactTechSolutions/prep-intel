@@ -58,9 +58,21 @@ export default function SchoolAdminForm({ setClaimUrl }: PageProps) {
 
   return (
     <div className="md:w-[23rem] p-6 bg-gray-100 rounded-md">
-      <h1 className="text-xl font-bold">Create School Manager</h1>
+      <h1 className="text-xl font-bold">Create New School</h1>
       <div className="mt-4">
         <form onSubmit={handleSubmit}>
+          <div>
+            <Input
+              id=""
+              name="school_name"
+              value={values.school_name}
+              onChange={handleChange}
+              touched={touched.school_name}
+              error={errors.school_name}
+              placeholder="Enter School Name"
+            />
+          </div>
+          <h2 className="mt-2 font-bold">Admin</h2>
           <div className="flex gap-3">
             <div>
               <Input
@@ -85,18 +97,7 @@ export default function SchoolAdminForm({ setClaimUrl }: PageProps) {
               />
             </div>
           </div>
-          <div>
-            <Input
-              id=""
-              name="school_name"
-              value={values.school_name}
-              onChange={handleChange}
-              touched={touched.school_name}
-              error={errors.school_name}
-              placeholder="Enter School Name"
-            />
-          </div>
-          <div className="mt-6">
+          <div className="">
             <Input
               id=""
               name="email"

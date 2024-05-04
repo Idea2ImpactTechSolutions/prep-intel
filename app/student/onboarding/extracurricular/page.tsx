@@ -80,6 +80,7 @@ export default function ExtracurricularPage() {
       <OnboardingFooter
         prevPageHandler={() => router.push('/student/onboarding/majors')}
         nextPageHandler={() => router.push('/student/onboarding/transcripts')}
+        preventGoBack={false}
       />
     </form>
   )

@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { ImagePlus, Upload } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import * as yup from "yup"
-import { useLazyGetRecruiterQuery, useUpdateRecruiterPersonalInfoMutation, useUploadRecruiterProfileImageMutation } from "@/redux/services/recruiter/recruiterApi";
+import { useLazyGetRecruiterQuery, useUpdateRecruiterPersonalInfoMutation } from "@/redux/services/recruiter/recruiterApi";
+import { useUploadAssetMutation, } from "@/redux/services/assets/assetApi";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import LoadingSpinner from "@/components/loading-spinner";
@@ -25,10 +26,11 @@ export default function Page() {
   const router = useRouter();
   const session = useSession()
   const recruiterId = session?.data?.user?.roleId
+  const userId = session?.data?.user?.id
 
   const [getData, {data}] = useLazyGetRecruiterQuery()
   const [updateRecruiterPersonalInfo, { isLoading }] = useUpdateRecruiterPersonalInfoMutation();
-  const [uploadRecruiterProfileImg, { isLoading:uploading }] = useUploadRecruiterProfileImageMutation();
+  const [uploadRecruiterProfileImg, { isLoading:uploading }] = useUploadAssetMutation();
 
   const [selectedImage, setSelectedImage] = useState<File>();
 
@@ -55,7 +57,7 @@ export default function Page() {
       first_name: data?.data?.user?.first_name,
       last_name: data?.data?.user?.last_name,
       phone: data?.data?.user?.phone,
-      profile_img: data?.data?.user?.profile_img
+      profile_img: data?.data?.profile_img
     },
     validationSchema: yup.object().shape({
       first_name: yup.string().required("first name is required."),
@@ -89,7 +91,9 @@ export default function Page() {
   useEffect(() => {
     if (selectedImage) {
       const payload = new FormData()
-      payload.append('profile_img', selectedImage)
+      payload.append('file', selectedImage)
+      payload.append('userId', userId as string)
+      payload.append('category', 'recruiter-profile-image')
       handleUploadRecruiterProfileImage(payload)
     }
   }, [selectedImage])
@@ -168,7 +172,7 @@ export default function Page() {
                           touched={touched.last_name}
                           placeholder="Enter your last name"
                           error={errors.last_name}
-                      />                    
+                      />
                     </div>
 
                     <div className="mt-2">
@@ -188,9 +192,9 @@ export default function Page() {
                     </div>
 
                     <div className='my-4 mt-7 flex justify-end'>
-                    <Button 
+                    <Button
                         type='submit'
-                        variant="orange" 
+                        variant="orange"
                         className='w-full sm:w-fit md:px-10 rounded-lg font-[500]'
                         loading={isLoading}
                         disabled={isLoading}
