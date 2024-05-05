@@ -1,14 +1,14 @@
 "use client"
-import CustomProfilePopover from "@/components/custom-profile-popover";
+import UserMenu from "@/components/user-menu";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAppDispatch } from "@/redux/store";
 import useWindowSize from "@/utils/hooks/useWindowSize";
-import { AlignJustify, Bell, LogOut, User } from "lucide-react";
+import { AlignJustify, Bell, LogOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { signOut } from "next-auth/react";
 import { managerReset } from "@/redux/features/school/managerSlice";
 
@@ -23,29 +23,30 @@ interface NavbarProps {
     showSidebar: any;
     setShowSidebar: (state: any) => any;
     tabs: TabLink[];
+    leftContent?: React.ReactNode;
+    showTabs?: boolean;
 }
 
-export function Navbar({ setShowSidebar, showSidebar, tabs }: NavbarProps) {
-    const [showProfilePopover, setShowProfilePopover] = useState(false)
-
+export function Navbar({ setShowSidebar, showSidebar, tabs, leftContent, showTabs=true }: NavbarProps) {
     const { width } = useWindowSize()
 
     const normal = 'relative p-1.5 mb-2 block flex items-center gap-x-2 text-sm'
     const defaultLink = normal + ' text-grey-500 pl-4 dark:text-slate-400 dark:hover:text-slate-300 hover:text-primary hover:p-1.5 hover:pl-4'
     const activeLink = normal + ' text-white bg-primary rounded-[4px] pl-4 dark:text-slate-300'
 
-    // const location = useLocation();
     const router = useRouter()
-    const location = usePathname()
+    const location = usePathname() as string;
     const pageParams = useParams();
     const schoolId = pageParams?.id as string;
+
+    const suppressTabList = ['/school/claim', '/school/set-password'];
+    const shouldShowTabs = showTabs && !suppressTabList.includes(location);
 
     const dispatch = useAppDispatch()
 
     const handleLogout = async () => {
         await signOut()
         dispatch(managerReset());
-        // window.location.href = "/login";
     }
 
     useEffect(() => {
@@ -63,7 +64,7 @@ export function Navbar({ setShowSidebar, showSidebar, tabs }: NavbarProps) {
             ></div>}
             <nav className={cn(
                //width < 768 && "p-4",
-              "pi-container flex justify-between items-center")}>
+              "pi-container flex items-center")}>
                 <Link
                     href="/"
                     className="hidden md:block"
@@ -75,11 +76,9 @@ export function Navbar({ setShowSidebar, showSidebar, tabs }: NavbarProps) {
                         alt="logo"
                     />
                 </Link>
+                {/* Sidebar */}
                 <section className="md:hidden">
-                    {
-                        location !== '/school/claim' && location !== '/school/set-password' && (
-                            <AlignJustify className="w-6 h-6 cursor-pointer" onClick={() => setShowSidebar(true)} />)
-                    }
+                    <AlignJustify className="w-6 h-6 cursor-pointer" onClick={() => setShowSidebar(true)} />)
                     <div className={`fixed top-0 left-0 h-screen bg-white w-[12rem] pt-4 z-30 transition-all duration-500 ease-in-out border-r border-r-gray-100 md:relative md:x-7 lg:w-[16rem] ${showSidebar || width >= 768 ? 'translate-x-0' : '-translate-x-full'} dark:bg-gray-800`}>
                         <div className="flex justify-center border-b border-b-gray-100 pb-4">
                             <Image
@@ -118,20 +117,13 @@ export function Navbar({ setShowSidebar, showSidebar, tabs }: NavbarProps) {
                             ><LogOut className="w-4 h-4 mr-1" /> Sign Out</Button>
                         </div>
                     </div>
-                    {
-                        location === '/school/claim' || location === '/school/set-password' && (
-                            <Image
-                                src="/images/logo/text-logo.png"
-                                width={100}
-                                height={100}
-                                alt="logo"
-                            />
-                        )
-                    }
                 </section>
+                <div className="flex-grow">
+                  {leftContent}
+                </div>
+                  <div className="flex items-center justify-between gap-x-16">
                 {
-                    location !== '/school/claim' && location !== '/school/set-password' && (
-                        <div className="flex items-center justify-between gap-x-16">
+                          shouldShowTabs && (
                             <div className="hidden md:flex md:justify-between md:items-center">
                                 {
                                     tabs.map(({ title, url }, index) => (
@@ -147,19 +139,15 @@ export function Navbar({ setShowSidebar, showSidebar, tabs }: NavbarProps) {
                                         </Link>
                                     ))
                                 }
-                            </div>
+                            </div>)
+                }
 
-                            <div className="flex gap-x-4">
-                                <Bell className="w-4 h-4 cursor-pointer" />
-                                <User className="w-4 h-4 cursor-pointer" onClick={() => setShowProfilePopover(!showProfilePopover)}/>
-                                <CustomProfilePopover
-                                    show={showProfilePopover}
-                                    handleClose={() => setShowProfilePopover(false)}
-                                />
-                            </div>
-                        </div>
+                    <div className="flex gap-x-4">
+                        <Bell className="w-4 h-4 cursor-pointer" />
+                        <UserMenu />
+                    </div>
+                </div>
 
-                    )}
             </nav>
         </div>
     )

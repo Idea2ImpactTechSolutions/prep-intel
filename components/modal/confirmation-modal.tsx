@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils"
     open: boolean,
     title?: string,
     loading?: boolean,
-    discription?: string,
+    description?: string,
     modalContentStyle?: string,
     descriptionStyle?: string,
     titleStyle?: string,
@@ -23,27 +23,27 @@ import { cn } from "@/lib/utils"
     handleClose: () => void
   }
 
-export default function ConfirmationModal({open, title, discription, loading = false, modalContentStyle, titleStyle,descriptionStyle,variant, loadingText="Submitting", onClick, handleClose}:AlertDialogType) {
+export default function ConfirmationModal({open, title, description: description, loading = false, modalContentStyle, titleStyle,descriptionStyle,variant, loadingText="Submitting", onClick, handleClose}:AlertDialogType) {
     return (
         <AlertDialog
             open={open}
         >
-            <AlertDialogContent 
+            <AlertDialogContent
                 className={cn("w-[90%] mx-auto p-8 font-sans", modalContentStyle)}
             >
                 <AlertDialogHeader>
-                    <AlertDialogTitle className={cn("text-cente text-[1.2rem]", titleStyle)}>{title}</AlertDialogTitle>
+                    <AlertDialogTitle className={cn("text-center text-[1.2rem]", titleStyle)}>{title}</AlertDialogTitle>
                     <AlertDialogDescription className={cn("text-[.9ren]", descriptionStyle)}>
-                        {discription}
+                        {description}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter className="gap-y-4 md:gap-y-0 ">
-                    <Button 
+                    <Button
                         onClick={handleClose}
                         variant="outline"
                         disabled={loading}
                     >Close</Button>
-                    <Button 
+                    <Button
                         onClick={onClick}
                         loading={loading}
                         loadingText={loadingText}

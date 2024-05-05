@@ -17,8 +17,9 @@ type CustomFileInputType = {
     error?: any,
     uploading?: boolean,
     disabled?: boolean
+    accept?: string,
 }
-export default function CustomFileInput({ handleFileChange, handleFileDrop, selectedFile, className, children, uploading = false, disabled = false }: CustomFileInputType) {
+export default function CustomFileInput({ handleFileChange, handleFileDrop, selectedFile, className, children, uploading = false, disabled = false, accept = "image/png, image/jpg, image/jpeg" }: CustomFileInputType) {
     const onFileChange = (file: HTMLInputElement) => {
         handleFileChange(file);
     }
@@ -29,7 +30,7 @@ export default function CustomFileInput({ handleFileChange, handleFileDrop, sele
         )}>
             <input
                 type="file"
-                accept="image/png, image/jpg, image/jpeg"
+                accept={accept}
                 onChange={(e: any) => onFileChange(e.target.files[0])}
                 onDrop={handleFileDrop}
                 className="hidden"

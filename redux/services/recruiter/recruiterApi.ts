@@ -55,14 +55,6 @@ const recruiterApi = baseApi.injectEndpoints({
       },
       invalidatesTags:["RECRUITER_INFO"]
     }),
-    uploadRecruiterProfileImage: builder.mutation({
-      query: (profile_img) => ({
-        url: `/recruiter/profile/upload-image`,
-        method: "POST",
-        body: profile_img,
-        formData: true,
-      }),
-    })
   }),
 });
 
@@ -72,7 +64,6 @@ export const {
   useLazyGetRecruiterQuery,
   useGetRecruiterQuery,
   useGetStudentProfileQuery,
-  useUploadRecruiterProfileImageMutation,
   useSendMessageMutation,
   useLazyExploreRecruitsQuery,
   useUpdateRecruiterPersonalInfoMutation
