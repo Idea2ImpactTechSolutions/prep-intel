@@ -1,21 +1,42 @@
 import SingleStat from '@/components/single-stat'
+import { Button } from '@/components/ui/button'
+import { useConnectWithRecruiterMutation } from '@/redux/services/student/studentApi'
 import { Dictionary } from '@/types/dictionary'
 import { Facebook, Instagram, Twitter } from 'lucide-react'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import { toast } from 'sonner'
 
 interface SchoolInformationProps {
     schoolData: Dictionary
 }
 
 export default function SchoolInformation({ schoolData }: SchoolInformationProps) {
-  function cachedBust(url) {
-    if (!url) {
-      return '';
+    const [connectWithRecruiter, {isLoading}] = useConnectWithRecruiterMutation()
+    const session = useSession()
+    const studentId = session.data?.user?.roleId
+    const userRole = session.data?.user?.role
+
+    const handleConnectWithRecruiter = async()=>{
+       connectWithRecruiter({school_id:schoolData?.id, studentId})
+       .unwrap().then((payload)=>{
+           if(payload?.status === 200){
+               toast.success(payload?.message)
+           }
+       }).catch((err)=>{
+            toast.error(err?.message)
+       })
     }
-    return  `${url}?v=${(new Date()).getTime()}`;
-}
+
+    function cachedBust(url) {
+      if (!url) {
+        return '';
+      }
+      return  `${url}?v=${(new Date()).getTime()}`;
+    }
+
     return (
         <section>
             <div className="rounded-lg shadow-md">
@@ -106,8 +127,19 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
                         </div>
                     </div>
                 </div>
-                <div className="bg-gray-200 p-4 lg:w-[60rem] xl:w-[30rem]">
-
+                <div className="bg-gray-200 p-4 lg:w-[60rem] xl:w-[30rem] rounded-xl">
+                    <div className="w-full h-[308px] border border-dashed border-[#333] mb-10 rounded-lg"></div>
+                    {
+                        userRole === "student"?
+                            <>
+                                <Button variant="orange" size="lg" className="w-full" onClick={handleConnectWithRecruiter} loading={isLoading} loadingText='Connecting...' disabled={isLoading}>
+                                    Connect with Recruiter
+                                </Button>
+                                <Button variant="outline" size="lg" className="w-full mt-5 font-bold bg-transparent" asChild>
+                                    <Link href={`https://${schoolData?.application_url}`} target="_blank">Apply to the School</Link>
+                                </Button>   
+                            </>: null
+                    }
                 </div>
             </div>
         </section>

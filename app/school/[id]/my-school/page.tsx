@@ -10,6 +10,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import SchoolInformation from "../../_components/school-information";
 import LoadingSpinner from "../../_components/loading-spinner";
+import { useSession } from 'next-auth/react'
 
 
 // type PROGRESS_TYPE = 'BASIC_INFORMATION' | 'ACADEMIC_INFORMATION' | 'CAMPUS_INFORMATION' | 'EXTRA_CURRICULAR_INFORMATION' | 'NEWS_FEED_EVENT' | 'PREVIEW_INFORMATION'
@@ -23,6 +24,8 @@ export default function MySchool() {
     const router = useRouter()
     const pageParams = useParams();
     const schoolId = pageParams?.id;
+    const session = useSession()
+    const userRole = session.data?.user?.role  
 
     const dispatch = useAppDispatch()
 
@@ -62,13 +65,14 @@ export default function MySchool() {
                         }
                         titleClass="text-sm"
                         rightContent={
-                            <Button
+                            userRole !== "student"?
+                                <Button
                                     variant={"outline"}
                                     className="text-xs h-8 rounded-sm px-3"
                                     onClick={() => router.push(`/school/${schoolId}/school-profile`)}
                                 >
                                     Edit School
-                                </Button>
+                                </Button>:null
                         }
                     />
                     <div className="border-t"> </div>
