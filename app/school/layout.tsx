@@ -34,7 +34,6 @@ const TABS = [
 ] as TabLink[];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-    const [showSidebar, setShowSidebar] = useState<boolean>(true)
     const [allowFullView, setAllowFullView] = useState(false);
     const [getSchoolProfile, { isLoading }] = useLazyGetSchoolProfileQuery()
     const { manager: { school_information: { school_data } } }: Dictionary = useAppSelector((state) => state.manager)
@@ -69,11 +68,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <main className="overflow-y-hidden font-sans">
             <section className="">
-                <Navbar
-                    showSidebar={showSidebar}
-                    setShowSidebar={setShowSidebar}
-                    tabs={TABS}
-                />
+                <Navbar tabs={TABS} />
                 <section>
                     {
                         isLoading ?

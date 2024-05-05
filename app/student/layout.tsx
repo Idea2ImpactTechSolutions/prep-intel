@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React from 'react'
 import { Navbar, TabLink} from "components/ui/nav-bar"
 import { GraduationCap, LayoutGrid, UserPlus } from "lucide-react"
 import { usePathname } from "next/navigation";
@@ -23,9 +23,7 @@ const TABS = [
 ] as TabLink[];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-    const [showSidebar, setShowSidebar] = useState<boolean>(true);
     const location = usePathname() as string;
-
 
     return (
       <main className="overflow-y-hidden font-sans">
@@ -35,8 +33,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 leftContent={
                   location.includes('onboarding') && <span className="ml-10 md:border-l md:pl-10">Complete Account Setup</span>
                 }
-                showSidebar={showSidebar}
-                setShowSidebar={setShowSidebar}
                 tabs={TABS}
             />
             <section>
@@ -44,7 +40,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </section>
         </section>
         </main>
-
-
     )
 }
