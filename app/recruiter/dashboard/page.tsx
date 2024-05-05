@@ -43,6 +43,10 @@ export default function Page() {
       title: "High School",
       field: "studentHighSchool",
     },
+    {
+      title: "Action",
+      field: "viewBtn",
+    },
   ];
 
   async function refreshCandidates(value) {
@@ -136,9 +140,9 @@ export default function Page() {
             />
 
             <Button
-              className="block mt-3 w-40"
-              loading={isLoading}
-              disabled={isLoading}
+              className="bloc mt-3 px-16"
+              disabled={isLoading || isFetching}
+              loadingText="Discover"
               type="submit"
             >
               Discover
