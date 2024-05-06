@@ -8,9 +8,12 @@ import { AlignJustify, Bell, LogOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { signOut } from "next-auth/react";
 import { managerReset } from "@/redux/features/school/managerSlice";
+import NavItems from "@/app/student/_components/nav-items";
+import { useLazyGetConnectionRequestsQuery } from "@/redux/services/student/studentApi";
+import { useSession } from "next-auth/react";
 
 export interface TabLink
 {
@@ -28,7 +31,12 @@ interface NavbarProps {
 }
 
 export function Navbar({ setShowSidebar, showSidebar, tabs, leftContent, showTabs=true }: NavbarProps) {
+    const [getConnectionRequest, {data:connectionRequests, isLoading:loadingConnections} ] = useLazyGetConnectionRequestsQuery()
+    
     const { width } = useWindowSize()
+    const session = useSession()
+    const studentId = session?.data?.user?.roleId
+
 
     const normal = 'relative p-1.5 mb-2 block flex items-center gap-x-2 text-sm'
     const defaultLink = normal + ' text-grey-500 pl-4 dark:text-slate-400 dark:hover:text-slate-300 hover:text-primary hover:p-1.5 hover:pl-4'
@@ -41,6 +49,7 @@ export function Navbar({ setShowSidebar, showSidebar, tabs, leftContent, showTab
 
     const suppressTabList = ['/school/claim', '/school/set-password'];
     const shouldShowTabs = showTabs && !suppressTabList.includes(location);
+    const [open, setOpen] = useState<boolean>(false)
 
     const dispatch = useAppDispatch()
 
@@ -56,6 +65,12 @@ export function Navbar({ setShowSidebar, showSidebar, tabs, leftContent, showTab
             setShowSidebar(true)
         }
     }, [width])
+
+    useEffect(()=>{
+        if(studentId){
+          getConnectionRequest(studentId)
+        }
+      }, [studentId])
 
     return (
         <div className="bg-[#F0F4F7]">
@@ -78,7 +93,7 @@ export function Navbar({ setShowSidebar, showSidebar, tabs, leftContent, showTab
                 </Link>
                 {/* Sidebar */}
                 <section className="md:hidden">
-                    <AlignJustify className="w-6 h-6 cursor-pointer" onClick={() => setShowSidebar(true)} />)
+                    <AlignJustify className="w-6 h-6 cursor-pointer" onClick={() => setShowSidebar(true)} />
                     <div className={`fixed top-0 left-0 h-screen bg-white w-[12rem] pt-4 z-30 transition-all duration-500 ease-in-out border-r border-r-gray-100 md:relative md:x-7 lg:w-[16rem] ${showSidebar || width >= 768 ? 'translate-x-0' : '-translate-x-full'} dark:bg-gray-800`}>
                         <div className="flex justify-center border-b border-b-gray-100 pb-4">
                             <Image
@@ -143,9 +158,13 @@ export function Navbar({ setShowSidebar, showSidebar, tabs, leftContent, showTab
                 }
 
                     <div className="flex gap-x-4">
-                        <Bell className="w-4 h-4 cursor-pointer" />
+                        <div className="relative cursor-pointer" onClick={()=>setOpen(true)}>
+                            <Bell className="w-4 h-4 "/>
+                            <span className="w-1 h-1 rounded-full bg-red-500 absolute right-0 top-0.5"></span>
+                        </div>
                         <UserMenu />
                     </div>
+                    <NavItems open={open} setOpen={setOpen} loadingConnections={loadingConnections} connectionRequests={connectionRequests?.data}/>                    
                 </div>
 
             </nav>
