@@ -1,49 +1,18 @@
 "use client";
 import PageTitleContainer from "@/components/page-title";
-import { setSchoolInformation } from "@/redux/features/school/managerSlice";
-import { useLazyGetSchoolProfileQuery } from "@/redux/services/school/managerApi";
-import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { Dictionary } from "@/types/dictionary";
+import { useGetSchoolProfileQuery } from "@/redux/services/school/managerApi";
 import moment from "moment";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
 import SchoolInformation from "@/components/school-information";
 import LoadingSpinner from "@/components/loading-spinner";
 
 export default function SchoolPage() {
-  const [isFetchedProfile, setIsFetchedProfile] = useState<boolean>(false);
-  const [
-    getSchoolProfile,
-    { isLoading: isLoadingGetProfile, isFetching: isFetchingSchoolProfile },
-  ] = useLazyGetSchoolProfileQuery();
-  const {
-    manager: {
-      school_information: { school_data },
-    },
-  }: Dictionary = useAppSelector((state) => state.manager);
-
   const pageParams = useParams();
   const schoolId = pageParams?.id;
+  const { data: response, isLoading } = useGetSchoolProfileQuery(schoolId);
+  const school_data = response?.data;
 
-  const dispatch = useAppDispatch();
-
-  const handleGetSchoolInformation = async (schoolId) => {
-    getSchoolProfile(schoolId)
-      .unwrap()
-      .then((payload) => {
-        const { data } = payload;
-        setIsFetchedProfile(true);
-        dispatch(setSchoolInformation({ slug: "school_data", data: data }));
-      });
-  };
-
-  useEffect(() => {
-    if (schoolId) {
-      !isFetchedProfile && handleGetSchoolInformation(schoolId);
-    }
-  }, []);
-
-  if (isLoadingGetProfile || isFetchingSchoolProfile) {
+  if (isLoading) {
     return <LoadingSpinner />;
   }
 
