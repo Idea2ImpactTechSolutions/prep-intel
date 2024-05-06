@@ -98,6 +98,7 @@ const managerApi = baseApi.injectEndpoints({
 
 export const {
   useLazyGetSchoolProfileQuery,
+  useGetSchoolProfileQuery,
   useManagerCreateSchoolProfileMutation,
   usePublishSchoolProfileMutation,
   useLazyGetPersonnelQuery,

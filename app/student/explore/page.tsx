@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import Select from "react-select";
 import { toast } from "sonner";
+import SchoolView from "../_components/school-view";
 
 const options = [
   { value: "AL", label: "Alabama" },
@@ -69,6 +70,7 @@ export default function Page() {
   const [getSchoolData,{isLoading, isFetching}] = useLazyGetSchoolDataQuery();
   const [activeSelection, setActiveSelection] = useState<any[]>([]);
   const [activeStates, setActiveStates] = useState<string[]>([]);
+  const [activeSchoolId, setActiveSchoolId] = useState("");
   const [schools, setSchools] = useState<any[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [page, setPage] = useState(0);
@@ -112,6 +114,11 @@ export default function Page() {
     );
     setActiveSelection(activeItems);
   }, [activeStates]);
+
+  if (activeSchoolId)
+    {
+      return <SchoolView schoolId={activeSchoolId} goBack={() => setActiveSchoolId("")} />
+    }
 
   return (
     <div className="pi-container mt-6">
@@ -177,7 +184,7 @@ export default function Page() {
             {schools?.length
               ? schools.map((school, index) => (
                   <li key={index} className="flex rounded bg-slate-50 relative justify-center items-center text-sm w-[200px] h-[150px] p-6 m-1 border border-red">
-                    <Link href={`/student/explore/schools/${school.id}`}>
+                    <Link href='#' onClick={() => setActiveSchoolId(school.id)}>
                       {school.name}
                     </Link>
                     <div className="absolute right-3 bottom-3 text-slate-400">
