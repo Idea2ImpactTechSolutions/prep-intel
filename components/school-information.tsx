@@ -1,40 +1,77 @@
 import SingleStat from '@/components/single-stat'
+import { Button } from '@/components/ui/button'
+import { useConnectWithRecruiterMutation } from '@/redux/services/student/studentApi'
 import { Dictionary } from '@/types/dictionary'
 import { Facebook, Instagram, Twitter } from 'lucide-react'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import { toast } from 'sonner'
+import { FaSchool } from "react-icons/fa6";
 
 interface SchoolInformationProps {
     schoolData: Dictionary
 }
 
 export default function SchoolInformation({ schoolData }: SchoolInformationProps) {
-  function cachedBust(url) {
-    if (!url) {
-      return '';
+    const [connectWithRecruiter, {isLoading}] = useConnectWithRecruiterMutation()
+    const session = useSession()
+    const studentId = session.data?.user?.roleId
+    const userRole = session.data?.user?.role
+
+    const handleConnectWithRecruiter = async()=>{
+       connectWithRecruiter({school_id:schoolData?.id, studentId})
+       .unwrap().then((payload)=>{
+           if(payload?.status === 200){
+               toast.success(payload?.message)
+           }
+       }).catch((err)=>{
+            toast.error(err?.message)
+       })
     }
-    return  `${url}?v=${(new Date()).getTime()}`;
-}
+
+    function cachedBust(url) {
+      if (!url) {
+        return '';
+      }
+      return  `${url}?v=${(new Date()).getTime()}`;
+    }
+
+    function profileImage(schoolData) {
+      return schoolData?.assets?.filter((f) => f.category === 'school-profile-image')?.[0]?.location;
+    }
+
+    function bannerImage(schoolData) {
+      return schoolData?.assets?.filter((f) => f.category === 'school-banner-image')?.[0]?.location;
+    }
+
     return (
         <section>
             <div className="rounded-lg shadow-md">
                 <div className="relative bg-gray-200 h-32 rounded-ss-lg rounded-se-lg lg:h-44 xl:h-52"
-                  style={{backgroundImage: `url("${cachedBust( schoolData?.assets?.filter((f) => f.category === 'school-banner-image')?.[0]?.location)}")`}}>
+                  style={{backgroundImage: `url("${cachedBust(bannerImage(schoolData))}")`}}>
                     <div className="absolute left-8 -bottom-10 w-24 h-24 bg-white rounded-full border grid place-content-center md:w-28 md:h-28 md:-bottom-12 lg:w-32 lg:h-32">
-                        <Image src={cachedBust(schoolData?.assets?.filter((f) => f.category === 'school-profile-image')?.[0]?.location)}
-                            alt="logo"
-                            width={0}
-                            height={0}
-                            sizes="100vw"
-                            style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
-                        />
+
+                    {profileImage(schoolData) ? (
+                      <Image src={cachedBust(profileImage(schoolData))}
+                        alt="logo"
+                        width={0}
+                        height={0}
+                        sizes="100vw"
+                        style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center w-full h-full text-gray-500 text-6xl">
+                        <FaSchool />
+                      </div>
+                    )}
                     </div>
                 </div>
                 <div>
                     <div className="bg-white rounded-lg p-4 pt-16 px-10">
                         <span className="text-gray-500"> STATE UNIVERSITY </span>
-                        <h2 className="mt-1.5 font-medium md:text-lg lg:text-xl xl:text-2xl">{schoolData?.name || "University of Georgia"}</h2>
+                        <h2 className="mt-1.5 font-medium md:text-lg lg:text-xl xl:text-2xl">{schoolData?.name}</h2>
                         <div className="mt-2 my-1 mb-6 text-gray-500 flex">
                             <span className="border-r-2 border-gray-400 pr-2 flex gap-2 capitalize">
                                 <Image
@@ -42,9 +79,9 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
                                     alt="logo"
                                     width={20}
                                     height={20}
-                                /> {schoolData?.school_address?.state || "Gorgia"}</span>
-                            <span className="border-r-2 border-gray-400 pr-2 pl-2"> {`${schoolData?.school_address?.city} ${schoolData?.school_address?.postal}` || 'Athens, GA 3060'} </span>
-                            <span className="pl-2"> { schoolData?.school_contacts?.[0]?.phone || "(706) 542-3000"} </span>
+                                /> {schoolData?.school_address?.state || ""}</span>
+                            <span className="border-r-2 border-gray-400 pr-2 pl-2"> {`${schoolData?.school_address?.city || ""}  ${schoolData?.school_address?.postal || ""}`} </span>
+                            <span className="pl-2"> { schoolData?.school_contacts?.[0]?.phone} </span>
                         </div>
                     </div>
                 </div>
@@ -54,7 +91,7 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
                     <div>
                         <h2 className="text-[#030712] font-bold text-sm md:text-lg">School Overview</h2>
                         <div className="text-xs text-[#312B2B] md:text-sm lg:w-4/5">
-                            {schoolData?.intro_paragraph || "Welcome to the University of ABC"}</div>
+                            {schoolData?.intro_paragraph}</div>
                     </div>
                     <div className="mt-4">
                         <h2 className="text-[#030712] font-bold text-sm md:text-lg">Contact Information</h2>
@@ -63,7 +100,7 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
                                 <tbody>
                                     <tr className="bg-transparent">
                                         <td className="text-[#030712] text-sm font-bold border-b-transparent p-0">Physical Address:</td>
-                                        <td className="border-b-transparent p-0 pl-8">{schoolData?.school_address?.street_address_1 || "10583 Saturn Pkwy, Saturn, Space 20499"}</td>
+                                        <td className="border-b-transparent p-0 pl-8">{schoolData?.school_address?.street_address_1}</td>
                                     </tr>
                                     {
                                         schoolData?.school_contacts?.map(({ contact_type, email, id, phone }) => (
@@ -106,8 +143,19 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
                         </div>
                     </div>
                 </div>
-                <div className="bg-gray-200 p-4 lg:w-[60rem] xl:w-[30rem]">
-
+                <div className="bg-gray-200 p-4 lg:w-[60rem] xl:w-[30rem] rounded-xl">
+                    <div className="w-full h-[308px] border border-dashed border-[#333] mb-10 rounded-lg"></div>
+                    {
+                        userRole === "student"?
+                            <>
+                                <Button variant="orange" size="lg" className="w-full" onClick={handleConnectWithRecruiter} loading={isLoading} loadingText='Connecting...' disabled={isLoading}>
+                                    Connect with Recruiter
+                                </Button>
+                                <Button variant="outline" size="lg" className="w-full mt-5 font-bold bg-transparent" asChild>
+                                    <Link href={`https://${schoolData?.application_url}`} target="_blank">Apply to the School</Link>
+                                </Button>
+                            </>: null
+                    }
                 </div>
             </div>
         </section>

@@ -8,15 +8,11 @@ import { Dictionary } from "@/types/dictionary";
 import moment from 'moment';
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import SchoolInformation from "../../_components/school-information";
-import LoadingSpinner from "../../_components/loading-spinner";
-
-
-// type PROGRESS_TYPE = 'BASIC_INFORMATION' | 'ACADEMIC_INFORMATION' | 'CAMPUS_INFORMATION' | 'EXTRA_CURRICULAR_INFORMATION' | 'NEWS_FEED_EVENT' | 'PREVIEW_INFORMATION'
-
+import SchoolInformation from "@/components/school-information";
+import LoadingSpinner from "@/components/loading-spinner";
 
 export default function MySchool() {
-    const [isFetchedProfile, setIsFetechProfile] = useState<boolean>(false)
+    const [isFetchedProfile, setIsFetchedProfile] = useState<boolean>(false)
     const [getSchoolProfile, {isLoading: isLoadingGetProfile, isFetching: isFetchingSchoolProfile }] = useLazyGetSchoolProfileQuery()
     const { manager: { school_information: { school_data } } }: Dictionary = useAppSelector((state) => state.manager)
 
@@ -31,7 +27,7 @@ export default function MySchool() {
             .unwrap()
             .then((payload) => {
                 const { data } = payload
-                setIsFetechProfile(true)
+                setIsFetchedProfile(true)
                 dispatch(setSchoolInformation({ slug: 'school_data', data: data }))
             })
       }
@@ -53,22 +49,22 @@ export default function MySchool() {
                     <PageTitleContainer
                         title={
                             <>
-                                {school_data?.name || "University of Saturn"}
-                                <div className="flex flex-col text-xs font-normal">
-                                    <span className="capitalize">{school_data?.tagline || "You’re going to love it out here"}</span>
-                                    <span className="italic">Founded {moment(school_data?.found_date).format('YYYY') || "2046"}</span>
-                                </div>
+                                {school_data?.name}
+                                { school_data?.found_date && <div className="flex flex-col text-xs font-normal">
+                                    <span className="capitalize">{school_data?.tagline}</span>
+                                    <span className="italic">Founded {moment(school_data?.found_date).format('YYYY')}</span>
+                                </div> }
                             </>
                         }
                         titleClass="text-sm"
                         rightContent={
-                            <Button
-                                    variant={"outline"}
-                                    className="text-xs h-8 rounded-sm px-3"
-                                    onClick={() => router.push(`/school/${schoolId}/school-profile`)}
-                                >
-                                    Edit School
-                                </Button>
+                          <Button
+                              variant={"outline"}
+                              className="text-xs h-8 rounded-sm px-3"
+                              onClick={() => router.push(`/school/${schoolId}/school-profile`)}
+                          >
+                              Edit School
+                          </Button>
                         }
                     />
                     <div className="border-t"> </div>

@@ -1,4 +1,5 @@
 "use client"
+import { useState } from 'react'
 import UserMenu from "@/components/user-menu";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -23,8 +24,6 @@ export interface TabLink
 }
 
 interface NavbarProps {
-    showSidebar: any;
-    setShowSidebar: (state: any) => any;
     tabs: TabLink[];
     leftContent?: React.ReactNode;
     showTabs?: boolean;

@@ -11,11 +11,11 @@ import { LoaderCircle, LucideSearch } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 import AVAILABLE_MAJORS from "../../../../data/majors.json";
 import OnboardingTabs from "../../_components/onboarding-tabs";
 import OnboardingTitle from "../../_components/onboarding-title";
 import { POPULAR_MAJOR, PROFESSIONAL_PT_PROGRAMS } from "../data";
-import { toast } from "sonner";
 
 export default function MajorPage() {
   const [isLoading, setIsLoading] = useState(false);
