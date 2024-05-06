@@ -127,7 +127,7 @@ export default function Page() {
         </div>
       </div>
 
-      {schools?.length ? 
+      {schools?.length ?
         <div className="space-y-1 my-3">
           <h2 className="font-semibold">{schoolCount} Universit{schoolCount === 1 ? 'y' : 'ies'} Found</h2>
           <p className="text-sm text-gray-500">Explore {schools?.length} top universit{schoolCount === 1 ? 'y' : 'ies'}</p>
@@ -154,27 +154,30 @@ export default function Page() {
               >
                 Search
               </Button>
-            </div>        
+            </div>
           </div>
           <div className="hidden relative md:flex space-y-2">
-            <Search width={15} height={15} className="text-[#AAAAAA] top-[22px] left-3 absolute" />
+          {
+            schools?.length ? <div>
+              <Search width={15} height={15} className="text-[#AAAAAA] top-[22px] left-3 absolute" />
               <Input
                   // label="Search Schools"
                   placeholder="Search schools by name"
                   className="rounded-lg p-[1rem] pl-8 placeholder:text-[#AAAAAA]"
                   onChange={(e)=>setSearchTerm(e.target.value)}
                   value={searchTerm}
-            />
+              /></div> : null
+          }
           </div>
         </div>
 
         {
             (isLoading || isFetching) ? <LoadingSpinner className="h-[250px]" /> :
-            <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-3 mt-5">
+            <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-3 mt-5 mb-40">
             {schools?.length
               ? schools.map((school, index) => (
                   <li key={index} className="flex rounded bg-slate-50 relative justify-center items-center text-sm w-[200px] h-[150px] p-6 m-1 border border-red">
-                    <Link href={`/school/${school.id}/dashboard`}>
+                    <Link href={`/student/explore/schools/${school.id}`}>
                       {school.name}
                     </Link>
                     <div className="absolute right-3 bottom-3 text-slate-400">
@@ -187,7 +190,7 @@ export default function Page() {
         }
 
         {
-          schools?.length ? 
+          schools?.length ?
             <div className="flex mt-5">
               <ReactPaginate
                 activeClassName={ "flex items-center justify-center text-primary border border-primary rounded- p- h-8 w-8"}
