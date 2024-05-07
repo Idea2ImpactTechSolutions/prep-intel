@@ -20,7 +20,7 @@ import {
  *   get:
  *     summary: Retrieves a list of assets
  *     tags:
- *       - Assets
+ *       - asset
  *     parameters:
  *       - in: query
  *         name: schoolId

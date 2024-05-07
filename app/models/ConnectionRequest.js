@@ -14,7 +14,6 @@ const ConnectionRequest = sequelize.define(
         school_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-        
         },
         student_id: {
             type: DataTypes.INTEGER,
@@ -43,7 +42,7 @@ const ConnectionRequest = sequelize.define(
             {
                 unique: true,
                 fields: [
-                    'school_id', 
+                    'school_id',
                     'student_id',
                     'recruiter_id'
                 ]

@@ -5,7 +5,6 @@ import LoadingSpinner from "@/components/loading-spinner";
 import SectionContainer from "@/components/section-container";
 import { Input } from "@/components/ui/input";
 import { useAddStudentMajorsMutation, useLazyGetStudentMajorsQuery } from "@/redux/services/student/studentApi";
-import { Dictionary } from "@/types/dictionary";
 import useDelayedFunction from "@/utils/hooks/useDelayedFunction";
 import { LoaderCircle, LucideSearch } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -19,8 +18,8 @@ import { POPULAR_MAJOR, PROFESSIONAL_PT_PROGRAMS } from "../data";
 
 export default function MajorPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const [majors, setMajors] = useState<Dictionary[]>([]);
-  const [selectedMajors, setSelectedMajors] = useState<Dictionary[]>([]);
+  const [majors, setMajors] = useState<string[]>([]);
+  const [selectedMajors, setSelectedMajors] = useState<string[]>([]);
 
   const [addStudentMajors, { isLoading: isAddingStudentMajor }] = useAddStudentMajorsMutation()
   const [getStudentMajors, { isLoading: isGettingStudentMajor, isFetching: isFetchingStudentMajor }] = useLazyGetStudentMajorsQuery()
@@ -37,25 +36,15 @@ export default function MajorPage() {
   const handleGetStudentMajors = async (studentId) => {
     getStudentMajors(studentId)
       .unwrap()
-      .then(data => {
-          const default_majors = data.data.map((major) => {
-            return {
-                ...major,
-                selected: true
-            }
-        })
-        setSelectedMajors([...selectedMajors, ...default_majors])
+      .then(body => {
+        const existingMajors = body.data;
+        setSelectedMajors([...selectedMajors, ...existingMajors])
       })
   }
 
   // submit student majors
   const handleSubmitMajors = async () => {
-    if (selectedMajors.length === 0) {
-      toast.error("Please select a major")
-      return
-    }
-    const majors = selectedMajors.map((major) => major.name)
-    addStudentMajors({ data: majors, studentId: studentId })
+    addStudentMajors({ data: selectedMajors, studentId: studentId })
       .unwrap()
       .then(data => {
         toast.success('Record submitted successfully')
@@ -65,14 +54,13 @@ export default function MajorPage() {
 
   // handle school change
   const handleSelectMajor = useCallback((major) => {
-    const index = selectedMajors.findIndex((s) => s.name === major.name);
+    const index = selectedMajors.findIndex((s) => s === major);
     if (index === -1) {
-      setSelectedMajors([...selectedMajors, { ...major, selected: true }]);
+      // Add the item to the list
+      setSelectedMajors([...selectedMajors, major]);
     } else {
-      const updatedSelectedMajors = [...selectedMajors];
-      updatedSelectedMajors[index].selected = !updatedSelectedMajors[index].selected;
-      updatedSelectedMajors.splice(index, 1);
-      setSelectedMajors(updatedSelectedMajors);
+      // Remove the item from the list
+      setSelectedMajors(selectedMajors.filter(m => m != major));
     }
   }, [selectedMajors]);
 
@@ -81,7 +69,7 @@ export default function MajorPage() {
     setIsLoading(true)
     setMajors([])
     const filteredMajors = AVAILABLE_MAJORS.filter((f) => f.name.includes(matchText))
-    setMajors(filteredMajors)
+    setMajors(filteredMajors.map(f => f.name))
     setIsLoading(false)
   }
 
@@ -186,14 +174,14 @@ export default function MajorPage() {
                     <>{selectedMajors?.length ?
                       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-x-8">
                         {
-                          selectedMajors.map((item: Dictionary) => (
+                          selectedMajors.map((item) => (
                             <CustomCheckbox
-                              key={item.name}
-                              id={item.name}
-                              label={item.name}
+                              key={item}
+                              id={item}
+                              label={item}
                               hasBorder
                               className="rounded-lg p-[1.4rem"
-                              checked={item.selected}
+                              checked={true}
                               onClick={() => handleSelectMajor(item)}
                             />
                           ))
@@ -217,15 +205,15 @@ export default function MajorPage() {
                         </div>
                         : <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-x-8">
                           {
-                            majors.map((item: Dictionary) => (
+                            majors.map((item) => (
                               <CustomCheckbox
-                                key={item.name}
-                                id={item.name}
-                                label={item.name}
+                                key={item}
+                                id={item}
+                                label={item}
                                 hasBorder
                                 className="rounded-lg p-[1.4rem"
                                 onClick={() => handleSelectMajor(item)}
-                                checked={selectedMajors.some((s) => s.name === item.name && s.selected)}
+                                checked={selectedMajors.some((s) => s === item)}
                               />
                             ))
                           }
