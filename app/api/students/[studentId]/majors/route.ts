@@ -121,7 +121,7 @@ export async function PATCH(
       }
     );
   }
-  const {majors} = await req.json()
+  const majors = await req.json()
   responseCode = 200
   const studentMajorInterests = await updateStudentMajors(student, majors);
   if (!studentMajorInterests) {
