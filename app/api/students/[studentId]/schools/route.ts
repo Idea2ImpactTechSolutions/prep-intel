@@ -1,30 +1,33 @@
 import * as yup from 'yup';
 import type { NextRequest } from "next/server";
-import { responseBody } from "../../../../../app/config/helpers";
-import { models } from "../../../../../app/models";
-const { Recruits, School, Students, Users } = models;
+import { apiResponse, responseBody } from "app/config/helpers";
+import { models } from "@/app/models";
+const { Recruiters, Recruits, School, SchoolAddress, Students, Users } = models;
 
 const POST_VALIDATION_SCHEMA = yup.array().of(
   yup.number().required()
 );
+
+const APPLICATION_STATUSES = ['Accepted', 'Rejected', 'Waitlisted'];
 
 const PATCH_VALIDATION_SCHEMA = yup.object({    
   school_id: yup.number().required(),
   criteria: yup.string().oneOf(['INTERESTED']).notRequired(),
   interested: yup.boolean().notRequired(),
   is_viewable: yup.boolean().notRequired(),
+  application_status: yup.string().oneOf(APPLICATION_STATUSES).notRequired(),
+  applicant_status: yup.string().oneOf(['Yes', 'No']).notRequired()
 });
-
-const RECRUITS_SCHOOLS_FIELDS = ['school_id', 'interested', 'school.name']
 
 /**
  * @openapi
  * /api/students/{studentId}/schools:
  *   get:
- *     summary: Retrieve a list of schools a student is interested in
+ *     summary: Retrieve a list of schools a student is interested in or recruiters a student is connected with
  *     description: >
- *       Fetches a list of schools that a student, identified by their student ID, has expressed interest in. This list includes,
- *       but is not limited to, school IDs and names. The response is filtered to include only schools where the student’s interest
+ *       Fetches a list of schools that a student, identified by their student ID, has expressed interest in, or a list of recruiters
+ *       the student is connected to. The list of schools includes, but is not limited to, school IDs and names. The list of recruiter
+ *       connections includes recruiter ids, names, and emails. The response is filtered to include only schools where the student’s interest
  *       is marked as true. This endpoint assumes the existence of an internal mechanism to flag student interest in particular schools.
  *     tags:
  *       - student
@@ -35,9 +38,17 @@ const RECRUITS_SCHOOLS_FIELDS = ['school_id', 'interested', 'school.name']
  *         schema:
  *           type: integer
  *         description: The unique identifier of the student whose school interests are being queried.
+ *       - in: query
+ *         name: view
+ *         required: false
+ *         schema:
+ *           type: string
+ *           enum:
+ *             - connections
+ *         description: The name of the page to query results for
  *     responses:
  *       200:
- *         description: School interests returned successfully.
+ *         description: School interests or recruiter connections returned successfully.
  *         content:
  *           application/json:
  *             schema:
@@ -45,22 +56,51 @@ const RECRUITS_SCHOOLS_FIELDS = ['school_id', 'interested', 'school.name']
  *               items:
  *                 type: object
  *                 properties:
- *                   schoolId:
- *                     type: integer
- *                     description: The unique identifier of the school.
- *                   schoolName:
- *                     type: string
- *                     description: The name of the school.
  *                   interested:
  *                     type: boolean
- *                     description: Indicates whether the student is interested in the school.
+ *                     description: Student school interest status.
+ *                   school:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         description: The unique identifier of the school.
+ *                       name:
+ *                         type: string
+ *                         description: Name of the school.
+ *                       school_address:
+ *                         type: object
+ *                         properties:
+ *                           state:
+ *                             type: string
+ *                             description: Two letter state code
+ *                   recruiter:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         description: The unique identifier of the recruiter.
+ *                       user:
+ *                         type: object
+ *                         properties:
+ *                           first_name:
+ *                             type: string
+ *                             description: The first name of the recruiter.
+ *                           last_name:
+ *                             type: string
+ *                             description: The last name of the recruiter.
+ *                           email:
+ *                             type: string
+ *                             description: The email of the recruiter.
+ *       400:
+ *         description: Bad request.
  *       404:
  *         description: No schools found or student not found. This can occur if the student does not exist or if none of the schools match the query criteria.
  *       500:
  *         description: A server error occurred while processing the request.
  */
 export async function GET(
-    req: Request,
+    req: NextRequest,
     { params }: { params: { studentId: number } }
   ) {
   try {
@@ -68,40 +108,67 @@ export async function GET(
     const userRole : {role: string} = await getUserRole(params.studentId);
 
     if (userRole.role !== 'student') {
-      return Response.json(responseBody("Not Found", 404), { status: 404 });
+      return apiResponse("Not Found", 404);
     }
 
-    const studentSchools: any = await Recruits.findAll({
+    const searchParams = req.nextUrl.searchParams;
+
+    let modelsToInclude: object[] = [{ 
+      model: School, 
+      attributes: ['id', 'name'],
+      include: {
+        model: SchoolAddress,
+        as: 'school_address',
+        attributes: ['state'],
+      }, 
+      required: true 
+    }];
+
+    let recruitsAttributes = [
+      'interested', 
+      'application_status', 
+      'applicant_status'
+    ];
+
+    if (searchParams.size > 1) {
+      return apiResponse("Bad request", 400);
+    } else if (searchParams.size === 1) {
+      const connectionsRequested = checkSearchParams(searchParams);
+
+      if ( !connectionsRequested ) {
+        return apiResponse("Bad request", 400);
+      } else {
+        modelsToInclude.push({
+          model: Recruiters,
+          attributes: ['id'],
+          include: {
+            model: Users,
+            attributes: ['first_name', 'last_name', 'email'],
+            required: true
+          },
+          required: true
+        });
+        
+        recruitsAttributes = ['interested'];
+      }
+    }
+
+    const studentSchoolsData = await Recruits.findAll({
       where: {
         student_id: params.studentId,
         interested: true
       },
-      attributes: RECRUITS_SCHOOLS_FIELDS,
-      include: {
-          model: School,
-          attributes: [],
-          required: true,
-      },
-      raw: true,
+      attributes: recruitsAttributes,
+      include: modelsToInclude,
     });
 
-    return Response.json(
-      responseBody(
+    return apiResponse(
         "School interests retrieved successfully",
         200,
-        studentSchools
-      ),
-      {
-        status: 200,
-      }
+        studentSchoolsData
     );
   } catch (error: any) {
-    return Response.json(
-      responseBody("Internal Server Error", 500, { error: error.message }),
-      {
-        status: 500,
-      }
-    );
+    return apiResponse("Internal Server Error", 500, { error: error.message });
   }
 }
 
@@ -158,7 +225,7 @@ export async function POST(
     const userRole : { role: string } = await getUserRole(params.studentId);
 
     if (userRole.role !== 'student') {
-      return Response.json(responseBody("Not Found", 404), { status: 404 });
+      return apiResponse("Not Found", 404);
     }
 
     const inputData : number[] = await req.json();
@@ -168,14 +235,14 @@ export async function POST(
 
     const validInputData = validateRequestBody(req.method, inputData);
     if (!validInputData) {
-      return Response.json(responseBody("Bad Request", 400), { status: 400 });
+      return apiResponse("Bad Request", 400);
     }
 
     const schoolsCount : number = await School.count({
       where: { id: inputData }
     });
     if (schoolsCount < inputData.length) {
-      return Response.json(responseBody("Not Found", 404), { status: 404 });
+      return apiResponse("Not Found", 404);
     }
 
     const { count, rows } : any = await Recruits.findAndCountAll({
@@ -202,15 +269,10 @@ export async function POST(
     }
 
     // Report
-    return Response.json(responseBody("Created", 201), { status: 201 });
+    return apiResponse("Created", 201);
   } catch (error: any) {
     // Report
-    return Response.json(
-      responseBody("Internal Server Error", 500, { error: error.message }),
-      {
-        status: 500,
-      }
-    );
+    return apiResponse("Internal Server Error", 500, { error: error.message });
   }
 }
 
@@ -223,15 +285,35 @@ export async function POST(
  *     tags:
  *       - student
  *       - school
+ *     parameters:
+ *       - in: path
+ *         name: studentId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The student's ID
  *     requestBody:
- *       description: A list of schools a student is interested in
+ *       description: An object with the school ID a student is interested in, and other fields to update
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: array
- *             items:
- *               type: string
+ *             type: object
+ *             properties:
+ *               school_id:
+ *                 type: integer
+ *                 description: The unique identifier of the school.
+ *               interested:
+ *                 type: boolean
+ *                 description: Student school interest status
+ *               application_status:
+ *                 type: string
+ *                 description: Student-supplied school application status.
+ *                 example: Accepted
+ *               applicant_status:
+ *                 type: string
+ *                 description: Student-supplied school applicant status.
+ *                 example: Yes
  *     responses:
  *       200:
  *         description: Schools of interest updated
@@ -251,44 +333,36 @@ export async function PATCH(
     const userRole : { role: string } = await getUserRole(params.studentId);
 
     if (userRole.role !== 'student') {
-      return Response.json(responseBody("Not Found", 404), { status: 404 });
+      return apiResponse("Not Found", 404);
     }
 
     const inputData : any = await req.json();
 
     const validInputData = await validateRequestBody(req.method, inputData);
     if (!validInputData) {
-      return Response.json(responseBody("Bad Request", 400), { status: 400 });
+      return apiResponse("Bad Request", 400);
     }
 
-    const { schoolId, ...updateAttributes } = Object.assign({}, inputData);
+    const { school_id, ...updateAttributes } = Object.assign({}, inputData);
 
     let studentSchool = await Recruits.findOne({
       where: {
         student_id: params.studentId,
-        school_id: schoolId
+        school_id: school_id
       }
     });
     if (studentSchool === null) {
-      return Response.json(responseBody("Not Found", 404), { status: 404 });
+      return apiResponse("Not Found", 404);
     }
 
     // Update
-    if (updateAttributes.hasOwnProperty('connection_initiator')) {
-      updateAttributes['connection_date'] = new Date();
-    }
     await studentSchool.update(updateAttributes);
 
     //Report
     return Response.json(responseBody("No Content", 204), { status: 200 });
   } catch (error: any) {
     // Report
-    return Response.json(
-      responseBody("Internal Server Error", 500, { error: error.message }),
-      {
-        status: 500,
-      }
-    );
+    return apiResponse("Internal Server Error", 500, { error: error.message });
   }
 }
 
@@ -308,6 +382,13 @@ async function getUserRole(studentId) {
     }],
     raw: true
   });
+}
+
+function checkSearchParams(searchParams) {
+  if (searchParams.has('view') && searchParams.get('view') === 'connections') {
+    return true;
+  }
+  return false;
 }
 
 function prepareNewRecruits(schoolIds: number[], studentId: number) {
