@@ -24,6 +24,7 @@ const GET_VALIDATION_SCHEMA = yup.object({
 const POST_VALIDATION_SCHEMA = yup.object({
     studentId: yup.number().required(),
     recruiterId: yup.number().required(),
+    schoolId: yup.number().notRequired(),
     requestMessage: yup.string().notRequired()
   });
 
