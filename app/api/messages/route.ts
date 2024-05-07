@@ -1,14 +1,15 @@
-import { responseBody } from "app/config/helpers";
+import { apiResponse } from "app/config/helpers";
 import { models } from "../../models";
 import { type NextRequest } from "next/server";
 const { Messages, Recruiters, School, Students, Users } = models;
-
 
 /**
  * @openapi
  * /api/messages:
  *   get:
  *     summary: Retrieves messages based on query parameters
+ *     tags:
+ *       - message
  *     parameters:
  *       - in: query
  *         name: recruiter_id
@@ -52,11 +53,7 @@ export async function GET(req: NextRequest) {
       if (school_id) whereClause['school_id'] = school_id;
 
       if (!recruiter_id && !student_id && !school_id) {
-        return Response.json(responseBody("Missing required query parameters: recruiter_id, student_id, or school_id", 400), 
-        {
-            status: 400
-        }
-      );
+        return apiResponse("Missing required query parameters: recruiter_id, student_id, or school_id", 400);
       }
 
       let order: [string, string][] = [];
@@ -64,7 +61,6 @@ export async function GET(req: NextRequest) {
       if (recent) {
           order.push(['create_date', 'DESC']);
       }
-    
 
       const messages = await Messages.findAll({
           where: whereClause,
@@ -72,35 +68,63 @@ export async function GET(req: NextRequest) {
           ...(recent && { limit: 1 }) // If 'recent' is true, only fetch the most recent message
       });
 
-      return Response.json(responseBody("Messages retrieved successfully", 200, messages ), {
-        status: 200
-    });
+      return apiResponse("Messages retrieved successfully", 200, messages );
   } catch (error : any) {
-    return Response.json(
-      responseBody("Internal Server Error", 500, { error: error.message }),
-      {
-        status: 500,
-      }
-    );
+    return apiResponse("Internal Server Error", 500, { error: error.message });
+  }
 }
-}
+
 /**
  * @openapi
- * /api/messages/routes:
+ * /api/messages:
  *   post:
- *     description: Posts the message to the required recipient
- *     summary: Creates a new recruiter
+ *     description: Posts the message to the required recipient.
+ *     summary: Creates a new message.
  *     tags:
  *       - message
+ *     parameters:
+ *       - in: query
+ *         name: recruiter_id
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: The unique identifier of the recruiter.
+ *       - in: query
+ *         name: school_id
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: The unique identifier of the school to which the message is being sent.
+ *       - in: query
+ *         name: student_id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The unique identifier of the student sending or receiving the message.
+ *       - in: query
+ *         name: sender_role
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The role of the sender, can be either 'recruiter' or 'student'.
+ *       - in: query
+ *         name: message_text
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The text of the message to be sent.
  *     responses:
- *       200:
- *         description: Message sent successfully
+ *       201:
+ *         description: Message sent successfully.
+ *       400:
+ *         description: Missing required student ID, school ID, or recruiter ID.
+ *       404:
+ *         description: Student, recruiter, or school not found.
+ *       500:
+ *         description: Internal Server Error occurred while processing the request.
  */
 export async function POST(req: NextRequest) {
   try {
-    // TODO: Implement
-    // console.log({ req: req.nextUrl.searchParams });
-
     const recruiter_id = req.nextUrl.searchParams.get("recruiter_id");
     const school_id = req.nextUrl.searchParams.get("school_id");
     const student_id = req.nextUrl.searchParams.get("student_id");
@@ -108,24 +132,15 @@ export async function POST(req: NextRequest) {
     const message_text = req.nextUrl.searchParams.get("message_text");
 
     if (!(recruiter_id || school_id) || !student_id) {
-      return Response.json(
-        responseBody(
+      return apiResponse(
           "A student id and a school id or recruiter id were not present",
-          400,
-          {}
-        ),
-        {
-          status: 400,
-        }
-      );
+          400);
     }
     let studentExists = await Students.findOne({
       where: { id: student_id },
     });
     if (!studentExists) {
-      return Response.json(responseBody("Student not found", 404, {}), {
-        status: 404,
-      });
+      return apiResponse("Student not found", 404);
     }
     if (sender_role == "recruiter") {
       return await sendMessageFromRecruiter({
@@ -144,18 +159,11 @@ export async function POST(req: NextRequest) {
         student_id,
       });
     } else {
-      return Response.json(responseBody("send_role not provided", 404, {}), {
-        status: 404,
-      });
+      return apiResponse("send_role not provided", 404);
     }
   } catch (error: any) {
     // Report
-    return Response.json(
-      responseBody("Internal Server Error", 500, { error: error.message }),
-      {
-        status: 500,
-      }
-    );
+    return apiResponse("Internal Server Error", 500, { error: error.message });
   }
 }
 
@@ -175,19 +183,13 @@ async function sendMessageFromRecruiter(data) {
         recipient_role: "student",
         create_date: Date.now(),
       });
-      return Response.json(responseBody("Message sent successfully", 201, {}), {
-        status: 201,
-      });
+      return apiResponse("Message sent successfully", 201);
     } else {
-      return Response.json(responseBody("recruiter not found", 404, {}), {
-        status: 404,
-      });
+      return apiResponse("recruiter not found", 404);
     }
   } else {
-    return Response.json(responseBody("recruiter not found", 404, {}), {
-      status: 404,
-    });
-  }
+    return apiResponse("recruiter not found", 404);
+    }
 }
 async function sendMessageFromStudent(data) {
   if (data.recruiter_id || data.school_id) {
@@ -196,12 +198,7 @@ async function sendMessageFromStudent(data) {
     }
     return await sendMessageFromStudentToSchool(data);
   } else {
-    return Response.json(
-      responseBody("recruiter or school not found", 404, {}),
-      {
-        status: 404,
-      }
-    );
+    return apiResponse("recruiter or school not found", 404);
   }
 }
 async function sendMessageFromStudentToRecruiter(data) {
@@ -219,22 +216,17 @@ async function sendMessageFromStudentToRecruiter(data) {
       recipient_role: "recruiter",
       create_date: Date.now(),
     });
-    return Response.json(responseBody("Message sent successfully", 201, {}), {
-      status: 201,
-    });
+    return apiResponse("Message sent successfully", 201);
   } else {
-    return Response.json(responseBody("recruiter not found", 404, {}), {
-      status: 404,
-    });
+    return apiResponse("recruiter not found", 404);
   }
 }
 async function sendMessageFromStudentToSchool(data) {
   let schoolExists = await School.findOne({ where: { id: data.school_id } });
   if (!schoolExists) {
-    return Response.json(responseBody("school not found", 404, {}), {
-      status: 404,
-    });
+    return apiResponse("school not found", 404);
   }
+
   await Messages.create({
     school_id: data.school_id,
     student_id: data.student_id,
@@ -243,7 +235,6 @@ async function sendMessageFromStudentToSchool(data) {
     recipient_role: "school",
     create_date: Date.now(),
   });
-  return Response.json(responseBody("Message sent successfully", 201, {}), {
-    status: 201,
-  });
+
+  return apiResponse("Message sent successfully", 201);
 }
