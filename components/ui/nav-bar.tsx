@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react'
+import { useEffect, useState } from "react";
 import UserMenu from "@/components/user-menu";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -9,12 +9,9 @@ import { AlignJustify, Bell, LogOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useParams } from "next/navigation";
-import { useEffect, useState } from "react";
 import { signOut } from "next-auth/react";
 import { managerReset } from "@/redux/features/school/managerSlice";
-import NavItems from "@/app/student/_components/nav-items";
-import { useLazyGetConnectionRequestsQuery } from "@/redux/services/student/studentApi";
-import { useSession } from "next-auth/react";
+import NotificationPanel from "../NotificationPanel";
 
 export interface TabLink
 {
@@ -29,12 +26,10 @@ interface NavbarProps {
     showTabs?: boolean;
 }
 
-export function Navbar({ setShowSidebar, showSidebar, tabs, leftContent, showTabs=true }: NavbarProps) {
-    const [getConnectionRequest, {data:connectionRequests, isLoading:loadingConnections} ] = useLazyGetConnectionRequestsQuery()
-    
+export function Navbar({tabs, leftContent, showTabs=true }: NavbarProps) {
+   
     const { width } = useWindowSize()
-    const session = useSession()
-    const studentId = session?.data?.user?.roleId
+    const [ showSidebar, setShowSidebar] = useState<boolean>(true)
 
 
     const normal = 'relative p-1.5 mb-2 block flex items-center gap-x-2 text-sm'
@@ -65,11 +60,7 @@ export function Navbar({ setShowSidebar, showSidebar, tabs, leftContent, showTab
         }
     }, [width])
 
-    useEffect(()=>{
-        if(studentId){
-          getConnectionRequest(studentId)
-        }
-      }, [studentId])
+    
 
     return (
         <div className="bg-[#F0F4F7]">
@@ -163,7 +154,7 @@ export function Navbar({ setShowSidebar, showSidebar, tabs, leftContent, showTab
                         </div>
                         <UserMenu />
                     </div>
-                    <NavItems open={open} setOpen={setOpen} loadingConnections={loadingConnections} connectionRequests={connectionRequests?.data}/>                    
+                    <NotificationPanel open={open} setOpen={setOpen}/>                    
                 </div>
 
             </nav>
