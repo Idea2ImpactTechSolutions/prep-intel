@@ -3,81 +3,87 @@ import { models } from "../../models";
 import { type NextRequest } from "next/server";
 const { Messages, Recruiters, School, Students, Users } = models;
 
-// /**
-//  * @openapi
-//  * /api/messages:
-//  *   get:
-//  *       responses:
-//  *           '200':
-//  *               content:
-//  *                    application/json:
-//  *                       schema:
-//  *                           type: array
-//  *                           items: {}
-//  *       summary: Retrieves all messages for provided fields which include recruiter_id, student_id, school_id
-//  */
+
+/**
+ * @openapi
+ * /api/messages:
+ *   get:
+ *     summary: Retrieves messages based on query parameters
+ *     parameters:
+ *       - in: query
+ *         name: recruiter_id
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: student_id
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: school_id
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: recent
+ *         schema:
+ *           type: boolean
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved messages
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items: {}
+ *       '500':
+ *         description: Internal server error
+ */
 export async function GET(req: NextRequest) {
   try {
-    const searchParams = req.nextUrl.searchParams;
-    let reqData = {
-      recruiter_id: searchParams.get("recruiter_id"),
-      student_id: searchParams.get("student_id"),
-      receiver_role: searchParams.get("receiver_role"),
-      school_id: searchParams.get("school_id"),
-    };
+      const { searchParams } = req.nextUrl;
+      const recruiter_id = searchParams.get("recruiter_id");
+      const student_id = searchParams.get("student_id");
+      const school_id = searchParams.get("school_id");
+      const recent = searchParams.get("recent") === "true";
 
-    let response;
-    if (reqData.recruiter_id && !reqData.student_id && !reqData.school_id) {
-      response = await Messages.findAll({
-        where: {
-          recruiter_id: reqData.recruiter_id,
-        },
-      });
-    } else if (
-      !reqData.recruiter_id &&
-      reqData.student_id &&
-      !reqData.school_id
-    ) {
-      response = await Messages.findAll({
-        where: {
-          student_id: reqData.student_id,
-        },
-      });
-    } else if (
-      reqData.recruiter_id &&
-      reqData.student_id &&
-      !reqData.school_id
-    ) {
-      response = await Messages.findAll({
-        where: {
-          recruiter_id: reqData.recruiter_id,
-          student_id: reqData.student_id,
-        },
-      });
-    } else {
-      response = await Messages.findAll({
-        where: {
-          school_id: reqData.school_id,
-          student_id: reqData.student_id,
-        },
-      });
-    }
-    return Response.json(
-      responseBody("Messages retrieved successfully", 200, { response }),
-      {
-        status: 200,
+      let whereClause = {};
+
+      if (recruiter_id) whereClause['recruiter_id'] = recruiter_id;
+      if (student_id) whereClause['student_id'] = student_id;
+      if (school_id) whereClause['school_id'] = school_id;
+
+      if (!recruiter_id && !student_id && !school_id) {
+        return Response.json(responseBody("Missing required query parameters: recruiter_id, student_id, or school_id", 400), 
+        {
+            status: 400
+        }
+      );
       }
-    );
-  } catch (error: any) {
+
+      let order: [string, string][] = [];
+
+      if (recent) {
+          order.push(['create_date', 'DESC']);
+      }
+    
+
+      const messages = await Messages.findAll({
+          where: whereClause,
+          order: order,
+          ...(recent && { limit: 1 }) // If 'recent' is true, only fetch the most recent message
+      });
+
+      return Response.json(responseBody("Messages retrieved successfully", 200, messages ), {
+        status: 200
+    });
+  } catch (error : any) {
     return Response.json(
       responseBody("Internal Server Error", 500, { error: error.message }),
       {
         status: 500,
       }
     );
-  }
 }
-
+}
 /**
  * @openapi
  * /api/messages/routes:
