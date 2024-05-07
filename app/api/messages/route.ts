@@ -5,7 +5,7 @@ const { Messages, Recruiters, School, Students, Users } = models;
 
 // /**
 //  * @openapi
-//  * /api/messages/routes:
+//  * /api/messages:
 //  *   get:
 //  *       responses:
 //  *           '200':

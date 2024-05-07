@@ -1,5 +1,6 @@
 const sequelize = require("./sequelize");
 const School = require("./School");
+const Extracurricular = require("./Extracurricular");
 const SchoolDepartment = require("./SchoolDepartment");
 const SchoolAccreditation = require("./SchoolAccreditation");
 const SchoolResearchProgram = require("./SchoolResearchProgram");
@@ -34,6 +35,7 @@ const models = {
   StudentsDepartmentInterests,
   Students,
   Applicants,
+  Extracurricular,
   Recruits,
   Users,
   Assets,
