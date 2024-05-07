@@ -11,26 +11,36 @@ import * as yup from 'yup'
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import ConfirmationModal from '@/components/modal/confirmation-modal'
-import { useSendMessageMutation } from '@/redux/services/recruiter/recruiterApi'
+import { useSendMessageMutation, useCreateConnectionRequestMutation } from '@/redux/services/recruiter/recruiterApi'
 import { useSession } from 'next-auth/react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 
-
-const StudentInformation = ({student_details}) => {
-    const [showModal,setShowModal] = useState<boolean>(false) 
+const StudentInformation = ({student_details, recruiterId, studentId }) => {
+    const [showModal,setShowModal] = useState<boolean>(false)
     const [showConfirmationModal,setShowConfirmationModal] = useState<boolean>(false)
-    const {data: session}: any = useSession() 
+    const {data: session}: any = useSession()
+    const schoolId = session?.user?.schoolID;
     const router = useRouter()
 
+    const [createConnectionRequest, { isLoading: isLoadingConnectionRequest }] = useCreateConnectionRequestMutation();
     const [sendMessage, { isLoading }] = useSendMessageMutation()
+
+    function sendConnectRequest() {
+      createConnectionRequest({
+        studentId: parseInt(studentId),
+        recruiterId: parseInt(recruiterId),
+        schoolId: parseInt(schoolId),
+        requestMessage: "Let's get connected",
+      })
+    }
 
     const handleSubmitMessage = (values:any, resetForm:()=>void)=>{
         setShowConfirmationModal(false)
         sendMessage({
-            studentId:student_details?.student_id, 
-            recruiterId:session?.user?.roleId, 
-            schoolId:"", 
+            studentId:student_details?.student_id,
+            recruiterId:session?.user?.roleId,
+            schoolId:"",
             senderRole:session?.user?.role,
             message:values.message
         }).unwrap()
@@ -56,11 +66,11 @@ const StudentInformation = ({student_details}) => {
         }),
         onSubmit:()=>setShowConfirmationModal(true)
     })
-    
+
   return (
     <div className='w-full'>
         <div className='relative'>
-            <div className="w-full bg-[url('/images/student-profile-banner.png')] min-h-[180px] md:min-h-[320px] object-cover bg-no-repeat rounded-t-2xl">
+            <div className="w-full bg-gray-200 min-h-[180px] md:min-h-[320px] object-cover bg-no-repeat rounded-t-2xl">
             </div>
             <div className='absolute w-[152px] h-[152px] rounded-full bg-white left-[43px] -bottom-[74px] flex justify-center items-center'>
                 {student_details?.connection_date &&  student_details?.interested?
@@ -70,13 +80,17 @@ const StudentInformation = ({student_details}) => {
         </div>
         <div className='p-10 bg-white shadow-xl rounded-b-xl'>
             <div className='flex justify-end'>
-                {(!student_details?.connection_date &&  !student_details?.interested) ? 
-                    <Button variant="outline" className='text-xl'>Connect To Unlock</Button>:<Button variant="outline" className='text-xl' onClick={()=>setShowModal(true)}>Message</Button>
-                } 
+                {(!student_details?.connection_date &&  !student_details?.interested) ?
+                    <Button variant="outline" className='text-xl'
+                      loading={isLoadingConnectionRequest}
+                      onClick={sendConnectRequest}
+                    >Connect To Unlock</Button>
+                    : <Button variant="outline" className='text-xl' onClick={()=>setShowModal(true)}>Message</Button>
+                }
             </div>
             <UserInformation user_info ={student_details}/>
         </div>
-        
+
         <TranscriptSection />
 
         <CustomModal handleClose={()=>setShowModal(false)} show={showModal}   title="Connect with Student" modalClass="w-full max-w-[85%] lg:w-[750px] !rounded-2xl">
@@ -84,11 +98,11 @@ const StudentInformation = ({student_details}) => {
                 <div className='mt-[7px]'>
                     <p className="text-base font-bold">Add your message</p>
                 </div>
-                <Textarea 
+                <Textarea
                     id='message'
                     name="message"
-                    className='w-full mt-3 rounded-2xl' 
-                    placeholder='Enter your message here' 
+                    className='w-full mt-3 rounded-2xl'
+                    placeholder='Enter your message here'
                     rows={5}
                     value={values.message}
                     onChange={handleChange}
@@ -97,9 +111,9 @@ const StudentInformation = ({student_details}) => {
                     error={errors.message}
                 />
                 <div className='flex justify-end items-center gap-x-5 mt-9'>
-                    <Button 
-                        type='button' 
-                        variant="outline" 
+                    <Button
+                        type='button'
+                        variant="outline"
                         disabled={isLoading}
                         onClick={()=>{
                             setShowModal(false)
@@ -110,9 +124,9 @@ const StudentInformation = ({student_details}) => {
                             No, cancel
                     </Button>
 
-                    <Button 
+                    <Button
                         type='submit'
-                        variant="orange" 
+                        variant="orange"
                         className='w-full sm:w-fit md:px-10 rounded-lg font-[500]'
                         loading={isLoading}
                         disabled={isLoading}
