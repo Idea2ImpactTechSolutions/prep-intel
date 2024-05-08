@@ -17,7 +17,7 @@ export const getApiDocs = async () => {
           description: "Local development",
         },
         {
-            url: "http://prep-intele-development.cluster-c7ao62sg4xma.us-east-1.rds.amazonaws.com/",
+            url: "http://prep-intel-dev-alb-1208390994.us-east-1.elb.amazonaws.com/",
             description: "AWS dev",
           },
 
