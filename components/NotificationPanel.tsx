@@ -41,10 +41,10 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
 
   useEffect(()=>{
     if(senderRole === "student"){
-        getMessages({recruiter_id:"" ,school_id, student_id:roleId, sender_role:senderRole})
+        getMessages({recruiter_id:"" ,school_id, student_id:roleId, receiver_role:senderRole})
     }
     if(senderRole === "recruiter"){
-      getMessages({recruiter_id:roleId ,school_id, student_id:"", sender_role:senderRole})
+      getMessages({recruiter_id:roleId ,school_id, student_id:"", receiver_role:senderRole})
     }
   }, [senderRole, roleId])
 
@@ -54,30 +54,25 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
     }
   }, [open])
     
-
   return (
     <div className="">
-      
       <SheetPanel
           show={open}
           title={`Notifications`}
           handleClose={() => setOpen(false)}
           width={450}
       >
+        
           {!openMessage ?
             <div className="mt-8 pb-16 h-[90vh] overflow-y-auto lg:mx-5">
               {isLoading ? <LoadingSpinner className="h-[250px]" /> :
-              messages?.map((message, index:number)=><div className="mb-8">
+              messages?.data?.map((message, index:number)=><div className="mb-8">
                 <div className="flex justify-between" key={"conn-request-"+index}>
                   <div className="flex flex-row">                
                     <span> <h2 className="font-semibold inline-block">Ralph Edwards</h2> has sent you an invitation to connect. Would you like to share your information and connect?</span>
                     <span>49m</span>
                   </div>
                 </div>
-                {/* <div className="flex gap-x-3 mt-2">
-                  <Button variant="outline" className="h-7">No</Button> 
-                  <Button className="h-7">Yes</Button>
-                </div> */}
               </div>)
               }
               

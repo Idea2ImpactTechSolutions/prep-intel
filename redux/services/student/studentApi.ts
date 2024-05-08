@@ -63,7 +63,7 @@ const studentApi = baseApi.injectEndpoints({
     }),
     getMessages: builder.query({
       query: ({recruiter_id,school_id, student_id, sender_role}) => ({
-        url: `/messages?recruiter_id=${recruiter_id}&school_id=${school_id}&student_id=${student_id}&sender_role=${sender_role}`,
+        url: `/messages?recruiter_id=${recruiter_id}&school_id=${school_id}&student_id=${student_id}&receiver_role=${sender_role}&recent=true`,
         method: "GET",
       }),
       providesTags: ["MESSAGES"],
