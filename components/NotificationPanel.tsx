@@ -12,6 +12,7 @@ import { Textarea } from "./ui/textarea";
 import { useLazyGetMessagesQuery, useSendMessageMutation} from "@/redux/services/user/userApi";
 import { dateTimeDifference } from "@/utils/helpers/date-format";
 import { toast } from "sonner";
+import moment from "moment";
 
 interface NotificationPanelProp {
   open:boolean,
@@ -128,7 +129,8 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
                     <div className="mb-4" key={index}>
                       <div className={`flex ${message?.sender_role === senderRole ? "justify-end" : "justify-start"}`}>
                         <p className={`w-fit max-w-[90%] p-3 rounded-md text-sm ${message?.sender_role === senderRole ? "bg-green-100" : "bg-primary/10"}`}>
-                          {message?.message_text}
+                          <span className="mb-2">{message?.message_text}</span>
+                          <span className="text-[10px] text-muted-foreground block text-right">{moment(message?.create_date).format('LLL')}</span>
                         </p>
                       </div>
                     </div>
