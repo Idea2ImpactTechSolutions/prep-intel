@@ -38,24 +38,23 @@ export default function SchoolPage() {
     const handleGetStudentSchools = async (studentId) => {
         getStudentSchools(studentId)
           .unwrap()
-          .then(data => {
-              const default_schools = data.data.map((school) => {
+          .then(response => {
+              // Assume .interested is not set on school initiated connections and thus filtering
+              // to interested only to ensure user's wouldn't be removing those connections here
+              const interestedSchools = response.data.filter(s => s.interested).map((data) => {
+                // Map to { id: n, name: x }
                 return {
-                    id: school.school_id,
-                    name: school.name,
-                    selected: true
+                    id: data.school.id,
+                    name: data.school.name,
                 }
             })
-            setSelectedSchools([...selectedSchools, ...default_schools])
+            setSelectedSchools([...selectedSchools, ...interestedSchools])
           })
       }
 
     // submit student school of interest
     const handleSubmitSchool = async () => {
-        if (selectedSchools.length === 0) {
-            toast.error("Please select a school")
-            return
-        }
+        // Map to an array of school ids and update
         const schools = selectedSchools.map((school) => school.id)
         addStudentSchools({ data: schools, studentId: studentId })
             .unwrap()
@@ -69,12 +68,11 @@ export default function SchoolPage() {
     const handleSelectSchool = useCallback((school) => {
         const index = selectedSchools.findIndex((s) => s.id === school.id);
         if (index === -1) {
-            setSelectedSchools([...selectedSchools, { ...school, selected: true }]);
+            // Add School
+            setSelectedSchools([...selectedSchools, school]);
         } else {
-            const updatedSelectedSchools = [...selectedSchools];
-            updatedSelectedSchools[index].selected = !updatedSelectedSchools[index].selected;
-            updatedSelectedSchools.splice(index, 1);
-            setSelectedSchools(updatedSelectedSchools);
+            // Remove school
+            setSelectedSchools(selectedSchools.filter(s => s.id !== school.id));
         }
     }, [selectedSchools]);
 
@@ -91,7 +89,6 @@ export default function SchoolPage() {
 
     // set a delay for the search
     function handleOnChange(e) {
-
         const matchText = e.target.value;
 
         if (!matchText) {
@@ -106,7 +103,7 @@ export default function SchoolPage() {
           handleGetStudentSchools(studentId)
         }
       }, [studentId])
-    
+
       if (isGettingStudentSchool || isFetchingStudentSchool) {
         return <LoadingSpinner/>
       }
@@ -206,7 +203,7 @@ export default function SchoolPage() {
                                                             label={item.name}
                                                             hasBorder
                                                             className="rounded-lg p-[1.4rem"
-                                                            checked={item.selected}
+                                                            checked={true}
                                                             onClick={() => handleSelectSchool(item)}
                                                         />
                                                     ))
