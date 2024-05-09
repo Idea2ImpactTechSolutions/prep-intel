@@ -9,9 +9,10 @@ import { AlignJustify, Bell, LogOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useParams } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { managerReset } from "@/redux/features/school/managerSlice";
 import NotificationPanel from "../NotificationPanel";
+import { useLazyGetConnectionRequestsQuery } from "@/redux/services/student/studentApi";
 
 export interface TabLink
 {
@@ -28,8 +29,11 @@ interface NavbarProps {
 
 export function Navbar({tabs, leftContent, showTabs=true }: NavbarProps) {
    
+    const [getConnections, {isLoading}] = useLazyGetConnectionRequestsQuery()
+
     const { width } = useWindowSize()
     const [ showSidebar, setShowSidebar] = useState<boolean>(true)
+
 
 
     const normal = 'relative p-1.5 mb-2 block flex items-center gap-x-2 text-sm'
@@ -40,6 +44,10 @@ export function Navbar({tabs, leftContent, showTabs=true }: NavbarProps) {
     const location = usePathname() as string;
     const pageParams = useParams();
     const schoolId = pageParams?.id as string;
+
+    const session = useSession()
+    const roleId = session?.data?.user?.roleId
+    const role = session?.data?.user?.role
 
     const suppressTabList = ['/school/claim', '/school/set-password'];
     const shouldShowTabs = showTabs && !suppressTabList.includes(location);
@@ -60,7 +68,11 @@ export function Navbar({tabs, leftContent, showTabs=true }: NavbarProps) {
         }
     }, [width])
 
-    
+    useEffect(() => {
+        if(role==="student"){
+            getConnections(roleId)
+        }
+    }, [roleId, role])
 
     return (
         <div className="bg-[#F0F4F7]">

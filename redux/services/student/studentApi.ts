@@ -61,24 +61,7 @@ const studentApi = baseApi.injectEndpoints({
       }),
       providesTags: ["CONNECTION_REQUESTS"],
     }),
-    getMessages: builder.query({
-      query: ({recruiter_id,school_id, student_id, sender_role}) => ({
-        url: `/messages?recruiter_id=${recruiter_id}&school_id=${school_id}&student_id=${student_id}&receiver_role=${sender_role}&recent=true`,
-        method: "GET",
-      }),
-      providesTags: ["MESSAGES"],
-    }),
-    updateMessages:  builder.mutation({
-      query: (payload) => {
-        let {studentApi, ...rest} = payload;
-        return ({        
-            url: `/messages`,
-            method: "PATCH",
-            body: rest
-        })
-      },
-      invalidatesTags: ["MESSAGES"],
-    }),
+    
     updateConnectionRequests: builder.mutation({
       query: (payload) => {
         let {studentApi, ...rest} = payload;
@@ -94,5 +77,5 @@ const studentApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useLazyGetSchoolDataQuery, useLazyGetStudentVitalsQuery, useAddStudentVitalsMutation, useAddStudentSchoolsMutation, useLazyGetStudentSchoolsQuery, useConnectWithRecruiterMutation, useAddStudentMajorsMutation, useLazyGetStudentMajorsQuery, useLazyGetConnectionRequestsQuery, useUpdateConnectionRequestsMutation, useLazyGetMessagesQuery
+  useLazyGetSchoolDataQuery, useLazyGetStudentVitalsQuery, useAddStudentVitalsMutation, useAddStudentSchoolsMutation, useLazyGetStudentSchoolsQuery, useConnectWithRecruiterMutation, useAddStudentMajorsMutation, useLazyGetStudentMajorsQuery, useLazyGetConnectionRequestsQuery, useUpdateConnectionRequestsMutation
 } = studentApi;

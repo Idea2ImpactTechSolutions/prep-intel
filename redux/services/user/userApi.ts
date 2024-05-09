@@ -38,7 +38,21 @@ const userApi = baseApi.injectEndpoints({
         body: payload,
       }),
     }),
+    getMessages: builder.query({
+      query: ({recruiter_id,school_id, student_id, sender_role,recent}) => ({
+        url: `/messages?recruiter_id=${recruiter_id}&school_id=${school_id}&student_id=${student_id}&receiver_role=${sender_role}&recent=${recent}`,
+        method: "GET",
+      }),
+      providesTags: ["MESSAGES"],
+    }),
+    sendMessage: builder.mutation({
+      query: ({recruiter_id, student_id, sender_role,schoold_id, message_text}) => ({
+        url: `/messages/?recruiter_id=${recruiter_id}&student_id=${student_id}&school_id=${schoold_id}&sender_role=${sender_role}&message_text=${message_text}`,
+        method: "POST",
+      }),
+      // invalidatesTags:["MESSAGES"]
+    }),
   }),
 });
 
-export const { useClaimAccountMutation, useSetPasswordMutation, useResetPasswordMutation } = userApi;
+export const { useClaimAccountMutation, useSetPasswordMutation, useResetPasswordMutation, useLazyGetMessagesQuery, useSendMessageMutation } = userApi;
