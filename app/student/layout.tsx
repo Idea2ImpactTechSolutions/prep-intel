@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React from 'react'
 import { Navbar, TabLink} from "components/ui/nav-bar"
 import { GraduationCap, LayoutGrid, UserPlus } from "lucide-react"
 import { usePathname } from "next/navigation";
