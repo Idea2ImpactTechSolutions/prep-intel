@@ -29,7 +29,7 @@ interface NavbarProps {
 
 export function Navbar({tabs, leftContent, showTabs=true }: NavbarProps) {
    
-    const [getConnections, {isLoading}] = useLazyGetConnectionRequestsQuery()
+    const [getConnections] = useLazyGetConnectionRequestsQuery()
 
     const { width } = useWindowSize()
     const [ showSidebar, setShowSidebar] = useState<boolean>(true)

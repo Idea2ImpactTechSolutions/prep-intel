@@ -19,11 +19,11 @@ interface NotificationPanelProp {
 }
 
 const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
-  const [getMessages, {data, isLoading} ] = useLazyGetMessagesQuery()
+  const [getMessages, {isLoading} ] = useLazyGetMessagesQuery()
   const [sendMessage, {isLoading:sendingMessage} ] = useSendMessageMutation()
 
   const [openMessage, setOpenMessage] =useState(false)
-  const [recent, setRecent] =useState(true)
+  const [recent] =useState(true)
   const [messages, setMessages] =useState<any>([])
   const [viewMessages, setViewMessages] =useState<any>([])
 
@@ -111,8 +111,9 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
           {!openMessage ?
             <div className="mt-8 pb-16 h-[90vh] overflow-y-auto lg:mx-5">
               {isLoading ? <LoadingSpinner className="h-[250px]" /> :
-              messages?.slice().reverse().map((message:any, index:number)=><div className="mb-5">
-                <div className="flex flex-row gap-x-3 justify-between cursor-pointer" key={"conn-request-"+index} onClick={()=>handleViewMessage(message)}>                
+              messages?.slice().reverse().map((message:any, index:number)=>
+              <div className="mb-5" key={"conn-request-"+index} onClick={()=>handleViewMessage(message)}>
+                <div className="flex flex-row gap-x-3 justify-between cursor-pointer" >                
                   <p><span className="font-semibold mr-2 ">James Sparks</span>{message?.message_text}</p>
                   <span className="w-[75px] text-sm text-right">{dateTimeDifference(message?.create_date)}</span>
                 </div>
