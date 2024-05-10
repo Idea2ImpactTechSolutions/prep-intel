@@ -25,7 +25,7 @@ const UserInformation = ({user_info}) => {
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 mb-10">
             <div className='space-y-1'>
-                <h3 className='text-[#8E8E8E] text-[22px]'>High Score</h3>
+                <h3 className='text-[#8E8E8E] text-[22px]'>High School</h3>
                 <p className='text-[#141111] text-xl'>{user_info?.student_high_school}</p>
             </div>
             <div className='space-y-1'>
@@ -37,8 +37,8 @@ const UserInformation = ({user_info}) => {
                 <p className='text-[#141111] text-xl'>{user_info?.student_gpa?user_info?.student_gpa:"N/A"}</p>
             </div>
             <div className='space-y-1'>
-                <h3 className='text-[#8E8E8E] text-[22px]'>Expected Graduated Year</h3>
-                <p className='text-[#141111] text-xl'>{user_info?.student_graudation_year?user_info?.student_graudation_year:"N/A"}</p>
+                <h3 className='text-[#8E8E8E] text-[22px]'>Expected Graduation Year</h3>
+                <p className='text-[#141111] text-xl'>{user_info?.student_graduation_year?user_info?.student_graduation_year:"N/A"}</p>
             </div>
             <div className='space-y-1'>
                 <h3 className='text-[#8E8E8E] text-[22px]'>SAT Score</h3>
