@@ -24,7 +24,7 @@ const GoalAndSkills = ({student_details}) => {
                 }
             </div>
             <div className=''>
-                <h2 className="text-[#8E8E8E] mb-3">Major Interest</h2>
+                <h2 className="text-[#8E8E8E] mb-3">Major Interests</h2>
                 <div className='text-base font-semibold space-y-1.5'>
                     {
                         student_details?.student_majors?.map((name:any, index:number)=>(
@@ -34,7 +34,7 @@ const GoalAndSkills = ({student_details}) => {
                 </div>
             </div>
             <div className=''>
-                <h2 className="text-[#8E8E8E] mb-3">Extracurricular Interest</h2>
+                <h2 className="text-[#8E8E8E] mb-3">Extracurricular Interests</h2>
                 <div className='text-base font-semibold space-y-1.5'>
                 {
                     student_details?.student_extracurricular?.map((name:any, index:number)=>(
