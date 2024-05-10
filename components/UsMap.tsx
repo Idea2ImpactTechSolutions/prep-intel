@@ -98,7 +98,7 @@ export default function USMap({ activeStates, setActiveStates }) {
         ))
       }
     </svg>
-    <div id="details-box" ref={bubbleElement}></div>
+    <div id="details-box" className="hidden" ref={bubbleElement}></div>
     </>
   );
 }
