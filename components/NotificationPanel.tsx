@@ -181,7 +181,7 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
       >        
         {!openMessage ?
           <div className="mt-8 pb-16 h-[90vh] overflow-y-auto lg:mx-5">
-            {isLoading ? <LoadingSpinner className="h-[250px]" /> :
+            {(isLoading || isLoadingConns )? <LoadingSpinner className="h-[250px]" /> :
             combineMsgAndConns?.map((message:any, index:number)=> message?.type === 'message'?
               <div className="mb-5" key={"msg-request-"+index} onClick={()=>handleViewMessage(message)}>
                 <div className="flex flex-row gap-x-3 justify-between cursor-pointer" >                
