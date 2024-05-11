@@ -64,7 +64,7 @@ export default function USMap({ activeStates, setActiveStates }) {
       <defs>
         <style>
           {`
-          path {
+          #us-map path {
             fill-rule: evenodd;
             stroke: white;
             fill: #88161856;
@@ -72,11 +72,11 @@ export default function USMap({ activeStates, setActiveStates }) {
             transform-origin: center center;
           }
 
-          path.active {
+          #us-map path.active {
             fill: #881618c3;
           }
 
-          path:hover {
+          #us-map path:hover {
             fill: #881618;
             cursor: pointer;
             transform: scale(1.002, 1.002);
@@ -98,7 +98,7 @@ export default function USMap({ activeStates, setActiveStates }) {
         ))
       }
     </svg>
-    <div id="details-box" ref={bubbleElement}></div>
+    <div id="details-box" className="hidden" ref={bubbleElement}></div>
     </>
   );
 }

@@ -81,6 +81,21 @@ StudentDepartmentInterest.belongsTo(Department, {
   as: 'department',
 });
 
+Messages.belongsTo(Recruiters, {
+  foreignKey: 'recruiter_id',
+  constraints: false
+});
+
+Messages.belongsTo(Students, {
+  foreignKey: 'student_id',
+  constraints: false
+});
+
+Messages.belongsTo(School, {
+  foreignKey: 'school_id',
+  constraints: false
+});
+
 // Model associations
 Object.keys(models).forEach((key) => {
   if ("associate" in models[key]) {

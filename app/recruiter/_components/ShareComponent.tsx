@@ -25,8 +25,7 @@ export default function SharedComponent({tableTitle, headerTitle}:SharedComponen
   
   const isConnections = pathName === "/recruiter/connections"
   const schoolId = session?.data?.user?.schoolID
-  // const recruiterId = session?.data?.user?.roleId
-  const recruiterId = "57e2c5c8-a963-4713-a4d8-e832e79b48e4"
+  const recruiterId = session?.data?.user?.roleId
 
   const acceptedConnection = ""
   const applicants = ""

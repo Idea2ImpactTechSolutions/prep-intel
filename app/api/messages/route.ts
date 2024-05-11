@@ -46,25 +46,33 @@ export async function GET(req: NextRequest) {
       const school_id = searchParams.get("school_id");
       const recent = searchParams.get("recent") === "true";
 
-      let whereClause = {};
-
-      if (recruiter_id) whereClause['recruiter_id'] = recruiter_id;
-      if (student_id) whereClause['student_id'] = student_id;
-      if (school_id) whereClause['school_id'] = school_id;
-
       if (!recruiter_id && !student_id && !school_id) {
         return apiResponse("Missing required query parameters: recruiter_id, student_id, or school_id", 400);
       }
 
-      let order: [string, string][] = [];
+      let whereClause = {};
+      let modelsToInclude: object[] = [];
 
-      if (recent) {
-          order.push(['create_date', 'DESC']);
+      if (recruiter_id) {
+        whereClause['recruiter_id'] = recruiter_id;
+        modelsToInclude.push(includeUsersModel(Recruiters));
+      }
+      if (student_id) {
+        whereClause['student_id'] = student_id;
+        modelsToInclude.push(includeUsersModel(Students));
+      }
+      if (school_id) {
+        whereClause['school_id'] = school_id;
+        modelsToInclude.push({
+          model: School,
+          attributes: ['name']
+        });
       }
 
       const messages = await Messages.findAll({
           where: whereClause,
-          order: order,
+          include: modelsToInclude,
+          order: [['create_date', 'DESC']],
           ...(recent && { limit: 1 }) // If 'recent' is true, only fetch the most recent message
       });
 
@@ -237,4 +245,15 @@ async function sendMessageFromStudentToSchool(data) {
   });
 
   return apiResponse("Message sent successfully", 201);
+}
+
+function includeUsersModel(roleModel) {
+    return {
+      model: roleModel,
+      attributes: ['id'],
+      include: {
+        model: Users,
+        attributes: ['first_name', 'last_name', 'email']
+      }
+    };
 }

@@ -29,10 +29,19 @@ const GET_FIELDS = [
 
 /**
  * @openapi
- * /api/students/{studentId}/schools/connections:
+ * /api/students/{studentId}/schools/connectionRequests:
  *   get:
  *     summary: Find open connection requests
  *     description: Returns open connection requests sent to a student
+ *     parameters:
+ *       - in: path
+ *         name: studentId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the student to retrieve.
+ *     tags:
+ *       - student
  *     responses:
  *       '200':
  *         description: Connection requests found
@@ -107,10 +116,17 @@ export async function GET(
 
 /**
  * @openapi
- * /api/students/{studentId}/schools/connections:
+ * /api/students/{studentId}/schools/connectionRequests:
  *   patch:
  *     summary: Update a connection request with a student's response
  *     description: Updates a connection request initiated by a recruiter
+ *     parameters:
+ *       - in: path
+ *         name: studentId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the student to retrieve.
  *     tags:
  *       - student
  *       - school
@@ -121,9 +137,9 @@ export async function GET(
  *          schema:
  *            type: object
  *            properties:
- *              id:
- *                type: string
- *              response:
+ *              connectionReqId:
+ *                type: integer
+ *              connection_accepted:
  *                type: boolean
  *     responses:
  *       200:
