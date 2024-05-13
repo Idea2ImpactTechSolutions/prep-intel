@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react'
+import { useEffect, useState } from "react";
 import UserMenu from "@/components/user-menu";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -9,9 +9,10 @@ import { AlignJustify, Bell, LogOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useParams } from "next/navigation";
-import { useEffect } from "react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { managerReset } from "@/redux/features/school/managerSlice";
+import NotificationPanel from "../NotificationPanel";
+import { useLazyGetConnectionRequestsQuery } from "@/redux/services/student/studentApi";
 
 export interface TabLink
 {
@@ -26,9 +27,14 @@ interface NavbarProps {
     showTabs?: boolean;
 }
 
-export function Navbar({ tabs, leftContent, showTabs=true }: NavbarProps) {
+export function Navbar({tabs, leftContent, showTabs=true }: NavbarProps) {
+   
+    const [getConnections] = useLazyGetConnectionRequestsQuery()
+
     const { width } = useWindowSize()
-    const [showSidebar, setShowSidebar] = useState<boolean>(true);
+    const [ showSidebar, setShowSidebar] = useState<boolean>(true)
+
+
 
     const normal = 'relative p-1.5 mb-2 block flex items-center gap-x-2 text-sm'
     const defaultLink = normal + ' text-grey-500 pl-4 dark:text-slate-400 dark:hover:text-slate-300 hover:text-primary hover:p-1.5 hover:pl-4'
@@ -39,8 +45,13 @@ export function Navbar({ tabs, leftContent, showTabs=true }: NavbarProps) {
     const pageParams = useParams();
     const schoolId = pageParams?.id as string;
 
+    const session = useSession()
+    const roleId = session?.data?.user?.roleId
+    const role = session?.data?.user?.role
+
     const suppressTabList = ['/school/claim', '/school/set-password'];
     const shouldShowTabs = showTabs && !suppressTabList.includes(location);
+    const [open, setOpen] = useState<boolean>(false)
 
     const dispatch = useAppDispatch()
 
@@ -56,6 +67,12 @@ export function Navbar({ tabs, leftContent, showTabs=true }: NavbarProps) {
             setShowSidebar(true)
         }
     }, [width])
+
+    useEffect(() => {
+        if(role==="student"){
+            getConnections(roleId)
+        }
+    }, [roleId, role])
 
     return (
         <div className="bg-[#F0F4F7]">
@@ -143,9 +160,13 @@ export function Navbar({ tabs, leftContent, showTabs=true }: NavbarProps) {
                 }
 
                     <div className="flex gap-x-4">
-                        <Bell className="w-4 h-4 cursor-pointer" />
+                        <div className="relative cursor-pointer" onClick={()=>setOpen(true)}>
+                            <Bell className="w-4 h-4 "/>
+                            <span className="w-1 h-1 rounded-full bg-red-500 absolute right-0 top-0.5"></span>
+                        </div>
                         <UserMenu />
                     </div>
+                    <NotificationPanel open={open} setOpen={setOpen}/>                    
                 </div>
 
             </nav>
