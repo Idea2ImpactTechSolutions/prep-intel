@@ -186,12 +186,26 @@ export async function GET(
  *       - school
  *       - recruit
  *       - recruiter
+ *     parameters:
+ *       - in: path
+ *         name: schoolId
+ *         required: true
+ *         description: Unique identifier of the school
+ *         schema:
+ *           type: integer
  *     requestBody:
  *      description: An list of schools a student wants to connect with
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/string-array'
+ *            type: object
+ *            properties:
+ *              studentId:
+ *                type: integer
+ *              recruiterId:
+ *                type: integer
+ *              requestMessage:
+ *                type: string
  *     responses:
  *       201:
  *        description: Created
