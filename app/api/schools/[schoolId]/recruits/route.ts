@@ -187,6 +187,7 @@ async function getRecruits(requestData) {
         {
           model: Students,
           attributes: STUDENT_STATS,
+          include: STUDENT_USERS_INCLUSION
         },
         RECRUITERS_MODEL_INCLUSION
       ],
