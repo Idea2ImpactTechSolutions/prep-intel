@@ -91,6 +91,6 @@ export const {
   useAddStudentMajorsMutation,
   useLazyGetStudentMajorsQuery,
   useLazyGetConnectionRequestsQuery,
-  useUpdateConnectionRequestsMutation
-  useLazyGetStudentRecruiterConnectionsQuery
+  useUpdateConnectionRequestsMutation,
+  useLazyGetStudentRecruiterConnectionsQuery,
 } = studentApi;
