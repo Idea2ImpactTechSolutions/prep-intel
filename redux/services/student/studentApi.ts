@@ -59,6 +59,7 @@ const studentApi = baseApi.injectEndpoints({
         url: `/students/${studentId}/schools?view=connections`,
         method: "GET",
       }),
+    }),
     getConnectionRequests: builder.query({
       query: (studentId) => ({
         url: `/students/${studentId}/schools/connectionRequests`,
