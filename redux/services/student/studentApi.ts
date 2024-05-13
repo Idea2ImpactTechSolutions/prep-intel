@@ -67,11 +67,10 @@ const studentApi = baseApi.injectEndpoints({
       }),
       providesTags: ["CONNECTION_REQUESTS"],
     }),
-    
     updateConnectionRequests: builder.mutation({
       query: (payload) => {
         let {studentApi, ...rest} = payload;
-        return ({        
+        return ({
             url: `/students/${payload?.studentId}/schools/connectionRequests`,
             method: "PATCH",
             body: rest
