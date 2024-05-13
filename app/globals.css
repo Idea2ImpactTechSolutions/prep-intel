@@ -138,3 +138,7 @@ table.simple td {
   padding: 6px 10px;
   border-bottom: 1px solid #efefef;
 }
+
+.card-shadow{
+  box-shadow: 0px 18px 40px 0px #7090B01F;
+}
