@@ -1,7 +1,7 @@
 import { models } from "app/models";
 import { Op } from "sequelize";
 const { ConnectionRequest, Recruits, Recruiters, Students, Users } = models;
-import { responseBody } from "app/config/helpers";
+import { apiResponse } from "app/config/helpers";
 import { type NextRequest } from 'next/server'
 import logger from 'lib/logger';
 
@@ -12,11 +12,26 @@ const STUDENT_STATS = [
   "high_school"
 ];
 
-const USERS_MODEL_AND_ATTRIBUTES = { 
+const STUDENT_USERS_INCLUSION = {
   model: Users,
   attributes: ["first_name", "last_name"],
-  required: true
+  required: true,
 };
+
+const RECRUITERS_MODEL_INCLUSION = {
+  model: Recruiters,
+  attributes: ["id"],
+  include: {
+    model: Users,
+    attributes: ["first_name", "last_name"],
+  }
+};
+
+const VALID_QUERY_PARAMS = [
+  "applicants", 
+  "recruiterId", 
+  "accepted_connection"
+];
 
 /**
  * @openapi
@@ -76,6 +91,14 @@ export async function GET(
   try {
     const schoolId = params.schoolId;
     const searchParams = req.nextUrl.searchParams
+
+    if (searchParams.size > 0) {
+      const validParams = checkQueryParams(searchParams)
+      if (!validParams) {
+        return apiResponse("Bad request", 400);
+      }
+    }
+
     const requestData = {
       schoolId,
       accepted_connection :searchParams.get('accepted_connection') === 'true',
@@ -84,16 +107,11 @@ export async function GET(
     }
 
     const getRecruitsRequest = await getRecruits(requestData);
-    return Response.json(
-      responseBody("Recruits successfully retrieved", 200, getRecruitsRequest)
-    );
+    return apiResponse("Recruits successfully retrieved", 200, getRecruitsRequest);
   } catch (error: any) {
     // Report
     logger.error(error.message);
-    return Response.json(
-      responseBody("Error occurred", 400, { error: error.message }),
-      { status: 400 }
-    );
+    return apiResponse("Error occurred", 400, { error: error.message });
   }
 }
 
@@ -113,45 +131,33 @@ async function getRecruits(requestData) {
         {
           model: Students,
           attributes: STUDENT_STATS,
-          include: USERS_MODEL_AND_ATTRIBUTES,
+          include: STUDENT_USERS_INCLUSION
         },
-        {
-          model: Recruiters,
-          where: { id: Number(recruiterId) },
-          required: true,
-          attributes: [],
-          include: USERS_MODEL_AND_ATTRIBUTES,
-        },
+        {...RECRUITERS_MODEL_INCLUSION, where: { id: Number(recruiterId) }},
       ],
-      raw: true,
-      nest: true,
     }); 
   } else if (accepted_connection) {
       recruits = await Recruits.findAll({
-        where: { school_id: schoolId },
+        where: { 
+          school_id: schoolId,
+         },
         include: [
           {
             model: Students,
             attributes: STUDENT_STATS,
             required: true,
             include: [
-              USERS_MODEL_AND_ATTRIBUTES,
+              STUDENT_USERS_INCLUSION,
               { 
                 model: ConnectionRequest, 
                 attributes: [], 
                 required: true,
                 where: { connection_accepted: true } 
-              }
+              },
             ],
           },
-          {
-            model: Recruiters,
-            attributes: [],
-            include: USERS_MODEL_AND_ATTRIBUTES,
-          },
+          RECRUITERS_MODEL_INCLUSION,
         ],
-        raw: true,
-        nest: true,
       });
   } else if (applicants) {
     recruits = await Recruits.findAll({
@@ -161,13 +167,9 @@ async function getRecruits(requestData) {
           model: Students,
           attributes: STUDENT_STATS,
           required: true,
-          include: USERS_MODEL_AND_ATTRIBUTES,
+          include: STUDENT_USERS_INCLUSION,
         },
-        {
-          model: Recruiters,
-          attributes: [],
-          include: USERS_MODEL_AND_ATTRIBUTES,
-        },
+        RECRUITERS_MODEL_INCLUSION,
       ],
       raw: true,
       nest: true,
@@ -186,15 +188,20 @@ async function getRecruits(requestData) {
           model: Students,
           attributes: STUDENT_STATS,
         },
-        {
-          model: Recruiters,
-          attributes: [],
-          include: USERS_MODEL_AND_ATTRIBUTES
-        }
+        RECRUITERS_MODEL_INCLUSION
       ],
       raw: true,
       nest: true,
     });
   }
   return recruits;
+}
+
+function checkQueryParams(searchParams) {
+  for (const key of searchParams.keys()) {
+    if (!VALID_QUERY_PARAMS.includes(key)) {
+      return false;
+    }
+  }
+  return true;
 }
