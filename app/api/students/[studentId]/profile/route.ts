@@ -2,12 +2,9 @@ import { responseBody } from "../../../../config/helpers";
 import { models } from "../../../../models";
 const {
   Recruits,
-  School,
   Recruiters,
   Students,
   Users,
-  StudentsDepartmentInterests,
-  StudentsExtracurriculars,
 } = models;
 import { type NextRequest } from "next/server";
 
@@ -18,13 +15,13 @@ export async function GET(
   try {
     const studentId = params.studentId;
     const searchParams = req.nextUrl.searchParams;
-    const studentSchools: any = await getStudentSchools({
+    const studentProfile: any = await getStudentProfile({
       studentId,
       searchParams,
     });
-    if (!studentSchools) {
+    if (!studentProfile) {
       return Response.json(
-        responseBody("School interests not found", 404, null),
+        responseBody("Student profile not found", 404, null),
         {
           status: 404,
         }
@@ -32,9 +29,9 @@ export async function GET(
     }
     return Response.json(
       responseBody(
-        "School interests retrieved successfully",
+        "Student profile retrieved successfully",
         200,
-        studentSchools
+        studentProfile
       )
     );
   } catch (error: any) {
@@ -47,76 +44,80 @@ export async function GET(
   }
 }
 
-async function getStudentSchools(jsonBody: any) {
+async function getStudentProfile(jsonBody: any) {
   let recruiter_id = jsonBody.searchParams.get("recruiter_id");
   const { studentId } = jsonBody;
 
   let recruiter = await Recruiters.findOne({
     where: { id: recruiter_id },
-    include: [{ model: Users }],
+    include: {
+      model: Users,
+      attributes: ['first_name', 'last_name', 'email']
+     }
   });
 
-  if (!recruiter) {
-    return Response.json(responseBody("Recruiter not found", 404, null), {
-      status: 404,
-    });
-  }
-
-  let recruits = await Recruits.findOne({
-    where: { student_id: studentId, school_id: recruiter.school_id },
-  });
-
-  if (!recruits) {
-    return Response.json(responseBody("Recruiter not found", 404, null), {
-      status: 404,
-    });
-  }
-
-  let school = await School.findAll({ where: { id: recruits.school_id } });
-
-  let students = await Students.findOne({
+  let student = await Students.findOne({
     where: { id: studentId },
-    include: [{ model: Users }],
   });
 
-  let student_last_name =
-    recruits.connection_date || recruits.interested !== null
-      ? students.user.last_name
-      : null;
-  let student_first_name =
-    recruits.connection_date || recruits.interested !== null
-      ? students.user.first_name
-      : null;
-  // let student_phone_num = recruits.connection_date || recruits.interested !== null ? students.phone : null;
+  if ( !recruiter || !student ) {
+    return false;
+  }
 
-  let student_extracurricular = await StudentsExtracurriculars.findAll({
-    where: { student_id: studentId },
-  });
-  let student_majors = await StudentsDepartmentInterests.findAll({
-    where: { student_id: studentId },
+  let schoolsOfInterest = await Recruits.findAll({
+    where: { 
+      student_id: studentId,
+      interested: true
+     }
   });
 
-  let option = {
+  let studentProfile = {
     student_id: studentId,
-    student_first_name: student_first_name || null,
-    student_last_name: student_last_name || null,
-    student_city: students.city || null,
-    student_state: students.state || null,
-    student_postal: students.postal || null,
-    student_high_school: students.high_school || null,
-    student_act_score: students.act_score || null,
-    student_sat_score: students.sat_score || null,
-    schools_of_interest: school || null,
-    connection_date: recruits.connection_date || null,
-    student_gpa: students.gpa || null,
-    student_graudation_year: students.graduation_year || null,
-    contacted: recruits.contacted || null,
-    interested: recruits.interested || null,
-    student_majors: student_majors || null,
-    student_extracurricular: student_extracurricular || null,
-    recruiter_id: recruiter_id || null,
-    recruiter_first_name: recruiter.user.first_name || null,
-    recruiter_last_name: recruiter.user.last_name || null,
+    student_high_school: student.high_school || null,
+    student_act_score: student.act_score || null,
+    student_sat_score: student.sat_score || null,
+    schools_of_interest: schoolsOfInterest || null,
+    student_gpa: student.gpa || null,
+    student_graduation_year: student.graduation_year || null,
+    student_majors: student.majors || null,
+    student_extracurricular: student.extracurriculars || null,
   };
-  return option;
+
+  let recruit = await Recruits.findOne({
+    where: { 
+      student_id: studentId, 
+      school_id: recruiter.school_id 
+    },
+    include: {
+      model: Students,
+      attributes: ['id'],
+      include: {
+        model: Users, 
+        attributes: ['first_name', 'last_name', 'email']
+      }
+    }
+  });
+
+  if (recruit) {
+    const recruitInfo = {
+      student_first_name: recruit.student.user.first_name || null,
+      student_last_name: recruit.student.user.last_name || null,
+      student_city: student.city || null,
+      student_state: student.state || null,
+      student_postal: student.postal || null,
+      contacted: recruit.contacted || null,
+      interested: recruit.interested || null,
+      connection_date: recruit.create_date || null,
+    };
+
+    const recruiterInfo = {
+      recruiter_id: recruiter_id || null,
+      recruiter_first_name: recruiter.user.first_name || null,
+      recruiter_last_name: recruiter.user.last_name || null,
+    }
+    
+    Object.assign(studentProfile, recruitInfo, recruiterInfo);
+  }
+
+  return studentProfile;
 }
