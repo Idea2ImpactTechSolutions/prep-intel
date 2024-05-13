@@ -54,9 +54,28 @@ const studentApi = baseApi.injectEndpoints({
         body: payload.data
       }),
     }),
+    getConnectionRequests: builder.query({
+      query: (studentId) => ({
+        url: `/students/${studentId}/schools/connectionRequests`,
+        method: "GET",
+      }),
+      providesTags: ["CONNECTION_REQUESTS"],
+    }),
+    
+    updateConnectionRequests: builder.mutation({
+      query: (payload) => {
+        let {studentApi, ...rest} = payload;
+        return ({        
+            url: `/students/${payload?.studentId}/schools/connectionRequests`,
+            method: "PATCH",
+            body: rest
+        })
+      },
+      invalidatesTags: ["CONNECTION_REQUESTS"],
+    }),
   }),
 });
 
 export const {
-  useLazyGetSchoolDataQuery, useLazyGetStudentVitalsQuery, useAddStudentVitalsMutation, useAddStudentSchoolsMutation, useLazyGetStudentSchoolsQuery, useConnectWithRecruiterMutation, useAddStudentMajorsMutation, useLazyGetStudentMajorsQuery
+  useLazyGetSchoolDataQuery, useLazyGetStudentVitalsQuery, useAddStudentVitalsMutation, useAddStudentSchoolsMutation, useLazyGetStudentSchoolsQuery, useConnectWithRecruiterMutation, useAddStudentMajorsMutation, useLazyGetStudentMajorsQuery, useLazyGetConnectionRequestsQuery, useUpdateConnectionRequestsMutation
 } = studentApi;
