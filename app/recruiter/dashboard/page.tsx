@@ -91,8 +91,6 @@ export default function Page() {
   return (
     <>
       <PageTitleContainer title="Discover New Recruits" />
-      <hr className="border-t border-gray-300" />
-
       <div className="pi-container">
         {/* {title: "ACT", title: "SAT",title: "GPA" } */}
 
