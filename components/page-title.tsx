@@ -1,4 +1,6 @@
 import { cn } from "@/lib/utils"
+import { Space_Grotesk } from "next/font/google";
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
 type ClaimAccountProps = {
     title: string | React.ReactNode,
@@ -8,7 +10,6 @@ type ClaimAccountProps = {
 }
 
 export default function PageTitleContainer({title, rightContent, titleClass, className}: ClaimAccountProps) {
-
   return (
     <>
     <section className={cn(
@@ -17,6 +18,7 @@ export default function PageTitleContainer({title, rightContent, titleClass, cla
     )}>
         <h2 className={cn(
           "font-bold md:text-lg",
+          spaceGrotesk.className,
           titleClass
         )}>{title}</h2>
         <div>{rightContent}</div>
