@@ -6,8 +6,6 @@ import { col, Op } from 'sequelize';
 
 const {
   ConnectionRequest,
-  Recruiters,
-  Recruits,
   School,
   Students,
 } = models;
@@ -20,13 +18,6 @@ const GET_VALIDATION_SCHEMA = yup.object({
     excludeEmptyString: true,
   })).notRequired()
 });
-
-const POST_VALIDATION_SCHEMA = yup.object({
-    studentId: yup.number().required(),
-    recruiterId: yup.number().required(),
-    schoolId: yup.number().notRequired(),
-    requestMessage: yup.string().notRequired()
-  });
 
 const GET_FIELDS = [
   [ 'id', 'studentId'],
@@ -122,7 +113,7 @@ export async function GET(
     const filters = getFilters(searchParams);
 
     if (filters) {
-      const validFilters = validateRequestBody(req.method, filters);
+      const validFilters = validateRequestBody(filters);
       if ( !validFilters ) {
         return apiResponse("Bad Request", 400);
       }
@@ -175,110 +166,6 @@ export async function GET(
     return apiResponse("Internal Server Error", 500, { error: error.message });
   }
 }
-
-/**
- * @openapi
- * /api/schools/{schoolId}/recruits/explorer:
- *   post:
- *     summary: Add new connection requests
- *     description: Creates a new connection request
- *     tags:
- *       - school
- *       - recruit
- *       - recruiter
- *     parameters:
- *       - in: path
- *         name: schoolId
- *         required: true
- *         description: Unique identifier of the school
- *         schema:
- *           type: integer
- *     requestBody:
- *      description: An list of schools a student wants to connect with
- *      content:
- *        application/json:
- *          schema:
- *            type: object
- *            properties:
- *              studentId:
- *                type: integer
- *              recruiterId:
- *                type: integer
- *              requestMessage:
- *                type: string
- *     responses:
- *       201:
- *        description: Created
- *       200:
- *        description: Successful request
- *       400:
- *        description: Bad request
- *       404:
- *        description: Not found
- *       409:
- *        description: Conflict
- *       500:
- *        description: Internal server error
- */
-export async function POST(
-    req: NextRequest,
-    { params }: { params: { schoolId: number } },
-  ) {
-    try {
-      // Collect
-      const school = await School.findByPk(params.schoolId);
-
-      if ( !school ) {
-        return apiResponse("Not Found", 404);
-      }
-
-      const inputData = await req.json();
-      if (Object.keys(inputData).length == 0) {
-        return apiResponse("No Content", 204);
-      }
-
-      const validInputData = validateRequestBody(req.method, inputData);
-      if ( !validInputData ) {
-        return apiResponse("Bad Request", 400);
-      }
-
-      const student = await Students.findByPk(inputData.studentId);
-      const recruiter = await Recruiters.findByPk(inputData.recruiterId);
-
-      if ( !student || !recruiter ) {
-        return apiResponse("Not Found", 404);
-      }
-
-      const whereConditions = {
-        school_id: params.schoolId,
-        student_id: inputData.studentId,
-        recruiter_id: inputData.recruiterId
-      };
-
-      const existingRecruit = await Recruits.findOne({
-        where: whereConditions
-      });
-      if (existingRecruit) {
-        return apiResponse("Conflict", 409);
-      }
-
-      // Create
-      const [connectionRequest, newRequest] : any = await ConnectionRequest.findOrCreate({
-        where: whereConditions
-      });
-
-      if (!newRequest) {
-        await connectionRequest.update({
-            connection_accepted: null
-        });
-      }
-      // Report
-      return apiResponse("Created", 201);
-    } catch (error: any) {
-      // Report
-      return apiResponse("Internal Server Error", 500, { error: error.message });
-    }
-  }
 
 function getFilters(searchParams) {
   if (searchParams.size > 0) {
@@ -344,13 +231,6 @@ function prepareQueryFilters(filters, school) {
   return filterConditions;
 }
 
-function validateRequestBody(method: string, testObject) {
-  switch (method) {
-    case "GET":
-      return GET_VALIDATION_SCHEMA.isValidSync(testObject, { strict: true });
-    case "POST":
-      return POST_VALIDATION_SCHEMA.isValidSync(testObject, { strict: true });
-    default:
-      return false;
-  }
+function validateRequestBody(testObject) {
+  return GET_VALIDATION_SCHEMA.isValidSync(testObject, { strict: true });
 }

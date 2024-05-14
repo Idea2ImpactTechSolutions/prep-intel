@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 import type { NextRequest } from "next/server";
-import { responseBody } from "app/config/helpers";
+import { responseBody, apiResponse } from "app/config/helpers";
 import { models } from "@/app/models";
 import { fn, col } from 'sequelize';
 const {
@@ -17,6 +17,13 @@ const PATCH_VALIDATION_SCHEMA = yup.object({
   connection_accepted: yup.boolean().required(),
 });
 
+const POST_VALIDATION_SCHEMA = yup.object({
+  studentId: yup.number().required(),
+  recruiterId: yup.number().required(),
+  schoolId: yup.number().notRequired(),
+  requestMessage: yup.string().notRequired()
+});
+
 const GET_FIELDS = [
   'id',
   [ col('school.name'), 'schoolName'],
@@ -24,7 +31,8 @@ const GET_FIELDS = [
        col('recruiter->user.first_name'), ' ', col('recruiter->user.last_name')
     ), 'recruiterName'
   ],
-  [ 'create_date', 'requestDate' ]
+  [ 'create_date', 'requestDate' ],
+  ['connection_accepted', 'requestStatus']
 ];
 
 /**
@@ -65,13 +73,12 @@ export async function GET(
     );
 
     if (userRole.role !== 'student') {
-      return Response.json(responseBody("Not Found", 404), { status: 404 });
+      return apiResponse("Not Found", 404);
     }
 
     const studentConnectionRequests: any = await ConnectionRequest.findAll({
       where: {
         student_id: params.studentId,
-        connection_accepted: null
       },
       attributes: GET_FIELDS,
       include: [
@@ -94,23 +101,13 @@ export async function GET(
       raw: true,
     });
 
-    return Response.json(
-      responseBody(
+    return apiResponse(
         "Recruiter connection requests retrieved successfully",
         200,
         studentConnectionRequests
-      ),
-      {
-        status: 200,
-      }
-    );
+      );
   } catch (error: any) {
-    return Response.json(
-      responseBody("Internal Server Error", 500, { error: error.message }),
-      {
-        status: 500,
-      }
-    );
+    return apiResponse("Internal Server Error", 500, { error: error.message });
   }
 }
 
@@ -161,14 +158,14 @@ export async function PATCH(
       params.studentId
     );
     if (userRole.role !== 'student') {
-      return Response.json(responseBody("Not Found", 404), { status: 404 });
+      return apiResponse("Not Found", 404);
     }
 
     const inputData : any = await req.json();
 
     const validInputData = validateRequestBody(req.method, inputData);
     if (!validInputData) {
-      return Response.json(responseBody("Bad Request", 400), { status: 400 });
+      return apiResponse("Bad Request", 400);
     }
 
     const { connectionReqId, ...updateAttributes } = Object.assign({}, inputData);
@@ -180,7 +177,7 @@ export async function PATCH(
       }
     });
     if (connectionRequest === null) {
-      return Response.json(responseBody("Not Found", 404), { status: 404 });
+      return apiResponse("Not Found", 404);
     }
 
     // Update
@@ -190,12 +187,109 @@ export async function PATCH(
     return Response.json(responseBody("No Content", 204), { status: 200 });
   } catch (error: any) {
     // Report
-    return Response.json(
-      responseBody("Internal Server Error", 500, { error: error.message }),
-      {
-        status: 500,
-      }
-    );
+    return apiResponse("Internal Server Error", 500, { error: error.message });
+  }
+}
+
+/**
+ * @openapi
+ * /api/students/{studentId}/schools/connectionRequests:
+ *   post:
+ *     summary: Add new connection requests
+ *     description: Creates a new connection request
+ *     tags:
+ *       - school
+ *       - recruit
+ *       - recruiter
+ *     parameters:
+ *       - in: path
+ *         name: studentId
+ *         required: true
+ *         description: Unique identifier of the student
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *      description: An object with a recruiter ID and their affiliated school ID
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              recruiterId:
+ *                type: integer
+ *              schoolId:
+ *                type: integer
+ *     responses:
+ *       201:
+ *        description: Created
+ *       200:
+ *        description: Successful request
+ *       400:
+ *        description: Bad request
+ *       404:
+ *        description: Not found
+ *       409:
+ *        description: Conflict
+ *       500:
+ *        description: Internal server error
+ */
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { studentId: number } },
+) {
+  try {
+    // Collect
+    const student = await Students.findByPk(params.studentId);
+
+    if ( !student ) {
+      return apiResponse("Not Found", 404);
+    }
+
+    const inputData = await req.json();
+    if (Object.keys(inputData).length == 0) {
+      return apiResponse("No Content", 204);
+    }
+
+    const validInputData = validateRequestBody(req.method, inputData);
+    if ( !validInputData ) {
+      return apiResponse("Bad Request", 400);
+    }
+
+    const school = await School.findByPk(inputData.schoolId);
+    const recruiter = await Recruiters.findByPk(inputData.recruiterId);
+
+    if ( !school || !recruiter ) {
+      return apiResponse("Not Found", 404);
+    }
+
+    const whereConditions = {
+      student_id: params.studentId,
+      school_id: inputData.schoolId,
+      recruiter_id: inputData.recruiterId
+    };
+
+    const existingRecruit = await Recruits.findOne({
+      where: whereConditions
+    });
+    if (existingRecruit) {
+      return apiResponse("Conflict", 409);
+    }
+
+    // Create
+    const [connectionRequest, newRequest] : any = await ConnectionRequest.findOrCreate({
+      where: whereConditions
+    });
+
+    if (!newRequest) {
+      await connectionRequest.update({
+          connection_accepted: null
+      });
+    }
+    // Report
+    return apiResponse("Created", 201);
+  } catch (error: any) {
+    // Report
+    return apiResponse("Internal Server Error", 500, { error: error.message });
   }
 }
 
@@ -218,10 +312,14 @@ async function getUserRole(studentId) {
 }
 
 function validateRequestBody(method: string, requestBody) {
-  return PATCH_VALIDATION_SCHEMA.isValidSync(
-    requestBody,
-    { strict: true }
-  );
+  switch (method) {
+    case "PATCH":
+      return PATCH_VALIDATION_SCHEMA.isValidSync(requestBody, { strict: true });
+    case "POST":
+      return POST_VALIDATION_SCHEMA.isValidSync(requestBody, { strict: true });
+    default:
+      return false;
+  }
 }
 
 async function addStudentResponse(connectionRequest, updateAttributes) {

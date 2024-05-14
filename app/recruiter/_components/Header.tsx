@@ -18,10 +18,10 @@ interface HeaderProps {
   title?: string;
   setSearchData:(data:any)=> void,
   data: [], 
-  recruites: [] 
+  recruits: [] 
 } 
 
-const Header = ({title, recruites, data, setSearchData}:HeaderProps) => {
+const Header = ({title, recruits, data, setSearchData}:HeaderProps) => {
   const [sortOrder, setSortOrder] = React.useState<boolean>(false)
   const [showPanel, setShowPanel] = React.useState<boolean>(false)
 
@@ -29,7 +29,7 @@ const Header = ({title, recruites, data, setSearchData}:HeaderProps) => {
 
   // Function to filter data based on search text
   const searchedData =(values:any)=>{
-    let searchedValues = recruites?.filter((item:any) =>
+    let searchedValues = recruits?.filter((item:any) =>
        Object.values(item?.student)?.some(value =>
         typeof value === 'string' && value.toLowerCase().includes(values?.toLowerCase())
         || typeof value === 'number' && value.toString().includes(values)
