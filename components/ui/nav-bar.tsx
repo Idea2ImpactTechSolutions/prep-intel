@@ -28,7 +28,7 @@ interface NavbarProps {
 }
 
 export function Navbar({tabs, leftContent, showTabs=true }: NavbarProps) {
-   
+
     const [getConnections] = useLazyGetConnectionRequestsQuery()
 
     const { width } = useWindowSize()
@@ -166,9 +166,8 @@ export function Navbar({tabs, leftContent, showTabs=true }: NavbarProps) {
                         </div>
                         <UserMenu />
                     </div>
-                    <NotificationPanel open={open} setOpen={setOpen}/>                    
                 </div>
-
+                <NotificationPanel open={open} setOpen={setOpen}/>
             </nav>
         </div>
     )
