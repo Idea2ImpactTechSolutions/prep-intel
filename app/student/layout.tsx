@@ -26,7 +26,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     const location = usePathname() as string;
 
     return (
-      <main className="overflow-y-hidden font-sans">
+      <main className="font-sans">
         <section className="">
             <Navbar
                 showTabs={!location.includes('onboarding')}

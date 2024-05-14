@@ -38,7 +38,7 @@ export default function StudentConnection() {
   }
 
   return (
-    <section className="p-5 overflow-y-auto pb-32 h-[calc(100vh_-_5rem)]">
+    <section className="pi-container mt-6">
       <SectionContainer
         title="Recruiter Connections"
         subTitle="Discover your ideal university match here."
