@@ -11,7 +11,8 @@ import * as yup from 'yup'
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import ConfirmationModal from '@/components/modal/confirmation-modal'
-import { useSendMessageMutation, useCreateConnectionRequestMutation } from '@/redux/services/recruiter/recruiterApi'
+import { useSendMessageMutation } from '@/redux/services/recruiter/recruiterApi'
+import { useCreateConnectionRequestsMutation } from '@/redux/services/student/studentApi'
 import { useSession } from 'next-auth/react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
@@ -23,7 +24,7 @@ const StudentInformation = ({student_details, recruiterId, studentId }) => {
     const schoolId = session?.user?.schoolID;
     const router = useRouter()
 
-    const [createConnectionRequest, { isLoading: isLoadingConnectionRequest }] = useCreateConnectionRequestMutation();
+    const [createConnectionRequest, { isLoading: isLoadingConnectionRequest }] = useCreateConnectionRequestsMutation();
     const [sendMessage, { isLoading }] = useSendMessageMutation()
 
     function sendConnectRequest() {

@@ -67,7 +67,13 @@ const studentApi = baseApi.injectEndpoints({
       }),
       providesTags: ["CONNECTION_REQUESTS"],
     }),
-    
+    createConnectionRequests: builder.mutation({
+      query: (payload) => ({
+        url: `/students/${payload.studentId}/schools/connectionRequests`,
+        method: "POST",
+        body: payload
+      }),
+    }),
     updateConnectionRequests: builder.mutation({
       query: (payload) => {
         let {studentApi, ...rest} = payload;
@@ -92,6 +98,7 @@ export const {
   useAddStudentMajorsMutation,
   useLazyGetStudentMajorsQuery,
   useLazyGetConnectionRequestsQuery,
+  useCreateConnectionRequestsMutation,
   useUpdateConnectionRequestsMutation,
   useLazyGetStudentRecruiterConnectionsQuery,
 } = studentApi;

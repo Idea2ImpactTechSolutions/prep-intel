@@ -116,7 +116,7 @@ export default function SharedComponent({tableTitle, headerTitle}:SharedComponen
 
   return (
     <div className="pi-container">
-      <Header title={headerTitle} recruites={data?.data} setSearchData={(data)=>setSearchData(data)} data={searchData}/>
+      <Header title={headerTitle} recruits={data?.data} setSearchData={(data)=>setSearchData(data)} data={searchData}/>
       <h1 className="text-xl lg:text-2xl font-bold mb-">Hello {session?.data?.user?.firstName}, welcome!</h1>
       <h2 className="text-[#8E8E8E]">Here are students that match your profile</h2>
 

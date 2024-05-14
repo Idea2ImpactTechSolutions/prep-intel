@@ -14,13 +14,6 @@ const recruiterApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
-    createConnectionRequest: builder.mutation({
-      query: (payload) => ({
-        url: `/schools/${payload.schoolId}/recruits/explorer`,
-        method: "POST",
-        body: payload,
-      }),
-    }),
     getRecruiter: builder.query({
       query: ({id}) => ({
         url: `/recruiters/${id}/`,
@@ -73,6 +66,5 @@ export const {
   useGetStudentProfileQuery,
   useSendMessageMutation,
   useLazyExploreRecruitsQuery,
-  useCreateConnectionRequestMutation,
   useUpdateRecruiterPersonalInfoMutation
 } = recruiterApi;
