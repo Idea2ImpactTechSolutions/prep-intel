@@ -75,7 +75,7 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
 
   const session = useSession()
   const roleId = session?.data?.user?.roleId
-  const senderRole = session?.data?.user?.role 
+  const senderRole = session?.data?.user?.role
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -87,7 +87,7 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
     onSubmit:async (values, {resetForm})=>{
       try {
         const res = await sendMessage({recruiter_id: viewMessages[0]?.recruiter_id, student_id:viewMessages[0]?.student_id, sender_role:senderRole, message_text:values?.message}).unwrap()
-  
+
         if(res?.status === 201){
           toast.success(res.message)
           handleViewMessage(viewMessages[0])
@@ -107,7 +107,7 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
         const res = await getMessages({recruiter_id:"" ,school_id:"", student_id:roleId, recent}).unwrap()
         setMessages(res?.data)
       }
-  
+
       if(senderRole === "recruiter"){
         const res = await getMessages({recruiter_id:roleId ,school_id:"", student_id:"", recent}).unwrap()
         setMessages(res?.data)
@@ -143,7 +143,7 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
       const res = await connect(payload).unwrap()
       if(res.status === 201){
         toast.success(res.message)
-      }      
+      }
     } catch (error:any) {
       toast.error(error.data.message)
     } finally{
@@ -170,7 +170,7 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
       messagesEndRef.current.scrollTop = messagesEndRef.current?.scrollHeight;
     }
   }, [viewMessages]);
-    
+
   return (
     <div className="">
       <SheetPanel
@@ -178,36 +178,36 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
           title={`Notifications`}
           handleClose={() => setOpen(false)}
           width={450}
-      >        
+      >
         {!openMessage ?
           <div className="mt-8 pb-16 h-[90vh] overflow-y-auto lg:mx-5">
             {(isLoading || isLoadingConns )? <LoadingSpinner className="h-[250px]" /> :
             combineMsgAndConns?.map((message:any, index:number)=> message?.type === 'message'?
               <div className="mb-5" key={"msg-request-"+index} onClick={()=>handleViewMessage(message)}>
-                <div className="flex flex-row gap-x-3 justify-between cursor-pointer" >                
+                <div className="flex flex-row gap-x-3 justify-between cursor-pointer" >
                   <p><span className="font-semibold mr-1 capitalize">James Sparks</span>{message?.message_text}</p>
                   <span className="w-[75px] text-sm text-right">{dateTimeDifference(message?.create_date)}</span>
                 </div>
-              </div>: 
+              </div>:
               <div className="mb-5" key={"conn-"+index} >
-                <div className="mb-2 flex flex-row gap-x-3 justify-between cursor-pointer">             
+                <div className="mb-2 flex flex-row gap-x-3 justify-between cursor-pointer">
                   <p><span className="font-semibold mr-1 capitalize ">{message?.recruiterName}</span> has sent you an invitation to connect. Would you like to share your information and connnect? </p>
                   <span className="w-[75px] text-sm text-right">{dateTimeDifference(message?.requestDate)}</span>
                 </div>
                 <div className="flex flex-row gap-x-3">
                   <Button variant="outline" size="sm" className="h-7" loading={!accept && connecting} loadingText="Rejecting..." onClick={()=>handleAcceptOrRejectConnection(message, false)}>No</Button>
-                  
+
                   <Button variant="default" size="sm" className="h-7" loading={accept && connecting} loadingText="Accepting..." onClick={()=>handleAcceptOrRejectConnection(message, true)}>Yes</Button>
                 </div>
               </div>
             )}
             {combineMsgAndConns?.length < 1 && !isLoading ? <h2 className="font-[500] text-sm md:text-base">No notification found!</h2>:null}
-          </div> : 
+          </div> :
           <div className="h-full flex flex-col gap-y-3" key={viewMessages}>
             <div className="flex justify-end mt-3 "><Button variant={'ghost'} title="Close Message" size="sm" className="h-5 px-1" onClick={()=>{setOpenMessage(false); resetForm()}}><X className="h-3 w-3 text-gray-400 cursor-pointer" /></Button></div>
             <div className="w-full h-full pb-3 overflow-y-auto" ref={messagesEndRef}>
               {
-                viewMessages?.length < 1 ? <LoadingSpinner className="h-[250px]" />: viewMessages?.map((message:any, index)=>  
+                viewMessages?.length < 1 ? <LoadingSpinner className="h-[250px]" />: viewMessages?.map((message:any, index)=>
                   <div className="mb-4" key={index}>
                     <div className={`flex ${message?.sender_role === senderRole ? "justify-end" : "justify-start"}`}>
                       <p className={`w-fit max-w-[90%] p-3 rounded-md text-sm ${message?.sender_role === senderRole ? "bg-green-100" : "bg-primary/10"}`}>
@@ -221,11 +221,11 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
             </div>
             <div className=" pt-2 mb-5">
               <form onSubmit={handleSubmit}>
-                <Textarea 
+                <Textarea
                     id='message'
                     name="message"
-                    className='w-full mt-2 rounded-xl' 
-                    placeholder='Enter your message here' 
+                    className='w-full mt-2 rounded-xl'
+                    placeholder='Enter your message here'
                     rows={2}
                     value={values.message}
                     onChange={handleChange}
@@ -234,9 +234,9 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
                     error={errors.message}
                 />
                 <div className='flex justify-end items-center gap-x-5 mt-2'>
-                  <Button 
+                  <Button
                       type='submit'
-                      variant="orange" 
+                      variant="orange"
                       className='w-fit md:px-4 h-8 rounded-lg font-[500]'
                       loading={sendingMessage}
                       disabled={viewMessages?.length < 1 && true}
