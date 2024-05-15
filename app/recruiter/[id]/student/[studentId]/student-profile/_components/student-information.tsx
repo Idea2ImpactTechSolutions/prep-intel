@@ -83,7 +83,7 @@ const StudentInformation = ({student_details, recruiterId, studentId }) => {
         </div>
         <div className='p-10 bg-white shadow-xl rounded-b-xl'>
             <div className='flex justify-end'>
-                { (disableConnectionButton) ?
+                {(disableConnectionButton) ?
                     <Button variant="outline" className='text-xl' disabled
                     >Invite Sent</Button>
                     : (!student_details?.connection_date &&  !student_details?.interested) ?

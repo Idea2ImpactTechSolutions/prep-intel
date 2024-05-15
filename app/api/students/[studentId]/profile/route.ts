@@ -121,12 +121,12 @@ async function getStudentProfile(jsonBody: any) {
   }
 
   const connectionRequest = await ConnectionRequest.findOne({
-      where: {
-        student_id: studentId,
-        recruiter_id: recruiter_id,
-        school_id: recruiter.school_id,
-        connection_accepted: null
-      }
+    where: {
+      student_id: studentId,
+      recruiter_id: recruiter_id,
+      school_id: recruiter.school_id,
+      connection_accepted: null
+    }
   });
 
   if (connectionRequest) {
