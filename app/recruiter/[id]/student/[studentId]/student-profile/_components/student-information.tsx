@@ -18,8 +18,9 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 
 const StudentInformation = ({student_details, recruiterId, studentId }) => {
-    const [showModal,setShowModal] = useState<boolean>(false)
-    const [showConfirmationModal,setShowConfirmationModal] = useState<boolean>(false)
+    const [showModal, setShowModal] = useState<boolean>(false)
+    const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false)
+    const [disableConnectionButton, setDisableConnectionButton] = useState<boolean>(student_details?.open_connection_request)
     const {data: session}: any = useSession()
     const schoolId = session?.user?.schoolID;
     const router = useRouter()
@@ -34,6 +35,7 @@ const StudentInformation = ({student_details, recruiterId, studentId }) => {
         schoolId: parseInt(schoolId),
         requestMessage: "Let's get connected",
       })
+      setDisableConnectionButton(true)
     }
 
     const handleSubmitMessage = (values:any, resetForm:()=>void)=>{
@@ -81,7 +83,10 @@ const StudentInformation = ({student_details, recruiterId, studentId }) => {
         </div>
         <div className='p-10 bg-white shadow-xl rounded-b-xl'>
             <div className='flex justify-end'>
-                {(!student_details?.connection_date &&  !student_details?.interested) ?
+                {(disableConnectionButton) ?
+                    <Button variant="outline" className='text-xl' disabled
+                    >Invite Sent</Button>
+                    : (!student_details?.connection_date &&  !student_details?.interested) ?
                     <Button variant="outline" className='text-xl'
                       loading={isLoadingConnectionRequest}
                       onClick={sendConnectRequest}

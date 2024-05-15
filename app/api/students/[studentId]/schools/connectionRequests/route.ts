@@ -247,7 +247,7 @@ export async function POST(
 
     const inputData = await req.json();
     if (Object.keys(inputData).length == 0) {
-      return apiResponse("No Content", 204);
+      return Response.json(responseBody("No Content", 204), { status: 200 });
     }
 
     const validInputData = validateRequestBody(req.method, inputData);
