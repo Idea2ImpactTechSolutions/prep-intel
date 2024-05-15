@@ -21,8 +21,6 @@ export default function Page() {
   return (
     <section>
       <PageTitleContainer title="My Dashboard" />
-      <hr className="border-t border-gray-300 my-4" />
-
       <section className="pi-container flex items-center justify-between">
         <div
           className="grid grid-cols-4 grid-rows-3 gap-4 w-full"

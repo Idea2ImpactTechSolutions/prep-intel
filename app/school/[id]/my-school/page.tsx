@@ -67,7 +67,6 @@ export default function MySchool() {
                           </Button>
                         }
                     />
-                    <div className="border-t"> </div>
 
                     <div className="pi-container pi-container">
                       <SchoolInformation schoolData={school_data} />
