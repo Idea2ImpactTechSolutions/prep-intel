@@ -60,14 +60,14 @@ export default function OnboardingTabs({ active_step }: OnboardingTabsProps) {
     <>
 
       <nav className={`p-4 mb-8`}>
-        <div className="flex overflow-x-auto mt-4 mx-auto md:mt-10 md:w-[calc(100vw_-_15rem)] lg:w-[calc(100vw_-_5rem) xl:w-[calc(100vw_-_35rem)]">
+        <div className="">
           <div className="flex-1">
             {/* <span className='block border-b border-[#D0CFCF]'></span> */}
             <div className='grid grid-cols-5 w-full'>
               {
                 STEPPERS.map(({ step, title, path }, idx) => (
                   <div key={step} className={cn(
-                    "flex flex-col items-center gap-y-2 z-20 relative",
+                    "flex flex-col items-center gap-y-2 z-0 relative",
                     idx !== 4 && "after:right-0 after:top-[25%] after:block after:contents-[''] after:absolute after:h-[2px] after:bg-[#D0CFCF] after:w-[50%] after:-z-10",
                     idx !== 0 && "before:left-0 before:top-[25%] before:block before:contents-[''] before:absolute before:h-[2px] before:bg-[#D0CFCF] before:w-[50%] before:-z-10",
                     nextStepperIndex -1 !== 0 && idx < nextStepperIndex - 1  && "after:bg-[#A81D28]",

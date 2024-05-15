@@ -35,7 +35,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 }
                 tabs={TABS}
             />
-            <section>
+            <section className="">
                {children}
             </section>
         </section>

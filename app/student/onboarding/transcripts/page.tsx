@@ -49,7 +49,7 @@ export default function TranscriptsPage() {
 
   return (
     <>
-      <div className="flex-1 px-6 md:px-12 lg:px-20">
+      <div className="flex-1 pi-container">
         <SectionContainer title="Upload Important Documents">
           <>
             <p>Important Documents include:</p>
@@ -99,9 +99,6 @@ export default function TranscriptsPage() {
             </div>
           </>
         </SectionContainer>
-
-
-
           <div>
               <h3 className="mb-1 mt-4 font-semibold">Documents</h3>
               <ul className="ml-2">
@@ -116,13 +113,13 @@ export default function TranscriptsPage() {
               </ul>
           </div>
 
+          <OnboardingFooter
+            prevPageHandler={() => router.push('/student/onboarding/extracurricular')}
+            nextPageHandler={() => setShowConfirmationModal(true)}
+            preventGoBack={false}
+            nextBtnLabel="Finish"
+          />
       </div>
-      <OnboardingFooter
-        prevPageHandler={() => router.push('/student/onboarding/extracurricular')}
-        nextPageHandler={() => setShowConfirmationModal(true)}
-        preventGoBack={false}
-        nextBtnLabel="Finish"
-      />
       <ConfirmationModal
         title="Are you absolutely sure?"
         description="This action cannot be undone. This will permanently submit your record."

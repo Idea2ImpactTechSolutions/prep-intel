@@ -84,7 +84,10 @@
 .pi-container {
   @apply container;
   @apply p-2;
+  @apply pb-4;
   @apply md:p-6;
+  @apply bg-slate-100;
+  @apply shadow-md;
 }
 
 .custom-calendar.rmdp-wrapper,

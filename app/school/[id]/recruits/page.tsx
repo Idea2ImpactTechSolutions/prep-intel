@@ -58,7 +58,7 @@ export default function Page() {
   return (
     <section>
       <PageTitleContainer title="Recruits" />
-      <section className="pi-container pt-0 items-center justify-between">
+      <section className="pi-container">
         <DataTable
           title="Recruits"
           columns={RECRUITER_COLUMNS}
