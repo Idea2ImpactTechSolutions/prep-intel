@@ -32,8 +32,6 @@ export default function SchoolView({goBack, schoolId}:PageProps) {
             }
             titleClass="text-sm"
           />
-          <div className="border-t"> </div>
-
           <div className="pi-container pi-container">
             <SchoolInformation schoolData={school_data} />
           </div>

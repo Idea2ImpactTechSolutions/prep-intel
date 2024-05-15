@@ -1,15 +1,11 @@
 "use client"
 import LoadingSpinner from "@/components/loading-spinner";
-import SectionContainer from "@/components/section-container";
 import SingleRecruiterCard from "@/components/single-recruiter-card";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { useLazyGetStudentRecruiterConnectionsQuery } from "@/redux/services/student/studentApi";
 import { useSession } from "next-auth/react";
-import { Space_Grotesk } from "next/font/google";
 import { useEffect, useState } from "react";
-const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
-
+import PageTitleContainer from "@/components/page-title";
 
 export default function StudentConnection() {
   const [availableConnections, setAvailableConnections] = useState([])
@@ -38,16 +34,19 @@ export default function StudentConnection() {
   }
 
   return (
-    <section className="pi-container mt-6">
-      <SectionContainer
-        title="Recruiter Connections"
-        subTitle="Discover your ideal university match here."
-        titleClass={cn(
-          spaceGrotesk.className,
-          "mb-0"
-        )}
-      >
-        <section className="pt-4">
+    <>
+    <PageTitleContainer
+        title={
+            <>
+              <span>Recruiter Connections</span>
+              <div className="flex flex-col text-xs font-normal">
+                  <span className="capitalize">Discover your ideal university match here.</span>
+              </div>
+            </>
+        }
+        titleClass="text-sm"
+    />
+        <section className="pi-container">
           {
             availableConnections?.length > 0 ?
               <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-6">
@@ -77,7 +76,6 @@ export default function StudentConnection() {
               </section>
           }
         </section>
-      </SectionContainer>
-    </section>
+      </>
   )
 }

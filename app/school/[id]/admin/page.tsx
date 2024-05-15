@@ -66,64 +66,60 @@ export default function AdminPage() {
 
     return (
         <section>
-            <>
-                <div className="border-b">
-                    <PageTitleContainer
-                        title={
-                            <>
-                                {currentView === "VIEW_ADMIN" && 'Admin'}
-                                {(currentView === "CREATE_RECRUITER" || currentView === "CREATE_ADMIN") && (
-                                    <div className="flex items-center cursor-pointer"
-                                        onClick={() => setCurrentView('VIEW_ADMIN')}
-                                    > <LucideChevronLeft width={20} height={20}/> <span> Admin </span> </div>
-                                )}
-                            </>
-                        }
-                        rightContent={
-                            <div className={cn(
-                                (currentView === "CREATE_RECRUITER" ||
-                                 currentView === "CREATE_ADMIN")
-                                && 'hidden'
-                            )}>
-                            <TitlebarButton
-                                title="Create Admin"
-                                onClick={() => setCurrentView("CREATE_ADMIN")} />
+            <PageTitleContainer
+                title={
+                    <>
+                        {currentView === "VIEW_ADMIN" && 'Admin'}
+                        {(currentView === "CREATE_RECRUITER" || currentView === "CREATE_ADMIN") && (
+                            <div className="flex items-center cursor-pointer"
+                                onClick={() => setCurrentView('VIEW_ADMIN')}
+                            > <LucideChevronLeft width={20} height={20}/> <span> Admin </span> </div>
+                        )}
+                    </>
+                }
+                rightContent={
+                    <div className={cn(
+                        (currentView === "CREATE_RECRUITER" ||
+                          currentView === "CREATE_ADMIN")
+                        && 'hidden'
+                    )}>
+                    <TitlebarButton
+                        title="Create Admin"
+                        onClick={() => setCurrentView("CREATE_ADMIN")} />
 
-                            <TitlebarButton
-                                title="Create Recruiter"
-                                onClick={() => setCurrentView("CREATE_RECRUITER")} />
-                            </div>
-                        }
-                    />
-                </div>
-                <div className={cn(
-                    "p-4",
-                    "pi-container",
-                    currentView === "VIEW_ADMIN" ? "block" : 'hidden'
-                )}>
-                    <InviteLink claimUrl={claimUrl} className="mb-4" />
+                    <TitlebarButton
+                        title="Create Recruiter"
+                        onClick={() => setCurrentView("CREATE_RECRUITER")} />
+                    </div>
+                }
+            />
+            <div className={cn(
+                "p-4",
+                "pi-container",
+                currentView === "VIEW_ADMIN" ? "block" : 'hidden'
+            )}>
+                <InviteLink claimUrl={claimUrl} className="mb-4" />
 
-                    <DataTable title="Personnel"
-                        columns={PERSONNEL_COLUMNS}
-                        data={personnel}
-                        isLoading={isLoading || isFetching} />
-                </div>
-                <section className={cn(
-                    "hidden",
-                    (currentView === "CREATE_RECRUITER" || currentView === "CREATE_ADMIN") && "block"
-                )}>
-                    <section className="pi-container">
-                        <h2 className="font-bold md:text-lg text-sm mb-2">{currentView === "CREATE_RECRUITER"  ? "Create Recruiter" : "Create Admin"}</h2>
-                        {(currentView === 'CREATE_RECRUITER' || currentView === 'CREATE_ADMIN') &&
-                        <CreatePersonnel
-                            role={(currentView === "CREATE_ADMIN") ? "admin" : "recruiter"}
-                            schoolId={schoolId}
-                            onCancel={()=> setCurrentView("VIEW_ADMIN")}
-                            onSuccess={(claimUrl) => { setCurrentView("VIEW_ADMIN"); setClaimUrl(claimUrl); loadPersonnel() }}
-                        />}
-                    </section>
+                <DataTable title="Personnel"
+                    columns={PERSONNEL_COLUMNS}
+                    data={personnel}
+                    isLoading={isLoading || isFetching} />
+            </div>
+            <section className={cn(
+                "hidden",
+                (currentView === "CREATE_RECRUITER" || currentView === "CREATE_ADMIN") && "block"
+            )}>
+                <section className="pi-container">
+                    <h2 className="font-bold md:text-lg text-sm mb-2">{currentView === "CREATE_RECRUITER"  ? "Create Recruiter" : "Create Admin"}</h2>
+                    {(currentView === 'CREATE_RECRUITER' || currentView === 'CREATE_ADMIN') &&
+                    <CreatePersonnel
+                        role={(currentView === "CREATE_ADMIN") ? "admin" : "recruiter"}
+                        schoolId={schoolId}
+                        onCancel={()=> setCurrentView("VIEW_ADMIN")}
+                        onSuccess={(claimUrl) => { setCurrentView("VIEW_ADMIN"); setClaimUrl(claimUrl); loadPersonnel() }}
+                    />}
                 </section>
-            </>
+            </section>
         </section>
     )
 }

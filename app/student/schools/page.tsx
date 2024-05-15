@@ -39,8 +39,6 @@ export default function StudentConnection() {
   return (
     <>
       <PageTitleContainer title="Schools" />
-      <hr className="border-t border-gray-300 mb-6"  />
-
       <section className="pi-container">
         <DataTable
           title="Schools"
