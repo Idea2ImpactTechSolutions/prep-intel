@@ -1,6 +1,7 @@
 import { responseBody } from "../../../../config/helpers";
 import { models } from "../../../../models";
 const {
+  ConnectionRequest,
   Recruits,
   Recruiters,
   Students,
@@ -117,6 +118,19 @@ async function getStudentProfile(jsonBody: any) {
     }
     
     Object.assign(studentProfile, recruitInfo, recruiterInfo);
+  }
+
+  const connectionRequest = await ConnectionRequest.findOne({
+      where: {
+        student_id: studentId,
+        recruiter_id: recruiter_id,
+        school_id: recruiter.school_id,
+        connection_accepted: null
+      }
+  });
+
+  if (connectionRequest) {
+    Object.assign(studentProfile, { open_connection_request: true });
   }
 
   return studentProfile;
