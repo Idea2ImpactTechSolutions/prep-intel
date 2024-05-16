@@ -20,7 +20,6 @@ export default function SchoolView({goBack, schoolId}:PageProps) {
   }
 
   return (
-    <>
       <div>
         <div className="flex flex-col overflow-y-auto">
           <PageTitleContainer
@@ -37,6 +36,5 @@ export default function SchoolView({goBack, schoolId}:PageProps) {
           </div>
         </div>
       </div>
-    </>
   );
 }
