@@ -188,17 +188,17 @@ export default function Page() {
             </Button>
           </div>
         </div>
-        <div className="hidden relative md:flex space-y-2">
+        <div className="hidden relative md:flex">
           {
-            schools?.length ? <div>
-              <Search width={15} height={15} className="text-[#AAAAAA] top-[22px] left-3 absolute" />
+            schools?.length ? <>
+              <Search width={15} height={15} className="text-[#AAAAAA] absolute left-3 top-1/2 transform -translate-y-1/2" />
               <Input
                 placeholder="Search schools by name"
+                containerClass="mb-0"
                 className="rounded-lg p-[1rem] pl-8 placeholder:text-[#AAAAAA]"
                 onChange={handleOnChange}
                 value={searchTerm}
-              />
-            </div> : null
+              /></> : null
           }
         </div>
       </div>
