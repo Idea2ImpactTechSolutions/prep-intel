@@ -82,6 +82,8 @@ import logger from "lib/logger";
 export async function GET(req: NextRequest) {
     try {
       const searchParams = req.nextUrl.searchParams;
+      const searchTerm = searchParams.get("searchTerm");
+
       const stateString = searchParams.get("states");
       const states = stateString?.split(",");
 
@@ -91,7 +93,8 @@ export async function GET(req: NextRequest) {
       const offset = (page - 1) * limit;
 
       // Fetching data and count
-      const result = await getSchoolsInStates(states, { limit, offset });
+   
+      const result = await getSchoolsInStates(states, searchTerm, { limit, offset });
       const totalItems = result.count;
       const totalPages = Math.ceil(totalItems / limit);
 
@@ -117,7 +120,10 @@ export async function GET(req: NextRequest) {
     }
   }
 
-function getSchoolsInStates(states, { limit, offset }) {
+function getSchoolsInStates(states, searchTerm, { limit, offset }) {
+  const whereConditions = searchTerm ? { name: { [Op.iLike]: `%${searchTerm}%` } } : {};
+
+
   return School.findAndCountAll({
     attributes: ["id", "name"],
     include: [
@@ -128,6 +134,7 @@ function getSchoolsInStates(states, { limit, offset }) {
         where: { state: { [Op.in]: states } },
       },
     ],
+    where: whereConditions,
     limit,
     offset,
   });
