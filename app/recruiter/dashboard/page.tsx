@@ -9,13 +9,16 @@ import { Button } from "@/components/ui/button";
 import { useFormik } from "formik";
 import PageTitleContainer from "@/components/page-title";
 import * as yup from "yup";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function Page() {
-  const [getRecruits, { isLoading, isFetching, isSuccess }] =
-    useLazyExploreRecruitsQuery();
+  const [getRecruits, { isLoading, isFetching, isSuccess }] = useLazyExploreRecruitsQuery();
   const [candidates, setCandidates] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(13);
+  const { data: session } = useSession();
+  const router = useRouter();
 
   // "totalItems": 10,
   // "totalPages": 1,
@@ -45,9 +48,21 @@ export default function Page() {
     },
     {
       title: "Action",
-      field: "viewBtn",
+      render: (row) => (
+            <span
+              className="border border-primary p-1.5 px-4 rounded-sm text-primary cursor-pointer text-sm hover:bg-primary hover:text-white"
+              onClick={() => handleViewStudentProfile(row)}>
+                View
+            </span>
+      )
     },
   ];
+
+  const handleViewStudentProfile = (data) => {
+    const recruiterId = session?.user?.roleId
+    const studentId = data?.studentId
+    router.push(`/recruiter/${recruiterId}/student/${studentId}/student-profile`)
+  }
 
   async function refreshCandidates(value) {
     const response: any = await getRecruits({
@@ -87,6 +102,7 @@ export default function Page() {
       refreshCandidates(values);
     }
   }, [currentPage]);
+
 
   return (
     <>
