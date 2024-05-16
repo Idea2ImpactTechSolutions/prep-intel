@@ -4,6 +4,8 @@ import { useGetStudentProfileQuery } from '@/redux/services/recruiter/recruiterA
 import { useParams } from 'next/navigation';
 import GoalAndSkills from './_components/goals-skills-section';
 import StudentInformation from './_components/student-information';
+import PageTitleContainer from "@/components/page-title";
+import Link from "next/link";
 
 const StudentProfilePage = () => {
   const pageParams = useParams();
@@ -17,6 +19,15 @@ const StudentProfilePage = () => {
         !isLoading && studentProfileDetails ?
         (
           <>
+            <PageTitleContainer
+            title={
+              <div className="flex items-center gap-4">
+                <Link href="/recruiter/dashboard" className="underline" onClick={() => { return false;}}>Dashboard</Link> 
+                {}
+              </div>
+            }
+            titleClass="text-sm"
+          />
             <StudentInformation student_details={studentProfileDetails?.data} recruiterId={recruiterId} studentId={studentId} />
             {/* <div className='my-10 grid lg:grid-cols-2 gap-5'> */}
             <div className='w-full mt-6 mb-10' >
