@@ -1,40 +1,38 @@
 "use client"
-import { useState } from "react";
 import PageTitleContainer from "@/components/page-title";
 import DataTable from "components/ui/data-table";
+import { useGetStudentSchoolsQuery } from "@/redux/services/student/studentApi";
+import { useSession } from "next-auth/react";
+import LoadingSpinner from "@/components/loading-spinner";
 
 export default function StudentConnection() {
-  const [schools ] = useState([]);
+  const { data } = useSession()
+  const studentId = data?.user?.roleId
+  const {data: response, isLoading, isFetching } = useGetStudentSchoolsQuery(studentId)
+  const schoolData = response?.data;
+
   const COLUMNS = [
     {
-      title: "% Match",
-      render: (row) => ``,
-    },
-    {
       title: "School Name",
-      render: (row) => `-`,
+      render: (row) => row.school?.name,
     },
     {
       title: "Location",
-      render: (row) => `-`,
+      render: (row) => row.school?.school_address?.state,
     },
     {
       title: "Applied",
-      render: (row) => `-`,
+      render: (row) => row.application_status ?? "-",
     },
     {
       title: "Status",
-      render: (row) => `-`,
-    },
-    {
-      title: "Recruiter",
-      render: (row) => `-`,
-    },
-    {
-      title: "Email Address",
-      render: (row) => `-`,
+      render: (row) => row.applicant_status ?? "-",
     },
   ];
+
+  if (isLoading || isFetching) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>
@@ -43,7 +41,7 @@ export default function StudentConnection() {
         <DataTable
           title="Schools"
           columns={COLUMNS}
-          data={schools}
+          data={schoolData}
           isLoading={false}
         />
       </section>
