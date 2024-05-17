@@ -79,6 +79,7 @@ export async function GET(
     const studentConnectionRequests: any = await ConnectionRequest.findAll({
       where: {
         student_id: params.studentId,
+        connection_accepted: null
       },
       attributes: GET_FIELDS,
       include: [

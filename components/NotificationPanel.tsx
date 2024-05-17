@@ -66,12 +66,13 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
   const [getConnections, {data, isLoading:isLoadingConns}] = useLazyGetConnectionRequestsQuery()
   const [connect, {isLoading:connecting}] = useUpdateConnectionRequestsMutation()
 
-  const [openMessage, setOpenMessage] =useState(false)
-  const [accept, setAccept] =useState<boolean |undefined>()
-  const [recent] =useState(true)
-  const [messages, setMessages] =useState<any>([])
-  const [viewMessages, setViewMessages] =useState<any>([])
+  const [openMessage, setOpenMessage] = useState(false)
+  const [accept, setAccept] = useState<boolean |undefined>()
+  const [recent] = useState(true)
+  const [messages, setMessages] = useState<any>([])
+  const [viewMessages, setViewMessages] = useState<any>([])
   const [combineMsgAndConns, setCombineMsgAndConns] =useState<any>([])
+  const [buttonLoading, setButtonLoading] = useState<number | undefined>(undefined)
 
   const session = useSession()
   const roleId = session?.data?.user?.roleId
@@ -132,7 +133,8 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
     }
   }
 
-  const handleAcceptOrRejectConnection = async(connection:Connection, connectionAccepted:boolean) => {
+  const handleAcceptOrRejectConnection = async(connection:Connection, connectionAccepted:boolean, index:number ) => {
+    setButtonLoading(index)
     setAccept(connectionAccepted)
     const payload = {
       "connectionReqId": connection?.id,
@@ -141,14 +143,25 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
      }
     try {
       const res = await connect(payload).unwrap()
-      if(res.status === 201){
-        toast.success(res.message)
+      if(res.status === 204 || res.status === 200 ){
+        if (!connectionAccepted) {
+          toast.success("Invite declined")
+        } else {
+          toast.success("Connected")
+        }
       }
     } catch (error:any) {
       toast.error(error.data.message)
     } finally{
+      removeConnectionRequest(index)
       getMessagesFunc()
     }
+  }
+
+  const removeConnectionRequest = (index) => {
+    setCombineMsgAndConns(combineMsgAndConns => {
+      return combineMsgAndConns.filter((_, i) => i !== index)
+    })
   }
 
   useEffect(()=>{
@@ -191,13 +204,13 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
               </div>:
               <div className="mb-5" key={"conn-"+index} >
                 <div className="mb-2 flex flex-row gap-x-3 justify-between cursor-pointer">
-                  <p><span className="font-semibold mr-1 capitalize ">{message?.recruiterName}</span> has sent you an invitation to connect. Would you like to share your information and connnect? </p>
+                  <p><span className="font-semibold mr-1 capitalize ">{message?.recruiterName}</span> has sent you an invitation to connect. Would you like to share your information and connect? </p>
                   <span className="w-[75px] text-sm text-right">{dateTimeDifference(message?.requestDate)}</span>
                 </div>
                 <div className="flex flex-row gap-x-3">
-                  <Button variant="outline" size="sm" className="h-7" loading={!accept && connecting} loadingText="Rejecting..." onClick={()=>handleAcceptOrRejectConnection(message, false)}>No</Button>
+                  <Button variant="outline" size="sm" className="h-7" loading={!accept && connecting && buttonLoading === index} loadingText="Rejecting..." onClick={()=>handleAcceptOrRejectConnection(message, false, index)}>No</Button>
 
-                  <Button variant="default" size="sm" className="h-7" loading={accept && connecting} loadingText="Accepting..." onClick={()=>handleAcceptOrRejectConnection(message, true)}>Yes</Button>
+                  <Button variant="default" size="sm" className="h-7" loading={accept && connecting && buttonLoading === index} loadingText="Accepting..." onClick={()=>handleAcceptOrRejectConnection(message, true, index)}>Yes</Button>
                 </div>
               </div>
             )}
