@@ -1,0 +1,30 @@
+"use client"
+import { useGetStudentProfileQuery } from '@/redux/services/recruiter/recruiterApi';
+import GoalAndSkills from './student/goals-skills-section';
+import StudentInformation from './student/student-information';
+import LoadingSpinner from '@/components/loading-spinner';
+
+interface PageProps {
+  goBack: () => void;
+  studentId: string;
+  recruiterId: string;
+}
+
+export default function StudentPanel({goBack, studentId, recruiterId }:PageProps) {
+  const {data: response, isLoading} = useGetStudentProfileQuery({studentId,recruiterId});
+  // Alias response data as student
+  const student = response?.data;
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  return (
+    <>
+      <StudentInformation student_details={student} recruiterId={recruiterId} studentId={studentId} />
+        <div className='w-full mt-6 mb-10' >
+          <GoalAndSkills student_details={student}/>
+        </div>
+    </>
+  )
+}
