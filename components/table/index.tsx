@@ -40,32 +40,34 @@ const Table = ({title, columns, children, columnHeaderStyle, titleNode, page=1, 
         </thead>
         {children}
       </table>
-      <nav className='flex items-center flex-column flex-wrap md:flex-row justify-between p-4'>
-        <span className='text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto'>
-          Showing{" "}
-          <span className='font-semibold text-gray-900 dark:text-white'>
-            {start}-{end}
-          </span>{" "}
-          of{" "}
-          <span className='font-semibold text-gray-900 dark:text-white'>
-            {totalPages*offset}
+      { totalPages > 0 &&
+        <nav className='flex items-center flex-column flex-wrap md:flex-row justify-between p-4'>
+          <span className='text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto'>
+            Showing{" "}
+            <span className='font-semibold text-gray-900 dark:text-white'>
+              {start}-{end}
+            </span>{" "}
+            of{" "}
+            <span className='font-semibold text-gray-900 dark:text-white'>
+              {totalPages*offset}
+            </span>
           </span>
-        </span>
-        <ul className='inline-flex -space-x-px rtl:space-x-reverse text-sm h-8 gap-x-2'>
-          <ChevronLeft size={18} onClick={() => prevPage && prevPage()}
-                          className={cn(
-                            "text-gray-400 bg-gray-200 rounded-md p-0.5",
-                            "cursor-pointer",
-                            page <= 1 && "pointer-events-none opacity-40"
-                            )} />
+          <ul className='inline-flex -space-x-px rtl:space-x-reverse text-sm h-8 gap-x-2'>
+            <ChevronLeft size={18} onClick={() => prevPage && prevPage()}
+                            className={cn(
+                              "text-gray-400 bg-gray-200 rounded-md p-0.5",
+                              "cursor-pointer",
+                              page <= 1 && "pointer-events-none opacity-40"
+                              )} />
 
-          <ChevronRight size={18} onClick={() => nextPage && nextPage()}
-                          className={cn(
-                            "text-gray-400 bg-gray-200 rounded-md p-0.5",
-                            "cursor-pointer",
-                            )}/>
-        </ul>
-      </nav>
+            <ChevronRight size={18} onClick={() => nextPage && nextPage()}
+                            className={cn(
+                              "text-gray-400 bg-gray-200 rounded-md p-0.5",
+                              "cursor-pointer",
+                              )}/>
+          </ul>
+        </nav>
+      }
     </div>
   </div></>
   )
