@@ -1,5 +1,5 @@
-import { responseBody, getAuthCode } from "app/config/helpers";
-const { models } = require("app/models");
+import { responseBody, getAuthCode } from "@/app/config/helpers";
+import { models } from "@/app/models";
 const { School, Recruiters, Users } = models;
 
 /**
