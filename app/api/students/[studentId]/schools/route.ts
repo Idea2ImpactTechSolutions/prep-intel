@@ -31,6 +31,7 @@ const PATCH_VALIDATION_SCHEMA = yup.object({
  *       is marked as true. This endpoint assumes the existence of an internal mechanism to flag student interest in particular schools.
  *     tags:
  *       - student
+ *       - school
  *     parameters:
  *       - in: path
  *         name: studentId
