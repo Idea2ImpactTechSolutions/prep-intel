@@ -40,9 +40,6 @@ describe('Connection Request API', () => {
     it('Accept a connection request', async () => {
       const response = await PATCH(req, {params: {studentId:1}});
       expect(response.status).toBe(200);
-      console.log(response);
-      // const json = await response.json();
-      // expect(json.length).toBeGreaterThan(1);
     });
     it('should invoke findOne', async () => {
       await PATCH(req, {params: {studentId:1}});
