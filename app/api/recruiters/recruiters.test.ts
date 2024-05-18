@@ -2,21 +2,31 @@ import { GET } from './route';
 import { models } from "@/app/models";
 const { Recruiters } = models;
 
-// import { createMocks } from 'node-mocks-http';
-// import type { NextApiRequest, NextApiResponse } from 'next';
 
-// createMocks<NextApiRequest, NextApiResponse>({
-//   method: 'GET',
-//   body: {
-//   },
-// });
+ // Mock the Response global object
+ const mockResponse = {
+  json: jest.fn().mockImplementation(function(data, init){
 
+    if (!init) {
+      init = { status: 200 };
+    }
 
-//(global as any).Response = { json: jest.fn(data => { data, status: 200}) };
+    return {
+      body: JSON.stringify(data),
+      headers: { 'content-type': 'application/json' },
+      status: init.status,
+      statusText: '',
+      type: 'default',
+      url: '',
+      ok: init.status >= 200 && init.status < 300,
+      redirected: false,
+      bodyUsed: true,
+    };
+ }),
+};
+(global as any).Response = mockResponse;
 
-const mockJson = jest.fn();
-const mockResponse = { json: mockJson, status: 200};
-(global as any).Response = { json: jest.fn(() => mockResponse) };
+//const request = new Request('http://localhost/api');
 
 // Spy on the getUserById method
 const mockFindAll = jest.spyOn(Recruiters, 'findAll');
@@ -38,9 +48,6 @@ describe('Recruiters API', () => {
     it('should retrieve school details', async () => {
       const response = await GET();
       expect(response.status).toBe(200);
-
-      // const json = await response.json();
-      // expect(json.length).toBeGreaterThan(1);
     });
     it('should invoke findAll', async () => {
       await GET();
