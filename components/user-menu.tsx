@@ -31,7 +31,7 @@ const UserProfileMenu = () => {
         case 'recruiter':
           router.push(`/recruiter/profile/personal-info`);
           break;
-        case 'recruiter':
+        case 'student':
           router.push(`/student/onboarding/vitals`);
           break;
         case 'admin':
