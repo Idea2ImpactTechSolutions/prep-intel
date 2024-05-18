@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 import type { NextRequest } from "next/server";
-import { responseBody, apiResponse } from "app/config/helpers";
+import { responseBody, apiResponse } from "@/app/config/helpers";
 import { models } from "@/app/models";
 import { fn, col } from 'sequelize';
 const {
