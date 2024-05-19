@@ -149,7 +149,7 @@ export async function POST(req: Request) {
           return apiResponse("No user found", 404);
         }
 
-        const response = await uploadDocument(
+        return await uploadDocument(
           file,
           `user/${userId}/${singleInstanceAsset ? category : file.name}`,
           singleInstanceAsset,
@@ -163,8 +163,6 @@ export async function POST(req: Request) {
             await user.save()
           }
         );
-
-        return response;
       }
 
       case SCHOOL_IMAGE:
