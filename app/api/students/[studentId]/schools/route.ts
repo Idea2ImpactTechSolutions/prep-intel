@@ -10,7 +10,7 @@ const POST_VALIDATION_SCHEMA = yup.array().of(
 
 const APPLICATION_STATUSES = ['Accepted', 'Rejected', 'Waitlisted'];
 
-const PATCH_VALIDATION_SCHEMA = yup.object({    
+const PATCH_VALIDATION_SCHEMA = yup.object({
   school_id: yup.number().required(),
   criteria: yup.string().oneOf(['INTERESTED']).notRequired(),
   interested: yup.boolean().notRequired(),
@@ -114,20 +114,20 @@ export async function GET(
 
     const searchParams = req.nextUrl.searchParams;
 
-    let modelsToInclude: object[] = [{ 
-      model: School, 
+    let modelsToInclude: object[] = [{
+      model: School,
       attributes: ['id', 'name'],
       include: {
         model: SchoolAddress,
         as: 'school_address',
         attributes: ['state'],
-      }, 
-      required: true 
+      },
+      required: true
     }];
 
     let recruitsAttributes = [
-      'interested', 
-      'application_status', 
+      'interested',
+      'application_status',
       'applicant_status'
     ];
 
@@ -144,12 +144,12 @@ export async function GET(
           attributes: ['id'],
           include: {
             model: Users,
-            attributes: ['first_name', 'last_name', 'email'],
+            attributes: ['first_name', 'last_name', 'email', 'phone', 'profile_image'],
             required: true
           },
           required: true
         });
-        
+
         recruitsAttributes = ['interested'];
       }
     }
@@ -368,7 +368,7 @@ export async function PATCH(
 }
 
 async function getUserRole(studentId) {
-  return await Students.findOne({ 
+  return await Students.findOne({
     where: {
       id: studentId,
     },
@@ -403,7 +403,7 @@ function prepareNewRecruits(schoolIds: number[], studentId: number) {
 }
 
 async function addNewSchoolInterests(
-  schoolInterests: number[], 
+  schoolInterests: number[],
   studentId: number
 ) {
   if (schoolInterests.length > 0) {
@@ -416,7 +416,7 @@ async function addNewSchoolInterests(
 }
 
 async function renewSchoolInterests(
-  schoolInterests: number[], 
+  schoolInterests: number[],
   studentId : number
 ) {
   if (schoolInterests.length > 0) {

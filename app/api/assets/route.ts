@@ -149,15 +149,22 @@ export async function POST(req: Request) {
           return apiResponse("No user found", 404);
         }
 
-        return await uploadDocument(
+        const response = await uploadDocument(
           file,
           `user/${userId}/${singleInstanceAsset ? category : file.name}`,
           singleInstanceAsset,
           {
             user_id: userId,
             category,
+          },
+          async (location) => {
+            // After upload, set the user's profile image to the uploaded image S3 url
+            user.profile_image = location;
+            await user.save()
           }
         );
+
+        return response;
       }
 
       case SCHOOL_IMAGE:
@@ -177,7 +184,7 @@ export async function POST(req: Request) {
           {
             category,
             school_id: schoolId,
-          }
+          },
         );
       }
     }
@@ -197,7 +204,8 @@ async function uploadDocument(
   assetFile: File,
   documentPath: string,
   singleInstanceAsset: boolean,
-  assetFields
+  assetFields,
+  onUploadSuccess?: (location: string) => void,
 ) {
   try {
     const bufferedView = await getBufferedView(assetFile);
@@ -206,6 +214,10 @@ async function uploadDocument(
       Key: documentPath,
       Body: bufferedView,
     });
+
+    if (onUploadSuccess) {
+      onUploadSuccess(response.Location);
+    }
 
     let existingAsset: any = null;
 

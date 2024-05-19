@@ -19,7 +19,7 @@ export default function SingleRecruiterCard({ imgUrl, name, school_name, school_
       <div className="border-b border-[#E9E9EA]">
         <div className="flex gap-4 items-center">
           <img
-            src="/images/profile-picture.jpg"
+            src={imgUrl}
             alt="avatar"
             className="w-12 h-12 rounded-full object-cover"
           />
@@ -52,7 +52,7 @@ export default function SingleRecruiterCard({ imgUrl, name, school_name, school_
       <div className="py-4">
         <div className="flex gap-2">
           <span><Phone width={16} height={16} className="text-xs text-[#757575]" /></span>
-          <span className="text-xs text-[#141111] font-normal">(382) 382-9145</span>
+          <span className="text-xs text-[#141111] font-normal">{phone}</span>
         </div>
         <div className="mt-3 flex gap-2">
           <span><Mail width={16} height={16} className="text-xs text-[#757575]" /></span>

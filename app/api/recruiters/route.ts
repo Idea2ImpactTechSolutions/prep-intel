@@ -28,7 +28,6 @@ export async function GET() {
  * @openapi
  * /api/recruiters:
  *   post:
- *     description: Returns the hello world
  *     summary: Creates a new recruiter
  *     tags:
  *       - recruiter
