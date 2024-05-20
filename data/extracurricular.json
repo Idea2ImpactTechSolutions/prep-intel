@@ -198,12 +198,6 @@
       "description": "Engage in math league, focusing on skills development and team/group activities in the field of academic clubs."
     },
     {
-      "id": 34,
-      "name": "Robotics",
-      "category": "Academic Clubs",
-      "description": "Engage in robotics, focusing on skills development and team/group activities in the field of academic clubs."
-    },
-    {
       "id": 35,
       "name": "Newspaper",
       "category": "Academic Clubs",
@@ -550,12 +544,6 @@
       "name": "Book Club",
       "category": "Special Interest",
       "description": "Engage in book club, focusing on skills development and team/group activities in the field of special interest."
-    },
-    {
-      "id": 93,
-      "name": "Film Society",
-      "category": "Special Interest",
-      "description": "Engage in film society, focusing on skills development and team/group activities in the field of special interest."
     },
     {
       "id": 94,

@@ -116,7 +116,7 @@ export async function PATCH(
       }
     );
   }
-  const {extracurriculars} = await req.json()
+  const extracurriculars = await req.json()
   responseCode = 200
   const studentMajorInterests = await updateStudentExtracurriculars(student, extracurriculars);
   if (!studentMajorInterests) {

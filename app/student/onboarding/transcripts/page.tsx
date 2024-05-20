@@ -120,6 +120,7 @@ export default function TranscriptsPage() {
       <OnboardingFooter
         prevPageHandler={() => router.push('/student/onboarding/extracurricular')}
         nextPageHandler={() => setShowConfirmationModal(true)}
+        preventGoBack={false}
         nextBtnLabel="Finish"
       />
       <ConfirmationModal
