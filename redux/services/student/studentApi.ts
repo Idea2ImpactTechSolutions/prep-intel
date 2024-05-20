@@ -54,6 +54,19 @@ const studentApi = baseApi.injectEndpoints({
         body: payload.data
       }),
     }),
+    getStudentExtracurricular: builder.query({
+      query: (studentId) => ({
+        url: `/students/${studentId}/extracurriculars`,
+        method: "GET",
+      }),
+    }),
+    addStudentExtracurricular: builder.mutation({
+      query: (payload) => ({
+        url: `/students/${payload.studentId}/extracurriculars`,
+        method: "PATCH",
+        body: payload.data
+      }),
+    }),
     getStudentRecruiterConnections: builder.query({
       query: (studentId) => ({
         url: `/students/${studentId}/schools?view=connections`,
@@ -97,6 +110,8 @@ export const {
   useConnectWithRecruiterMutation,
   useAddStudentMajorsMutation,
   useLazyGetStudentMajorsQuery,
+  useAddStudentExtracurricularMutation,
+  useLazyGetStudentExtracurricularQuery,
   useLazyGetConnectionRequestsQuery,
   useCreateConnectionRequestsMutation,
   useUpdateConnectionRequestsMutation,

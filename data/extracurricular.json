@@ -1,502 +1,591 @@
 [
-  {
+    {
+      "id": 1,
       "name": "Basketball",
       "category": "Sports",
       "description": "Engage in basketball, focusing on skills development and team/group activities in the field of sports."
-  },
-  {
+    },
+    {
+      "id": 2,
       "name": "Soccer",
       "category": "Sports",
       "description": "Engage in soccer, focusing on skills development and team/group activities in the field of sports."
-  },
-  {
+    },
+    {
+      "id": 3,
       "name": "Swimming",
       "category": "Sports",
       "description": "Engage in swimming, focusing on skills development and team/group activities in the field of sports."
-  },
-  {
+    },
+    {
+      "id": 4,
       "name": "Track and Field",
       "category": "Sports",
       "description": "Engage in track and field, focusing on skills development and team/group activities in the field of sports."
-  },
-  {
+    },
+    {
+      "id": 5,
       "name": "Tennis",
       "category": "Sports",
       "description": "Engage in tennis, focusing on skills development and team/group activities in the field of sports."
-  },
-  {
+    },
+    {
+      "id": 6,
       "name": "Volleyball",
       "category": "Sports",
       "description": "Engage in volleyball, focusing on skills development and team/group activities in the field of sports."
-  },
-  {
+    },
+    {
+      "id": 7,
       "name": "Baseball",
       "category": "Sports",
       "description": "Engage in baseball, focusing on skills development and team/group activities in the field of sports."
-  },
-  {
+    },
+    {
+      "id": 8,
       "name": "Softball",
       "category": "Sports",
       "description": "Engage in softball, focusing on skills development and team/group activities in the field of sports."
-  },
-  {
+    },
+    {
+      "id": 9,
       "name": "Golf",
       "category": "Sports",
       "description": "Engage in golf, focusing on skills development and team/group activities in the field of sports."
-  },
-  {
+    },
+    {
+      "id": 10,
       "name": "Cross Country",
       "category": "Sports",
       "description": "Engage in cross country, focusing on skills development and team/group activities in the field of sports."
-  },
-  {
+    },
+    {
+      "id": 11,
       "name": "Wrestling",
       "category": "Sports",
       "description": "Engage in wrestling, focusing on skills development and team/group activities in the field of sports."
-  },
-  {
+    },
+    {
+      "id": 12,
       "name": "Football",
       "category": "Sports",
       "description": "Engage in football, focusing on skills development and team/group activities in the field of sports."
-  },
-  {
+    },
+    {
+      "id": 13,
       "name": "Hockey",
       "category": "Sports",
       "description": "Engage in hockey, focusing on skills development and team/group activities in the field of sports."
-  },
-  {
+    },
+    {
+      "id": 14,
       "name": "Lacrosse",
       "category": "Sports",
       "description": "Engage in lacrosse, focusing on skills development and team/group activities in the field of sports."
-  },
-  {
+    },
+    {
+      "id": 15,
       "name": "Field Hockey",
       "category": "Sports",
       "description": "Engage in field hockey, focusing on skills development and team/group activities in the field of sports."
-  },
-  {
+    },
+    {
+      "id": 16,
       "name": "Drama Club",
       "category": "Arts",
       "description": "Engage in drama club, focusing on skills development and team/group activities in the field of arts."
-  },
-  {
+    },
+    {
+      "id": 17,
       "name": "Choir",
       "category": "Arts",
       "description": "Engage in choir, focusing on skills development and team/group activities in the field of arts."
-  },
-  {
+    },
+    {
+      "id": 18,
       "name": "Band",
       "category": "Arts",
       "description": "Engage in band, focusing on skills development and team/group activities in the field of arts."
-  },
-  {
+    },
+    {
+      "id": 19,
       "name": "Dance",
       "category": "Arts",
       "description": "Engage in dance, focusing on skills development and team/group activities in the field of arts."
-  },
-  {
+    },
+    {
+      "id": 20,
       "name": "Photography",
       "category": "Arts",
       "description": "Engage in photography, focusing on skills development and team/group activities in the field of arts."
-  },
-  {
+    },
+    {
+      "id": 21,
       "name": "Art Club",
       "category": "Arts",
       "description": "Engage in art club, focusing on skills development and team/group activities in the field of arts."
-  },
-  {
+    },
+    {
+      "id": 22,
       "name": "Film Society",
       "category": "Arts",
       "description": "Engage in film society, focusing on skills development and team/group activities in the field of arts."
-  },
-  {
+    },
+    {
+      "id": 23,
       "name": "Theater Tech",
       "category": "Arts",
       "description": "Engage in theater tech, focusing on skills development and team/group activities in the field of arts."
-  },
-  {
+    },
+    {
+      "id": 24,
       "name": "Sculpture",
       "category": "Arts",
       "description": "Engage in sculpture, focusing on skills development and team/group activities in the field of arts."
-  },
-  {
+    },
+    {
+      "id": 25,
       "name": "Ceramics",
       "category": "Arts",
       "description": "Engage in ceramics, focusing on skills development and team/group activities in the field of arts."
-  },
-  {
+    },
+    {
+      "id": 26,
       "name": "Fashion Design",
       "category": "Arts",
       "description": "Engage in fashion design, focusing on skills development and team/group activities in the field of arts."
-  },
-  {
+    },
+    {
+      "id": 27,
       "name": "Drawing and Painting",
       "category": "Arts",
       "description": "Engage in drawing and painting, focusing on skills development and team/group activities in the field of arts."
-  },
-  {
+    },
+    {
+      "id": 28,
       "name": "Digital Media",
       "category": "Arts",
       "description": "Engage in digital media, focusing on skills development and team/group activities in the field of arts."
-  },
-  {
+    },
+    {
+      "id": 29,
       "name": "Printmaking",
       "category": "Arts",
       "description": "Engage in printmaking, focusing on skills development and team/group activities in the field of arts."
-  },
-  {
+    },
+    {
+      "id": 30,
       "name": "Graphic Design",
       "category": "Arts",
       "description": "Engage in graphic design, focusing on skills development and team/group activities in the field of arts."
-  },
-  {
+    },
+    {
+      "id": 31,
       "name": "Debate Team",
       "category": "Academic Clubs",
       "description": "Engage in debate team, focusing on skills development and team/group activities in the field of academic clubs."
-  },
-  {
+    },
+    {
+      "id": 32,
       "name": "Science Club",
       "category": "Academic Clubs",
       "description": "Engage in science club, focusing on skills development and team/group activities in the field of academic clubs."
-  },
-  {
+    },
+    {
+      "id": 33,
       "name": "Math League",
       "category": "Academic Clubs",
       "description": "Engage in math league, focusing on skills development and team/group activities in the field of academic clubs."
-  },
-  {
-      "name": "Robotics",
-      "category": "Academic Clubs",
-      "description": "Engage in robotics, focusing on skills development and team/group activities in the field of academic clubs."
-  },
-  {
+    },
+    {
+      "id": 35,
       "name": "Newspaper",
       "category": "Academic Clubs",
       "description": "Engage in newspaper, focusing on skills development and team/group activities in the field of academic clubs."
-  },
-  {
+    },
+    {
+      "id": 36,
       "name": "Yearbook",
       "category": "Academic Clubs",
       "description": "Engage in yearbook, focusing on skills development and team/group activities in the field of academic clubs."
-  },
-  {
+    },
+    {
+      "id": 37,
       "name": "Language Clubs",
       "category": "Academic Clubs",
       "description": "Engage in language clubs, focusing on skills development and team/group activities in the field of academic clubs."
-  },
-  {
+    },
+    {
+      "id": 38,
       "name": "History Club",
       "category": "Academic Clubs",
       "description": "Engage in history club, focusing on skills development and team/group activities in the field of academic clubs."
-  },
-  {
+    },
+    {
+      "id": 39,
       "name": "Geography Bee",
       "category": "Academic Clubs",
       "description": "Engage in geography bee, focusing on skills development and team/group activities in the field of academic clubs."
-  },
-  {
+    },
+    {
+      "id": 40,
       "name": "Economics Club",
       "category": "Academic Clubs",
       "description": "Engage in economics club, focusing on skills development and team/group activities in the field of academic clubs."
-  },
-  {
+    },
+    {
+      "id": 41,
       "name": "Volunteer Groups",
       "category": "Community Service",
       "description": "Engage in volunteer groups, focusing on skills development and team/group activities in the field of community service."
-  },
-  {
+    },
+    {
+      "id": 42,
       "name": "Environmental Club",
       "category": "Community Service",
       "description": "Engage in environmental club, focusing on skills development and team/group activities in the field of community service."
-  },
-  {
+    },
+    {
+      "id": 43,
       "name": "Key Club",
       "category": "Community Service",
       "description": "Engage in key club, focusing on skills development and team/group activities in the field of community service."
-  },
-  {
+    },
+    {
+      "id": 44,
       "name": "Habitat for Humanity",
       "category": "Community Service",
       "description": "Engage in habitat for humanity, focusing on skills development and team/group activities in the field of community service."
-  },
-  {
+    },
+    {
+      "id": 45,
       "name": "Red Cross Club",
       "category": "Community Service",
       "description": "Engage in red cross club, focusing on skills development and team/group activities in the field of community service."
-  },
-  {
+    },
+    {
+      "id": 46,
       "name": "Food Bank Volunteer",
       "category": "Community Service",
       "description": "Engage in food bank volunteer, focusing on skills development and team/group activities in the field of community service."
-  },
-  {
+    },
+    {
+      "id": 47,
       "name": "Animal Shelter Helper",
       "category": "Community Service",
       "description": "Engage in animal shelter helper, focusing on skills development and team/group activities in the field of community service."
-  },
-  {
+    },
+    {
+      "id": 48,
       "name": "Senior Citizen Outreach",
       "category": "Community Service",
       "description": "Engage in senior citizen outreach, focusing on skills development and team/group activities in the field of community service."
-  },
-  {
+    },
+    {
+      "id": 49,
       "name": "Literacy Programs",
       "category": "Community Service",
       "description": "Engage in literacy programs, focusing on skills development and team/group activities in the field of community service."
-  },
-  {
+    },
+    {
+      "id": 50,
       "name": "Fundraising Committee",
       "category": "Community Service",
       "description": "Engage in fundraising committee, focusing on skills development and team/group activities in the field of community service."
-  },
-  {
+    },
+    {
+      "id": 51,
       "name": "Latin American Student Organization",
       "category": "Cultural Clubs",
       "description": "Engage in latin american student organization, focusing on skills development and team/group activities in the field of cultural clubs."
-  },
-  {
+    },
+    {
+      "id": 52,
       "name": "Asian Culture Club",
       "category": "Cultural Clubs",
       "description": "Engage in asian culture club, focusing on skills development and team/group activities in the field of cultural clubs."
-  },
-  {
+    },
+    {
+      "id": 53,
       "name": "Black Student Union",
       "category": "Cultural Clubs",
       "description": "Engage in black student union, focusing on skills development and team/group activities in the field of cultural clubs."
-  },
-  {
+    },
+    {
+      "id": 54,
       "name": "International Relations",
       "category": "Cultural Clubs",
       "description": "Engage in international relations, focusing on skills development and team/group activities in the field of cultural clubs."
-  },
-  {
+    },
+    {
+      "id": 55,
       "name": "European Culture Club",
       "category": "Cultural Clubs",
       "description": "Engage in european culture club, focusing on skills development and team/group activities in the field of cultural clubs."
-  },
-  {
+    },
+    {
+      "id": 56,
       "name": "Middle Eastern Club",
       "category": "Cultural Clubs",
       "description": "Engage in middle eastern club, focusing on skills development and team/group activities in the field of cultural clubs."
-  },
-  {
+    },
+    {
+      "id": 57,
       "name": "Caribbean Students Association",
       "category": "Cultural Clubs",
       "description": "Engage in caribbean students association, focusing on skills development and team/group activities in the field of cultural clubs."
-  },
-  {
+    },
+    {
+      "id": 58,
       "name": "South Asian Student Society",
       "category": "Cultural Clubs",
       "description": "Engage in south asian student society, focusing on skills development and team/group activities in the field of cultural clubs."
-  },
-  {
+    },
+    {
+      "id": 59,
       "name": "African Heritage Club",
       "category": "Cultural Clubs",
       "description": "Engage in african heritage club, focusing on skills development and team/group activities in the field of cultural clubs."
-  },
-  {
+    },
+    {
+      "id": 60,
       "name": "Native American Cultural Group",
       "category": "Cultural Clubs",
       "description": "Engage in native american cultural group, focusing on skills development and team/group activities in the field of cultural clubs."
-  },
-  {
+    },
+    {
+      "id": 61,
       "name": "Coding Club",
       "category": "Technology",
       "description": "Engage in coding club, focusing on skills development and team/group activities in the field of technology."
-  },
-  {
+    },
+    {
+      "id": 62,
       "name": "Cybersecurity Club",
       "category": "Technology",
       "description": "Engage in cybersecurity club, focusing on skills development and team/group activities in the field of technology."
-  },
-  {
+    },
+    {
+      "id": 63,
       "name": "Tech Help Desk",
       "category": "Technology",
       "description": "Engage in tech help desk, focusing on skills development and team/group activities in the field of technology."
-  },
-  {
+    },
+    {
+      "id": 64,
       "name": "Robotics",
       "category": "Technology",
       "description": "Engage in robotics, focusing on skills development and team/group activities in the field of technology."
-  },
-  {
+    },
+    {
+      "id": 65,
       "name": "Computer Graphics",
       "category": "Technology",
       "description": "Engage in computer graphics, focusing on skills development and team/group activities in the field of technology."
-  },
-  {
+    },
+    {
+      "id": 66,
       "name": "Game Development Club",
       "category": "Technology",
       "description": "Engage in game development club, focusing on skills development and team/group activities in the field of technology."
-  },
-  {
+    },
+    {
+      "id": 67,
       "name": "3D Printing Club",
       "category": "Technology",
       "description": "Engage in 3d printing club, focusing on skills development and team/group activities in the field of technology."
-  },
-  {
+    },
+    {
+      "id": 68,
       "name": "AI and Machine Learning Club",
       "category": "Technology",
       "description": "Engage in ai and machine learning club, focusing on skills development and team/group activities in the field of technology."
-  },
-  {
+    },
+    {
+      "id": 69,
       "name": "Technology Student Association",
       "category": "Technology",
       "description": "Engage in technology student association, focusing on skills development and team/group activities in the field of technology."
-  },
-  {
+    },
+    {
+      "id": 70,
       "name": "Computer Hardware Club",
       "category": "Technology",
       "description": "Engage in computer hardware club, focusing on skills development and team/group activities in the field of technology."
-  },
-  {
+    },
+    {
+      "id": 71,
       "name": "Student Government",
       "category": "Leadership",
       "description": "Engage in student government, focusing on skills development and team/group activities in the field of leadership."
-  },
-  {
+    },
+    {
+      "id": 72,
       "name": "Peer Mentoring",
       "category": "Leadership",
       "description": "Engage in peer mentoring, focusing on skills development and team/group activities in the field of leadership."
-  },
-  {
+    },
+    {
+      "id": 73,
       "name": "Leadership Workshop",
       "category": "Leadership",
       "description": "Engage in leadership workshop, focusing on skills development and team/group activities in the field of leadership."
-  },
-  {
+    },
+    {
+      "id": 74,
       "name": "Youth Advisory Council",
       "category": "Leadership",
       "description": "Engage in youth advisory council, focusing on skills development and team/group activities in the field of leadership."
-  },
-  {
+    },
+    {
+      "id": 75,
       "name": "Model United Nations",
       "category": "Leadership",
       "description": "Engage in model united nations, focusing on skills development and team/group activities in the field of leadership."
-  },
-  {
+    },
+    {
+      "id": 76,
       "name": "Future Business Leaders of America",
       "category": "Leadership",
       "description": "Engage in future business leaders of america, focusing on skills development and team/group activities in the field of leadership."
-  },
-  {
+    },
+    {
+      "id": 77,
       "name": "Junior Achievement",
       "category": "Leadership",
       "description": "Engage in junior achievement, focusing on skills development and team/group activities in the field of leadership."
-  },
-  {
+    },
+    {
+      "id": 78,
       "name": "Student Council",
       "category": "Leadership",
       "description": "Engage in student council, focusing on skills development and team/group activities in the field of leadership."
-  },
-  {
+    },
+    {
+      "id": 79,
       "name": "Honor Society",
       "category": "Leadership",
       "description": "Engage in honor society, focusing on skills development and team/group activities in the field of leadership."
-  },
-  {
+    },
+    {
+      "id": 80,
       "name": "ROTC",
       "category": "Leadership",
       "description": "Engage in rotc, focusing on skills development and team/group activities in the field of leadership."
-  },
-  {
+    },
+    {
+      "id": 81,
       "name": "Orchestra",
       "category": "Music and Performance",
       "description": "Engage in orchestra, focusing on skills development and team/group activities in the field of music and performance."
-  },
-  {
+    },
+    {
+      "id": 82,
       "name": "Jazz Band",
       "category": "Music and Performance",
       "description": "Engage in jazz band, focusing on skills development and team/group activities in the field of music and performance."
-  },
-  {
+    },
+    {
+      "id": 83,
       "name": "Marching Band",
       "category": "Music and Performance",
       "description": "Engage in marching band, focusing on skills development and team/group activities in the field of music and performance."
-  },
-  {
+    },
+    {
+      "id": 84,
       "name": "Glee Club",
       "category": "Music and Performance",
       "description": "Engage in glee club, focusing on skills development and team/group activities in the field of music and performance."
-  },
-  {
+    },
+    {
+      "id": 85,
       "name": "A Cappella Group",
       "category": "Music and Performance",
       "description": "Engage in a cappella group, focusing on skills development and team/group activities in the field of music and performance."
-  },
-  {
+    },
+    {
+      "id": 86,
       "name": "Chamber Music Ensemble",
       "category": "Music and Performance",
       "description": "Engage in chamber music ensemble, focusing on skills development and team/group activities in the field of music and performance."
-  },
-  {
+    },
+    {
+      "id": 87,
       "name": "Music Theory Club",
       "category": "Music and Performance",
       "description": "Engage in music theory club, focusing on skills development and team/group activities in the field of music and performance."
-  },
-  {
+    },
+    {
+      "id": 88,
       "name": "Opera Club",
       "category": "Music and Performance",
       "description": "Engage in opera club, focusing on skills development and team/group activities in the field of music and performance."
-  },
-  {
+    },
+    {
+      "id": 89,
       "name": "Songwriting Workshop",
       "category": "Music and Performance",
       "description": "Engage in songwriting workshop, focusing on skills development and team/group activities in the field of music and performance."
-  },
-  {
+    },
+    {
+      "id": 90,
       "name": "Pep Band",
       "category": "Music and Performance",
       "description": "Engage in pep band, focusing on skills development and team/group activities in the field of music and performance."
-  },
-  {
+    },
+    {
+      "id": 91,
       "name": "Chess Club",
       "category": "Special Interest",
       "description": "Engage in chess club, focusing on skills development and team/group activities in the field of special interest."
-  },
-  {
+    },
+    {
+      "id": 92,
       "name": "Book Club",
       "category": "Special Interest",
       "description": "Engage in book club, focusing on skills development and team/group activities in the field of special interest."
-  },
-  {
-      "name": "Film Society",
-      "category": "Special Interest",
-      "description": "Engage in film society, focusing on skills development and team/group activities in the field of special interest."
-  },
-  {
+    },
+    {
+      "id": 94,
       "name": "Gardening Club",
       "category": "Special Interest",
       "description": "Engage in gardening club, focusing on skills development and team/group activities in the field of special interest."
-  },
-  {
+    },
+    {
+      "id": 95,
       "name": "Cooking Club",
       "category": "Special Interest",
       "description": "Engage in cooking club, focusing on skills development and team/group activities in the field of special interest."
-  },
-  {
+    },
+    {
+      "id": 96,
       "name": "Travel Club",
       "category": "Special Interest",
       "description": "Engage in travel club, focusing on skills development and team/group activities in the field of special interest."
-  },
-  {
+    },
+    {
+      "id": 97,
       "name": "Fashion Club",
       "category": "Special Interest",
       "description": "Engage in fashion club, focusing on skills development and team/group activities in the field of special interest."
-  },
-  {
+    },
+    {
+      "id": 98,
       "name": "Trivia Team",
       "category": "Special Interest",
       "description": "Engage in trivia team, focusing on skills development and team/group activities in the field of special interest."
-  },
-  {
+    },
+    {
+      "id": 99,
       "name": "Creative Writing",
       "category": "Special Interest",
       "description": "Engage in creative writing, focusing on skills development and team/group activities in the field of special interest."
-  },
-  {
+    },
+    {
+      "id": 100,
       "name": "Podcasting Club",
       "category": "Special Interest",
       "description": "Engage in podcasting club, focusing on skills development and team/group activities in the field of special interest."
-  }
-]
+    }
+  ]
+  
