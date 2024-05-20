@@ -1,4 +1,4 @@
-import { responseBody } from "app/config/helpers";
+import { apiResponse } from "app/config/helpers";
 import { NextRequest } from "next/server";
 import { models } from "@/app/models";
 const { Students } = models;
@@ -37,30 +37,16 @@ export async function GET(
 ) {
   try {
     const { studentId } = params;
-
     const studentExtracurriculars: any = await getStudentExtracurriculars(studentId);
     if (studentExtracurriculars === null) {
-      return Response.json(
-        responseBody("Student not found", 404, null),
-        {
-          status: 404,
-        }
-      );
+      return apiResponse("Student not found", 404);
     }
-    return Response.json(
-      responseBody(
-        "Extracurricular interests retrieved successfully",
+    return apiResponse(
+      "Extracurricular interests retrieved successfully",
         200,
-        studentExtracurriculars
-      )
-    );
+        studentExtracurriculars);
   } catch (error: any) {
-    return Response.json(
-      responseBody("Internal Server Error", 500, { error: error.message }),
-      {
-        status: 500,
-      }
-    );
+    return apiResponse("Internal Server Error", 500, { error: error.message });
   }
 }
 
@@ -85,7 +71,7 @@ export async function GET(
  *         application/json:
  *           schema:
  *             type: array
- *             items: 
+ *             items:
  *              type: string
  *     responses:
  *       200:
@@ -97,50 +83,23 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: { studentId: string } }
 ) {
-  let responseCode = 404;
-  let responseMessage = "Student not found.";
-  let responseData: any;
-  const student = await Students.findOne({
-    where: {
-      id: params.studentId
-    }
-  });
+  const student = await Students.findByPk(params.studentId);
   if (!student) {
-    return Response.json(
-      responseBody(
-        responseMessage,
-        responseCode
-      ),
-      {
-        status: responseCode,
-      }
-    );
+    return apiResponse("Student not found", 404);
   }
   const extracurriculars = await req.json()
-  responseCode = 200
+
   const studentMajorInterests = await updateStudentExtracurriculars(student, extracurriculars);
   if (!studentMajorInterests) {
-    responseMessage = "No extracurriculars selected"
+    return apiResponse("No extracurriculars selected", 200);
   }
   else{
-    responseMessage = "Student Extracurricular Interests created successfully."
-    responseData = studentMajorInterests
+    return apiResponse("Student Extracurricular Interests created successfully.", 200, studentMajorInterests);
   }
-
-  return Response.json(
-    responseBody(responseMessage, responseCode, responseData),
-    {
-      status: responseCode,
-    }
-  );
 }
 
 async function getStudentExtracurriculars(studentId) {
-  const student = await Students.findOne({
-    where: {
-      id: studentId
-    }
-  });
+  const student = await Students.findByPk(studentId);
   if (!student){
     return null;
   }
@@ -152,6 +111,6 @@ async function updateStudentExtracurriculars(student, extracurriculars) {
     return null;
   }
   return await student.update({
-    extracurriculars: extracurriculars
+    extracurriculars
   });
 }
