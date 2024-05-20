@@ -1,4 +1,4 @@
-import { responseBody } from "app/config/helpers";
+import { apiResponse } from "app/config/helpers";
 import { NextRequest } from "next/server";
 import { models } from "@/app/models";
 const { Students } = models;
@@ -44,30 +44,14 @@ export async function GET(
 ) {
   try {
     const { studentId } = params;
-
     const studentMajors: any = await getStudentMajors(studentId);
     if (!studentMajors) {
-      return Response.json(
-        responseBody("Major interests not found", 404, null),
-        {
-          status: 404,
-        }
-      );
+      return apiResponse("Major interests not found", 404);
     }
-    return Response.json(
-      responseBody(
-        "Major interests retrieved successfully",
-        200,
-        studentMajors
-      )
-    );
+
+    return apiResponse("Major interests retrieved successfully", 200, studentMajors);
   } catch (error: any) {
-    return Response.json(
-      responseBody("Internal Server Error", 500, { error: error.message }),
-      {
-        status: 500,
-      }
-    );
+    return apiResponse("Internal Server Error", 500, { error: error.message });
   }
 }
 
@@ -102,42 +86,22 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: { studentId: string } }
 ) {
-  let responseCode = 404;
-  let responseMessage = "Student not found.";
-  let responseData: any;
   const student = await Students.findOne({
     where: {
       id: params.studentId
     }
   });
   if (!student) {
-    return Response.json(
-      responseBody(
-        responseMessage,
-        responseCode
-      ),
-      {
-        status: responseCode,
-      }
-    );
+    return apiResponse("Student not found.", 404);
   }
   const majors = await req.json()
-  responseCode = 200
   const studentMajorInterests = await updateStudentMajors(student, majors);
   if (!studentMajorInterests) {
-    responseMessage = "No majors selected"
+    return apiResponse("No majors selected", 200)
   }
   else{
-    responseMessage = "Student Major Interests created successfully."
-    responseData = studentMajorInterests
+    return apiResponse("Student Major Interests updated successfully.", 200)
   }
-
-  return Response.json(
-    responseBody(responseMessage, responseCode, responseData),
-    {
-      status: responseCode,
-    }
-  );
 }
 
 async function getStudentMajors(studentId) {
