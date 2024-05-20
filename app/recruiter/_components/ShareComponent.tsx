@@ -1,163 +1,109 @@
 "use client";
 import LoadingSpinner from "@/components/loading-spinner";
-import Table from "@/components/table";
-import { TBODY, TD, TR } from "@/components/table/table-element";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useGetRecruitsQuery } from "@/redux/services/recruiter/recruiterApi";
-import { EyeIcon } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import Header from "./Header";
-import { usePathname } from "next/navigation";
+import { useState } from "react";
 import Link from "next/link";
+import { GoChevronRight } from "react-icons/go";
+import PageTitleContainer from "@/components/page-title";
+import DataTable from "@/components/ui/data-table";
+import StudentPanel from "./student-panel";
+import { cn } from "@/lib/utils";
 
 interface SharedComponentProps {
   tableTitle?: string
   headerTitle:string
+  recruiterId:string;
+  schoolId:string;
 }
 
-export default function SharedComponent({tableTitle, headerTitle}:SharedComponentProps) {
-  const session:any = useSession()
-  const pathName = usePathname()
-  
-  const [searchData, setSearchData] = useState<[]>([]);
-  
-  const isConnections = pathName === "/recruiter/connections"
-  const schoolId = session?.data?.user?.schoolID
-  const recruiterId = session?.data?.user?.roleId
-
+export default function SharedComponent({headerTitle, recruiterId, schoolId}:SharedComponentProps) {
+  const [studentId, setStudentId] = useState("");
   const acceptedConnection = ""
   const applicants = ""
+  const {data:recruitsResponse, isLoading}  = useGetRecruitsQuery({schoolId, recruiterId, acceptedConnection, applicants})
 
-  const RECRUITS_COLUMNS = [  
+  const COLUMNS = [
     {
-      id: 1,
-      title: <Checkbox/>,
-    },
-    {
-      id: 2,
-      title:"ACT",
-    },
-    {
-      id: 3,
-      title:"GPA",
-    },
-    {
-      id: 4,
-      title:"SAT",
-    },
-    {
-      id: 5,
-      title:"Major Interests",
-    },
-    {
-      id: 6,
-      title:"Extracurriculars",
-    },
-    {
-      id: 7,
-      title:"Grad Year",
-    },
-    {
-      id: 8,
-      title:"",
-    },
-  ]
-
-  const CONNECTIONS_COLUMNS = [  
-    {
-      id: 1,
-      title: <Checkbox/>,
-    },
-    {
-      id: 2,
       title:"FIRST NAME",
+      render: (row:any) => row?.student?.user?.first_name,
     },
     {
-      id: 3,
       title:"LAST NAME",
+      render: (row:any) => row?.student?.user?.last_name,
     },
     {
-      id: 4,
       title:"ACT",
+      render: (row:any) => row?.student?.act_score,
     },
     {
-      id: 5,
       title:"GPA",
+      render: (row:any) => row?.student?.gpa_score,
     },
     {
-      id: 6,
       title:"SAT",
+      render: (row:any) => row?.student?.sat_score,
     },
     {
-      id: 7,
       title:"Major Interests",
+      render: (row:any) => "-" // Not in the response: row?.student?.majors,
     },
     {
-      id: 8,
       title:"Extracurriculars",
+      render: (row:any) => "-" // Not in the response: row?.student?.extracuriculars,
     },
     {
-      id: 9,
       title:"Grad Year",
+      render: (row:any) => "-" // Not in the response: row?.student?.grad_year,
     },
     {
-      id: 10,
-      title:"",
+      title: "Action",
+      render: (row) => (
+        <span
+          className="border border-primary p-1.5 px-4 rounded-sm text-primary cursor-pointer text-sm hover:bg-primary hover:text-white"
+          onClick={() => setStudentId(row?.student_id)}>
+          View
+        </span>
+      ),
     },
   ]
 
-  const {data, isLoading}  = useGetRecruitsQuery({schoolId, recruiterId, acceptedConnection, applicants})
-
-  useEffect(()=>{
-    setSearchData(data?.data)
-  },[data])
+  if (isLoading || !recruiterId) {
+    return <LoadingSpinner />
+  }
 
   return (
-    <div className="pi-container">
-      <Header title={headerTitle} recruits={data?.data} setSearchData={(data)=>setSearchData(data)} data={searchData}/>
-      <h1 className="text-xl lg:text-2xl font-bold mb-">Hello {session?.data?.user?.firstName}, welcome!</h1>
-      <h2 className="text-[#8E8E8E]">Here are students that match your profile</h2>
-
-      <div className='mt-5'>
+    <>
+      <PageTitleContainer
+        title={
+          <div className="flex items-center gap-2">
+          {
+            !studentId ? <span>{headerTitle}</span> : <>
+              <Link href="#" className="underline" onClick={() => { setStudentId(''); return false;}}>Connections</Link>
+              <GoChevronRight className="mt-1" />
+              <span>Student Profile</span>
+            </>
+          }
+          </div>
+        }
+        titleClass="text-sm"
+      />
+      <div className="pi-container">
+        { recruitsResponse ? <div className="pi-container">
+            <DataTable
+              title="Connections"
+              columns={COLUMNS}
+              data={recruitsResponse.data}
+              className={cn(studentId && 'hidden')}
+              isLoading={isLoading} />
+            </div>
+            :
+            <div>Empty</div>
+        }
         {
-          !isLoading ?
-        (<Table
-        title={tableTitle}
-        columns={!isConnections? RECRUITS_COLUMNS: CONNECTIONS_COLUMNS}
-        >
-          <TBODY>
-            {
-              searchData?.map((recruits:any, index) => (
-                <TR key={index}>
-                  <TD><Checkbox/></TD>
-                  {isConnections && Object.keys(recruits?.student?.user).length !== 0 && (
-                    <>
-                      <TD>{recruits?.student?.user?.first_name}</TD>
-                      <TD>{recruits?.student?.user?.last_name}</TD>
-                    </>
-                  )}
-                  <TD>{recruits?.student?.act_score}</TD>
-                  <TD>3.7</TD>
-                  <TD>{recruits?.student?.sat_score}</TD>
-                  <TD>Business and Sports</TD>
-                  <TD>Student Government</TD>
-                  <TD>{recruits?.student?.graduation_year}</TD>
-                  <TD>
-                    <Button variant="outlinePrimary" className="text-[#A81D28] gap-x-1 text-sm h-7" asChild>
-                      <Link href={`/recruiter/${recruiterId}/student/${recruits?.student_id}/student-profile`}>
-                        <EyeIcon size={16}/> <span>View</span>
-                      </Link>
-                    </Button>
-                  </TD>
-                </TR>))
-            }
-          </TBODY>
-        </Table>): <LoadingSpinner/>
-        // (<div>No data available</div>)
+          /* Conditionally details view */
+          studentId && <StudentPanel goBack={() => setStudentId('')} studentId={studentId} recruiterId={recruiterId} />
         }
       </div>
-    </div>
+    </>
   );
 }
