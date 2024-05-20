@@ -38,3 +38,10 @@ export function apiResponse(
     }
   );
 }
+
+export function cacheBust(url) {
+  if (!url) {
+    return '';
+  }
+  return  `${url}?v=${(new Date()).getTime()}`;
+}

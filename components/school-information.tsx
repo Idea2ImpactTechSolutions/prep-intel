@@ -9,6 +9,7 @@ import Link from 'next/link'
 import React from 'react'
 import { toast } from 'sonner'
 import { FaSchool } from "react-icons/fa6";
+import { cacheBust } from '@/app/config/helpers'
 
 interface SchoolInformationProps {
     schoolData: Dictionary
@@ -31,13 +32,6 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
        })
     }
 
-    function cachedBust(url) {
-      if (!url) {
-        return '';
-      }
-      return  `${url}?v=${(new Date()).getTime()}`;
-    }
-
     function profileImage(schoolData) {
       return schoolData?.assets?.filter((f) => f.category === 'school-profile-image')?.[0]?.location;
     }
@@ -50,11 +44,11 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
         <section>
             <div className="rounded-lg shadow-md">
                 <div className="relative bg-gray-200 h-32 rounded-ss-lg rounded-se-lg lg:h-44 xl:h-52"
-                  style={{backgroundImage: `url("${cachedBust(bannerImage(schoolData))}")`}}>
+                  style={{backgroundImage: `url("${cacheBust(bannerImage(schoolData))}")`}}>
                     <div className="absolute left-8 -bottom-10 w-24 h-24 bg-white rounded-full border grid place-content-center md:w-28 md:h-28 md:-bottom-12 lg:w-32 lg:h-32">
 
                     {profileImage(schoolData) ? (
-                      <Image src={cachedBust(profileImage(schoolData))}
+                      <Image src={cacheBust(profileImage(schoolData))}
                         alt="logo"
                         width={0}
                         height={0}

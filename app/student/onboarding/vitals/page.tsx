@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import OnboardingFooter from "@/app/student/_components/onboarding-footer";
 import CustomDatePicker from "@/components/custom-date-picker";
 import SectionContainer from "@/components/section-container";
@@ -18,6 +18,8 @@ import LoadingSpinner from "@/components/loading-spinner";
 import { STATE_CITY_DATA } from "@/utils/data";
 import { toast } from "sonner";
 import CustomSelect from "@/components/custom-select";
+import { cacheBust } from "@/app/config/helpers";
+
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
 export default function VitalsPage() {
