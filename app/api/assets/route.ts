@@ -12,6 +12,7 @@ import {
   SCHOOL_DOCUMENT,
   USER_DOCUMENT,
   RECRUITER_PROFILE_IMAGE,
+  STUDENT_PROFILE_IMAGE,
 } from "types/assetTypes";
 
 /**
@@ -135,6 +136,7 @@ export async function POST(req: Request) {
     const file = formData.get("file") as File;
     const singleInstanceTypes = [
       RECRUITER_PROFILE_IMAGE,
+      STUDENT_PROFILE_IMAGE,
       SCHOOL_PROFILE_IMAGE,
       SCHOOL_BANNER_IMAGE,
     ];
@@ -142,6 +144,7 @@ export async function POST(req: Request) {
 
     switch (category) {
       case USER_DOCUMENT:
+      case STUDENT_PROFILE_IMAGE:
       case RECRUITER_PROFILE_IMAGE: {
         const userId = formData.get("userId") as string;
         const user = await Users.findByPk(userId);

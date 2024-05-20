@@ -14,7 +14,7 @@ const STUDENT_FIELDS = [
   "guardian_last_name",
   "guardian_email",
 ];
-const USER_FIELDS = ["id", "first_name", "last_name"];
+const USER_FIELDS = ["id", "first_name", "last_name", "profile_image"];
 
 /**
  * @openapi
