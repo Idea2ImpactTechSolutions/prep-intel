@@ -5,6 +5,7 @@ import React from 'react'
 
 interface TableProps {
     title?:string;
+    className?:string;
     titleNode?:React.ReactNode
     columns:Dictionary[];
     children:React.ReactNode
@@ -16,14 +17,14 @@ interface TableProps {
     prevPage?: ()=>void;
 }
 
-const Table = ({title, columns, children, columnHeaderStyle, titleNode, page=1, totalPages=0, nextPage, prevPage, offset=10}:TableProps) => {
+const Table = ({title, className, columns, children, columnHeaderStyle, titleNode, page=1, totalPages=0, nextPage, prevPage, offset=10}:TableProps) => {
 
   const minusOne = page-1;
   const start = minusOne * offset + 1;
   const end = minusOne * offset + 10;
 
   return (
-    <><div className='overflow-x-auto sm:rounded-lg'>
+    <div className={cn("overflow-x-auto sm:rounded-lg", className)}>
     <div className='border p-'>
       <div className='flex items-center p-4 bg-[#F6F8FA] border border-[#E6EBF0] gap-x-2'>
         <span className='text-[#141111] '>{title} {titleNode} </span>
@@ -69,7 +70,7 @@ const Table = ({title, columns, children, columnHeaderStyle, titleNode, page=1, 
         </nav>
       }
     </div>
-  </div></>
+    </div>
   )
 }
 
