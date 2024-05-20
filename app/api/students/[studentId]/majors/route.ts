@@ -20,19 +20,6 @@ const { Students } = models;
  *     responses:
  *       '200':
  *         description: A list of major interests for the specified student
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   majorName:
- *                     type: string
- *                     description: The name of the major
- *                   interestLevel:
- *                     type: integer
- *                     description: The level of interest in the major
  *       '404':
  *         description: Major interests not found for the specified student
  *       '500':
@@ -43,13 +30,13 @@ export async function GET(
   { params }: {params: {studentId: string}}
 ) {
   try {
-    const { studentId } = params;
-    const studentMajors: any = await getStudentMajors(studentId);
-    if (!studentMajors) {
+    const student = await Students.findByPk(params.studentId)
+    if (!student) {
+      // TODO: This is incorrect, and only now evident because the behavior is surfaced and it's obvious that the student is actually not found.
       return apiResponse("Major interests not found", 404);
     }
 
-    return apiResponse("Major interests retrieved successfully", 200, studentMajors);
+    return apiResponse("Major interests retrieved successfully", 200, student.majors);
   } catch (error: any) {
     return apiResponse("Internal Server Error", 500, { error: error.message });
   }
@@ -86,41 +73,18 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: { studentId: string } }
 ) {
-  const student = await Students.findOne({
-    where: {
-      id: params.studentId
-    }
-  });
+  const student = await Students.findByPk(params.studentId);
   if (!student) {
     return apiResponse("Student not found.", 404);
   }
   const majors = await req.json()
-  const studentMajorInterests = await updateStudentMajors(student, majors);
-  if (!studentMajorInterests) {
+  if (!majors) {
+    // TODO: Why do this instead of just clearing majors when an empty array is passed?
     return apiResponse("No majors selected", 200)
   }
   else{
+    await student.update({ majors });
     return apiResponse("Student Major Interests updated successfully.", 200)
   }
 }
 
-async function getStudentMajors(studentId) {
-  const student = await Students.findOne({
-    where: {
-      id: studentId
-    }
-  });
-  if (!student){
-    return null;
-  }
-  return student.majors;
-}
-
-async function updateStudentMajors(student, majors) {
-  if (!majors) {
-    return null;
-  }
-  return await student.update({
-    majors: majors
-  });
-}
