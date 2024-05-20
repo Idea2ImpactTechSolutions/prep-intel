@@ -129,7 +129,7 @@ export default function ExtracurricularPage() {
         <form>
           <div className="flex-1 px-6 md:px-12 lg:px-20">
           <SectionContainer
-                title="What do you want to Major In?"
+                title="What activities do you participate in?"
           >
                 <>
               <Input
