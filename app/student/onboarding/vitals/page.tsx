@@ -71,7 +71,6 @@ export default function VitalsPage() {
       user: yup.object().shape({
         first_name: yup.string().required('first name is required'),
         last_name: yup.string().required('last name is required'),
-        profile_image: yup.string(),
       }),
       dob: yup.string().required('date of birth is required'),
       graduation_year: yup.string().min(4, "graduation year must be 4 digits").max(4, "graduation year must be 4 digits").required('graduation year is required'),
@@ -134,7 +133,6 @@ export default function VitalsPage() {
                         assetCategory="student-profile-image"
                         toast={toast}
                         onAssetUploaded={setAssetUrl} />
-
                     </div>
 
                     <Input
