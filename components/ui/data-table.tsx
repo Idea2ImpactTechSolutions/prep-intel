@@ -35,10 +35,10 @@ export default function DataTable({ title, titleNode, className, isLoading, colu
           {
             data?.map((row, index) => (
               <TR key={index}>
-                { columns.map(function(col) {
+                { columns.map(function(col, colIndex) {
                   // Conditionally invoke the custom render function, or the given field
                   let cellValue = col.render ? col.render(row) : row[col.field];
-                  return (<TD key={index}>{cellValue}</TD>)
+                  return <TD key={colIndex}>{cellValue}</TD>
                 })}
               </TR>))
           }
