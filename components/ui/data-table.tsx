@@ -1,6 +1,5 @@
 "use client";
 import Table from "@/components/table";
-import { TBODY, TD, TR } from "@/components/table/table-element";
 import LoadingSpinner from "components/loading-spinner";
 
 interface PageProps {
@@ -17,11 +16,12 @@ interface PageProps {
 }
 
 export default function DataTable({ title, titleNode, className, isLoading, columns, data, page, totalPages, nextPage, prevPage }: PageProps) {
+  if (isLoading) {
+    return <LoadingSpinner/>
+  }
+
   return (
-    <>
-    {
-      isLoading ? <LoadingSpinner/> :
-      (<Table
+    <Table
         title={title}
         titleNode={titleNode}
         columns={columns}
@@ -31,19 +31,17 @@ export default function DataTable({ title, titleNode, className, isLoading, colu
         nextPage={nextPage}
         prevPage={prevPage}
       >
-        <TBODY>
+        <tbody>
           {
             data?.map((row, index) => (
-              <TR key={index}>
-                { columns.map(function(col) {
+              <tr key={index} className="bg-white border-b border-[#E6EBF0] hover:bg-gray-50">
+                { columns.map(function(col, colIndex) {
                   // Conditionally invoke the custom render function, or the given field
                   let cellValue = col.render ? col.render(row) : row[col.field];
-                  return (<TD key={index}>{cellValue}</TD>)
+                  return <td className="w-4 p-4" key={colIndex}>{cellValue}</td>
                 })}
-              </TR>))
+              </tr>))
           }
-        </TBODY>
-      </Table>)
-      }
-    </>)
+        </tbody>
+  </Table>)
 }
