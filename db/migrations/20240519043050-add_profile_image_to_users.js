@@ -4,7 +4,7 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.sequelize.transaction(async (transaction) => {
-      await queryInterface.addColumn('users', 'profile_img', {
+      await queryInterface.addColumn('users', 'profile_image', {
         type: Sequelize.STRING(255),
         allowNull: true,
         comment: "Profile Image Url",
