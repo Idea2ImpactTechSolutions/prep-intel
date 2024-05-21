@@ -82,6 +82,7 @@ export default function DataTable({ title, titleNode, className, isLoading, colu
                             className={cn(
                               "text-gray-400 bg-gray-200 rounded-md p-0.5",
                               "cursor-pointer",
+                              page >= totalPages && "pointer-events-none opacity-40"
                               )}/>
           </ul>
         </nav>
