@@ -12,6 +12,7 @@ import {
   SCHOOL_DOCUMENT,
   USER_DOCUMENT,
   RECRUITER_PROFILE_IMAGE,
+  STUDENT_PROFILE_IMAGE,
 } from "types/assetTypes";
 
 /**
@@ -135,6 +136,7 @@ export async function POST(req: Request) {
     const file = formData.get("file") as File;
     const singleInstanceTypes = [
       RECRUITER_PROFILE_IMAGE,
+      STUDENT_PROFILE_IMAGE,
       SCHOOL_PROFILE_IMAGE,
       SCHOOL_BANNER_IMAGE,
     ];
@@ -142,6 +144,7 @@ export async function POST(req: Request) {
 
     switch (category) {
       case USER_DOCUMENT:
+      case STUDENT_PROFILE_IMAGE:
       case RECRUITER_PROFILE_IMAGE: {
         const userId = formData.get("userId") as string;
         const user = await Users.findByPk(userId);
@@ -156,6 +159,11 @@ export async function POST(req: Request) {
           {
             user_id: userId,
             category,
+          },
+          async (location) => {
+            // After upload, set the user's profile image to the uploaded image S3 url
+            user.profile_image = location;
+            await user.save()
           }
         );
       }
@@ -177,7 +185,7 @@ export async function POST(req: Request) {
           {
             category,
             school_id: schoolId,
-          }
+          },
         );
       }
     }
@@ -197,7 +205,8 @@ async function uploadDocument(
   assetFile: File,
   documentPath: string,
   singleInstanceAsset: boolean,
-  assetFields
+  assetFields,
+  onUploadSuccess?: (location: string) => void,
 ) {
   try {
     const bufferedView = await getBufferedView(assetFile);
@@ -206,6 +215,10 @@ async function uploadDocument(
       Key: documentPath,
       Body: bufferedView,
     });
+
+    if (onUploadSuccess) {
+      onUploadSuccess(response.Location);
+    }
 
     let existingAsset: any = null;
 

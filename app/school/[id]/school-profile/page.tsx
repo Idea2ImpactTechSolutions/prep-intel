@@ -27,6 +27,7 @@ import {
   SCHOOL_PROFILE_IMAGE,
   SCHOOL_BANNER_IMAGE,
 } from "types/assetTypes";
+import { cacheBust } from "@/app/config/helpers";
 
 interface initialValues {
   school_id: string,
@@ -229,17 +230,10 @@ export default function Page() {
       }
   }, [])
 
-  function cachedBust(url) {
-      if (!url) {
-        return '';
-      }
-      return  `${url}?v=${(new Date()).getTime()}`;
-  }
-
   useEffect(() => {
     // TODO: Add these simple props to the data returned by the endpoint
-    setBannerImageUrl(cachedBust(school_data?.assets?.filter((f) => f.category === SCHOOL_BANNER_IMAGE)?.[0]?.location));
-    setProfileImageUrl(cachedBust(school_data?.assets?.filter((f) => f.category === SCHOOL_PROFILE_IMAGE)?.[0]?.location));
+    setBannerImageUrl(cacheBust(school_data?.assets?.filter((f) => f.category === SCHOOL_BANNER_IMAGE)?.[0]?.location));
+    setProfileImageUrl(cacheBust(school_data?.assets?.filter((f) => f.category === SCHOOL_PROFILE_IMAGE)?.[0]?.location));
 
     setInitialSchoolData({
       school_id: school_data?.id || '',
@@ -377,7 +371,7 @@ export default function Page() {
                           </div>
                         </div>
                       </div>
-                      
+
                       <div className="flex-1">
                         <div className="grid grid-cols-1 gap-y-3 gap-x-4 md:grid-cols-2 md:mt-5">
                           <CustomDatePicker

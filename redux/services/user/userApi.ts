@@ -8,13 +8,6 @@ const userApi = baseApi.injectEndpoints({
         method: "POST",
         body: payload,
       }),
-      async onQueryStarted(_, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled;
-        } catch (error) {
-          // console.log(error);
-        }
-      },
     }),
     setPassword: builder.mutation({
       query: (payload) => ({
@@ -22,14 +15,6 @@ const userApi = baseApi.injectEndpoints({
         method: "POST",
         body: payload,
       }),
-      async onQueryStarted(_, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled;
-          console.log(result);
-        } catch (error) {
-          console.log(error);
-        }
-      },
     }),
     resetPassword: builder.mutation({
       query: (payload) => ({
@@ -55,4 +40,10 @@ const userApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useClaimAccountMutation, useSetPasswordMutation, useResetPasswordMutation, useLazyGetMessagesQuery, useSendMessageMutation } = userApi;
+export const {
+  useClaimAccountMutation,
+  useSetPasswordMutation,
+  useResetPasswordMutation,
+  useLazyGetMessagesQuery,
+  useSendMessageMutation
+} = userApi;

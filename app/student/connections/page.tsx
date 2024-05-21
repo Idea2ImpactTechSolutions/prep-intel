@@ -53,8 +53,8 @@ export default function StudentConnection() {
                 {
                   availableConnections?.map(({ recruiter, school }: { recruiter: any, school: any }, idx) => (
                     <SingleRecruiterCard
-                      key={idx}
-                      imgUrl=""
+                      key={recruiter?.id}
+                      imgUrl={recruiter?.user.profile_image}
                       name={`${recruiter?.user?.first_name} ${recruiter?.user?.last_name}`}
                       school_name={school?.name}
                       school_state={school?.school_address?.state}

@@ -1,6 +1,7 @@
 import { apiResponse } from "app/config/helpers";
 const { models } = require("app/models");
 const { Users, Recruiters, Assets } = models;
+import {includeKeys} from 'filter-obj';
 
 /**
  * @openapi
@@ -113,6 +114,7 @@ export async function PATCH(
   req: Request,
   { params }: { params: { id: string } }
 ) {
+
   try {
     const updateData = await req.json();
     const recruiter = await Recruiters.findOne({ where: { id: params.id } });
@@ -121,14 +123,18 @@ export async function PATCH(
       return apiResponse("Recruiter not found", 404 );
     }
 
+    const user = await Users.findOne({ where: { id: recruiter.user_id } });
+
     // Update fields
-    recruiter.set(updateData);
+    user.set(includeKeys(updateData, ['first_name', 'last_name', 'phone']));
 
     // Update db
-    const updatedRecruiter = await recruiter.save();
+    //const updatedRecruiter = await recruiter.save();
+    const updated = await user.save();
 
     // Response
-    return apiResponse("Recruiter updated", 200, updatedRecruiter);
+    //return apiResponse("Recruiter updated", 200, updatedRecruiter);
+    return apiResponse("Recruiter updated", 200, updated);
   } catch (error: any) {
     // Notify
     return apiResponse("Errors occurred", 400, { error: error.message });

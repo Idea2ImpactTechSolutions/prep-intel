@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import OnboardingFooter from "@/app/student/_components/onboarding-footer";
 import CustomDatePicker from "@/components/custom-date-picker";
 import SectionContainer from "@/components/section-container";
@@ -18,17 +18,26 @@ import LoadingSpinner from "@/components/loading-spinner";
 import { STATE_CITY_DATA } from "@/utils/data";
 import { toast } from "sonner";
 import CustomSelect from "@/components/custom-select";
+import AssetImage from "@/components/asset-image";
+import { cacheBust } from "@/app/config/helpers";
+
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
 export default function VitalsPage() {
-  const { data } = useSession()
-  const studentId = data?.user?.roleId
+  const { data } = useSession();
+  const router = useRouter()
+  const studentId = data?.user?.roleId;
+  const userId = data?.user?.id;
+  const [getStudentVitals, { isLoading, isFetching }] = useLazyGetStudentVitalsQuery()
+  const [addStudentVitals, { isLoading: isAddingVitals }] = useAddStudentVitalsMutation()
 
   const [studentData, setStudentData] = useState({
     user: {
       first_name: "",
       last_name: "",
+      profile_image: "",
     },
+    asset_image: "",
     dob: "",
     graduation_year: "",
     state: "",
@@ -38,9 +47,6 @@ export default function VitalsPage() {
     guardian_last_name: "",
     guardian_email: "",
   })
-
-  const [getStudentVitals, { isLoading, isFetching }] = useLazyGetStudentVitalsQuery()
-  const [addStudentVitals, { isLoading: isAddingVitals }] = useAddStudentVitalsMutation()
 
   const handleGetStudentVitals = async (studentId) => {
     getStudentVitals(studentId)
@@ -58,8 +64,6 @@ export default function VitalsPage() {
         router.push("/student/onboarding/schools")
       })
   }
-
-  const router = useRouter()
 
   const { values, errors, handleSubmit, handleChange, touched, setFieldValue } = useFormik({
     initialValues: studentData,
@@ -83,6 +87,18 @@ export default function VitalsPage() {
       handleGetStudentVitals(studentId)
     }
   }, [studentId])
+
+  // Update asset image url after upload, using cached value from update response
+  function setAssetUrl(url) {
+    setStudentData(
+      {
+        ...studentData,
+        user: {
+          ...studentData.user,
+          profile_image: cacheBust(url),
+        }
+      });
+  }
 
   if (isLoading || isFetching) {
     return <LoadingSpinner />
@@ -108,7 +124,17 @@ export default function VitalsPage() {
                 )}
               >
                 <div className="pt-3">
-                  <div className="grid grid-cols-1 gap-x-4 md:grid-cols-2 md:gap-x-8 lg:grid-cols-">
+                  <div className="grid grid-cols-[auto,1fr,1fr] gap-x-4 md:gap-x-8">
+                    <div className="row-span-6">
+                      <h3 className="mb-3 font-semibold">Profile Picture</h3>
+                      <AssetImage
+                        imageUrl={studentData.user.profile_image}
+                        userId={userId as string}
+                        assetCategory="student-profile-image"
+                        toast={toast}
+                        onAssetUploaded={setAssetUrl} />
+                    </div>
+
                     <Input
                       label="First Name"
                       className="rounded-lg p-[1.4rem] placeholder:text-[#AAAAAA]'"
@@ -185,8 +211,6 @@ export default function VitalsPage() {
                       selected={values?.state}
                       setSelected={(selected) => setFieldValue('state', selected)}
                     />
-                  </div>
-                  <div className="mt-3">
                     <Input
                       label="High School Name"
                       className="rounded-lg p-[1.4rem] placeholder:text-[#AAAAAA]'"

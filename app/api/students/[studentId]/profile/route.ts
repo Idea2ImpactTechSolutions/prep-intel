@@ -66,7 +66,7 @@ async function getStudentProfile(jsonBody: any) {
   }
 
   let schoolsOfInterest = await Recruits.findAll({
-    where: { 
+    where: {
       student_id: studentId,
       interested: true
      }
@@ -85,16 +85,16 @@ async function getStudentProfile(jsonBody: any) {
   };
 
   let recruit = await Recruits.findOne({
-    where: { 
-      student_id: studentId, 
-      school_id: recruiter.school_id 
+    where: {
+      student_id: studentId,
+      school_id: recruiter.school_id
     },
     include: {
       model: Students,
       attributes: ['id'],
       include: {
-        model: Users, 
-        attributes: ['first_name', 'last_name', 'email']
+        model: Users,
+        attributes: ['first_name', 'last_name', 'email', 'profile_image']
       }
     }
   });
@@ -109,6 +109,7 @@ async function getStudentProfile(jsonBody: any) {
       contacted: recruit.contacted || null,
       interested: recruit.interested || null,
       connection_date: recruit.create_date || null,
+      profile_image: recruit.student.user.profile_image || null,
     };
 
     const recruiterInfo = {
@@ -116,7 +117,7 @@ async function getStudentProfile(jsonBody: any) {
       recruiter_first_name: recruiter.user.first_name || null,
       recruiter_last_name: recruiter.user.last_name || null,
     }
-    
+
     Object.assign(studentProfile, recruitInfo, recruiterInfo);
   }
 

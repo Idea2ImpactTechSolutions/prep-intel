@@ -10,12 +10,13 @@ interface PageProps {
   columns: any[];
   data: any[];
   page?: number;
+  className?: string;
   totalPages?: number;
   nextPage?: ()=>void;
   prevPage?: ()=>void;
 }
 
-export default function DataTable({ title, titleNode, isLoading, columns, data, page, totalPages, nextPage, prevPage }: PageProps) {
+export default function DataTable({ title, titleNode, className, isLoading, columns, data, page, totalPages, nextPage, prevPage }: PageProps) {
   return (
     <>
     {
@@ -24,6 +25,7 @@ export default function DataTable({ title, titleNode, isLoading, columns, data, 
         title={title}
         titleNode={titleNode}
         columns={columns}
+        className={className}
         page={page}
         totalPages={totalPages}
         nextPage={nextPage}

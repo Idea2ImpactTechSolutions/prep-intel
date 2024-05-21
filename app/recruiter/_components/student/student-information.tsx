@@ -76,8 +76,8 @@ const StudentInformation = ({student_details, recruiterId, studentId }) => {
             <div className="w-full bg-gray-200 min-h-[180px] md:min-h-[320px] object-cover bg-no-repeat rounded-t-2xl">
             </div>
             <div className='absolute w-[152px] h-[152px] rounded-full bg-white left-[43px] -bottom-[74px] flex justify-center items-center'>
-                {student_details?.connection_date &&  student_details?.interested?
-                    <Image src={'/images/profile-picture.jpg'} fill objectFit='cover' alt='student-profile' className='rounded-full'/>:<CircleUserRound size={120}/>
+                {student_details?.connection_date && student_details?.interested && student_details.profile_image ?
+                    <Image src={student_details.profile_image} fill objectFit='cover' alt='student-profile' className='rounded-full'/>:<CircleUserRound size={120}/>
                 }
             </div>
         </div>

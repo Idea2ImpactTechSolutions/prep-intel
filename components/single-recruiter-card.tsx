@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Globe, Mail, Phone } from "lucide-react";
+import { /*Globe,*/ Mail, Phone } from "lucide-react";
 import { Space_Grotesk } from "next/font/google";
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
@@ -13,13 +13,33 @@ interface SingleRecruiterCardProps {
   email: string,
 }
 
+function formatPhoneNumber(phoneNumber) {
+
+  if (!phoneNumber) return "";
+
+  // Ensure the input is a string
+  phoneNumber = phoneNumber.toString();
+
+  // Remove any non-numeric characters
+  phoneNumber = phoneNumber.replace(/\D/g, '');
+
+  // Check if the phone number has 10 digits
+  if (phoneNumber.length !== 10) {
+    // Opt-out if the phone number is not the expected length
+    return phoneNumber;
+  }
+
+  // Format the phone number
+  return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6)}`;
+}
+
 export default function SingleRecruiterCard({ imgUrl, name, school_name, school_state, school_email, phone, email}: SingleRecruiterCardProps) {
   return (
     <div className="w-full sm:w-[19rem rounded-[12px] p-5 bg-white card-shadow">
       <div className="border-b border-[#E9E9EA]">
         <div className="flex gap-4 items-center">
           <img
-            src="/images/profile-picture.jpg"
+            src={imgUrl}
             alt="avatar"
             className="w-12 h-12 rounded-full object-cover"
           />
@@ -52,16 +72,19 @@ export default function SingleRecruiterCard({ imgUrl, name, school_name, school_
       <div className="py-4">
         <div className="flex gap-2">
           <span><Phone width={16} height={16} className="text-xs text-[#757575]" /></span>
-          <span className="text-xs text-[#141111] font-normal">(382) 382-9145</span>
+          <span className="text-xs text-[#141111] font-normal">{formatPhoneNumber(phone)}</span>
         </div>
         <div className="mt-3 flex gap-2">
           <span><Mail width={16} height={16} className="text-xs text-[#757575]" /></span>
           <span className="text-xs text-[#141111] font-normal">{email}</span>
         </div>
+        {/*
+        Disable fake school url for now
         <div className="mt-3 flex gap-2">
           <span><Globe width={16} height={16} className="text-xs text-[#757575]" /></span>
           <span className="text-xs text-[#141111] font-normal">uf.com</span>
         </div>
+         */}
         {/* <div className="mt-5 flex flex-col">
         <span className="pb-1 text-xs text-[#141111] font-normal"> Personal Statement </span>
         <span className="text-xs text-[#757575] font-light">Did you know that the University of Alabama is often referred to as “The Capstone” by alumni and friends of the university? </span>
