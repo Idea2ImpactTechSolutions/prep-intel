@@ -18,7 +18,7 @@ export default function OnboardingFooter({prevPageHandler, nextPageHandler, next
             <Button
                 type="button"
                 variant="outline"
-                onClick={() => prevPageHandler()}
+                onClick={prevPageHandler}
                 className={cn(
                     spaceGrotesk.className,
                     "p-5 px-8 border border-gray-300 text-gray-400",
@@ -30,7 +30,7 @@ export default function OnboardingFooter({prevPageHandler, nextPageHandler, next
             <Button
                 type="button"
                 variant="default"
-                onClick={() => nextPageHandler()}
+                onClick={nextPageHandler}
                 loading={loading}
                 loadingText={nextBtnLabel ? nextBtnLabel : "Next Step"}
                 disabled={loading}
