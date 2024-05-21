@@ -16,11 +16,12 @@ interface PageProps {
 }
 
 export default function DataTable({ title, titleNode, className, isLoading, columns, data, page, totalPages, nextPage, prevPage }: PageProps) {
+  if (isLoading) {
+    return <LoadingSpinner/>
+  }
+
   return (
-    <>
-    {
-      isLoading ? <LoadingSpinner/> :
-      (<Table
+    <Table
         title={title}
         titleNode={titleNode}
         columns={columns}
@@ -42,7 +43,5 @@ export default function DataTable({ title, titleNode, className, isLoading, colu
               </tr>))
           }
         </tbody>
-      </Table>)
-      }
-    </>)
+  </Table>)
 }
