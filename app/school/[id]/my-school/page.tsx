@@ -68,7 +68,7 @@ export default function MySchool() {
                         }
                     />
 
-                    <div className="pi-container pi-container">
+                    <div className="pi-container">
                       <SchoolInformation schoolData={school_data} />
                     </div>
                 </div>

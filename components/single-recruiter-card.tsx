@@ -1,5 +1,6 @@
+import { formatPhoneNumber } from "@/app/config/helpers";
 import { cn } from "@/lib/utils";
-import { /*Globe,*/ Mail, Phone } from "lucide-react";
+import { /*Globe,*/ CircleUserRound, Mail, Phone } from "lucide-react";
 import { Space_Grotesk } from "next/font/google";
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
@@ -13,36 +14,17 @@ interface SingleRecruiterCardProps {
   email: string,
 }
 
-function formatPhoneNumber(phoneNumber) {
-
-  if (!phoneNumber) return "";
-
-  // Ensure the input is a string
-  phoneNumber = phoneNumber.toString();
-
-  // Remove any non-numeric characters
-  phoneNumber = phoneNumber.replace(/\D/g, '');
-
-  // Check if the phone number has 10 digits
-  if (phoneNumber.length !== 10) {
-    // Opt-out if the phone number is not the expected length
-    return phoneNumber;
-  }
-
-  // Format the phone number
-  return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6)}`;
-}
-
 export default function SingleRecruiterCard({ imgUrl, name, school_name, school_state, school_email, phone, email}: SingleRecruiterCardProps) {
   return (
     <div className="w-full sm:w-[19rem rounded-[12px] p-5 bg-white card-shadow">
       <div className="border-b border-[#E9E9EA]">
         <div className="flex gap-4 items-center">
-          <img
-            src={imgUrl}
-            alt="avatar"
-            className="w-12 h-12 rounded-full object-cover"
-          />
+          { imgUrl ? <img
+              src={imgUrl}
+              alt="avatar"
+              className="w-12 h-12 rounded-full object-cover"
+            /> : <CircleUserRound className="text-gray-600" size={60}/>
+          }
           <div className="flex flex-col gap-y-[.1rem]">
             <span className={cn(
               "font-semibold text-[1rem] text-[#141111]",

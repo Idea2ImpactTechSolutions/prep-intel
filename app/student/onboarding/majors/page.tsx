@@ -94,15 +94,15 @@ export default function MajorPage() {
   }
   return (
     <>
-      <OnboardingTabs active_step="Majors" />
-      <div className="overflow-y-auto pb-32 h-[calc(100vh_-_10rem)]">
+      <OnboardingTabs className="pi-container" active_step="Majors" />
+      <div className="pi-container">
         <OnboardingTitle
           title="Choose your interested Major"
           subtitle="Where Will Your Curiosity Take You?"
         />
         <div className="mt-10">
           <form>
-            <div className="flex-1 px-6 md:px-12 lg:px-20">
+            <div className="flex-1">
               <SectionContainer
                 title="What do you want to Major In?"
               >

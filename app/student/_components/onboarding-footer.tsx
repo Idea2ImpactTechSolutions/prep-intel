@@ -14,7 +14,7 @@ type OnboardingFooterType = {
 
 export default function OnboardingFooter({prevPageHandler, nextPageHandler, nextBtnLabel, preventGoBack = true, loading = false}: OnboardingFooterType) {
     return (
-        <div className="mt-16 flex gap-x-6 items-center justify-end h-[4rem] p-5 md:px-12 lg:px-20">
+        <div className="pt-8 flex gap-x-6 items-center justify-end h-[4rem]">
             <Button
                 type="button"
                 variant="outline"

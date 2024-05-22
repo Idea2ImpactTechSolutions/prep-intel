@@ -52,7 +52,7 @@ export default function ExtracurricularPage() {
           setSelectedExtracurriculars([...selectedExtracurriculars, ...existingExtracurriculars])
         })
     }
-  
+
     // submit student majors
     const handleSubmitExtracurriculars = async () => {
       if(pageUpdatedFlag == true){
@@ -66,9 +66,7 @@ export default function ExtracurricularPage() {
       }else{
         router.push('/student/onboarding/transcripts')
       }
-   
     }
-  
 
   // handle school change
   const handleSelectExtracurricular = useCallback((activity) => {
@@ -94,9 +92,9 @@ export default function ExtracurricularPage() {
         }
         setPageUpdatedFlag(true);
       }
-    
+
     }, [selectedExtracurriculars]);
-  
+
 
   // Filter extracurricular activities based on search term and limit to 10 results
   const filteredActivities = EXTRACURRICULAR_ACTIVITIES.filter(extracurricular =>
@@ -119,15 +117,15 @@ export default function ExtracurricularPage() {
 
   return (
     <>
-    <OnboardingTabs active_step="Extracurricular" />
-    <div className="overflow-y-auto pb-32 h-[calc(100vh_-_10rem)]">
+    <OnboardingTabs className="pi-container" active_step="Extracurricular" />
+    <div className="pi-container">
       <OnboardingTitle
           title="Choose your interested Extracurricular Activities"
           subtitle="How do you pass time?"
       />
       <div className="mt-10">
         <form>
-          <div className="flex-1 px-6 md:px-12 lg:px-20">
+          <div className="flex-1">
           <SectionContainer
                 title="What activities do you participate in?"
           >
@@ -141,7 +139,7 @@ export default function ExtracurricularPage() {
             />
                   <SectionContainer title="Add Custom Extracurricular" className="mt-8">
           <div>
-          
+
           {/* Custom Extracurricular input box */}
           <Input
             label="Custom Extracurricular"
@@ -152,7 +150,7 @@ export default function ExtracurricularPage() {
           />
 
            {/* Custom Extracurricular button */}
-          
+
         <Button className="bg-[#FEBB0E] border-[#FEBB0E] text-black "
           onClick={() =>handleAddCustomExtracurricular(newExtracurricular)}
             type="button"
@@ -188,7 +186,7 @@ export default function ExtracurricularPage() {
                       </div>}
                     </>
                   </SectionContainer>
-        
+
              {/* Search bar section */}
             {searchTerm && (
             <SectionContainer title="Search Results">
@@ -210,7 +208,7 @@ export default function ExtracurricularPage() {
               )}
 
                {/* Section that previews category and a few choices from each
-                    Currently showing 4 for each category to keep page from getting 
+                    Currently showing 4 for each category to keep page from getting
                     real busy.   */}
               {categories.map((category) => (
               <SectionContainer key={category} title={category} className="mt-8">
@@ -248,7 +246,7 @@ export default function ExtracurricularPage() {
             </div>
           </SectionContainer>
         )}
-  
+
         </>
         </SectionContainer>
       </div>

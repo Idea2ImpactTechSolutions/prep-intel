@@ -23,7 +23,7 @@ export default function PageTitleContainer({title, rightContent, titleClass, cla
         )}>{title}</h2>
         <div>{rightContent}</div>
     </section>
-    <hr className="border-t border-gray-300 pb-4" />
+    <hr className="border-t border-gray-300" />
     </>
   )
 }

@@ -110,15 +110,15 @@ export default function SchoolPage() {
 
     return (
         <>
-            <OnboardingTabs active_step="Schools" />
-            <div className="overflow-y-auto pb-32 h-[calc(100vh_-_10rem)]">
+            <OnboardingTabs className="pi-container" active_step="Schools" />
+            <div className="pi-container">
                 <OnboardingTitle
                     title="Choose the University you are interested in"
                     subtitle="Where Will Your Curiosity Take You?"
                 />
                 <div className="mt-10">
                     <form>
-                        <div className="flex-1 px-6 md:px-12 lg:px-20">
+                        <div className="flex-1">
                             <SectionContainer
                                 title="Your Interested University"
                                 subTitle="Search and Choose your Interested University"

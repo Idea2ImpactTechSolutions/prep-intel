@@ -88,14 +88,13 @@ export default function SharedComponent({headerTitle, recruiterId, schoolId}:Sha
         titleClass="text-sm"
       />
       <div className="pi-container">
-        { recruitsResponse ? <div className="pi-container">
+        { recruitsResponse ?
             <DataTable
               title="Connections"
               columns={COLUMNS}
               data={recruitsResponse.data}
               className={cn(studentId && 'hidden')}
               isLoading={isLoading} />
-            </div>
             :
             <div>Empty</div>
         }

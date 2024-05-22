@@ -106,15 +106,15 @@ export default function VitalsPage() {
 
   return (
     <>
-      <OnboardingTabs active_step="Vitals" />
-      <div className="overflow-y-auto pb-32 h-[calc(100vh_-_10rem)]">
+      <OnboardingTabs className="pi-container" active_step="Vitals" />
+      <div className="pi-container">
         <OnboardingTitle
           title="Complete Your Profile"
           subtitle="Please take a few minutes to fill in your profile so we can customize the opportunities for you."
         />
         <div className="mt-12">
           <form onSubmit={handleSubmit}>
-            <div className="flex-1 px-6 md:px-12 lg:px-20">
+            <div className="flex-1">
               <SectionContainer
                 title="About You"
                 subTitle=""
