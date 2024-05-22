@@ -34,10 +34,11 @@ const STEPPERS = [
 ]
 
 interface OnboardingTabsProps {
-  active_step: ACTIVE_STEP
+  active_step: ACTIVE_STEP;
+  className?: string;
 }
 
-export default function OnboardingTabs({ active_step }: OnboardingTabsProps) {
+export default function OnboardingTabs({ active_step, className }: OnboardingTabsProps) {
   const [activeIndex, setActiveIndex] = useState<any>("")
   const [nextStepperIndex, setnextStepperIndex] = useState<any>("")
 
@@ -50,16 +51,14 @@ export default function OnboardingTabs({ active_step }: OnboardingTabsProps) {
         setnextStepperIndex(foundIndex)
         return
       }
-      
+
       const newStepperIndex = foundIndex + 1
       setnextStepperIndex(newStepperIndex)
     }
   },[active_step])
 
   return (
-    <>
-
-      <nav className={`p-4 mb-8`}>
+      <nav className={cn(`p-4 pb-8`, className)}>
         <div className="">
           <div className="flex-1">
             {/* <span className='block border-b border-[#D0CFCF]'></span> */}
@@ -92,9 +91,5 @@ export default function OnboardingTabs({ active_step }: OnboardingTabsProps) {
           </div>
         </div>
       </nav>
-
-
-
-    </>
   )
 }
