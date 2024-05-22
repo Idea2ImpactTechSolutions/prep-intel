@@ -1,3 +1,4 @@
+import { formatPhoneNumber } from "@/app/config/helpers";
 import { cn } from "@/lib/utils";
 import { /*Globe,*/ CircleUserRound, Mail, Phone } from "lucide-react";
 import { Space_Grotesk } from "next/font/google";
@@ -11,26 +12,6 @@ interface SingleRecruiterCardProps {
   school_email: string,
   phone: string,
   email: string,
-}
-
-function formatPhoneNumber(phoneNumber) {
-
-  if (!phoneNumber) return "";
-
-  // Ensure the input is a string
-  phoneNumber = phoneNumber.toString();
-
-  // Remove any non-numeric characters
-  phoneNumber = phoneNumber.replace(/\D/g, '');
-
-  // Check if the phone number has 10 digits
-  if (phoneNumber.length !== 10) {
-    // Opt-out if the phone number is not the expected length
-    return phoneNumber;
-  }
-
-  // Format the phone number
-  return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6)}`;
 }
 
 export default function SingleRecruiterCard({ imgUrl, name, school_name, school_state, school_email, phone, email}: SingleRecruiterCardProps) {
