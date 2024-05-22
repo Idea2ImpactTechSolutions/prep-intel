@@ -125,7 +125,7 @@ export default function Page() {
   return (
     <>
     <PageTitleContainer title="My Territories" />
-    <div className="pi-container mt-6">
+    <div className="pi-container">
       <div className="w-full overflow-x-auto">
         <UsMap activeStates={activeStates} setActiveStates={setActiveStates} ></UsMap>
       </div>
