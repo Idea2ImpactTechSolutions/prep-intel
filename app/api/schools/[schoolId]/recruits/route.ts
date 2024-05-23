@@ -7,9 +7,11 @@ import logger from 'lib/logger';
 const STUDENT_DETAILS = [
   "act_score",
   "sat_score",
+  "gpa",
   "graduation_year",
   "high_school",
-  "majors"
+  "majors",
+  "extracurriculars"
 ];
 
 const STUDENT_USERS_INCLUSION = {

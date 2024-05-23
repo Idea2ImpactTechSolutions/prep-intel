@@ -34,7 +34,7 @@ export default function Page() {
     },
     {
       title:"GPA",
-      render: (row:any) => row?.student?.gpa_score,
+      render: (row:any) => row?.student?.gpa,
     },
     {
       title:"SAT",
@@ -42,15 +42,15 @@ export default function Page() {
     },
     {
       title:"Major Interests",
-      render: (row:any) => "-" // Not in the response: row?.student?.majors,
+      render: (row:any) => row.student.majors ? row.student.majors.join(', ') : 'N/A',
     },
     {
       title:"Extracurriculars",
-      render: (row:any) => "-" // Not in the response: row?.student?.extracuriculars,
+      render: (row:any) => row.student.majors ? row.student.extracurriculars.join(', ') : 'N/A',
     },
     {
       title:"Grad Year",
-      render: (row:any) => "-" // Not in the response: row?.student?.grad_year,
+      render: (row:any) => `${row.student.graduation_year}`,
     },
     {
       title: "Action",
