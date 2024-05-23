@@ -1,11 +1,16 @@
-import React, { useRef } from "react";
-import statePaths from "../data/state-paths.json"
+import React, { useRef, Dispatch, SetStateAction } from "react";
+import { statePaths, stateLabels } from "../data/state-paths.js"
 
-export default function USMap({ activeStates, setActiveStates }) {
-  const bubbleElement = useRef<HTMLDivElement>(null);
+interface PageProps {
+  setActiveStates: Dispatch<SetStateAction<string[]>>;
+  activeStates: string[];
+  useStateCode?: boolean;
+}
+
+export default function USMap({ activeStates, setActiveStates, useStateCode=true }:PageProps) {
   const svgRef = useRef<SVGSVGElement | null>(null);
-  const hoveredLocation = useRef(null);
-  const svgOffset = useRef([0, 0]);
+  let offsetX, offsetY;
+  let isDragging = false;
 
   function mapClick(e) {
     if (e.target.tagName == 'path') {
@@ -27,38 +32,40 @@ export default function USMap({ activeStates, setActiveStates }) {
   }
 
   function mouseMove(e) {
-    const x = e.clientX,
-        y = e.clientY;
-
-    if (!bubbleElement || !bubbleElement.current)
-      return;
-
-    bubbleElement.current.style.top = (y + 30 + svgOffset.current[1]) + 'px';
-    bubbleElement.current.style.left = (x + svgOffset.current[0]) + 'px';
-
-    if (e.target.tagName == 'path') {
-      const content = e.target.dataset;
-      hoveredLocation.current = content;
-
-      bubbleElement.current.innerHTML = content.name;
-      bubbleElement.current.style.display = "block";
+    if (isDragging) {
+      const newX = e.clientX - offsetX;
+      const newY = e.clientY - offsetY;
+      e.target.setAttribute('x', newX);
+      e.target.setAttribute('y', newY);
     }
-    else {
-      bubbleElement.current.style.display = "none";
-    }
+  }
+
+  function elemMouseDown(e) {
+        isDragging = true;
+        //const { x, y } = e.target.getBoundingClientRect();
+
+        offsetX = e.clientX - e.target.getAttribute("x");
+        offsetY = e.clientY - e.target.getAttribute("y");
+  }
+
+  function elemMouseUp(e) {
+    isDragging = false;
+  }
+
+  function getStateName(code) {
+    return statePaths.find((p) => p.id == code)?.name || '';
   }
 
   return (
     <>
     <svg
-      width="1000px"
-      height="589px"
       ref={svgRef}
       onMouseMove={mouseMove}
+      onMouseUp={elemMouseUp}
       onClick={mapClick}
-      viewBox="0 0 1000 589"
-      style={{ strokeLinejoin: 'round', stroke: '#000', fill: 'none' }}
+      viewBox="80 0 1000 589"
       id="us-map"
+      style={{width: "100%", height: "auto"}}
       preserveAspectRatio="xMinYMin meet"
     >
       <defs>
@@ -67,19 +74,25 @@ export default function USMap({ activeStates, setActiveStates }) {
           #us-map path {
             fill-rule: evenodd;
             stroke: white;
-            fill: #88161856;
+            fill: #E3E9F1;
             transition: fill .4s ease;
             transform-origin: center center;
           }
 
           #us-map path.active {
-            fill: #881618c3;
+            fill: #FEBB0E;
           }
 
           #us-map path:hover {
-            fill: #881618;
+            fill: #f9db90;
             cursor: pointer;
             transform: scale(1.002, 1.002);
+          }
+
+          #us-map text {
+            font: 10px sans-serif;
+            pointer-events: none;
+            font-weight: bold;
           }
         `}
         </style>
@@ -94,11 +107,21 @@ export default function USMap({ activeStates, setActiveStates }) {
             data-id={id}
             d={d}
           />
-
         ))
       }
+      {
+        stateLabels.map((item, index) => (
+          <text onMouseDown={elemMouseDown}
+            font-weight="lighter"
+            key={index}
+            x={item.x}
+            y={item.y}
+          >{useStateCode ? item.key : getStateName(item.key)}</text>
+        ))
+      }
+
     </svg>
-    <div id="details-box" className="hidden" ref={bubbleElement}></div>
     </>
   );
 }
+

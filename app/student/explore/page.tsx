@@ -12,6 +12,8 @@ import Select from "react-select";
 import { toast } from "sonner";
 import SchoolView from "../_components/school-view";
 import useDelayedFunction from "@/utils/hooks/useDelayedFunction";
+import PageTitleContainer from "@/components/page-title";
+import { cn } from "@/lib/utils";
 
 const options = [
   { value: "AL", label: "Alabama" },
@@ -146,17 +148,53 @@ export default function Page() {
   }
 
   return (
-    <div className="pi-container">
-      <h1 className="text-lg md:text-2xl font-bold mb-4">
-        Select the states you would like to explore
-      </h1>
-      <div className="w-full overflow-x-auto">
-        <div className="w-full">
-          <UsMap
-            activeStates={activeStates}
-            setActiveStates={setActiveStates}
-          ></UsMap>
+    <>
+      <PageTitleContainer
+        title={
+          <>
+            <span>Select the states you would like to explore</span>
+            <div className="flex flex-col text-xs font-normal">
+                <span className="capitalize">Discover your ideal university match here.</span>
+            </div>
+          </>
+      }
+      titleClass="text-sm"
+      />
+
+    <div className="pi-container !pt-0" >
+
+      <div className="w-full flex pt-4 items-end">
+        <div >
+          <h2>State</h2>
+          <Select instanceId="state-select"
+            options={options}
+            isMulti
+            value={activeSelection}
+            onChange={selectChanged}
+            className="w-full md:w-[600px]"
+          />
         </div>
+
+        <span className="flex-1"></span>
+
+        <Button
+          type="button"
+          variant="default"
+          loadingText="Search..."
+          loading={isLoading || isFetching}
+          onClick={() => fetchSchoolData()}
+        >
+          Search
+        </Button>
+      </div>
+
+      <div className={cn(
+        "w-full min-h-[200px] p-2 md:px-10 lg:px-20",
+        (isLoading || schools?.length) && "md:px-40 lg:px-80")} >
+        <UsMap
+          activeStates={activeStates}
+          setActiveStates={setActiveStates}
+        />
       </div>
 
       {schools?.length ?
@@ -165,29 +203,6 @@ export default function Page() {
           <p className="text-sm text-gray-500">Explore {schools?.length} top universit{schoolCount === 1 ? 'y' : 'ies'}</p>
         </div> : null}
       <div className="flex flex-col md:flex-row md:justify-between md:items-end">
-        <div className="w-full md:w-fit flex flex-col md:flex-row items-end gap-2">
-          <div className="w-full space-y-2">
-            <h2>Select State</h2>
-            <Select instanceId="state-select"
-              options={options}
-              isMulti
-              value={activeSelection}
-              onChange={selectChanged}
-              className="w-full md:w-[400px]"
-            />
-          </div>
-          <div>
-            <Button
-              type="button"
-              variant="default"
-              loadingText="Search..."
-              loading={isLoading || isFetching}
-              onClick={() => fetchSchoolData()}
-            >
-              Search
-            </Button>
-          </div>
-        </div>
         <div className="hidden relative md:flex">
           {
             schools?.length ? <>
@@ -205,7 +220,7 @@ export default function Page() {
 
       {
         (isLoading || isFetching) ? <LoadingSpinner className="h-[250px]" /> :
-          <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-3 mt-5 mb-40">
+          <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-3 mt-5">
             {schools?.length
               ? schools.map((school, index) => (
                 <li key={index} className="flex rounded bg-slate-50 relative justify-center items-center text-sm w-[200px] h-[150px] p-6 m-1 border border-red">
@@ -244,5 +259,6 @@ export default function Page() {
           </div> : null
       }
     </div>
+    </>
   );
 }
