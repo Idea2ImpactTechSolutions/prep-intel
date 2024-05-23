@@ -1,5 +1,4 @@
 import { models } from "app/models";
-import { Op } from "sequelize";
 const { ConnectionRequest, Recruits, Recruiters, Students, Users } = models;
 import { apiResponse } from "app/config/helpers";
 import { type NextRequest } from 'next/server'
