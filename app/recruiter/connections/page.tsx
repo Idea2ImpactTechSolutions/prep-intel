@@ -46,7 +46,7 @@ export default function Page() {
     },
     {
       title:"Extracurriculars",
-      render: (row:any) => row.student.majors ? row.student.extracurriculars.join(', ') : 'N/A',
+      render: (row:any) => row.student.extracurriculars ? row.student.extracurriculars.join(', ') : 'N/A',
     },
     {
       title:"Grad Year",
