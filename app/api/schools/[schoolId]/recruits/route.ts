@@ -1,15 +1,17 @@
 import { models } from "app/models";
-import { Op } from "sequelize";
 const { ConnectionRequest, Recruits, Recruiters, Students, Users } = models;
 import { apiResponse } from "app/config/helpers";
 import { type NextRequest } from 'next/server'
 import logger from 'lib/logger';
 
-const STUDENT_STATS = [
+const STUDENT_DETAILS = [
   "act_score",
   "sat_score",
+  "gpa",
   "graduation_year",
-  "high_school"
+  "high_school",
+  "majors",
+  "extracurriculars"
 ];
 
 const STUDENT_USERS_INCLUSION = {
@@ -130,7 +132,7 @@ async function getRecruits(requestData) {
       include: [
         {
           model: Students,
-          attributes: STUDENT_STATS,
+          attributes: STUDENT_DETAILS,
           include: STUDENT_USERS_INCLUSION
         },
         {...RECRUITERS_MODEL_INCLUSION, where: { id: Number(recruiterId) }},
@@ -144,7 +146,7 @@ async function getRecruits(requestData) {
         include: [
           {
             model: Students,
-            attributes: STUDENT_STATS,
+            attributes: STUDENT_DETAILS,
             required: true,
             include: [
               STUDENT_USERS_INCLUSION,
@@ -165,7 +167,7 @@ async function getRecruits(requestData) {
       include: [
         {
           model: Students,
-          attributes: STUDENT_STATS,
+          attributes: STUDENT_DETAILS,
           required: true,
           include: STUDENT_USERS_INCLUSION,
         },
@@ -178,15 +180,11 @@ async function getRecruits(requestData) {
     recruits = await Recruits.findAll({
       where: { 
         school_id: schoolId, 
-        [Op.or]: [
-          { is_applicant: null},
-          { contacted: null }
-        ]
       },
       include: [
         {
           model: Students,
-          attributes: STUDENT_STATS,
+          attributes: STUDENT_DETAILS,
           include: STUDENT_USERS_INCLUSION
         },
         RECRUITERS_MODEL_INCLUSION

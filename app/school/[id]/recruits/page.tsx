@@ -8,31 +8,33 @@ import DataTable from "components/ui/data-table";
 const RECRUITER_COLUMNS = [
   {
     title: "Name",
-    render: (row) => `Student ${row.id}`,
+    render: (row) => `${row.student.user.first_name} ${row.student.user.last_name}`,
+  },
+  {
+    title: "High School",
+    render: (row) => `${row.student.high_school}`,
   },
   {
     title: "Application Status",
-    render: (row) => `-`,
-  },
-  {
-    title: "Recruitment Source",
-    render: (row) => `-`,
+    render: (row) => 
+      row.applicant_status ? row.applicant_status :
+      row.application_status ? row.application_status :
+      "Not Applied",
   },
   {
     title: "Application Date",
-    render: (row) => `-`,
+    render: (row) => row.application_date ? row.application_date : 'N/A',
   },
   {
     title: "Recruiter Name",
-    render: (row) => `Recruiter ${row.recruiter_id}`,
+    render: (row) => {
+      const recruiterName = row.recruiter.user.first_name ? `${row.recruiter.user.first_name} ${row.recruiter.user.last_name}` : 'N/A';
+      return row.recruiter.user.first_name ? recruiterName : <strong>{recruiterName}</strong>;
+    }
   },
   {
     title: "Program of Interest",
-    render: (row) => `${row.high_school}`,
-  },
-  {
-    title: "Email Address",
-    render: (row) => `-`,
+    render: (row) => row.student.majors ? row.student.majors.join(', ') : 'N/A',
   },
 ];
 
@@ -53,7 +55,7 @@ export default function Page() {
     if (schoolId) {
       handleGetRecruits();
     }
-  }, []);
+  }, [schoolId]);
 
   return (
     <section>
