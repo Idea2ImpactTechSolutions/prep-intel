@@ -6,7 +6,7 @@ import DiscoverPanel from "../_components/discover-panel";
 import StudentPanel from "../_components/student-panel";
 import Link from "next/link";
 import { GoChevronRight } from "react-icons/go";
-import PageTitleContainer from "@/components/page-title";
+import { PageHeading, PageContent } from "@/components/common-page";
 import { cn } from "@/lib/utils";
 
 export default function Page() {
@@ -16,32 +16,23 @@ export default function Page() {
 
   return (
     <>
-      <PageTitleContainer
+      <PageHeading
         title={
-          <div className="flex items-center gap-2">
-          {
-            !studentId ? "Discover New Recruits" : <>
+            !studentId ? "Discover New Recruits" : <div className="flex items-center gap-2">
               <Link href="#" className="underline" onClick={() => { setStudentId(''); return false;}}>Search Results</Link>
               <GoChevronRight className="mt-1" />
               <span>Student Profile</span>
-            </>
-          }
-          </div>
-        }
-        titleClass="text-sm"
-      />
-      <div className="pi-container">
+            </div>} />
+      <PageContent>
         <DiscoverPanel
           recruiterId={recruiterId}
           onStudentSelected={id => setStudentId(id)}
-          className={cn(
-            studentId && 'hidden',
-          )} />
+          className={cn(studentId && 'hidden')} />
         {
           /* Conditionally details view */
           studentId && <StudentPanel goBack={() => setStudentId('')} studentId={studentId} recruiterId={recruiterId} />
         }
-      </div>
+      </PageContent>
     </>
   );
 }

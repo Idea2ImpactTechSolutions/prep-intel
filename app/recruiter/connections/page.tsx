@@ -5,7 +5,7 @@ import { useGetRecruitsQuery } from "@/redux/services/recruiter/recruiterApi";
 import { useState } from "react";
 import Link from "next/link";
 import { GoChevronRight } from "react-icons/go";
-import PageTitleContainer from "@/components/page-title";
+import { PageHeading, PageContent } from "@/components/common-page";
 import DataTable from "@/components/ui/data-table";
 import StudentPanel from "../_components/student-panel";
 import { cn } from "@/lib/utils";
@@ -76,7 +76,7 @@ export default function Page() {
 
   return (
     <>
-      <PageTitleContainer
+      <PageHeading
         title={
           <div className="flex items-center gap-2">
             {!studentId ? (
@@ -94,7 +94,7 @@ export default function Page() {
         }
         titleClass="text-sm"
       />
-      <div className="pi-container">
+      <PageContent>
         {isLoading ? (
           <LoadingSpinner />
         ) : recruitsResponse && recruitsResponse.data && recruitsResponse.data.length > 0 ? (
@@ -111,7 +111,7 @@ export default function Page() {
         {studentId && (
           <StudentPanel goBack={() => setStudentId("")} studentId={studentId} recruiterId={recruiterId} />
         )}
-      </div>
+      </PageContent>
     </>
   );
 }

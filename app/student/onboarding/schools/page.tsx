@@ -19,6 +19,7 @@ import { useSession } from "next-auth/react";
 import { useAddStudentSchoolsMutation, useLazyGetStudentSchoolsQuery } from "@/redux/services/student/studentApi";
 import LoadingSpinner from "@/components/loading-spinner";
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
+import { PageContent } from "@/components/common-page";
 
 export default function SchoolPage() {
     const [schools, setSchools] = useState([]);
@@ -111,7 +112,7 @@ export default function SchoolPage() {
     return (
         <>
             <OnboardingTabs className="pi-container" active_step="Schools" />
-            <div className="pi-container">
+            <PageContent>
                 <OnboardingTitle
                     title="Choose the University you are interested in"
                     subtitle="Where Will Your Curiosity Take You?"
@@ -253,7 +254,7 @@ export default function SchoolPage() {
                         />
                     </form>
                 </div>
-            </div>
+            </PageContent>
         </>
     )
 }

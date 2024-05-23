@@ -19,10 +19,11 @@ import { useEffect, useState } from "react";
 import * as yup from "yup"
 import { toast } from "sonner"
 import { CompletionPanel } from "@/components/completion-panel";
-import BottomBar from "../../_components/bottom-bar";
+import FormFooter from "../../_components/form-footer";
 import { setSchoolInformation } from "@/redux/features/school/managerSlice";
-import LoadingSpinner from "../../_components/loading-spinner";
+import LoadingSpinner from "@/components/loading-spinner";
 import ProfilePublishedLabel from "@/components/profile-published-label";
+import { PageContent } from "@/components/common-page";
 import {
   SCHOOL_PROFILE_IMAGE,
   SCHOOL_BANNER_IMAGE,
@@ -288,7 +289,6 @@ export default function Page() {
 
   return (
     <>
-      <div className="">
         <div className="pi-container mx-auto">
           {!school_data?.publish_date && <CompletionPanel percentCompleted={0} title={"0/3"}></CompletionPanel>}
           {school_data?.publish_date && <div className="float-right"><ProfilePublishedLabel/></div>}
@@ -296,6 +296,7 @@ export default function Page() {
             Create Your School's Profile
           </h1>
         </div>
+        <PageContent>
         <Formik
           initialValues={initialSchoolData}
           onSubmit={handleFormSubmit}
@@ -305,7 +306,7 @@ export default function Page() {
           {({ values, errors, touched, handleChange, setFieldValue }) => {
             return (
               <Form>
-                <div className="pi-container flex flex-col h-[calc(100vh_-_14rem)] overflow-y-auto">
+                <div className="pi-container flex flex-col">
                   <div className="flex-1">
                     <div className="flex flex-col gap-y-4 md:flex-row md:gap-x-8">
                       <div className="flex gap-x-8">
@@ -660,7 +661,7 @@ export default function Page() {
 
                   </div>
                 </div>
-                <BottomBar
+                <FormFooter
                     onBack={() => null}
                     onSaveForLater={() => null}
                     isBackDisabled={true}
@@ -671,7 +672,7 @@ export default function Page() {
           }
           }
         </Formik>
-      </div>
+        </PageContent>
     </>
   );
 }

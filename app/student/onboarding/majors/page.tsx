@@ -15,6 +15,7 @@ import AVAILABLE_MAJORS from "../../../../data/majors.json";
 import OnboardingTabs from "../../_components/onboarding-tabs";
 import OnboardingTitle from "../../_components/onboarding-title";
 import { POPULAR_MAJOR, PROFESSIONAL_PT_PROGRAMS } from "../data";
+import { PageContent } from "@/components/common-page";
 
 export default function MajorPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -95,7 +96,7 @@ export default function MajorPage() {
   return (
     <>
       <OnboardingTabs className="pi-container" active_step="Majors" />
-      <div className="pi-container">
+      <PageContent>
         <OnboardingTitle
           title="Choose your interested Major"
           subtitle="Where Will Your Curiosity Take You?"
@@ -232,7 +233,7 @@ export default function MajorPage() {
           </form>
         </div>
 
-      </div>
+      </PageContent>
     </>
   )
 }

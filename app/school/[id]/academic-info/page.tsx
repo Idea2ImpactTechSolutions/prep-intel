@@ -10,8 +10,9 @@ import { toast } from "sonner";
 import { useAppDispatch } from "@/redux/store";
 import { setSchoolInformation } from "@/redux/features/school/managerSlice";
 import LoadingSpinner from "../../_components/loading-spinner";
-import BottomBar from "../../_components/bottom-bar";
+import FormFooter from "../../_components/form-footer";
 import ProfilePublishedLabel from "@/components/profile-published-label";
+import { PageContent } from "@/components/common-page";
 
 // Define the validation schema using Yup
 const validationSchema = Yup.object().shape({
@@ -262,6 +263,7 @@ export default function AcademicInfo() {
   }
 
   return (
+    <PageContent>
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
@@ -650,7 +652,7 @@ export default function AcademicInfo() {
             </div>
           </div>
 
-          <BottomBar
+          <FormFooter
             onBack={handleBack}
             onSaveForLater={handleSaveForLater}
             isBackDisabled={false}
@@ -659,5 +661,6 @@ export default function AcademicInfo() {
         </Form>
       )}
     </Formik>
+    </PageContent>
   );
 }

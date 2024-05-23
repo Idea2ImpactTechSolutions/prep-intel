@@ -12,7 +12,7 @@ import Select from "react-select";
 import { toast } from "sonner";
 import SchoolView from "../_components/school-view";
 import useDelayedFunction from "@/utils/hooks/useDelayedFunction";
-import PageTitleContainer from "@/components/page-title";
+import { PageHeading, PageContent } from "@/components/common-page";
 import { cn } from "@/lib/utils";
 
 const options = [
@@ -149,19 +149,11 @@ export default function Page() {
 
   return (
     <>
-      <PageTitleContainer
-        title={
-          <>
-            <span>Select the states you would like to explore</span>
-            <div className="flex flex-col text-xs font-normal">
-                <span className="capitalize">Discover your ideal university match here.</span>
-            </div>
-          </>
-      }
-      titleClass="text-sm"
+      <PageHeading
+        title="Select the states you would like to explore"
+        subtitle="Discover your ideal university match here."
       />
-
-    <div className="pi-container !pt-0" >
+      <PageContent className="!pt-0" >
 
       <div className="w-full flex pt-4 items-end">
         <div >
@@ -258,7 +250,7 @@ export default function Page() {
             />
           </div> : null
       }
-    </div>
+    </PageContent>
     </>
   );
 }

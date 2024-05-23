@@ -1,5 +1,5 @@
 "use client"
-import PageTitleContainer from "@/components/page-title"
+import { PageHeading, PageContent } from "@/components/common-page";
 import CreatePersonnel from "./_components/create-personnel"
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
@@ -65,8 +65,8 @@ export default function AdminPage() {
     }
 
     return (
-        <section>
-            <PageTitleContainer
+      <>
+      <PageHeading
                 title={
                     <>
                         {currentView === "VIEW_ADMIN" && 'Admin'}
@@ -76,26 +76,23 @@ export default function AdminPage() {
                             > <LucideChevronLeft width={20} height={20}/> <span> Admin </span> </div>
                         )}
                     </>
-                }
-                rightContent={
-                    <div className={cn(
-                        (currentView === "CREATE_RECRUITER" ||
-                          currentView === "CREATE_ADMIN")
-                        && 'hidden'
-                    )}>
-                    <TitlebarButton
-                        title="Create Admin"
-                        onClick={() => setCurrentView("CREATE_ADMIN")} />
+                }>
+                <div className={cn(
+                    (currentView === "CREATE_RECRUITER" ||
+                      currentView === "CREATE_ADMIN")
+                    && 'hidden'
+                )}>
+                  <TitlebarButton
+                      title="Create Admin"
+                      onClick={() => setCurrentView("CREATE_ADMIN")} />
 
-                    <TitlebarButton
-                        title="Create Recruiter"
-                        onClick={() => setCurrentView("CREATE_RECRUITER")} />
-                    </div>
-                }
-            />
+                  <TitlebarButton
+                      title="Create Recruiter"
+                      onClick={() => setCurrentView("CREATE_RECRUITER")} />
+                </div>
+        </PageHeading>
+        <PageContent>
             <div className={cn(
-                "p-4",
-                "pi-container",
                 currentView === "VIEW_ADMIN" ? "block" : 'hidden'
             )}>
                 <InviteLink claimUrl={claimUrl} className="mb-4" />
@@ -109,7 +106,7 @@ export default function AdminPage() {
                 "hidden",
                 (currentView === "CREATE_RECRUITER" || currentView === "CREATE_ADMIN") && "block"
             )}>
-                <section className="pi-container">
+
                     <h2 className="font-bold md:text-lg text-sm mb-2">{currentView === "CREATE_RECRUITER"  ? "Create Recruiter" : "Create Admin"}</h2>
                     {(currentView === 'CREATE_RECRUITER' || currentView === 'CREATE_ADMIN') &&
                     <CreatePersonnel
@@ -118,8 +115,8 @@ export default function AdminPage() {
                         onCancel={()=> setCurrentView("VIEW_ADMIN")}
                         onSuccess={(claimUrl) => { setCurrentView("VIEW_ADMIN"); setClaimUrl(claimUrl); loadPersonnel() }}
                     />}
-                </section>
             </section>
-        </section>
+      </PageContent>
+      </>
     )
 }

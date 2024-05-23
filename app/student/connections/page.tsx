@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useLazyGetStudentRecruiterConnectionsQuery } from "@/redux/services/student/studentApi";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import PageTitleContainer from "@/components/page-title";
+import { PageHeading, PageContent } from "@/components/common-page";
 
 export default function StudentConnection() {
   const [availableConnections, setAvailableConnections] = useState([])
@@ -35,18 +35,10 @@ export default function StudentConnection() {
 
   return (
     <>
-    <PageTitleContainer
-        title={
-            <>
-              <span>Recruiter Connections</span>
-              <div className="flex flex-col text-xs font-normal">
-                  <span className="capitalize">Discover your ideal university match here.</span>
-              </div>
-            </>
-        }
-        titleClass="text-sm"
-    />
-        <section className="pi-container">
+    <PageHeading
+        title="Recruiter Connections"
+        subtitle="Discover your ideal university match here." />
+    <PageContent>
           {
             availableConnections?.length > 0 ?
               <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-6">
@@ -64,7 +56,8 @@ export default function StudentConnection() {
                     />
                   ))
                 }
-              </div> :
+              </div>
+              :
               <section className='h-[calc(100vh_-_20rem)] bg-[#F0F4F7] rounded-[6px] flex justify-center items-center text-center'>
                 <div>
                   <p className="pb-4"> No Connection Found</p>
@@ -75,7 +68,7 @@ export default function StudentConnection() {
                 </div>
               </section>
           }
-        </section>
-      </>
+    </PageContent>
+    </>
   )
 }

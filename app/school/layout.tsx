@@ -66,7 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     }, [school_data])
 
     return (
-        <main className="overflow-y-hidden font-sans">
+        <main className="-sans">
             <section className="">
                 <Navbar tabs={TABS} />
                 <section>
