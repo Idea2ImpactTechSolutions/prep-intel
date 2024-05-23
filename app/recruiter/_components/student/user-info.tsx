@@ -5,7 +5,7 @@ import { FileCheck } from 'lucide-react'
 const UserInformation = ({user_info}) => {
   return (
     <div>
-        <div className={`flex flex-col md:flex-row justify-start md:items-center gap-x-2 mt-6 mb-2`}>
+        <div className={`flex flex-col md:flex-row justify-start md:items-center gap-x-2`}>
             {
                 user_info?.connection_date &&  user_info?.interested && (
                     <>
@@ -22,27 +22,27 @@ const UserInformation = ({user_info}) => {
         </div>
 
         {user_info?.connection_date &&  user_info?.interested && <p className="text-xl mb-10">{user_info?.student_city}  |  {user_info?.student_state} {user_info?.student_postal? `| ${user_info?.student_postal}` : null} {user_info?.student_phone_number? ` | ${user_info?.student_phone_number}` : null}</p>}
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 mb-10">
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className='space-y-1'>
-                <h3 className='text-[#8E8E8E] text-[22px]'>High School</h3>
-                <p className='text-[#141111] text-xl'>{user_info?.student_high_school}</p>
+                <h3 className='text-gray-400 text-md'>High School</h3>
+                <p className='text-md'>{user_info?.student_high_school}</p>
             </div>
             <div className='space-y-1'>
-                <h3 className='text-[#8E8E8E] text-[22px]'>ACT Score</h3>
-                <p className='text-[#141111] text-xl'>{user_info?.student_act_score?user_info?.student_act_score:"N/A"}</p>
+                <h3 className='text-gray-400 text-md'>ACT Score</h3>
+                <p className='text-md'>{user_info?.student_act_score?user_info?.student_act_score:"N/A"}</p>
             </div>
             <div className='space-y-1'>
-                <h3 className='text-[#8E8E8E] text-[22px]'>GPA</h3>
-                <p className='text-[#141111] text-xl'>{user_info?.student_gpa?user_info?.student_gpa:"N/A"}</p>
+                <h3 className='text-gray-400 text-md'>GPA</h3>
+                <p className='text-md'>{user_info?.student_gpa?user_info?.student_gpa:"N/A"}</p>
             </div>
             <div className='space-y-1'>
-                <h3 className='text-[#8E8E8E] text-[22px]'>Expected Graduation Year</h3>
-                <p className='text-[#141111] text-xl'>{user_info?.student_graduation_year?user_info?.student_graduation_year:"N/A"}</p>
+                <h3 className='text-gray-400 text-md'>Expected Graduation Year</h3>
+                <p className='text-md'>{user_info?.student_graduation_year?user_info?.student_graduation_year:"N/A"}</p>
             </div>
             <div className='space-y-1'>
-                <h3 className='text-[#8E8E8E] text-[22px]'>SAT Score</h3>
-                <p className='text-[#141111] text-xl'>{ user_info?.student_sat_score? user_info?.student_sat_score: "N/A"}</p>
+                <h3 className='text-gray-400 text-md'>SAT Score</h3>
+                <p className='text-md'>{ user_info?.student_sat_score? user_info?.student_sat_score: "N/A"}</p>
             </div>
         </div>
     </div>
