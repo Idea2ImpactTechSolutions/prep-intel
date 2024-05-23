@@ -16,6 +16,7 @@ import { useCreateConnectionRequestsMutation } from '@/redux/services/student/st
 import { useSession } from 'next-auth/react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import GoalAndSkills from './goals-skills-section'
 
 const StudentInformation = ({student_details, recruiterId, studentId }) => {
     const [showModal, setShowModal] = useState<boolean>(false)
@@ -71,33 +72,39 @@ const StudentInformation = ({student_details, recruiterId, studentId }) => {
     })
 
   return (
-    <div className='w-full'>
-        <div className='relative'>
-            <div className="w-full bg-gray-200 min-h-[180px] md:min-h-[320px] object-cover bg-no-repeat rounded-t-2xl">
-            </div>
-            <div className='absolute w-[152px] h-[152px] rounded-full bg-white left-[43px] -bottom-[74px] flex justify-center items-center'>
-                {student_details?.connection_date && student_details?.interested && student_details.profile_image ?
-                    <Image src={student_details.profile_image} fill objectFit='cover' alt='student-profile' className='rounded-full'/>:<CircleUserRound size={120}/>
-                }
-            </div>
-        </div>
-        <div className='p-10 bg-white shadow-xl rounded-b-xl'>
-            <div className='flex justify-end'>
-                {(disableConnectionButton) ?
-                    <Button variant="outline" className='text-xl' disabled
-                    >Invite Sent</Button>
-                    : (!student_details?.connection_date &&  !student_details?.interested) ?
-                    <Button variant="outline" className='text-xl'
-                      loading={isLoadingConnectionRequest}
-                      onClick={sendConnectRequest}
-                    >Connect To Unlock</Button>
-                    : <Button variant="outline" className='text-xl' onClick={()=>setShowModal(true)}>Message</Button>
-                }
-            </div>
-            <UserInformation user_info ={student_details}/>
+    <div className='w-full flex flex-col space-y-2 md:space-y-6'>
+        <div className="shadow-sm rounded-xl border overflow-hidden">
+          <div className='relative'>
+              <div className="w-full bg-[#F6F8FA] min-h-[120px] md:min-h-[140px] object-cover bg-no-repeat">
+              </div>
+              <div className='absolute w-[140px] h-[140px] rounded-full bg-white left-[43px] -bottom-[70px] flex justify-center items-center'>
+                  {student_details?.connection_date && student_details?.interested && student_details.profile_image ?
+                      <Image src={student_details.profile_image} fill objectFit='cover' alt='student-profile' className='rounded-full'/>
+                      :
+                      <CircleUserRound size={100} />
+                  }
+              </div>
+          </div>
+          <div className='p-10 bg-white'>
+              <div className='flex justify-end'>
+                  {(disableConnectionButton) ?
+                      <Button variant="outline" className='text-xl' disabled
+                      >Invite Sent</Button>
+                      : (!student_details?.connection_date &&  !student_details?.interested) ?
+                      <Button variant="outline"
+                        loading={isLoadingConnectionRequest}
+                        onClick={sendConnectRequest}
+                      >Connect To Unlock</Button>
+                      : <Button variant="outline" className='text-xl' onClick={()=>setShowModal(true)}>Message</Button>
+                  }
+              </div>
+              <UserInformation user_info ={student_details}/>
+          </div>
         </div>
 
         <TranscriptSection />
+
+        <GoalAndSkills student_details={student_details}/>
 
         <CustomModal handleClose={()=>setShowModal(false)} show={showModal}   title="Connect with Student" modalClass="w-full max-w-[85%] lg:w-[750px] !rounded-2xl">
             <form onSubmit={handleSubmit}>
