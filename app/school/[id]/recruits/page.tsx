@@ -11,6 +11,10 @@ const RECRUITER_COLUMNS = [
     render: (row) => `${row.student.user.first_name} ${row.student.user.last_name}`,
   },
   {
+    title: "High School",
+    render: (row) => `${row.student.high_school}`,
+  },
+  {
     title: "Application Status",
     render: (row) => 
       row.applicant_status ? row.applicant_status :
