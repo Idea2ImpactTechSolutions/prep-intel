@@ -1,5 +1,5 @@
 "use client"
-import { PageHeading, PageContent } from "@/components/common-page";
+import { PageHeader, PageContent } from "@/components/common-page";
 import { Button } from "@/components/ui/button";
 import { setSchoolInformation } from "@/redux/features/school/managerSlice";
 import { useLazyGetSchoolProfileQuery } from "@/redux/services/school/managerApi";
@@ -44,7 +44,7 @@ export default function MySchool() {
 
     return (
       <>
-                <PageHeading
+                <PageHeader
                         title={
                             <>
                                 {school_data?.name}

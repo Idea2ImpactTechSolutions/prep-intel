@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useParams } from "next/navigation";
-import { PageHeading, PageContent } from "@/components/common-page";
+import { PageHeader, PageContent } from "@/components/common-page";
 
 export default function Page() {
   const pageParams = useParams();
@@ -20,7 +20,7 @@ export default function Page() {
 
   return (
     <>
-    <PageHeading title="My Dashboard" />
+    <PageHeader title="My Dashboard" />
     <PageContent>
       <section className="flex items-center justify-between">
         <div

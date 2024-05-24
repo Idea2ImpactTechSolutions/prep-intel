@@ -1,6 +1,6 @@
 "use client"
 import { CompletionPanel } from "@/components/completion-panel";
-import { PageHeading, PageContent } from "@/components/common-page";
+import { PageHeader, PageContent } from "@/components/common-page";
 import { Button } from "@/components/ui/button";
 import { setSchoolInformation } from "@/redux/features/school/managerSlice";
 import { useLazyGetSchoolProfileQuery, usePublishSchoolProfileMutation } from "@/redux/services/school/managerApi";
@@ -83,7 +83,7 @@ export default function SchoolPreview() {
                             </h1>
                         </div>
                         <div className="border-t"> </div>
-                        <PageHeading
+                        <PageHeader
                             title={
                                 <>
                                     {school_data?.name || "University of Saturn"}

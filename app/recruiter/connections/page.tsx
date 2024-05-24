@@ -5,7 +5,7 @@ import { useGetRecruitsQuery } from "@/redux/services/recruiter/recruiterApi";
 import { useState } from "react";
 import Link from "next/link";
 import { GoChevronRight } from "react-icons/go";
-import { PageHeading, PageContent } from "@/components/common-page";
+import { PageHeader, PageContent } from "@/components/common-page";
 import DataTable from "@/components/ui/data-table";
 import StudentPanel from "../_components/student-panel";
 import { cn } from "@/lib/utils";
@@ -76,7 +76,7 @@ export default function Page() {
 
   return (
     <>
-      <PageHeading
+      <PageHeader
         title={
           <div className="flex items-center gap-2">
             {!studentId ? (

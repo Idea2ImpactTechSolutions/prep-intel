@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useLazyGetStudentRecruiterConnectionsQuery } from "@/redux/services/student/studentApi";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { PageHeading, PageContent } from "@/components/common-page";
+import { PageHeader, PageContent } from "@/components/common-page";
 
 export default function StudentConnection() {
   const [availableConnections, setAvailableConnections] = useState([])
@@ -35,7 +35,7 @@ export default function StudentConnection() {
 
   return (
     <>
-    <PageHeading
+    <PageHeader
         title="Recruiter Connections"
         subtitle="Discover your ideal university match here." />
     <PageContent>

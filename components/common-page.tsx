@@ -16,7 +16,7 @@ type ContentProps = {
   children?: React.ReactNode;
 }
 
-export function PageHeading({title, subtitle, rightContent, titleClass, className, children}: TitleProps) {
+export function PageHeader({title, subtitle, rightContent, titleClass, className, children}: TitleProps) {
   return (
     <>
     <section className={cn("pi-container flex items-center justify-between", className)}>

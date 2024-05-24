@@ -6,7 +6,7 @@ import DiscoverPanel from "../_components/discover-panel";
 import StudentPanel from "../_components/student-panel";
 import Link from "next/link";
 import { GoChevronRight } from "react-icons/go";
-import { PageHeading, PageContent } from "@/components/common-page";
+import { PageHeader, PageContent } from "@/components/common-page";
 import { cn } from "@/lib/utils";
 
 export default function Page() {
@@ -16,7 +16,7 @@ export default function Page() {
 
   return (
     <>
-      <PageHeading
+      <PageHeader
         title={
             !studentId ? "Discover New Recruits" : <div className="flex items-center gap-2">
               <Link href="#" className="underline" onClick={() => { setStudentId(''); return false;}}>Search Results</Link>

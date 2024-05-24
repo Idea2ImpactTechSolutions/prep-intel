@@ -1,7 +1,7 @@
 import { Image as LucidImage } from 'lucide-react'
 import React from 'react'
 import { Button } from './ui/button'
-import { PageHeading, PageContent } from "@/components/common-page";
+import { PageHeader, PageContent } from "@/components/common-page";
 import { cn } from '@/lib/utils'
 
 type EmptyStateContainerType = {
@@ -17,7 +17,7 @@ type EmptyStateContainerType = {
 export default function EmptyStateContainer({ show, pageTitle, title, content, onClick, buttonName }: EmptyStateContainerType) {
     return (
         <section className={cn(!show && 'hidden')}>
-            <PageHeading title={pageTitle} />
+            <PageHeader title={pageTitle} />
             <PageContent>
             <section className='!py-6 md:!py-20 '>
                 <div className='w-full md:w-[30rem] md:mx-auto'>

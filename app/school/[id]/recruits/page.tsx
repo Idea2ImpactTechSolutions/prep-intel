@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { PageHeading, PageContent } from "@/components/common-page";
+import { PageHeader, PageContent } from "@/components/common-page";
 import { useParams } from "next/navigation";
 import { useLazyGetRecruitsQuery } from "@/redux/services/school/managerApi";
 import DataTable from "components/ui/data-table";
@@ -59,7 +59,7 @@ export default function Page() {
 
   return (
     <>
-      <PageHeading title="Recruits" />
+      <PageHeader title="Recruits" />
       <PageContent>
         <DataTable
           title="Recruits"

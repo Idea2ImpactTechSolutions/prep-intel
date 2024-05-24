@@ -12,7 +12,7 @@ import Select from "react-select";
 import { toast } from "sonner";
 import SchoolView from "../_components/school-view";
 import useDelayedFunction from "@/utils/hooks/useDelayedFunction";
-import { PageHeading, PageContent } from "@/components/common-page";
+import { PageHeader, PageContent } from "@/components/common-page";
 import { cn } from "@/lib/utils";
 
 const options = [
@@ -149,7 +149,7 @@ export default function Page() {
 
   return (
     <>
-      <PageHeading
+      <PageHeader
         title="Select the states you would like to explore"
         subtitle="Discover your ideal university match here."
       />

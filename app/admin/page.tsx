@@ -11,7 +11,7 @@ import { IconInput } from "@/components/ui/icon-input";
 import { FaSearch } from "react-icons/fa";
 import { useLazyGetSchoolsQuery } from "@/redux/services/admin/adminApi";
 import Link from "next/link";
-import { PageHeading, PageContent } from "@/components/common-page";
+import { PageHeader, PageContent } from "@/components/common-page";
 
 export default function AdminPage() {
   const [claimUrl, setClaimUrl] = useState("");
@@ -41,7 +41,7 @@ export default function AdminPage() {
 
   return (
     <>
-    <PageHeading title="Site Admin" />
+    <PageHeader title="Site Admin" />
     <PageContent>
       <div className="flex w-full rows p-0 mt-2 space-x-6 self-center">
         <CreateSchoolManagerForm setClaimUrl={setClaimUrl} />

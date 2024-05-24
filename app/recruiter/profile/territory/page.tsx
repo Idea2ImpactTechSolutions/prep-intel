@@ -1,7 +1,7 @@
 "use client";
 import UsMap from "@/components/UsMap";
 import LoadingSpinner from "@/components/loading-spinner";
-import { PageHeading, PageContent } from "@/components/common-page";
+import { PageHeader, PageContent } from "@/components/common-page";
 import { Button } from "@/components/ui/button";
 import { useLazyGetRecruiterQuery, useSetTerritoriesMutation } from "@/redux/services/recruiter/recruiterApi";
 import { useSession } from "next-auth/react";
@@ -124,7 +124,7 @@ export default function Page() {
 
   return (
     <>
-    <PageHeading title="My Territories" />
+    <PageHeader title="My Territories" />
     <PageContent>
       <div className="w-full overflow-x-auto">
         <UsMap activeStates={activeStates} setActiveStates={setActiveStates} ></UsMap>

@@ -1,5 +1,5 @@
 "use client"
-import { PageHeading, PageContent } from "@/components/common-page";
+import { PageHeader, PageContent } from "@/components/common-page";
 import CreatePersonnel from "./_components/create-personnel"
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
@@ -66,7 +66,7 @@ export default function AdminPage() {
 
     return (
       <>
-      <PageHeading
+      <PageHeader
                 title={
                     <>
                         {currentView === "VIEW_ADMIN" && 'Admin'}
@@ -90,7 +90,7 @@ export default function AdminPage() {
                       title="Create Recruiter"
                       onClick={() => setCurrentView("CREATE_RECRUITER")} />
                 </div>
-        </PageHeading>
+        </PageHeader>
         <PageContent>
             <div className={cn(
                 currentView === "VIEW_ADMIN" ? "block" : 'hidden'
