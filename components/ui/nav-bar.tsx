@@ -81,7 +81,7 @@ export function Navbar({tabs, leftContent, showTabs=true }: NavbarProps) {
             ></div>}
             <nav className={cn(
                //width < 768 && "p-4",
-              "pi-container flex items-center !bg-sky-50")}>
+              "pi-container flex items-center")}>
                 <Link
                     href="/"
                     className="hidden md:block"

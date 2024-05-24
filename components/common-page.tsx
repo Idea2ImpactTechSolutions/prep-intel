@@ -19,7 +19,7 @@ type ContentProps = {
 export function PageHeading({title, subtitle, rightContent, titleClass, className, children}: TitleProps) {
   return (
     <>
-    <section className={cn("pi-container flex items-center justify-between !bg-sky-100", className)}>
+    <section className={cn("pi-container flex items-center justify-between", className)}>
         <h2 className={cn("font-bold md:text-lg", spaceGrotesk.className, titleClass)}>
           {title}
           {
@@ -31,14 +31,14 @@ export function PageHeading({title, subtitle, rightContent, titleClass, classNam
         </h2>
         <div>{rightContent || children}</div>
     </section>
-    {/* <hr className="border-t border-gray-300" /> */}
+    <hr className="border-t border-gray-300" />
     </>
   )
 }
 
 export function PageContent({className, children}: ContentProps) {
   return (
-    <div className={cn("pi-container mb-6 md:!mb-8 rounded-b-lg !bg-sky-50", className)}>
+    <div className={cn("pi-container mb-6 md:!mb-8 rounded-b-lg", className)}>
       {children}
     </div>
   )
