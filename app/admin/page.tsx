@@ -61,7 +61,7 @@ export default function AdminPage() {
             Student Portal
           </Button>
           <Button
-            onClick={() => router.push("/recruiter/profile/welcome")}
+            onClick={() => router.push("/recruiter/dashboard")}
             type="button"
             variant="outline"
           >
