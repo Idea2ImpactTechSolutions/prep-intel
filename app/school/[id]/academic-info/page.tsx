@@ -9,7 +9,7 @@ import { FormSection } from "@/components/form-section";
 import { toast } from "sonner";
 import { useAppDispatch } from "@/redux/store";
 import { setSchoolInformation } from "@/redux/features/school/managerSlice";
-import LoadingSpinner from "../../_components/loading-spinner";
+import LoadingSpinner from "@/components/loading-spinner";
 import FormFooter from "../../_components/form-footer";
 import ProfilePublishedLabel from "@/components/profile-published-label";
 import { PageContent } from "@/components/common-page";

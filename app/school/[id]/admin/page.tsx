@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { LucideChevronLeft } from "lucide-react"
-import LoadingSpinner from "../../_components/loading-spinner"
+import LoadingSpinner from "@/components/loading-spinner"
 import { useLazyGetPersonnelQuery } from "@/redux/services/school/managerApi"
 import {TitlebarButton } from "@/components/ui/titlebar-button"
 import InviteLink from "components/ui/invite-link";

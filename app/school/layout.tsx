@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/store'
 import { setSchoolInformation } from '@/redux/features/school/managerSlice'
 import EmptyStateContainer from '@/components/empty-state'
 import { usePathname, useRouter, useParams } from 'next/navigation'
-import LoadingSpinner from './_components/loading-spinner'
+import LoadingSpinner from '@/components/loading-spinner'
 import { Dictionary } from '@/types/dictionary'
 import { GraduationCap, LayoutGrid, Lock, UserPlus } from "lucide-react"
 
