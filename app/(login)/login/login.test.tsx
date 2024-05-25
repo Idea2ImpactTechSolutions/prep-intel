@@ -7,28 +7,32 @@ import React from 'react';
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-
 const ROLE_ROUTE_MAPPER = {
   "admin": "/admin",
   "manager": "school/123456/dashboard",
   "recruiter": "/recruiter/dashboard",
   "student": "/student/onboarding/vitals"
 };
+
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
   useSearchParams: jest.fn()
 }));
 
-jest.mock('next-auth/react', () => ({
+jest.mock("next-auth/react", () => ({
   useSession: jest.fn(),
 }));
 
+jest.mock("./forgot-password", () => ({
+  __esModule: true,
+  default: jest.fn(),
+}));
 
 describe("Login Page", () => {
     it("renders a heading", () => {
       (useSession as jest.Mock).mockReturnValueOnce({})
       render(<Page/>);
-  
+
       const button = screen.getByText("Sign In");
       expect(button).toBeInTheDocument();
     });
