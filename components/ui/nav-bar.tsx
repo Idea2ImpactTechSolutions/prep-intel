@@ -159,10 +159,10 @@ export function Navbar({tabs, leftContent, showTabs=true }: NavbarProps) {
                             </div>)
                 }
 
-                    <div className="flex gap-x-4">
-                        <div className="relative cursor-pointer" onClick={()=>setOpen(true)}>
+                    <div className="flex gap-x-2">
+                        <div className="relative cursor-pointer w-4" onClick={()=>setOpen(true)}>
                             <Bell className="w-4 h-4 "/>
-                            <span className="w-1 h-1 rounded-full bg-red-500 absolute right-0 top-0.5"></span>
+                            <div className="ml-2 w-1 h-1 rounded-full bg-red-500 absolute right-0 top-0.5"></div>
                         </div>
                         <UserMenu />
                     </div>

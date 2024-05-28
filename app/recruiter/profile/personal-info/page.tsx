@@ -13,7 +13,7 @@ import { useSession } from "next-auth/react";
 import LoadingSpinner from "@/components/loading-spinner";
 import CustomFileInput from "@/components/custom-file-input";
 import { cn } from "@/lib/utils";
-
+import { PageContent } from "@/components/common-page";
 
 interface InitialValues {
   phone:string,
@@ -103,7 +103,7 @@ export default function Page() {
   }
 
   return (
-    <div className="pi-container">
+    <PageContent>
         <div className="w-full bg-white">
             <div className="w-full px-5 md:px-0 md:w-[50%] mx-auto">
               <h1 className="text-2xl md:text-3xl text-center font-bold mb-2">Let's Get to Know You</h1>
@@ -209,6 +209,6 @@ export default function Page() {
               </div>
             </div>
         </div>
-    </div>
+    </PageContent>
   );
 }

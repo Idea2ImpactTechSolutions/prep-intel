@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { useUploadAssetMutation, useGetAssetsQuery } from "@/redux/services/assets/assetApi";
 import LoadingSpinner from '@/components/loading-spinner';
 import { FaFileAlt } from "react-icons/fa";
+import { PageContent } from "@/components/common-page";
 
 export default function TranscriptsPage() {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -49,7 +50,7 @@ export default function TranscriptsPage() {
 
   return (
     <>
-      <div className="flex-1 pi-container">
+      <PageContent>
         <SectionContainer title="Upload Important Documents">
           <>
             <p>Important Documents include:</p>
@@ -119,7 +120,7 @@ export default function TranscriptsPage() {
             preventGoBack={false}
             nextBtnLabel="Finish"
           />
-      </div>
+      </PageContent>
       <ConfirmationModal
         title="Are you absolutely sure?"
         description="This action cannot be undone. This will permanently submit your record."

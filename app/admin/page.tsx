@@ -11,6 +11,7 @@ import { IconInput } from "@/components/ui/icon-input";
 import { FaSearch } from "react-icons/fa";
 import { useLazyGetSchoolsQuery } from "@/redux/services/admin/adminApi";
 import Link from "next/link";
+import { PageHeader, PageContent } from "@/components/common-page";
 
 export default function AdminPage() {
   const [claimUrl, setClaimUrl] = useState("");
@@ -39,8 +40,9 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="pi-container">
-      <h1 className="text-2xl font-bold mb-4">Site Admin</h1>
+    <>
+    <PageHeader title="Site Admin" />
+    <PageContent>
       <div className="flex w-full rows p-0 mt-2 space-x-6 self-center">
         <CreateSchoolManagerForm setClaimUrl={setClaimUrl} />
         <CreateSiteAdmin setClaimUrl={setClaimUrl} />
@@ -59,7 +61,7 @@ export default function AdminPage() {
             Student Portal
           </Button>
           <Button
-            onClick={() => router.push("/recruiter/profile/welcome")}
+            onClick={() => router.push("/recruiter/dashboard")}
             type="button"
             variant="outline"
           >
@@ -99,6 +101,7 @@ export default function AdminPage() {
           }
         <PageList schoolId={schoolId} studentId={studentId} />
       </div>
-    </div>
+    </PageContent>
+    </>
   );
 }

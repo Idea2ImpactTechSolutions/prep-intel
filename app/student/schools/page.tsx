@@ -1,5 +1,5 @@
 "use client"
-import PageTitleContainer from "@/components/page-title";
+import { PageHeader, PageContent } from "@/components/common-page";
 import DataTable from "components/ui/data-table";
 import { useGetStudentSchoolsQuery } from "@/redux/services/student/studentApi";
 import { useSession } from "next-auth/react";
@@ -36,15 +36,15 @@ export default function StudentConnection() {
 
   return (
     <>
-      <PageTitleContainer title="Schools" />
-      <section className="pi-container">
+      <PageHeader title="Schools" />
+      <PageContent>
         <DataTable
           title="Schools"
           columns={COLUMNS}
           data={schoolData}
           isLoading={false}
         />
-      </section>
+      </PageContent>
     </>
   )
 }

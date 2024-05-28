@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import CustomSelect from "@/components/custom-select";
 import AssetImage from "@/components/asset-image";
 import { cacheBust } from "@/app/config/helpers";
+import { PageContent } from "@/components/common-page";
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
@@ -107,7 +108,7 @@ export default function VitalsPage() {
   return (
     <>
       <OnboardingTabs className="pi-container" active_step="Vitals" />
-      <div className="pi-container">
+      <PageContent>
         <OnboardingTitle
           title="Complete Your Profile"
           subtitle="Please take a few minutes to fill in your profile so we can customize the opportunities for you."
@@ -277,7 +278,7 @@ export default function VitalsPage() {
             />
           </form>
         </div>
-      </div>
+      </PageContent>
     </>
   );
 }

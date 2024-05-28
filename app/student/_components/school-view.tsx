@@ -1,5 +1,5 @@
 "use client";
-import PageTitleContainer from "@/components/page-title";
+import { PageHeader, PageContent } from "@/components/common-page";
 import { useGetSchoolProfileQuery } from "@/redux/services/school/managerApi";
 import SchoolInformation from "@/components/school-information";
 import LoadingSpinner from "@/components/loading-spinner";
@@ -20,21 +20,17 @@ export default function SchoolView({goBack, schoolId}:PageProps) {
   }
 
   return (
-      <div>
-        <div className="flex flex-col overflow-y-auto">
-          <PageTitleContainer
+    <>
+        <PageHeader
             title={
               <div className="flex items-center gap-4">
                 <Link href="#" className="underline" onClick={() => { goBack(); return false;}}>Explore Schools</Link> <GoChevronRight className="mt-1" />
                 {school_data?.name}
               </div>
-            }
-            titleClass="text-sm"
-          />
-          <div className="pi-container pi-container">
-            <SchoolInformation schoolData={school_data} />
-          </div>
-        </div>
-      </div>
+            } />
+        <PageContent>
+          <SchoolInformation schoolData={school_data} />
+        </PageContent>
+    </>
   );
 }

@@ -1,6 +1,6 @@
 "use client"
 import { CompletionPanel } from "@/components/completion-panel";
-import PageTitleContainer from "@/components/page-title";
+import { PageHeader, PageContent } from "@/components/common-page";
 import { Button } from "@/components/ui/button";
 import { setSchoolInformation } from "@/redux/features/school/managerSlice";
 import { useLazyGetSchoolProfileQuery, usePublishSchoolProfileMutation } from "@/redux/services/school/managerApi";
@@ -10,8 +10,8 @@ import moment from 'moment';
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import SchoolInformation from "@/components/school-information";
-import BottomBar from "../../_components/bottom-bar";
-import LoadingSpinner from "../../_components/loading-spinner";
+import FormFooter from "../../_components/form-footer";
+import LoadingSpinner from "@/components/loading-spinner";
 import { useFormik } from "formik";
 import { toast } from "sonner";
 import ProfilePublishedLabel from "@/components/profile-published-label";
@@ -83,7 +83,7 @@ export default function SchoolPreview() {
                             </h1>
                         </div>
                         <div className="border-t"> </div>
-                        <PageTitleContainer
+                        <PageHeader
                             title={
                                 <>
                                     {school_data?.name || "University of Saturn"}
@@ -102,18 +102,17 @@ export default function SchoolPreview() {
                                 >
                                     Edit School
                                 </Button>
-                            }
-                        />
-                        <div className="pi-container">
+                            } />
+                        <PageContent>
                           <SchoolInformation schoolData={school_data}/>
-                        </div>
+                          <FormFooter
+                              onBack={() => router.push(`/school/${schoolId}/academic-info`)}
+                              onSaveForLater={() => null}
+                              isBackDisabled={false}
+                              isSubmitting={isPublishingSchool}
+                          />
+                        </PageContent>
                     </div>
-                    <BottomBar
-                        onBack={() => router.push(`/school/${schoolId}/academic-info`)}
-                        onSaveForLater={() => null}
-                        isBackDisabled={false}
-                        isSubmitting={isPublishingSchool}
-                    />
                 </form>
             </div>
         </>

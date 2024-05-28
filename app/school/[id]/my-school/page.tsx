@@ -1,5 +1,5 @@
 "use client"
-import PageTitleContainer from "@/components/page-title";
+import { PageHeader, PageContent } from "@/components/common-page";
 import { Button } from "@/components/ui/button";
 import { setSchoolInformation } from "@/redux/features/school/managerSlice";
 import { useLazyGetSchoolProfileQuery } from "@/redux/services/school/managerApi";
@@ -43,10 +43,8 @@ export default function MySchool() {
       }
 
     return (
-        <>
-            <div>
-                <div className="flex flex-col overflow-y-auto">
-                    <PageTitleContainer
+      <>
+                <PageHeader
                         title={
                             <>
                                 {school_data?.name}
@@ -65,14 +63,10 @@ export default function MySchool() {
                           >
                               Edit School
                           </Button>
-                        }
-                    />
-
-                    <div className="pi-container">
+                        } />
+                <PageContent>
                       <SchoolInformation schoolData={school_data} />
-                    </div>
-                </div>
-            </div>
+                </PageContent>
         </>
     )
 }

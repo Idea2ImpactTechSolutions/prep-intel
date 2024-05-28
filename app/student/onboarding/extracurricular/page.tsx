@@ -3,19 +3,16 @@ import OnboardingFooter from "@/app/student/_components/onboarding-footer";
 import CustomCheckbox from "@/components/custom-checkbox";
 import SectionContainer from "@/components/section-container";
 import LoadingSpinner from "@/components/loading-spinner";
-
 import { Input } from "@/components/ui/input";
-
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { useAddStudentExtracurricularMutation, useLazyGetStudentExtracurricularQuery } from "@/redux/services/student/studentApi";
 import { Button } from "@/components/ui/button";
-
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import OnboardingTabs from "../../_components/onboarding-tabs";
 import OnboardingTitle from "../../_components/onboarding-title";
-
+import { PageContent } from "@/components/common-page";
 import EXTRACURRICULAR_ACTIVITIES from "../../../../data/extracurricular.json";
 
 const categories = [
@@ -118,7 +115,7 @@ export default function ExtracurricularPage() {
   return (
     <>
     <OnboardingTabs className="pi-container" active_step="Extracurricular" />
-    <div className="pi-container">
+    <PageContent>
       <OnboardingTitle
           title="Choose your interested Extracurricular Activities"
           subtitle="How do you pass time?"
@@ -167,7 +164,7 @@ export default function ExtracurricularPage() {
               >
                 <>
                 {selectedExtracurriculars?.length ?
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-x-8">
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:gap-x-8">
                     {
                       selectedExtracurriculars.map((item) => (
                       <CustomCheckbox
@@ -190,7 +187,7 @@ export default function ExtracurricularPage() {
              {/* Search bar section */}
             {searchTerm && (
             <SectionContainer title="Search Results">
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-x-8">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:gap-x-8">
                 {filteredActivities.map(({ id, name }) => (
                 <CustomCheckbox
                   key={name}
@@ -257,8 +254,8 @@ export default function ExtracurricularPage() {
         loading={isAddingStudentExtracurricular}
       />
     </form>
-    </div>
-    </div>
+      </div>
+    </PageContent>
     </>
   )
 }

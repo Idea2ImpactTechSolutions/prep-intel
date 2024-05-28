@@ -1,7 +1,7 @@
 "use client";
 import UsMap from "@/components/UsMap";
 import LoadingSpinner from "@/components/loading-spinner";
-import PageTitleContainer from "@/components/page-title";
+import { PageHeader, PageContent } from "@/components/common-page";
 import { Button } from "@/components/ui/button";
 import { useLazyGetRecruiterQuery, useSetTerritoriesMutation } from "@/redux/services/recruiter/recruiterApi";
 import { useSession } from "next-auth/react";
@@ -124,8 +124,8 @@ export default function Page() {
 
   return (
     <>
-    <PageTitleContainer title="My Territories" />
-    <div className="pi-container">
+    <PageHeader title="My Territories" />
+    <PageContent>
       <div className="w-full overflow-x-auto">
         <UsMap activeStates={activeStates} setActiveStates={setActiveStates} ></UsMap>
       </div>
@@ -159,7 +159,7 @@ export default function Page() {
         </div>
       </>
       }
-    </div>
+    </PageContent>
     </>
   );
 }

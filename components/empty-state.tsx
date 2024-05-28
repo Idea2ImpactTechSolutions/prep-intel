@@ -1,7 +1,7 @@
 import { Image as LucidImage } from 'lucide-react'
 import React from 'react'
 import { Button } from './ui/button'
-import PageTitleContainer from './page-title'
+import { PageHeader, PageContent } from "@/components/common-page";
 import { cn } from '@/lib/utils'
 
 type EmptyStateContainerType = {
@@ -14,13 +14,12 @@ type EmptyStateContainerType = {
     onClick?: () => void
 }
 
-export default function EmptyStateContainer({ show, pageTitle, pageTitleRightContent, title, content, onClick, buttonName }: EmptyStateContainerType) {
+export default function EmptyStateContainer({ show, pageTitle, title, content, onClick, buttonName }: EmptyStateContainerType) {
     return (
         <section className={cn(!show && 'hidden')}>
-            <PageTitleContainer
-                title={pageTitle}
-            />
-            <section className='pi-container !py-6 md:!py-20 '>
+            <PageHeader title={pageTitle} />
+            <PageContent>
+            <section className='!py-6 md:!py-20 '>
                 <div className='w-full md:w-[30rem] md:mx-auto'>
                     <div className='p-5 px-6 md:px-10 w-fit mx-auto flex flex-col items-center border-2 border-primary rounded-[6px] bg-white'>
                         <LucidImage className='w-4 h-4 text-primary' />
@@ -36,6 +35,7 @@ export default function EmptyStateContainer({ show, pageTitle, pageTitleRightCon
                     </div>
                 </div>
             </section>
+            </PageContent>
         </section>
     )
 }

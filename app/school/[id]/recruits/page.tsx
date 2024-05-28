@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import PageTitleContainer from "@/components/page-title";
+import { PageHeader, PageContent } from "@/components/common-page";
 import { useParams } from "next/navigation";
 import { useLazyGetRecruitsQuery } from "@/redux/services/school/managerApi";
 import DataTable from "components/ui/data-table";
@@ -16,7 +16,7 @@ const RECRUITER_COLUMNS = [
   },
   {
     title: "Application Status",
-    render: (row) => 
+    render: (row) =>
       row.applicant_status ? row.applicant_status :
       row.application_status ? row.application_status :
       "Not Applied",
@@ -58,16 +58,16 @@ export default function Page() {
   }, [schoolId]);
 
   return (
-    <section>
-      <PageTitleContainer title="Recruits" />
-      <section className="pi-container">
+    <>
+      <PageHeader title="Recruits" />
+      <PageContent>
         <DataTable
           title="Recruits"
           columns={RECRUITER_COLUMNS}
           data={recruits}
           isLoading={isLoading}
         />
-      </section>
-    </section>
+      </PageContent>
+    </>
   );
 }

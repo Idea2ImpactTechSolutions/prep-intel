@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useParams } from "next/navigation";
-import PageTitleContainer from "@/components/page-title";
+import { PageHeader, PageContent } from "@/components/common-page";
 
 export default function Page() {
   const pageParams = useParams();
@@ -19,9 +19,10 @@ export default function Page() {
   };
 
   return (
-    <section>
-      <PageTitleContainer title="My Dashboard" />
-      <section className="pi-container flex items-center justify-between">
+    <>
+    <PageHeader title="My Dashboard" />
+    <PageContent>
+      <section className="flex items-center justify-between">
         <div
           className="grid grid-cols-4 grid-rows-3 gap-4 w-full"
           style={{ gridTemplateColumns: "1fr 1fr 1fr 2fr" }}
@@ -59,6 +60,7 @@ export default function Page() {
           </div>
         </div>
       </section>
-    </section>
+    </PageContent>
+    </>
   );
 }
