@@ -2,7 +2,6 @@ import { apiResponse } from "app/config/helpers";
 import { models } from "../../models";
 import { type NextRequest } from "next/server";
 import { sequelize } from "../../models";
-import { Op, fn, col } from 'sequelize';
 const { Messages, Recruiters, School, Students, Users } = models;
 
 /**
