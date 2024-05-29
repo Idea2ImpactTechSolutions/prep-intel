@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 import type { NextRequest } from "next/server";
-import { responseBody, apiResponse } from "@/app/config/helpers";
+import { apiResponse } from "@/app/config/helpers";
 import { models } from "@/app/models";
 import { fn, col } from 'sequelize';
 const {
@@ -50,6 +50,7 @@ const GET_FIELDS = [
  *         description: The ID of the student to retrieve.
  *     tags:
  *       - student
+ *       - recruit
  *     responses:
  *       '200':
  *         description: Connection requests found
@@ -67,12 +68,8 @@ export async function GET(
     { params }: { params: { studentId: number } }
   ) {
   try {
-    // Collect
-    const userRole : {role: string} = await getUserRole(
-      params.studentId
-    );
-
-    if (userRole.role !== 'student') {
+    const student = await Students.findByPk(params.studentId);
+    if (!student) {
       return apiResponse("Not Found", 404);
     }
 
@@ -154,18 +151,14 @@ export async function PATCH(
     { params }: { params: { studentId: number } }
   ) {
   try {
-    // Collect
-    const userRole : {role: string} = await getUserRole(
-      params.studentId
-    );
-    if (userRole.role !== 'student') {
+    const student = await Students.findByPk(params.studentId);
+    if (!student) {
       return apiResponse("Not Found", 404);
     }
 
     const inputData : any = await req.json();
 
-    const validInputData = validateRequestBody(req.method, inputData);
-    if (!validInputData) {
+    if (!validateRequestBody(req.method, inputData)) {
       return apiResponse("Bad Request", 400);
     }
 
@@ -185,7 +178,7 @@ export async function PATCH(
     await addStudentResponse(connectionRequest, updateAttributes);
 
     //Report
-    return Response.json(responseBody("No Content", 204), { status: 200 });
+    return apiResponse("No Content", 204);
   } catch (error: any) {
     // Report
     return apiResponse("Internal Server Error", 500, { error: error.message });
@@ -239,16 +232,14 @@ export async function POST(
   { params }: { params: { studentId: number } },
 ) {
   try {
-    // Collect
     const student = await Students.findByPk(params.studentId);
-
     if ( !student ) {
       return apiResponse("Not Found", 404);
     }
 
     const inputData = await req.json();
     if (Object.keys(inputData).length == 0) {
-      return Response.json(responseBody("No Content", 204), { status: 200 });
+      return apiResponse("No Content", 204);
     }
 
     const validInputData = validateRequestBody(req.method, inputData);
@@ -294,23 +285,6 @@ export async function POST(
   }
 }
 
-async function getUserRole(studentId) {
-  return await Students.findOne({
-    where: {
-      id: studentId,
-    },
-    attributes: ['user.role'],
-    include: [{
-      model: Users,
-      required: true,
-      attributes: [],
-      where: {
-        role: 'student'
-      }
-    }],
-    raw: true
-  });
-}
 
 function validateRequestBody(method: string, requestBody) {
   switch (method) {
