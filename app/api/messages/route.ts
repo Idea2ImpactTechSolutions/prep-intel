@@ -360,14 +360,3 @@ async function sendMessageFromStudentToSchool(data) {
 
   return apiResponse("Message sent successfully", 201);
 }
-
-function includeUsersModel(roleModel) {
-    return {
-      model: roleModel,
-      attributes: ['id'],
-      include: {
-        model: Users,
-        attributes: ['first_name', 'last_name', 'email']
-      }
-    };
-}
