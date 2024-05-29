@@ -1,6 +1,8 @@
 import { apiResponse } from "app/config/helpers";
 import { models } from "../../models";
 import { type NextRequest } from "next/server";
+import { sequelize } from "../../models";
+import { Op, fn, col } from 'sequelize';
 const { Messages, Recruiters, School, Students, Users } = models;
 
 /**
@@ -38,49 +40,162 @@ const { Messages, Recruiters, School, Students, Users } = models;
  *       '500':
  *         description: Internal server error
  */
+
+
+
+
 export async function GET(req: NextRequest) {
   try {
-      const { searchParams } = req.nextUrl;
-      const recruiter_id = searchParams.get("recruiter_id");
-      const student_id = searchParams.get("student_id");
-      const school_id = searchParams.get("school_id");
-      const recent = searchParams.get("recent") === "true";
+    const { searchParams } = req.nextUrl;
+    const recruiter_id = searchParams.get("recruiter_id");
+    const student_id = searchParams.get("student_id");
+    const school_id = searchParams.get("school_id");
+    const recent = searchParams.get("recent") === "true";
 
-      if (!recruiter_id && !student_id && !school_id) {
-        return apiResponse("Missing required query parameters: recruiter_id, student_id, or school_id", 400);
-      }
-
-      let whereClause = {};
-      let modelsToInclude: object[] = [];
-
-      if (recruiter_id) {
-        whereClause['recruiter_id'] = recruiter_id;
-        modelsToInclude.push(includeUsersModel(Recruiters));
-      }
-      if (student_id) {
-        whereClause['student_id'] = student_id;
-        modelsToInclude.push(includeUsersModel(Students));
-      }
-      if (school_id) {
-        whereClause['school_id'] = school_id;
-        modelsToInclude.push({
-          model: School,
-          attributes: ['name']
-        });
-      }
-
-      const messages = await Messages.findAll({
-          where: whereClause,
-          include: modelsToInclude,
-          order: [['create_date', 'DESC']],
-          ...(recent && { limit: 1 }) // If 'recent' is true, only fetch the most recent message
+    if (recruiter_id && student_id) {
+      // Return all messages between a specific recruiter and student
+      const messagesList = await Messages.findAll({
+        where: {
+          recruiter_id,
+          student_id,
+        },
+        include: [
+          {
+            model: Recruiters,
+            attributes: ['id'],
+            include: {
+              model: Users,
+              attributes: ['first_name', 'last_name', 'profile_image'],
+            },
+          },
+          {
+            model: Students,
+            attributes: ['id'],
+            include: {
+              model: Users,
+              attributes: ['first_name', 'last_name', 'profile_image'],
+            },
+          },
+        ],
+        Sorder: [['message.create_date', 'DESC']],
       });
 
-      return apiResponse("Messages retrieved successfully", 200, messages );
-  } catch (error : any) {
+      const formattedMessages = messagesList.map((message) => ({
+        ...message.toJSON(),
+        sender_image: message.sender_role === 'recruiter' ? message.recruiter.user.profile_image : message.student.user.profile_image,
+        sender_name: message.sender_role === 'recruiter' ? `${message.recruiter.user.first_name} ${message.recruiter.user.last_name}` : `${message.student.user.first_name} ${message.student.user.last_name}`,
+      }));
+
+      return apiResponse("Messages retrieved successfully", 200, formattedMessages);
+    } else if (student_id && school_id) {
+      // Return all messages between a student and a school
+      const messagesList = await Messages.findAll({
+        where: {
+          student_id,
+          school_id,
+        },
+        include: [
+          {
+            model: Students,
+            attributes: ['id'],
+            include: {
+              model: Users,
+              attributes: ['first_name', 'last_name', 'profile_image'],
+            },
+          },
+          {
+            model: School,
+            attributes: ['name'],
+          },
+        ],
+        order: [['message.create_date', 'DESC']],
+      });
+
+      const formattedMessages = messagesList.map((message) => ({
+        ...message.toJSON(),
+        sender_image: message.sender_role === 'recruiter' ? message.recruiter.user.profile_image : message.student.user.profile_image,
+        sender_name: message.sender_role === 'recruiter' ? `${message.recruiter.user.first_name} ${message.recruiter.user.last_name}` : `${message.student.user.first_name} ${message.student.user.last_name}`,
+      }));
+
+      return apiResponse("Messages retrieved successfully", 200, formattedMessages);
+    } 
+    else if (recruiter_id && recent) {
+      // Return the most recent message from each conversation for a student
+      const messagesList = await sequelize.query(
+        `SELECT DISTINCT ON (student_id)
+            m.id,
+            m.message_text,
+            m.create_date,
+            m.recipient_role,
+            m.recruiter_id,
+            m.school_id,
+            m.sender_role,
+            m.status,
+            m.student_id,
+            u.first_name,
+            u.last_name,
+            u.profile_image
+         FROM messages m
+         JOIN students s ON m.student_id = s.id
+         JOIN users u ON s.user_id = u.id
+         WHERE m.recruiter_id = ?
+         ORDER BY student_id, create_date DESC`, 
+        {
+          replacements: [recruiter_id],
+          type: sequelize.QueryTypes.SELECT,
+        }
+      );
+
+      const formattedMessages = messagesList.map((message) => ({
+        ...message,
+        sender_image: message.profile_image,
+        sender_name: `${message.first_name} ${message.last_name}`,
+      }));
+
+      return apiResponse("Messages retrieved successfully", 200, formattedMessages);
+    }
+    else if (student_id && recent) {
+      // Return the most recent message from each conversation for a student
+      const messagesList = await sequelize.query(
+        `SELECT DISTINCT ON (recruiter_id)
+            m.id,
+            m.message_text,
+            m.create_date,
+            m.recipient_role,
+            m.recruiter_id,
+            m.school_id,
+            m.sender_role,
+            m.status,
+            m.student_id,
+            u.first_name,
+            u.last_name,
+            u.profile_image
+         FROM messages m
+         JOIN recruiters r ON m.recruiter_id = r.id
+         JOIN users u ON r.user_id = u.id
+         WHERE m.student_id = ?
+         ORDER BY recruiter_id, create_date DESC`, 
+        {
+          replacements: [student_id],
+          type: sequelize.QueryTypes.SELECT,
+        }
+      );
+
+      const formattedMessages = messagesList.map((message) => ({
+        ...message,
+        sender_image: message.profile_image,
+        sender_name: `${message.first_name} ${message.last_name}`,
+      }));
+
+      return apiResponse("Messages retrieved successfully", 200, formattedMessages);
+    } else {
+      return apiResponse("Invalid parameter combination", 400);
+    }
+  } catch (error: any) {
     return apiResponse("Internal Server Error", 500, { error: error.message });
   }
 }
+
 
 /**
  * @openapi
