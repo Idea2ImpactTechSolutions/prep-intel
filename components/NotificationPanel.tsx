@@ -10,7 +10,6 @@ import { useFormik } from "formik";
 import * as yup from "yup"
 import { Textarea } from "./ui/textarea";
 import { useLazyGetMessagesQuery, useSendMessageMutation} from "@/redux/services/user/userApi";
-import { dateTimeDifference } from "@/utils/helpers/date-format";
 import { toast } from "sonner";
 import moment from "moment";
 import { useLazyGetConnectionRequestsQuery, useUpdateConnectionRequestsMutation } from "@/redux/services/student/studentApi";
