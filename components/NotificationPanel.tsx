@@ -278,7 +278,7 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
                   id='message'
                   name="message"
                   className='w-full mt-2 rounded-xl'
-                  placeholder='Enter your message here playboy'
+                  placeholder='Enter your message here'
                   rows={2}
                   value={values.message}
                   onChange={handleChange}
