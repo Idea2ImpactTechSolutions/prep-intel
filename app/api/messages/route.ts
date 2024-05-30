@@ -76,7 +76,7 @@ export async function GET(req: NextRequest) {
             },
           },
         ],
-        Sorder: [['message.create_date', 'DESC']],
+        order: [['create_date', 'DESC']],
       });
 
       const formattedMessages = messagesList.map((message) => ({
@@ -117,7 +117,7 @@ export async function GET(req: NextRequest) {
       }));
 
       return apiResponse("Messages retrieved successfully", 200, formattedMessages);
-    } 
+    }
     else if (recruiter_id && recent) {
       // Return the most recent message from each conversation for a student
       const messagesList = await sequelize.query(
@@ -138,7 +138,7 @@ export async function GET(req: NextRequest) {
          JOIN students s ON m.student_id = s.id
          JOIN users u ON s.user_id = u.id
          WHERE m.recruiter_id = ?
-         ORDER BY student_id, create_date DESC`, 
+         ORDER BY student_id, create_date DESC`,
         {
           replacements: [recruiter_id],
           type: sequelize.QueryTypes.SELECT,
@@ -173,7 +173,7 @@ export async function GET(req: NextRequest) {
          JOIN recruiters r ON m.recruiter_id = r.id
          JOIN users u ON r.user_id = u.id
          WHERE m.student_id = ?
-         ORDER BY recruiter_id, create_date DESC`, 
+         ORDER BY recruiter_id, create_date DESC`,
         {
           replacements: [student_id],
           type: sequelize.QueryTypes.SELECT,

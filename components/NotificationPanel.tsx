@@ -191,10 +191,8 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
   };
 
   const getProfileImage = (message) => {
-    if (message.sender_role !== senderRole) {
-      return message.sender_image || <DefaultProfileImage />;
-    }
-    return message.receiver_image || <DefaultProfileImage />;
+    const imgUrl = message.sender_role !== senderRole ? message.sender_image : message.receiver_image;
+    return imgUrl ? <img src={imgUrl} alt="Profile" className="w-full h-full object-cover" /> : <DefaultProfileImage />;
   };
 
   useEffect(() => {
