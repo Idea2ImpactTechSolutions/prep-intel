@@ -10,10 +10,10 @@ import { useFormik } from "formik";
 import * as yup from "yup"
 import { Textarea } from "./ui/textarea";
 import { useLazyGetMessagesQuery, useSendMessageMutation} from "@/redux/services/user/userApi";
-import { dateTimeDifference } from "@/utils/helpers/date-format";
 import { toast } from "sonner";
 import moment from "moment";
 import { useLazyGetConnectionRequestsQuery, useUpdateConnectionRequestsMutation } from "@/redux/services/student/studentApi";
+import DefaultProfileImage  from '../public/images/default-profile-img';
 
 interface NotificationPanelProp {
   open:boolean,
@@ -87,8 +87,12 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
     }),
     onSubmit:async (values, {resetForm})=>{
       try {
-        const res = await sendMessage({recruiter_id: viewMessages[0]?.recruiter_id, student_id:viewMessages[0]?.student_id, sender_role:senderRole, message_text:values?.message}).unwrap()
-
+        const res = await sendMessage({
+                                        recruiterId: viewMessages[0]?.recruiter_id, 
+                                        studentId:viewMessages[0]?.student_id, 
+                                        senderRole:senderRole, 
+                                        message:values?.message})
+                                        .unwrap()
         if(res?.status === 201){
           toast.success(res.message)
           handleViewMessage(viewMessages[0])
@@ -178,6 +182,19 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
     setCombineMsgAndConns(combineMessageAndConnections(messages, data?.data))
   },[data, messages])
 
+
+  const getLastMessagePreview = (message) => {
+    if (message.sender_role === senderRole) {
+      return `You: ${message.message_text}`;
+    }
+    return message.message_text;
+  };
+
+  const getProfileImage = (message) => {
+    const imgUrl = message.sender_role !== senderRole ? message.sender_image : message.receiver_image;
+    return imgUrl ? <img src={imgUrl} alt="Profile" className="w-full h-full object-cover" /> : <DefaultProfileImage />;
+  };
+
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollTop = messagesEndRef.current?.scrollHeight;
@@ -194,69 +211,92 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
       >
         {!openMessage ?
           <div className="mt-8 pb-16 h-[90vh] overflow-y-auto lg:mx-5">
-            {(isLoading || isLoadingConns )? <LoadingSpinner className="h-[250px]" /> :
-            combineMsgAndConns?.map((message:any, index:number)=> message?.type === 'message'?
-              <div className="mb-5" key={"msg-request-"+index} onClick={()=>handleViewMessage(message)}>
-                <div className="flex flex-row gap-x-3 justify-between cursor-pointer" >
-                  <p><span className="font-semibold mr-1 capitalize">James Sparks</span>{message?.message_text}</p>
-                  <span className="w-[75px] text-sm text-right">{dateTimeDifference(message?.create_date)}</span>
+            {(isLoading || isLoadingConns) ? <LoadingSpinner className="h-[250px]" /> :
+              combineMsgAndConns?.map((message, index) => message?.type === 'message' ?
+                <div className="mb-5 flex items-start" key={"msg-request-" + index} onClick={() => handleViewMessage(message)}>
+                  <div className="w-8 h-8 mr-3 flex items-center justify-center overflow-hidden rounded-full bg-gray-200">
+                    {getProfileImage(message)}
+                  </div>
+                  <div className="flex flex-col">
+                    <div className="flex items-center">
+                      <span className="font-semibold capitalize mr-2">{message?.sender_name}</span>
+                      <span className="text-sm text-gray-500">{moment(message?.create_date).format('MMM D, h:mm A')}</span>
+                    </div>
+                    <p>{getLastMessagePreview(message)}</p>
+                  </div>
+                </div> :
+                <div className="mb-5 flex items-start" key={"conn-" + index}>
+                  <div className="w-8 h-8 mr-3 flex items-center justify-center overflow-hidden rounded-full bg-gray-200">
+                    {message?.sender_image ? (
+                      <img src={message?.sender_image} alt="Profile" className="w-full h-full object-cover" />
+                    ) : (
+                      <DefaultProfileImage />
+                    )}
+                  </div>
+                  <div className="flex flex-col">
+                    <div className="flex items-center">
+                      <span className="font-semibold capitalize mr-2">{message?.recruiterName}</span>
+                      <span className="text-sm text-gray-500">{moment(message?.requestDate).format('MMM D, h:mm A')}</span>
+                    </div>
+                    <p>{message?.recruiterName} has sent you an invitation to connect. Would you like to share your information and connect?</p>
+                    <div className="flex gap-x-3 mt-2">
+                      <Button variant="outline" size="sm" className="h-7" loading={!accept && connecting && buttonLoading === index} loadingText="Rejecting..." onClick={() => handleAcceptOrRejectConnection(message, false, index)}>No</Button>
+                      <Button variant="default" size="sm" className="h-7" loading={accept && connecting && buttonLoading === index} loadingText="Accepting..." onClick={() => handleAcceptOrRejectConnection(message, true, index)}>Yes</Button>
+                    </div>
+                  </div>
                 </div>
-              </div>:
-              <div className="mb-5" key={"conn-"+index} >
-                <div className="mb-2 flex flex-row gap-x-3 justify-between cursor-pointer">
-                  <p><span className="font-semibold mr-1 capitalize ">{message?.recruiterName}</span> has sent you an invitation to connect. Would you like to share your information and connect? </p>
-                  <span className="w-[75px] text-sm text-right">{dateTimeDifference(message?.requestDate)}</span>
-                </div>
-                <div className="flex flex-row gap-x-3">
-                  <Button variant="outline" size="sm" className="h-7" loading={!accept && connecting && buttonLoading === index} loadingText="Rejecting..." onClick={()=>handleAcceptOrRejectConnection(message, false, index)}>No</Button>
-
-                  <Button variant="default" size="sm" className="h-7" loading={accept && connecting && buttonLoading === index} loadingText="Accepting..." onClick={()=>handleAcceptOrRejectConnection(message, true, index)}>Yes</Button>
-                </div>
-              </div>
-            )}
-            {combineMsgAndConns?.length < 1 && !isLoading ? <h2 className="font-[500] text-sm md:text-base">No notification found!</h2>:null}
+              )}
+            {combineMsgAndConns?.length < 1 && !isLoading ? <h2 className="font-[500] text-sm md:text-base">No notification found!</h2> : null}
           </div> :
           <div className="h-full flex flex-col gap-y-3" key={viewMessages}>
-            <div className="flex justify-end mt-3 "><Button variant={'ghost'} title="Close Message" size="sm" className="h-5 px-1" onClick={()=>{setOpenMessage(false); resetForm()}}><X className="h-3 w-3 text-gray-400 cursor-pointer" /></Button></div>
+            <div className="flex justify-end mt-3 "><Button variant={'ghost'} title="Close Message" size="sm" className="h-5 px-1" onClick={() => { setOpenMessage(false); resetForm() }}><X className="h-3 w-3 text-gray-400 cursor-pointer" /></Button></div>
             <div className="w-full h-full pb-3 overflow-y-auto" ref={messagesEndRef}>
               {
-                viewMessages?.length < 1 ? <LoadingSpinner className="h-[250px]" />: viewMessages?.map((message:any, index)=>
-                  <div className="mb-4" key={index}>
-                    <div className={`flex ${message?.sender_role === senderRole ? "justify-end" : "justify-start"}`}>
-                      <p className={`w-fit max-w-[90%] p-3 rounded-md text-sm ${message?.sender_role === senderRole ? "bg-green-100" : "bg-primary/10"}`}>
+                viewMessages?.length < 1 ? <LoadingSpinner className="h-[250px]" /> : viewMessages?.map((message, index) =>
+                  <div className="mb-4 flex" key={index}>
+                    <div className="w-8 h-8 mr-3 flex items-center justify-center overflow-hidden rounded-full bg-gray-200">
+                      {message?.sender_image ? (
+                        <img src={message?.sender_image} alt="Profile" className="w-full h-full object-cover" />
+                      ) : (
+                        <DefaultProfileImage />
+                      )}
+                    </div>
+                    <div className="flex flex-col ml-3">
+                      <span className="font-semibold capitalize">{message?.sender_name}</span>
+                      <p className={`w-fit max-w-[90%] p-3 rounded-md text-sm`}>
                         <span className="mb-2">{message?.message_text}</span>
-                        <span className="text-[10px] text-muted-foreground block text-right">{moment(message?.create_date).format('LLL')}</span>
+                        <span className="text-[10px] text-muted-foreground block text-right">{moment(message?.create_date).format('MMM D, h:mm A')}</span>
                       </p>
                     </div>
                   </div>
                 )
               }
             </div>
-            <div className=" pt-2 mb-5">
+            <div className="pt-2 mb-5">
               <form onSubmit={handleSubmit}>
                 <Textarea
-                    id='message'
-                    name="message"
-                    className='w-full mt-2 rounded-xl'
-                    placeholder='Enter your message here'
-                    rows={2}
-                    value={values.message}
-                    onChange={handleChange}
-                    handleBlur={handleBlur}
-                    touched={touched.message}
-                    error={errors.message}
+                  id='message'
+                  name="message"
+                  className='w-full mt-2 rounded-xl'
+                  placeholder='Enter your message here'
+                  rows={2}
+                  value={values.message}
+                  onChange={handleChange}
+                  handleBlur={handleBlur}
+                  touched={touched.message}
+                  error={errors.message}
                 />
                 <div className='flex justify-end items-center gap-x-5 mt-2'>
                   <Button
-                      type='submit'
-                      variant="orange"
-                      className='w-fit md:px-4 h-8 rounded-lg font-[500]'
-                      loading={sendingMessage}
-                      disabled={viewMessages?.length < 1 && true}
-                      loadingText={"Sending..."}
+                    type='submit'
+                    variant="orange"
+                    className='w-fit md:px-4 h-8 rounded-lg font-[500]'
+                    loading={sendingMessage}
+                    disabled={viewMessages?.length < 1 && true}
+                    loadingText={"Sending..."}
                   >
-                      Send
-                    </Button>
+                    Send
+                  </Button>
                 </div>
               </form>
             </div>
@@ -266,5 +306,6 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
     </div>
   )
 }
+
 
 export default NotificationPanel
