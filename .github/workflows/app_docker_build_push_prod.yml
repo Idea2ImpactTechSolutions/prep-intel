@@ -31,15 +31,6 @@ jobs:
       - name: Checkout app code
         uses: actions/checkout@v4
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          role-to-assume: arn:aws:iam::533267153582:role/AWS_PrepIntel_GHA_Role
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v2
-
       - name: Build tagged Docker image
         run: |
           docker build -t ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }} \
@@ -52,6 +43,15 @@ jobs:
           --build-arg AWS_REGION=${{env.AWS_REGION}} \
           --build-arg AWS_SECRET_ACCESS_KEY=${{env.AWS_SECRET_ACCESS_KEY}} \
           --build-arg BUCKET_NAME=${{env.BUCKET_NAME}} .
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::533267153582:role/AWS_PrepIntel_GHA_Role
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
 
       - name: Push tagged Docker image to ECR
         run: |
