@@ -2,7 +2,7 @@ name: Dev App Build and Push
 
 on:
   push:
-    branches: [develop, main, test_gha_build_deploy_update]
+    branches: [develop, main]
   workflow_dispatch:
 
 env:
@@ -29,7 +29,7 @@ jobs:
     steps:
       - name: Checkout app code
         uses: actions/checkout@v4
-        
+
       - name: Build tagged Docker image
         env:
           IMAGE_VERSION: latest
