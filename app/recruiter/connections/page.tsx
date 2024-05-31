@@ -8,7 +8,6 @@ import { GoChevronRight } from "react-icons/go";
 import { PageHeader, PageContent } from "@/components/common-page";
 import DataTable from "@/components/ui/data-table";
 import StudentPanel from "../_components/student-panel";
-import { cn } from "@/lib/utils";
 
 export default function Page() {
   const session = useSession();
@@ -94,20 +93,14 @@ export default function Page() {
         }
         titleClass="text-sm"
       />
-      <PageContent>
-        {isLoading ? (
-          <LoadingSpinner />
-        ) : recruitsResponse && recruitsResponse.data && recruitsResponse.data.length > 0 ? (
+      <PageContent className="p-4">
           <DataTable
             title="Connections"
             columns={COLUMNS}
-            data={recruitsResponse.data}
-            className={cn(studentId && "hidden")}
+            data={recruitsResponse?.data}
+            emptyMessage="No recruits found."
             isLoading={isLoading}
           />
-        ) : (
-          <div>No recruits found.</div>
-        )}
         {studentId && (
           <StudentPanel goBack={() => setStudentId("")} studentId={studentId} recruiterId={recruiterId} />
         )}
