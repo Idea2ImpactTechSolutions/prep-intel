@@ -3,12 +3,10 @@
 import DataTable from "components/ui/data-table";
 import { useLazyExploreRecruitsQuery } from "@/redux/services/recruiter/recruiterApi";
 import { useEffect, useState } from "react";
-import LoadingSpinner from "@/components/loading-spinner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useFormik } from "formik";
 import * as yup from "yup";
-
 
 interface PageProps {
   recruiterId: string;
@@ -20,7 +18,7 @@ export default function DiscoverPanel({ recruiterId, className, onStudentSelecte
   const [getRecruits, { isLoading, isFetching, isSuccess }] = useLazyExploreRecruitsQuery();
   const [candidates, setCandidates] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(13);
+  const [totalPages, setTotalPages] = useState(0);
 
   const handleStudentSelected = (row) => {
     if (onStudentSelected) {
@@ -51,9 +49,10 @@ export default function DiscoverPanel({ recruiterId, className, onStudentSelecte
     },
     {
       title: "Action",
+      className: "w-40",
       render: (row) => (
         <span
-          className="border border-primary p-1.5 px-4 rounded-sm text-primary cursor-pointer text-sm hover:bg-primary hover:text-white"
+          className="border border-primary p-1.5 px-4 rounded-sm text-primary cursor-pointer text-sm hover:bg-primary hover:text-white w-auto"
           onClick={() => handleStudentSelected(row)}>
           View
         </span>
@@ -62,6 +61,10 @@ export default function DiscoverPanel({ recruiterId, className, onStudentSelecte
   ];
 
   async function refreshCandidates(value) {
+    setCandidates([]);
+    setTotalPages(0);
+    setCurrentPage(1);
+
     const response: any = await getRecruits({
       ...values,
       schoolId: 112075,
@@ -157,9 +160,7 @@ export default function DiscoverPanel({ recruiterId, className, onStudentSelecte
       </form>
 
       <div className="mt-5">
-        {isLoading || isFetching ? (
-          <LoadingSpinner className="my-40 h-full" />
-        ) : (
+        { (!isSuccess && !isLoading) ? <p className="p-4">Discover Candidates</p> :
           <DataTable
             title="Discover Candidates"
             columns={COLUMNS}
@@ -168,9 +169,9 @@ export default function DiscoverPanel({ recruiterId, className, onStudentSelecte
             totalPages={totalPages}
             nextPage={() => setCurrentPage(currentPage + 1)}
             prevPage={() => setCurrentPage(currentPage - 1)}
-            isLoading={false}
+            isLoading={isLoading || isFetching}
           />
-        )}
+        }
       </div>
     </div>
   )

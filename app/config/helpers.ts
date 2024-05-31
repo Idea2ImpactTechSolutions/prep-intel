@@ -43,7 +43,8 @@ export function cacheBust(url) {
   if (!url) {
     return '';
   }
-  return  `${url}?v=${(new Date()).getTime()}`;
+
+  return `${url}?v=${(new Date()).getTime()}`;
 }
 
 export function formatPhoneNumber(phoneNumber) {
@@ -57,12 +58,15 @@ export function formatPhoneNumber(phoneNumber) {
   phoneNumber = phoneNumber.replace(/\D/g, '');
 
   // Check if the phone number has 10 digits
-  if (phoneNumber.length !== 10) {
-    // Opt-out if the phone number is not the expected length
-    return phoneNumber;
+  if (phoneNumber.length === 10) {
+      // Format the phone number
+      return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6)}`;
+  } else if (phoneNumber.length === 7) {
+      // Format the phone number
+      return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3)}`;
   }
 
-  // Format the phone number
-  return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6)}`;
+  // Opt-out if the phone number is not the expected length
+  return phoneNumber;
 }
 

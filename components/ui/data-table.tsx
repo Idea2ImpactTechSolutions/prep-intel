@@ -11,6 +11,7 @@ interface PageProps {
   titleNode?:React.ReactNode;
   isLoading: boolean;
   columns:Dictionary[];
+  emptyMessage?:string;
   data: any[];
   columnHeaderStyle?:string
   page?: number;
@@ -20,23 +21,18 @@ interface PageProps {
   prevPage?: ()=>void;
 }
 
-export default function DataTable({ title, titleNode, className, isLoading, columnHeaderStyle, columns, data, page=1, totalPages=0, nextPage, prevPage, offset=10 }: PageProps) {
-  if (isLoading) {
-    return <LoadingSpinner/>
-  }
-
+export default function DataTable({ title, titleNode, className, isLoading, columnHeaderStyle, columns, data, page=1, totalPages=0, nextPage, prevPage, offset=10, emptyMessage="No results." }: PageProps) {
   const minusOne = page-1;
   const start = minusOne * offset + 1;
   const end = minusOne * offset + 10;
 
    return (
-    <div className={cn("overflow-x-auto sm:rounded-lg", className)}>
-    <div className='border p-'>
-      <div className='flex items-center p-4 bg-[#F6F8FA] border border-[#E6EBF0] gap-x-2'>
-        <span className='text-[#141111] '>{title} {titleNode} </span>
+    <div className={cn("overflow-hidden rounded-lg border", className)}>
+      <div className='flex items-center p-4 bg-[#F6F8FA] border-b gap-x-2'>
+        <span className='text-md text-[#141111] '>{title} {titleNode} </span>
       </div>
       <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-        <thead className='text-xs text-gray-700 uppercase bg-[#F6F8FA] border-b border-[#E6EBF0] '>
+        <thead className='text-xs text-gray-700 uppercase bg-[#F6F8FA] border-b'>
           <tr className=''>
             {columns?.map((column, index) =>(
               <th scope='col' className={cn('px-4 py-5 whitespace-nowrap', columnHeaderStyle)} key={column?.id || index}>
@@ -46,21 +42,30 @@ export default function DataTable({ title, titleNode, className, isLoading, colu
           </tr>
         </thead>
         <tbody>
+          { isLoading && <tr><td colSpan={columns.length}><LoadingSpinner className="h-[200px] m-auto" /></td></tr> }
+          { !isLoading && data?.length === 0 &&
+            <tr className='bg-white'>
+              <td colSpan={columns.length} className='p-4'>{emptyMessage}</td>
+            </tr>
+          }
           {
-            data?.map((row, index) => (
-              <tr key={index} className="bg-white border-b border-[#E6EBF0] hover:bg-gray-50">
+            !isLoading && data?.map((row, index) => (
+              <tr key={index} className={cn(
+                "bg-white hover:bg-gray-50",
+                (totalPages > 0 || index < (data.length -1)) && "border-b" // Prevent bottom border on last row
+                )}>
                 { columns.map(function(col, colIndex) {
                   // Conditionally invoke the custom render function, or the given field
                   let cellValue = col.render ? col.render(row) : row[col.field];
-                  return <td className="w-4 p-4" key={colIndex}>{cellValue}</td>
+                  return <td className="p-4" key={colIndex}>{cellValue}</td>
                 })}
               </tr>))
           }
         </tbody>
       </table>
       { totalPages > 0 &&
-        <nav className='flex items-center flex-column flex-wrap md:flex-row justify-between p-4'>
-          <span className='text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto'>
+        <nav className='flex items-center flex-column flex-wrap md:flex-row justify-between px-4 py-3'>
+          <span className='flex text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 w-full md:inline md:w-auto'>
             Showing{" "}
             <span className='font-semibold text-gray-900 dark:text-white'>
               {start}-{end}
@@ -70,7 +75,7 @@ export default function DataTable({ title, titleNode, className, isLoading, colu
               {totalPages*offset}
             </span>
           </span>
-          <ul className='inline-flex -space-x-px rtl:space-x-reverse text-sm h-8 gap-x-2'>
+          <ul className='inline-flex items-center -space-x-px rtl:space-x-reverse text-sm h-8 gap-x-2'>
             <ChevronLeft size={18} onClick={() => prevPage && prevPage()}
                             className={cn(
                               "text-gray-400 bg-gray-200 rounded-md p-0.5",
@@ -87,7 +92,6 @@ export default function DataTable({ title, titleNode, className, isLoading, colu
           </ul>
         </nav>
       }
-    </div>
     </div>
   )
 }
