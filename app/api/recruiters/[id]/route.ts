@@ -116,7 +116,6 @@ export async function PATCH(
 
   try {
     const updateData = await req.json();
-    const { id, ...fieldsToUpdate } = updateData;
 
     const recruiter = await Recruiters.findOne({ where: { id: params.id } });
 
@@ -134,14 +133,14 @@ export async function PATCH(
     const recruiterKeys = Object.keys(Recruiters.getAttributes());
 
     // Update all fields in payload that correspond to the user model
-    const userUpdateData = filterKeys(fieldsToUpdate, userKeys);
+    const userUpdateData = filterKeys(updateData, userKeys);
     if (Object.keys(userUpdateData).length > 0) {
       user.set(userUpdateData);
       await user.save();
     }
 
     // Update all fields in payload that correspond to the recruiter model
-    const recruiterUpdateData = filterKeys(fieldsToUpdate, recruiterKeys);
+    const recruiterUpdateData = filterKeys(updateData, recruiterKeys);
     if (Object.keys(recruiterUpdateData).length > 0) {
       recruiter.set(recruiterUpdateData);
       await recruiter.save();
@@ -164,7 +163,7 @@ export async function PATCH(
 
 function filterKeys(obj: any, validKeys: string[]) {
   return Object.keys(obj).reduce((acc, key) => {
-    if (validKeys.includes(key)) {
+    if (validKeys.includes(key) && key !== 'id') {
       acc[key] = obj[key];
     }
     return acc;
