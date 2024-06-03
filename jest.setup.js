@@ -14,7 +14,7 @@ global.Response = {
     }
 
     return {
-      body: JSON.stringify(data),
+      body: data,
       headers: { 'content-type': 'application/json' },
       status: init.status,
       statusText: '',
@@ -29,34 +29,43 @@ global.Response = {
 
 // Dynamic mock setup for models
 jest.mock('@/app/models', () => {
-  const models = jest.requireActual('@/app/models');
+  const models = jest.requireActual('./app/models');
 
   return {
-    ...models,
-    Users: {
-      ...models.Users,
-      findByPk: jest.fn(),
-      findOne: jest.fn(),
-      create: jest.fn(),
-      update: jest.fn(),
-      getAttributes: jest.fn().mockReturnValue({
-        id: 'id',
-        first_name: 'first_name',
-        last_name: 'last_name',
-        phone: 'phone',
-        email: 'email',
-      }),
-    },
-    Recruiters: {
-      ...models.Recruiters,
-      findOne: jest.fn(),
-      create: jest.fn(),
-      update: jest.fn(),
-      getAttributes: jest.fn().mockReturnValue({
-        id: 'id',
-        user_id: 'user_id',
-        territories: 'territories',
-      }),
-    },
+      models: {
+        ...models.models,
+        Users: {
+          ...models.Users,
+          findByPk: jest.fn(),
+          findOne: jest.fn(),
+          create: jest.fn(),
+          update: jest.fn(),
+          getAttributes: jest.fn().mockReturnValue(models.models.Users.rawAttributes),
+          findAll: jest.fn(),
+          destroy: jest.fn(),
+          count: jest.fn(),
+          set: jest.fn(),
+          build: jest.fn(() => {
+            return {
+              save: jest.fn(),
+            };
+          }),
+        },
+        Recruiters: {
+          findOne: jest.fn(),
+          create: jest.fn(),
+          update: jest.fn(),
+          getAttributes: jest.fn().mockReturnValue(models.models.Recruiters.rawAttributes),
+          findAll: jest.fn(),
+          destroy: jest.fn(),
+          count: jest.fn(),
+          set: jest.fn(),
+          build: jest.fn(() => {
+            return {
+              save: jest.fn(),
+            };
+          }),
+        },
+      },
   };
 });

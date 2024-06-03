@@ -1,5 +1,5 @@
-import { apiResponse } from "app/config/helpers";
-const { models } = require("app/models");
+import { apiResponse } from "@/app/config/helpers";
+import { models } from "@/app/models";
 const { Users, Recruiters, Assets } = models;
 
 /**
@@ -115,6 +115,7 @@ export async function PATCH(
 ) {
 
   try {
+    let responseMessage = 'Recruiter not updated';
     const updateData = await req.json();
 
     const recruiter = await Recruiters.findOne({ where: { id: params.id } });
@@ -135,6 +136,7 @@ export async function PATCH(
     // Update all fields in payload that correspond to the user model
     const userUpdateData = filterKeys(updateData, userKeys);
     if (Object.keys(userUpdateData).length > 0) {
+      responseMessage = 'Recruiter updated'
       user.set(userUpdateData);
       await user.save();
     }
@@ -142,6 +144,7 @@ export async function PATCH(
     // Update all fields in payload that correspond to the recruiter model
     const recruiterUpdateData = filterKeys(updateData, recruiterKeys);
     if (Object.keys(recruiterUpdateData).length > 0) {
+      responseMessage = 'Recruiter updated'
       recruiter.set(recruiterUpdateData);
       await recruiter.save();
     }
@@ -154,7 +157,7 @@ export async function PATCH(
 
 
     // Response
-    return apiResponse("Recruiter updated", 200, updatedRecruiter);
+    return apiResponse(responseMessage, 200, updatedRecruiter);
   } catch (error: any) {
     // Notify
     return apiResponse("Errors occurred", 400, { error: error.message });
