@@ -1,5 +1,6 @@
 import { apiResponse } from "@/app/config/helpers";
 import { models } from "@/app/models";
+import {includeKeys} from 'filter-obj';
 const { Users, Recruiters, Assets } = models;
 
 /**
@@ -115,7 +116,6 @@ export async function PATCH(
 ) {
 
   try {
-    let responseMessage = 'Recruiter not updated';
     const updateData = await req.json();
 
     const recruiter = await Recruiters.findOne({ where: { id: params.id } });
@@ -130,21 +130,19 @@ export async function PATCH(
       return apiResponse("User not found", 404);
     }
     
-    const userKeys = Object.keys(Users.getAttributes());
-    const recruiterKeys = Object.keys(Recruiters.getAttributes());
+    const userKeys =  ['first_name', 'last_name', 'phone'];
+    const recruiterKeys =  ['territories'];
 
     // Update all fields in payload that correspond to the user model
-    const userUpdateData = filterKeys(updateData, userKeys);
+    const userUpdateData = includeKeys(updateData, userKeys);
     if (Object.keys(userUpdateData).length > 0) {
-      responseMessage = 'Recruiter updated'
       user.set(userUpdateData);
       await user.save();
     }
-
+    
     // Update all fields in payload that correspond to the recruiter model
-    const recruiterUpdateData = filterKeys(updateData, recruiterKeys);
+    const recruiterUpdateData = includeKeys(updateData, recruiterKeys);
     if (Object.keys(recruiterUpdateData).length > 0) {
-      responseMessage = 'Recruiter updated'
       recruiter.set(recruiterUpdateData);
       await recruiter.save();
     }
@@ -154,21 +152,12 @@ export async function PATCH(
       include: [{ model: Users, as: 'user' }]
     });
     
-
-
     // Response
-    return apiResponse(responseMessage, 200, updatedRecruiter);
+    return apiResponse('Recruiter updated', 200, updatedRecruiter);
   } catch (error: any) {
     // Notify
     return apiResponse("Errors occurred", 400, { error: error.message });
   }
 }
 
-function filterKeys(obj: any, validKeys: string[]) {
-  return Object.keys(obj).reduce((acc, key) => {
-    if (validKeys.includes(key) && key !== 'id') {
-      acc[key] = obj[key];
-    }
-    return acc;
-  }, {});
-}
+
