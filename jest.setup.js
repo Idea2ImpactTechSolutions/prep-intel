@@ -43,28 +43,19 @@ jest.mock('@/app/models', () => {
           getAttributes: jest.fn().mockReturnValue(models.models.Users.rawAttributes),
           findAll: jest.fn(),
           destroy: jest.fn(),
-          count: jest.fn(),
           set: jest.fn(),
-          build: jest.fn(() => {
-            return {
-              save: jest.fn(),
-            };
-          }),
+          save: jest.fn(),
         },
         Recruiters: {
+          ...models.Recruiters,
           findOne: jest.fn(),
           create: jest.fn(),
           update: jest.fn(),
           getAttributes: jest.fn().mockReturnValue(models.models.Recruiters.rawAttributes),
           findAll: jest.fn(),
           destroy: jest.fn(),
-          count: jest.fn(),
           set: jest.fn(),
-          build: jest.fn(() => {
-            return {
-              save: jest.fn(),
-            };
-          }),
+          save: jest.fn()
         },
       },
   };

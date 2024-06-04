@@ -25,9 +25,8 @@ describe('PATCH /api/recruiters/:id', () => {
       set: jest.fn().mockResolvedValue(true),
       save: jest.fn().mockResolvedValue(true),
     };
-
-    (Users.findOne as jest.Mock).mockResolvedValue(user);
-    (Recruiters.findOne as jest.Mock).mockResolvedValue(recruiter);
+    Users.findOne.mockResolvedValue(user);
+    Recruiters.findOne.mockResolvedValue(recruiter);
   });
 
   afterEach(() => {
