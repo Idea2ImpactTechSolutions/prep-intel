@@ -83,7 +83,6 @@ export default function SchoolPage() {
         await getMatchingSchools(matchText)
             .unwrap()
             .then((payload) => {
-                // console.log(payload.data.map((f) => f.id))
                 setSchools(payload.data);
             })
     }
@@ -114,7 +113,7 @@ export default function SchoolPage() {
             <OnboardingTabs className="pi-container" active_step="Schools" />
             <PageContent>
                 <OnboardingTitle
-                    title="Choose the University you are interested in"
+                    title="Choose the Institution you are interested in"
                     subtitle="Where Will Your Curiosity Take You?"
                 />
                 <div className="mt-10">
@@ -122,7 +121,7 @@ export default function SchoolPage() {
                         <div className="flex-1">
                             <SectionContainer
                                 title="Your Interested University"
-                                subTitle="Search and Choose your Interested University"
+                                subTitle="Search and Choose the Institution you are interested in"
                                 titleClass={cn(
                                     spaceGrotesk.className,
                                     "mb-0"

@@ -37,7 +37,7 @@ export default function StudentConnection() {
     <>
     <PageHeader
         title="Recruiter Connections"
-        subtitle="Discover your ideal university match here." />
+        subtitle="Discover your ideal institution match here." />
     <PageContent>
           {
             availableConnections?.length > 0 ?

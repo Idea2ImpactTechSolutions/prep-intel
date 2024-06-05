@@ -11,18 +11,18 @@ const mockFindAll = jest.spyOn(Recruiters, 'findAll');
 // Provide a mock implementation for getUserById
 mockFindAll.mockImplementation(() => {
     return Promise.resolve([
-      new Recruiters({
+      {
         id: 1,
         school_id: 2,
         user_id: 3,
         territories: ["CA", "NY", "TX"]
-      }),
-      new Recruiters({
+      },
+      {
         id: 2,
         school_id: 2,
         user_id: 4,
         territories: ["AZ"]
-      }),
+      },
     ]);
 });
 

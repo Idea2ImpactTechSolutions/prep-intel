@@ -15,6 +15,8 @@ const customJestConfig = {
     //
     // '^uuid$': '<rootDir>/node_modules/uuid/dist/index.js',
       '^uuid$': require.resolve('uuid'),
+      '^@/app/(.*)$': '<rootDir>/app/$1', 
+
   },
   watchPathIgnorePatterns: [
     "node_modules",

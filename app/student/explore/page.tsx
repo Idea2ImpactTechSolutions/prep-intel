@@ -151,7 +151,7 @@ export default function Page() {
     <>
       <PageHeader
         title="Select the states you would like to explore"
-        subtitle="Discover your ideal university match here."
+        subtitle="Discover your ideal Institution match here."
       />
       <PageContent className="!pt-0" >
 

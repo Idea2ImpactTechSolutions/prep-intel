@@ -59,7 +59,7 @@ export default function RegisterPage() {
                 <h2 className={cn(
                     spaceGrotesk.className,
                     'text-[#141111] text-2xl font-bold md:text-3xl lg:text-4xl xl:text-5xl xl:leading-[3.2rem]'
-                )}>Find your dream College of Seconds</h2>
+                )}>Find your dream Institution in Seconds</h2>
                 <p className="text-[#695959] text-xs md:text-sm md:mt-2">Enter your email address and password to find matches.</p>
             </div>
             <div className="mt-5 lg:mt-10">

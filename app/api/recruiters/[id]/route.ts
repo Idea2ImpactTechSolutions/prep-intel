@@ -1,7 +1,6 @@
-import { apiResponse } from "app/config/helpers";
-const { models } = require("app/models");
+import { apiResponse } from "@/app/config/helpers";
+import { models } from "@/app/models";
 const { Users, Recruiters, Assets } = models;
-import {includeKeys} from 'filter-obj';
 
 /**
  * @openapi
@@ -117,6 +116,7 @@ export async function PATCH(
 
   try {
     const updateData = await req.json();
+
     const recruiter = await Recruiters.findOne({ where: { id: params.id } });
 
     if (!recruiter) {
@@ -125,18 +125,47 @@ export async function PATCH(
 
     const user = await Users.findOne({ where: { id: recruiter.user_id } });
 
-    // Update fields
-    user.set(includeKeys(updateData, ['first_name', 'last_name', 'phone']));
+    if (!user) {
+      return apiResponse("User not found", 404);
+    }
+    
+    const userKeys =  ['first_name', 'last_name', 'phone'];
+    const recruiterKeys =  ['territories'];
 
-    // Update db
-    //const updatedRecruiter = await recruiter.save();
-    const updated = await user.save();
+    // Update all fields in payload that correspond to the user model
+    const userUpdateData = filterKeys(updateData, userKeys);
+    if (Object.keys(userUpdateData).length > 0) {
+      user.set(userUpdateData);
+      await user.save();
+    }
+    
+    // Update all fields in payload that correspond to the recruiter model
+    const recruiterUpdateData = filterKeys(updateData, recruiterKeys);
+    if (Object.keys(recruiterUpdateData).length > 0) {
+      recruiter.set(recruiterUpdateData);
+      await recruiter.save();
+    }
 
+    const updatedRecruiter = await Recruiters.findOne({
+      where: { id: params.id },
+      include: [{ model: Users, as: 'user' }]
+    });
+    
     // Response
-    //return apiResponse("Recruiter updated", 200, updatedRecruiter);
-    return apiResponse("Recruiter updated", 200, updated);
+    return apiResponse('Recruiter updated', 200, updatedRecruiter);
   } catch (error: any) {
     // Notify
     return apiResponse("Errors occurred", 400, { error: error.message });
   }
 }
+
+
+function filterKeys(obj: any, validKeys: string[]) {
+  return Object.keys(obj).reduce((acc, key) => {
+    if (validKeys.includes(key) && key !== 'id') {
+      acc[key] = obj[key];
+    }
+    return acc;
+  }, {});
+}
+
