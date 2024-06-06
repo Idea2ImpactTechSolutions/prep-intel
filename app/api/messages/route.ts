@@ -76,7 +76,7 @@ export async function GET(req: NextRequest) {
             },
           },
         ],
-        order: [['create_date', 'DESC']],
+        order: [['create_date', 'ASC']],
       });
 
       const formattedMessages = messagesList.map((message) => ({
@@ -107,7 +107,7 @@ export async function GET(req: NextRequest) {
             attributes: ['name'],
           },
         ],
-        order: [['message.create_date', 'DESC']],
+        order: [['message.create_date', 'ASC']],
       });
 
       const formattedMessages = messagesList.map((message) => ({
