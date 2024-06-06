@@ -93,18 +93,19 @@ export default function Page() {
         }
         titleClass="text-sm"
       />
-      <PageContent className="p-4">
-          <DataTable
-            title="Connections"
-            columns={COLUMNS}
-            data={recruitsResponse?.data}
-            emptyMessage="No recruits found."
-            isLoading={isLoading}
-          />
-        {studentId && (
-          <StudentPanel goBack={() => setStudentId("")} studentId={studentId} recruiterId={recruiterId} />
-        )}
-      </PageContent>
-    </>
-  );
-}
+       <PageContent className="p-4">
+           {!studentId ? (
+           <DataTable
+             title="Connections"
+             columns={COLUMNS}
+             data={recruitsResponse?.data}
+             emptyMessage="No recruits found."
+             isLoading={isLoading}
+           />
+            ) :( 
+            <StudentPanel goBack={() => setStudentId("")} studentId={studentId} recruiterId={recruiterId} />
+         )}
+       </PageContent>
+     </>
+   );
+ }
