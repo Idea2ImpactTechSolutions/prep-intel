@@ -2,7 +2,6 @@
 import OnboardingFooter from "@/app/student/_components/onboarding-footer";
 import CustomFileInput from "@/components/custom-file-input";
 import CustomSelect from "@/components/custom-select";
-import ConfirmationModal from "@/components/modal/confirmation-modal";
 import SectionContainer from "@/components/section-container";
 import { CheckCircle2, FileText } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -15,9 +14,7 @@ import { FaFileAlt } from "react-icons/fa";
 import { PageContent } from "@/components/common-page";
 
 export default function TranscriptsPage() {
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [insertedFile, setInsertedFile] = useState<File>()
-  const [loading, setLoading] = useState(false);
   const [documentType, setDocumentType] = useState("");
   const router = useRouter();
   const [ uploadAsset , { isLoading: isLoadingUpload, isSuccess }] = useUploadAssetMutation()
@@ -116,31 +113,11 @@ export default function TranscriptsPage() {
 
           <OnboardingFooter
             prevPageHandler={() => router.push('/student/onboarding/extracurricular')}
-            nextPageHandler={() => setShowConfirmationModal(true)}
+            nextPageHandler={() => router.push("/student/explore")}
             preventGoBack={false}
             nextBtnLabel="Finish"
           />
       </PageContent>
-      <ConfirmationModal
-        title="Are you absolutely sure?"
-        description="This action cannot be undone. This will permanently submit your record."
-        open={showConfirmationModal}
-        handleClose={() => setShowConfirmationModal(false)}
-        loading={loading}
-        onClick={() => {
-          setLoading(true);
-          new Promise((resolve) => {
-            setTimeout(() => {
-              setLoading(false);
-              resolve("");
-            }, 2000);
-          }).then(() => {
-            setShowConfirmationModal(false);
-            toast.success("Account Created");
-            router.push("/student/explore");
-          });
-        }}
-      />
     </>
   );
 }
