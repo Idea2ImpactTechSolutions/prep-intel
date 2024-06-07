@@ -7,7 +7,6 @@ import { CheckCircle2, FileText } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import { toast } from "sonner";
 import { useUploadAssetMutation, useGetAssetsQuery } from "@/redux/services/assets/assetApi";
 import LoadingSpinner from '@/components/loading-spinner';
 import { FaFileAlt } from "react-icons/fa";
