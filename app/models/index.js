@@ -65,7 +65,10 @@ ConnectionRequest.belongsTo(School, {
   constraints: false
 });
 
-// Students.hasMany(Recruits, { foreignKey: "student_id", as: "recruits" })
+Students.hasMany(Recruits, { 
+  foreignKey: "student_id",
+  constraints: false
+})
 // Students.hasMany(Applicants, { foreignKey: "student_id", as: "applicants" })
 
 Students.belongsTo(Users, {
@@ -94,6 +97,11 @@ Messages.belongsTo(Students, {
 Messages.belongsTo(School, {
   foreignKey: 'school_id',
   constraints: false
+});
+
+Recruits.belongsTo(Students, {
+  foreignKey: 'student_id', // This should match the foreignKey in the hasOne association
+  // as: 'student' // Optional alias
 });
 
 // Model associations

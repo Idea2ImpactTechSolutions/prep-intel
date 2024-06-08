@@ -2,10 +2,11 @@ import * as yup from 'yup';
 import type { NextRequest } from "next/server";
 import { apiResponse } from "app/config/helpers";
 import { models } from "@/app/models";
-import { col, Op } from 'sequelize';
+import { col, Op, fn } from 'sequelize';
 
 const {
   ConnectionRequest,
+  Recruits,
   School,
   Students,
 } = models;
@@ -20,7 +21,7 @@ const GET_VALIDATION_SCHEMA = yup.object({
 });
 
 const GET_FIELDS = [
-  [ 'id', 'studentId'],
+  [ fn('DISTINCT', col('students.id')), 'studentId'],
   [ 'act_score', 'studentActScore' ],
   [ 'sat_score', 'studentSatScore' ],
   [ 'gpa', 'studentGpa' ],
@@ -109,7 +110,7 @@ export async function GET(
       return apiResponse("Not Found", 404);
     }
 
-    const searchParams = req.nextUrl.searchParams
+    const searchParams = req.nextUrl.searchParams;
     const filters = getFilters(searchParams);
 
     if (filters) {
@@ -141,6 +142,11 @@ export async function GET(
           where: {
             school_id: params.schoolId,
           },
+          attributes: [],
+          required: false
+        },
+        {
+          model: Recruits,
           attributes: [],
           required: false
         },
@@ -199,7 +205,12 @@ function getFilters(searchParams) {
 }
 
 function prepareQueryFilters(filters, school) {
-  let schoolMins: object = {};
+  let schoolMins: object = {
+    [Op.or]: [
+      {'$recruits.student_id$': null },
+      {'$recruits.school_id$': { [Op.ne]: school.id }}
+    ]
+  };
 
   if ( filters ) {
     Object.entries(filters).forEach(([key, value]) => {

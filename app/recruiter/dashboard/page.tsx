@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 export default function Page() {
   const { data: session } = useSession();
   const recruiterId = session?.user?.roleId || "";
+  const schoolId = session?.user?.schoolID || "";
   const [studentId, setStudentId] = useState("");
 
   return (
@@ -26,6 +27,7 @@ export default function Page() {
       <PageContent>
         <DiscoverPanel
           recruiterId={recruiterId}
+          schoolID={schoolId}
           onStudentSelected={id => setStudentId(id)}
           className={cn(studentId && 'hidden')} />
         {
