@@ -11,10 +11,11 @@ import * as yup from "yup";
 interface PageProps {
   recruiterId: string;
   className: string;
+  schoolID: string;
   onStudentSelected?: (id: string) => void;
 }
 
-export default function DiscoverPanel({ recruiterId, className, onStudentSelected }: PageProps) {
+export default function DiscoverPanel({ recruiterId, className, schoolID, onStudentSelected }: PageProps) {
   const [getRecruits, { isLoading, isFetching, isSuccess }] = useLazyExploreRecruitsQuery();
   const [candidates, setCandidates] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -67,7 +68,7 @@ export default function DiscoverPanel({ recruiterId, className, onStudentSelecte
 
     const response: any = await getRecruits({
       ...values,
-      schoolId: 112075,
+      schoolId: schoolID,
       page: currentPage,
     }).unwrap();
 
