@@ -15,7 +15,7 @@ import * as yup from "yup";
 import OnboardingTabs from "../../_components/onboarding-tabs";
 import OnboardingTitle from "../../_components/onboarding-title";
 import LoadingSpinner from "@/components/loading-spinner";
-import { STATE_CITY_DATA } from "@/utils/data";
+import { statePaths } from "@/data/state-paths";
 import { toast } from "sonner";
 import CustomSelect from "@/components/custom-select";
 import AssetImage from "@/components/asset-image";
@@ -202,10 +202,10 @@ export default function VitalsPage() {
                       touched={touched?.state}
                       error={errors?.state}
                       options={
-                        STATE_CITY_DATA.map((state) => (
+                        statePaths.map((state) => (
                           {
                             label: state.name,
-                            value: state.name,
+                            value: state.id,
                           }
                         ))
                       }

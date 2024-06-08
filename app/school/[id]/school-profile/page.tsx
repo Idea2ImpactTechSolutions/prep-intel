@@ -10,7 +10,7 @@ import { useLazyGetSchoolProfileQuery, useManagerCreateSchoolProfileMutation } f
 import { useUploadAssetMutation  } from "@/redux/services/assets/assetApi";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { Dictionary } from "@/types/dictionary";
-import { STATE_CITY_DATA } from "@/utils/data";
+import { statePaths } from "@/data/state-paths";
 import { formatRMDatePicker } from "@/utils/helpers/date-format";
 import { Formik, Form, FieldArray, Field } from "formik";
 import { File, ImagePlus, MinusCircle, PlusSquare } from "lucide-react";
@@ -449,10 +449,10 @@ export default function Page() {
                               touched={touched?.school_address?.school_state}
                               error={errors?.school_address?.school_state}
                               options={
-                                STATE_CITY_DATA.map((state) => (
+                                statePaths.map((state) => (
                                   {
                                     label: state.name,
-                                    value: state.name,
+                                    value: state.id,
                                   }
                                 ))
                               }

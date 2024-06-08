@@ -109,17 +109,19 @@ export async function POST(
     attributes: STUDENT_FIELDS,
   });
 
+  formData.state = formData.state.toUpperCase();
+
   if (studentVitals === null) {
     return apiResponse("Student not found", 404);
   } else {
     studentVitals.set(formData)
 
-    if (studentVitals.user.changed)
+    if (studentVitals.user.changed())
     {
       await studentVitals.user.save();
     }
 
-    if (studentVitals.changed) {
+    if (studentVitals.changed()) {
       await studentVitals.update(formData);
     }
     return apiResponse("Student Vitals information saved successfully", 200, studentVitals);
