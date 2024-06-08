@@ -201,7 +201,7 @@ async function updateSchoolAddress(schoolId : string, schoolAddressFormData) {
     id: schoolAddressFormData.address_id,
     street_address_1: schoolAddressFormData.street_address,
     city: schoolAddressFormData.city,
-    state: schoolAddressFormData.school_state,
+    state: schoolAddressFormData.school_state.toUpperCase(),
     postal: schoolAddressFormData.school_zip,
   };
 
