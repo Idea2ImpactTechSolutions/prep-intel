@@ -6,7 +6,6 @@ import CreateSiteAdmin from "./_components/CreateSiteAdmin";
 import InviteLink from "components/ui/invite-link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import PageList  from "@/components/page-list"
 import { IconInput } from "@/components/ui/icon-input";
 import { FaSearch } from "react-icons/fa";
 import { useLazyGetSchoolsQuery } from "@/redux/services/admin/adminApi";
@@ -99,7 +98,6 @@ export default function AdminPage() {
                 <Link className="underline cursor-pointer " href={`/school/${id}/my-school`}>{name}</Link>
               </div>))
           }
-        <PageList schoolId={schoolId} studentId={studentId} />
       </div>
     </PageContent>
     </>
