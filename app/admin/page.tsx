@@ -18,7 +18,6 @@ export default function AdminPage() {
   const [schools, setSchools] = useState([]);
   const [getMatchingSchools, {isLoading}] = useLazyGetSchoolsQuery();
   const [schoolId, setSchoolId] = useState(7001);
-  const [studentId ] = useState(1);
 
   let filterTimeout;
 
