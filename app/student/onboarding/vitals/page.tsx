@@ -43,6 +43,9 @@ export default function VitalsPage() {
     graduation_year: "",
     state: "",
     city: "",
+    gpa: "0",
+    act_score: "0",
+    sat_score: "0",
     high_school: "",
     guardian_first_name: "",
     guardian_last_name: "",
@@ -226,16 +229,46 @@ export default function VitalsPage() {
                 </div>
               </SectionContainer>
 
-              <SectionContainer
-                title="About Your Guardian"
-                subTitle=""
-                titleClass={cn(
-                  spaceGrotesk.className,
-                  "mt-6"
-                )}
-              >
-                <>
-                  <div className="grid grid-cols-1 gap-x-4 md:grid-cols-2 md:gap-x-8 lg:grid-cols-">
+              <SectionContainer title="Academic Details" titleClass={cn(spaceGrotesk.className,"mt-6")}>
+                  <div className="grid grid-cols-1 gap-x-4 md:grid-cols-3 md:gap-x-8 lg:grid-cols-">
+                    <Input
+                      label="ACT Score"
+                      className="mb-4 rounded-lg p-[1.4rem] placeholder:text-[#AAAAAA]"
+                      placeholder="ACT Score"
+                      name="act_score"
+                      type="number"
+                      value={values.act_score}
+                      onChange={handleChange}
+                      touched={touched.act_score}
+                      error={errors.act_score}
+                    />
+                    <Input
+                      label="SAT Score"
+                      className="mb-4 rounded-lg p-[1.4rem] placeholder:text-[#AAAAAA]"
+                      placeholder="SAT Score"
+                      name="sat_score"
+                      type="number"
+                      value={values.sat_score}
+                      onChange={handleChange}
+                      touched={touched.sat_score}
+                      error={errors.sat_score}
+                    />
+                    <Input
+                      label="GPA"
+                      className="mb-4 rounded-lg p-[1.4rem] placeholder:text-[#AAAAAA]"
+                      placeholder="GPA"
+                      name="gpa"
+                      type="number"
+                      value={values.gpa}
+                      onChange={handleChange}
+                      touched={touched.gpa}
+                      error={errors.gpa}
+                    />
+                  </div>
+              </SectionContainer>
+
+              <SectionContainer title="About Your Guardian" titleClass={cn(spaceGrotesk.className,"mt-6")}>
+                  <div className="grid grid-cols-1 gap-x-4 md:grid-cols-3 md:gap-x-8 lg:grid-cols-">
                     <Input
                       label="Guardian First name"
                       className="mb-4 rounded-lg p-[1.4rem] placeholder:text-[#AAAAAA]"
@@ -256,21 +289,21 @@ export default function VitalsPage() {
                       touched={touched.guardian_last_name}
                       error={errors.guardian_last_name}
                     />
+                    <Input
+                      label="Email Address"
+                      className="mb-4 rounded-lg p-[1.4rem] placeholder:text-[#AAAAAA]"
+                      placeholder="Enter your guardian's email"
+                      type="email"
+                      name="guardian_email"
+                      value={values.guardian_email}
+                      onChange={handleChange}
+                      touched={touched.guardian_email}
+                      error={errors.guardian_email}
+                    />
                   </div>
-                  <Input
-                    label="Email Address"
-                    className="mb-4 rounded-lg p-[1.4rem] placeholder:text-[#AAAAAA]"
-                    placeholder="Enter your guardian's email"
-                    type="email"
-                    name="guardian_email"
-                    value={values.guardian_email}
-                    onChange={handleChange}
-                    touched={touched.guardian_email}
-                    error={errors.guardian_email}
-                  />
-                </>
               </SectionContainer>
             </div>
+
             <OnboardingFooter
               prevPageHandler={() => router.push('/register')}
               nextPageHandler={handleSubmit}

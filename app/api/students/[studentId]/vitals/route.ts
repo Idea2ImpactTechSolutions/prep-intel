@@ -10,6 +10,9 @@ const STUDENT_FIELDS = [
   "city",
   "graduation_year",
   "high_school",
+  "gpa",
+  "sat_score",
+  "act_score",
   "guardian_first_name",
   "guardian_last_name",
   "guardian_email",
@@ -99,8 +102,7 @@ export async function POST(
 ) {
   const formData = await req.json();
 
-  let studentVitals = await Students.findOne({
-    where: { id: params.studentId },
+  const student = await Students.findByPk (params.studentId, {
     include: [{
       model: Users,
       attributes: USER_FIELDS,
@@ -111,19 +113,19 @@ export async function POST(
 
   formData.state = formData.state.toUpperCase();
 
-  if (studentVitals === null) {
+  if (student === null) {
     return apiResponse("Student not found", 404);
   } else {
-    studentVitals.set(formData)
+    student.set(formData)
 
-    if (studentVitals.user.changed())
+    if (student.user.changed())
     {
-      await studentVitals.user.save();
+      await student.user.save();
     }
 
-    if (studentVitals.changed()) {
-      await studentVitals.update(formData);
+    if (student.changed()) {
+      await student.update(formData);
     }
-    return apiResponse("Student Vitals information saved successfully", 200, studentVitals);
+    return apiResponse("Student Vitals information saved successfully", 200, student);
   }
 }

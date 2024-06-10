@@ -86,10 +86,10 @@ export default function DiscoverPanel({ recruiterId, className, schoolID, onStud
   // handle input change
   const { values, errors, handleSubmit, handleChange, touched } = useFormik({
     initialValues: {
-      minAct: "30",
-      minSat: "1500",
-      minGpa: "3.7",
-      states: "CA,NV",
+      minAct: "",
+      minSat: "",
+      minGpa: "",
+      states: "",
     },
     validationSchema: yup.object().shape({
       states: yup.string().required("states field is required"),
@@ -115,6 +115,7 @@ export default function DiscoverPanel({ recruiterId, className, schoolID, onStud
             onChange={handleChange}
             touched={touched.minAct}
             error={errors.minAct}
+            placeholder="36"
             label="ACT"
           />
 
@@ -125,6 +126,7 @@ export default function DiscoverPanel({ recruiterId, className, schoolID, onStud
             onChange={handleChange}
             touched={touched.minSat}
             error={errors.minSat}
+            placeholder="1600"
             label="SAT"
           />
 
@@ -135,6 +137,7 @@ export default function DiscoverPanel({ recruiterId, className, schoolID, onStud
             onChange={handleChange}
             touched={touched.minGpa}
             error={errors.minGpa}
+            placeholder="4.0"
             label="GPA"
           />
 
@@ -146,6 +149,7 @@ export default function DiscoverPanel({ recruiterId, className, schoolID, onStud
             onChange={handleChange}
             touched={touched.states}
             error={errors.states}
+            placeholder="GL,AL"
             label="States"
           />
 
