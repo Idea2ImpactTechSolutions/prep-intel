@@ -63,7 +63,16 @@ const Students = sequelize.define(
         },
         extracurriculars: {
             type: DataTypes.ARRAY(DataTypes.STRING)
-        }
+        },
+        gpa: {
+          type: DataTypes.FLOAT,
+        },
+        act_score: {
+          type: DataTypes.FLOAT,
+        },
+        sat_score: {
+          type: DataTypes.FLOAT,
+        },
     },
     {
         timestamps: false,
