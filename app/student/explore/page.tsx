@@ -3,15 +3,13 @@ import UsMap from "@/components/UsMap";
 import LoadingSpinner from "@/components/loading-spinner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useLazyGetSchoolDataQuery } from "@/redux/services/student/studentApi";
+import { useGetSchoolDataQuery } from "@/redux/services/student/studentApi";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import Select from "react-select";
-import { toast } from "sonner";
 import SchoolView from "../_components/school-view";
-import useDelayedFunction from "@/utils/hooks/useDelayedFunction";
 import { PageHeader, PageContent } from "@/components/common-page";
 import { cn } from "@/lib/utils";
 import { statePaths } from "@/data/state-paths";
@@ -20,20 +18,57 @@ const options = statePaths
   .sort((a, b) => a.name.localeCompare(b.name))
   .map((e) => ({ value: e.id, label: e.name }));
 
+function useDebouncedValue(inputValue, delay) {
+  const [debouncedValue, setDebouncedValue] = useState(inputValue);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(inputValue);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [inputValue, delay]);
+
+  return debouncedValue;
+};
+
 export default function Page() {
-  const [getSchoolData, { isLoading, isFetching }] = useLazyGetSchoolDataQuery();
   const [activeSelection, setActiveSelection] = useState<any[]>([]);
   const [activeStates, setActiveStates] = useState<string[]>([]);
   const [activeSchoolId, setActiveSchoolId] = useState("");
-  const [schools, setSchools] = useState<any[]>([]);
-  const [pageCount, setPageCount] = useState(0);
   const [page, setPage] = useState(0);
-  const [schoolCount, setSchoolCount] = useState(0);
+  const [termText, setTermText] = useState("");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const itemsPerPage = 18;
+  const debouncedSearchTerm = useDebouncedValue(termText, 500);
 
-  const { delayedFunction } = useDelayedFunction(500);
+  // After debounced search term (termText) settles, update searchTerm variable, kicking off the query
+  useEffect(() => {
+    setSearchTerm(debouncedSearchTerm);
+  }, [debouncedSearchTerm]);
 
+  // Bind the getSchoolData query to a given search term, paging data, and selected states
+  const { data: response, isLoading, isFetching } = useGetSchoolDataQuery({
+    searchTerm,
+    states: activeStates.join(","),
+    page: page + 1,
+    pageSize: itemsPerPage,
+  },
+  {
+    skip: activeStates.length === 0,
+  });
+
+  // Destructure the response from getSchoolData, extracting the schools, totalPages,
+  // and totalItems into the previously expected local variable names
+  const {
+    schools = [],
+    totalPages: pageCount = 0,
+    totalItems: schoolCount = 0
+  } = response?.data || {};
+
+  // Update activeStates as the user interacts with the data
   function selectChanged(selected, e: any) {
     switch (e.action) {
       case "clear":
@@ -48,41 +83,9 @@ export default function Page() {
     }
   }
 
-  const fetchSchoolData = async () => {
-    setSchools([]);
-    try {
-      const result = await getSchoolData({ states: activeStates.join(","),searchTerm:'', page: page + 1, pageSize: itemsPerPage }).unwrap();
-      const { schools, totalPages, totalItems } = result.data;
-      setSchools(schools);
-      setPageCount(totalPages);
-      setSchoolCount(totalItems);
-    } catch (error) {
-      toast.error("There was a problem fetching school data:");
-    }
-  };
-
-  const handleSearch = useCallback(async (searchTerm: string) => {
-    setSchools([]);
-    try {
-      const result = await getSchoolData({ states: activeStates.join(","), searchTerm, page: page + 1, pageSize: itemsPerPage }).unwrap();
-      const { schools, totalPages, totalItems } = result.data;
-      setSchools(schools);
-      setPageCount(totalPages);
-      setSchoolCount(totalItems);
-    } catch (error) {
-      toast.error("There was a problem fetching school data:");
-    }
-  }, [activeStates, page, itemsPerPage, getSchoolData]);
-
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    delayedFunction(() => setSearchTerm(e.target.value));
+    setTermText(e.target.value);
   };
-
-  useEffect(() => {
-    if (activeStates.length > 0) {
-      fetchSchoolData();
-    }
-  }, [page]);
 
   useEffect(() => {
     const activeItems = options.filter((opt) =>
@@ -137,33 +140,33 @@ export default function Page() {
         />
       </div>
 
-      {schools?.length ?
-        <div className="space-y-1 my-3">
-          <h2 className="font-semibold">{schoolCount} Universit{schoolCount === 1 ? 'y' : 'ies'} Found</h2>
-          <p className="text-sm text-gray-500">Explore {schools?.length} top universit{schoolCount === 1 ? 'y' : 'ies'}</p>
-        </div> : null}
-      <div className="flex flex-col md:flex-row md:justify-between md:items-end">
-        <div className="hidden relative md:flex">
-          {
-            schools?.length ? <>
+      {activeStates?.length > 0 ? (
+        <div className="w-full flex items-end">
+          <div className="space-y-1 my-3">
+            <h2 className="font-semibold">{schoolCount} Universit{schoolCount === 1 ? 'y' : 'ies'} Found</h2>
+            <p className="text-sm text-gray-500">Explore {schools?.length} top universit{schoolCount === 1 ? 'y' : 'ies'}</p>
+          </div>
+          <div className="flex-grow"></div>
+          <div className="flex flex-col md:flex-row md:justify-between md:items-end">
+            <div className="relative md:flex">
               <Search width={15} height={15} className="text-[#AAAAAA] absolute left-3 top-1/2 transform -translate-y-1/2" />
               <Input
                 placeholder="Search schools by name"
                 containerClass="mb-0"
                 className="rounded-lg p-[1rem] pl-8 placeholder:text-[#AAAAAA]"
                 onChange={handleOnChange}
-                value={searchTerm}
-              /></> : null
-          }
-        </div>
-      </div>
+                value={termText}
+              />
+            </div>
+          </div>
+        </div>) : null }
 
       {
         (isLoading || isFetching) ? <LoadingSpinner className="h-[250px]" /> :
           <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-3 mt-5">
             {schools?.length
               ? schools.map((school, index) => (
-                <li key={index} className="flex rounded bg-slate-50 relative justify-center items-center text-sm w-[200px] h-[150px] p-6 m-1 border border-red">
+                <li key={index} className="flex rounded bg-slate-50 relative justify-center items-center text-sm w-[160px] h-[120px] md:w-[200px] md:h-[150px] p-3 md:p-6 m-1 border">
                   <Link href='#' onClick={() => setActiveSchoolId(school.id)}>
                     {school.name}
                   </Link>
@@ -172,7 +175,7 @@ export default function Page() {
                   </div>
                 </li>
               ))
-              : null}
+              : <p className="text-sm text-gray-500">No matches found.</p>}
           </ul>
       }
 
