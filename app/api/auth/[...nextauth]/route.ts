@@ -77,45 +77,22 @@ const handler = NextAuth({
 
 
 async function getUsersRoleId(userId,role){
-  let roleId = '';
+  const filter = { where: { user_id: userId } };
+
   switch(role) {
     case 'recruiter':
-      roleId = await getRecruiter(userId);
-      break;
+      const recruiter = await Recruiters.findOne(filter);
+      return recruiter.id;
     case 'manager':
-      roleId = await getManager(userId);
-      break;
+      const manager = await Managers.findOne(filter);
+      return manager.id;
     case 'student':
-      roleId = await getStudent(userId);
-      break;
+      const student = await Students.findOne(filter);
+      return student.id;
   }
-  return roleId;
-}
-async function getRecruiter(userId){
-  let recruiter = await Recruiters.findOne({
-    where: {
-      user_id: userId,
-    },
-  });
-  return recruiter.id;
+
+  throw new Error("Invalid user role: " + role);
 }
 
-async function getStudent(userId){
-  let student = await Students.findOne({
-    where: {
-      user_id: userId,
-    },
-  });
-  return student.id;
-}
-
-async function getManager(userId){
-  let manager = await Managers.findOne({
-    where: {
-      user_id: userId,
-    },
-  });
-  return manager.id;
-}
 
 export { handler as GET, handler as POST };
