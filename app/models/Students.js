@@ -68,10 +68,10 @@ const Students = sequelize.define(
           type: DataTypes.FLOAT,
         },
         act_score: {
-          type: DataTypes.FLOAT,
+          type: DataTypes.INTEGER,
         },
         sat_score: {
-          type: DataTypes.FLOAT,
+          type: DataTypes.INTEGER,
         },
     },
     {
