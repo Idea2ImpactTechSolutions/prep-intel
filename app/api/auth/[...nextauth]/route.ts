@@ -89,6 +89,8 @@ async function getUsersRoleId(userId,role){
     case 'student':
       const student = await Students.findOne(filter);
       return student.id;
+    default:
+      return ''
   }
 
   throw new Error("Invalid user role: " + role);
