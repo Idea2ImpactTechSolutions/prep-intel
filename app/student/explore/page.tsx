@@ -140,7 +140,7 @@ export default function Page() {
         />
       </div>
 
-      {activeStates?.length > 0 ? (
+      {(activeStates?.length > 0 && !isLoading) ? (
         <div className="w-full flex items-end">
           <div className="space-y-1 my-3">
             <h2 className="font-semibold">{schoolCount} Universit{schoolCount === 1 ? 'y' : 'ies'} Found</h2>
@@ -163,8 +163,9 @@ export default function Page() {
 
       {
         (isLoading || isFetching) ? <LoadingSpinner className="h-[250px]" /> :
+          activeStates?.length > 0 && (<>
           <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-3 mt-5">
-            {schools?.length
+            {schools?.length > 0
               ? schools.map((school, index) => (
                 <li key={index} className="flex rounded bg-slate-50 relative justify-center items-center text-sm w-[160px] h-[120px] md:w-[200px] md:h-[150px] p-3 md:p-6 m-1 border">
                   <Link href='#' onClick={() => setActiveSchoolId(school.id)}>
@@ -177,11 +178,10 @@ export default function Page() {
               ))
               : <p className="text-sm text-gray-500">No matches found.</p>}
           </ul>
-      }
-
-      {
-        schools?.length ?
-          <div className="flex mt-5">
+          <div className={cn(
+              "flex mt-5",
+              schools?.length === 0 && "hidden",
+              )}>
             <ReactPaginate
               activeClassName={"flex items-center justify-center text-primary border border-primary rounded- p- h-8 w-8"}
               breakClassName={"item break-me "}
@@ -199,7 +199,7 @@ export default function Page() {
               previousClassName={"bg-primary text-white h-9 w-9 flex justify-center items-center rounded-sm"}
               previousLabel={<ChevronLeft className="text-sm" />}
             />
-          </div> : null
+          </div></>)
       }
     </PageContent>
     </>
