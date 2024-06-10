@@ -113,6 +113,9 @@ export default function Page() {
 
   function selectChanged(selected, e: any) {
     switch(e.action) {
+      case "clear":
+        setActiveStates([]);
+        break;
       case 'remove-value':
         setActiveStates([...activeStates.filter(st => st !== e.removedValue.value)]);
         break;
@@ -126,39 +129,37 @@ export default function Page() {
     <>
     <PageHeader title="My Territories" />
     <PageContent>
-      <div className="w-full overflow-x-auto">
+      <div>
+        { isLoading ? <LoadingSpinner className="mt-5 h-full"/> : (<>
+          <h2>States</h2>
+          <div className="flex flex-col md:flex-row gap-y-3">
+            <Select instanceId="state-select"
+              options={options}
+              isMulti
+              value={activeSelection}
+              isDisabled={isSaving}
+              onChange={selectChanged}
+              className="w-full md:w-[60%]" />
+
+            <div className="flex-grow"></div>
+
+            <Button
+              type="button"
+              variant="default"
+              loading={isSaving}
+              loadingText="Updating..."
+              onClick={handleSetTerritories}
+            >
+              Save
+            </Button>
+
+          </div>
+        </>)
+        }
+      </div>
+      <div className="w-full min-h-[200px] p-2 md:px-10 lg:px-20">
         <UsMap activeStates={activeStates} setActiveStates={setActiveStates} ></UsMap>
       </div>
-      <div className="h-fit w-full">
-        { isLoading && <LoadingSpinner className="mt-5 h-full"/>}
-      </div>
-      { !isLoading &&
-      <>
-        <h2>Select State</h2>
-        <div className="flex flex-col md:flex-row gap-y-3">
-          <Select instanceId="state-select"
-            options={options}
-            isMulti
-            value={activeSelection}
-            isDisabled={isSaving}
-            onChange={selectChanged}
-            className="w-full md:w-[400px]" />
-
-          <div className="flex-grow"></div>
-
-          <Button
-            type="button"
-            variant="default"
-            loading={isSaving}
-            loadingText="Updating..."
-            onClick={handleSetTerritories}
-          >
-            Save
-          </Button>
-
-        </div>
-      </>
-      }
     </PageContent>
     </>
   );

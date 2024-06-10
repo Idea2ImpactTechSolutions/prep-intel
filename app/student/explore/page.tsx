@@ -85,6 +85,9 @@ export default function Page() {
 
   function selectChanged(selected, e: any) {
     switch (e.action) {
+      case "clear":
+        setActiveStates([]);
+        break;
       case "remove-value":
         setActiveStates([...activeStates.filter((st) => st !== e.removedValue.value)]);
         break;
@@ -121,13 +124,7 @@ export default function Page() {
   }, [activeStates, page, itemsPerPage, getSchoolData]);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchText = e.target.value;
-    setSearchTerm(searchText);
-    if (!searchText) {
-      fetchSchoolData();
-      return;
-    }
-    delayedFunction(() => handleSearch(searchText));
+    delayedFunction(() => setSearchTerm(e.target.value));
   };
 
   useEffect(() => {
@@ -156,14 +153,14 @@ export default function Page() {
       <PageContent className="!pt-0" >
 
       <div className="w-full flex pt-4 items-end">
-        <div >
-          <h2>State</h2>
+        <div className=" md:w-[60%]">
+          <h2>States</h2>
           <Select instanceId="state-select"
             options={options}
             isMulti
             value={activeSelection}
             onChange={selectChanged}
-            className="w-full md:w-[600px]"
+            className="w-full"
           />
         </div>
 
