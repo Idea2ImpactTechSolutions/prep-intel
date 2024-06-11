@@ -1,90 +1,78 @@
 "use client";
 import UsMap from "@/components/UsMap";
 import LoadingSpinner from "@/components/loading-spinner";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useLazyGetSchoolDataQuery } from "@/redux/services/student/studentApi";
+import { useGetSchoolDataQuery } from "@/redux/services/student/studentApi";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import Select from "react-select";
-import { toast } from "sonner";
 import SchoolView from "../_components/school-view";
-import useDelayedFunction from "@/utils/hooks/useDelayedFunction";
 import { PageHeader, PageContent } from "@/components/common-page";
 import { cn } from "@/lib/utils";
+import { statePaths } from "@/data/state-paths";
 
-const options = [
-  { value: "AL", label: "Alabama" },
-  { value: "AK", label: "Alaska" },
-  { value: "AZ", label: "Arizona" },
-  { value: "AR", label: "Arkansas" },
-  { value: "CA", label: "California" },
-  { value: "CO", label: "Colorado" },
-  { value: "CT", label: "Connecticut" },
-  { value: "DE", label: "Delaware" },
-  { value: "DC", label: "District of Columbia" },
-  { value: "FL", label: "Florida" },
-  { value: "GA", label: "Georgia" },
-  { value: "HI", label: "Hawaii" },
-  { value: "ID", label: "Idaho" },
-  { value: "IL", label: "Illinois" },
-  { value: "IN", label: "Indiana" },
-  { value: "IA", label: "Iowa" },
-  { value: "KS", label: "Kansas" },
-  { value: "KY", label: "Kentucky" },
-  { value: "LA", label: "Louisiana" },
-  { value: "ME", label: "Maine" },
-  { value: "MD", label: "Maryland" },
-  { value: "MA", label: "Massachusetts" },
-  { value: "MI", label: "Michigan" },
-  { value: "MN", label: "Minnesota" },
-  { value: "MS", label: "Mississippi" },
-  { value: "MO", label: "Missouri" },
-  { value: "MT", label: "Montana" },
-  { value: "NE", label: "Nebraska" },
-  { value: "NV", label: "Nevada" },
-  { value: "NH", label: "New Hampshire" },
-  { value: "NJ", label: "New Jersey" },
-  { value: "NM", label: "New Mexico" },
-  { value: "NY", label: "New York" },
-  { value: "NC", label: "North Carolina" },
-  { value: "ND", label: "North Dakota" },
-  { value: "OH", label: "Ohio" },
-  { value: "OK", label: "Oklahoma" },
-  { value: "OR", label: "Oregon" },
-  { value: "PA", label: "Pennsylvania" },
-  { value: "RI", label: "Rhode Island" },
-  { value: "SC", label: "South Carolina" },
-  { value: "SD", label: "South Dakota" },
-  { value: "TN", label: "Tennessee" },
-  { value: "TX", label: "Texas" },
-  { value: "UT", label: "Utah" },
-  { value: "VT", label: "Vermont" },
-  { value: "VA", label: "Virginia" },
-  { value: "WA", label: "Washington" },
-  { value: "WV", label: "West Virginia" },
-  { value: "WI", label: "Wisconsin" },
-  { value: "WY", label: "Wyoming" },
-];
+const options = statePaths
+  .sort((a, b) => a.name.localeCompare(b.name))
+  .map((e) => ({ value: e.id, label: e.name }));
+
+function useDebouncedValue(inputValue, delay) {
+  const [debouncedValue, setDebouncedValue] = useState(inputValue);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(inputValue);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [inputValue, delay]);
+
+  return debouncedValue;
+};
 
 export default function Page() {
-  const [getSchoolData, { isLoading, isFetching }] = useLazyGetSchoolDataQuery();
   const [activeSelection, setActiveSelection] = useState<any[]>([]);
   const [activeStates, setActiveStates] = useState<string[]>([]);
   const [activeSchoolId, setActiveSchoolId] = useState("");
-  const [schools, setSchools] = useState<any[]>([]);
-  const [pageCount, setPageCount] = useState(0);
   const [page, setPage] = useState(0);
-  const [schoolCount, setSchoolCount] = useState(0);
+  const [termText, setTermText] = useState("");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const itemsPerPage = 18;
+  const debouncedSearchTerm = useDebouncedValue(termText, 500);
 
-  const { delayedFunction } = useDelayedFunction(500);
+  // After debounced search term (termText) settles, update searchTerm variable, kicking off the query
+  useEffect(() => {
+    setSearchTerm(debouncedSearchTerm);
+  }, [debouncedSearchTerm]);
 
+  // Bind the getSchoolData query to a given search term, paging data, and selected states
+  const { data: response, isLoading, isFetching } = useGetSchoolDataQuery({
+    searchTerm,
+    states: activeStates.join(","),
+    page: page + 1,
+    pageSize: itemsPerPage,
+  },
+  {
+    skip: activeStates.length === 0,
+  });
+
+  // Destructure the response from getSchoolData, extracting the schools, totalPages,
+  // and totalItems into the previously expected local variable names
+  const {
+    schools = [],
+    totalPages: pageCount = 0,
+    totalItems: schoolCount = 0
+  } = response?.data || {};
+
+  // Update activeStates as the user interacts with the data
   function selectChanged(selected, e: any) {
     switch (e.action) {
+      case "clear":
+        setActiveStates([]);
+        break;
       case "remove-value":
         setActiveStates([...activeStates.filter((st) => st !== e.removedValue.value)]);
         break;
@@ -94,47 +82,9 @@ export default function Page() {
     }
   }
 
-  const fetchSchoolData = async () => {
-    setSchools([]);
-    try {
-      const result = await getSchoolData({ states: activeStates.join(","),searchTerm:'', page: page + 1, pageSize: itemsPerPage }).unwrap();
-      const { schools, totalPages, totalItems } = result.data;
-      setSchools(schools);
-      setPageCount(totalPages);
-      setSchoolCount(totalItems);
-    } catch (error) {
-      toast.error("There was a problem fetching school data:");
-    }
-  };
-
-  const handleSearch = useCallback(async (searchTerm: string) => {
-    setSchools([]);
-    try {
-      const result = await getSchoolData({ states: activeStates.join(","), searchTerm, page: page + 1, pageSize: itemsPerPage }).unwrap();
-      const { schools, totalPages, totalItems } = result.data;
-      setSchools(schools);
-      setPageCount(totalPages);
-      setSchoolCount(totalItems);
-    } catch (error) {
-      toast.error("There was a problem fetching school data:");
-    }
-  }, [activeStates, page, itemsPerPage, getSchoolData]);
-
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchText = e.target.value;
-    setSearchTerm(searchText);
-    if (!searchText) {
-      fetchSchoolData();
-      return;
-    }
-    delayedFunction(() => handleSearch(searchText));
+    setTermText(e.target.value);
   };
-
-  useEffect(() => {
-    if (activeStates.length > 0) {
-      fetchSchoolData();
-    }
-  }, [page]);
 
   useEffect(() => {
     const activeItems = options.filter((opt) =>
@@ -156,28 +106,19 @@ export default function Page() {
       <PageContent className="!pt-0" >
 
       <div className="w-full flex pt-4 items-end">
-        <div >
-          <h2>State</h2>
+        <div className=" md:w-[60%]">
+          <h2>States</h2>
           <Select instanceId="state-select"
             options={options}
             isMulti
             value={activeSelection}
             onChange={selectChanged}
-            className="w-full md:w-[600px]"
+            className="w-full"
           />
         </div>
 
         <span className="flex-1"></span>
 
-        <Button
-          type="button"
-          variant="default"
-          loadingText="Search..."
-          loading={isLoading || isFetching}
-          onClick={() => fetchSchoolData()}
-        >
-          Search
-        </Button>
       </div>
 
       <div className={cn(
@@ -189,33 +130,34 @@ export default function Page() {
         />
       </div>
 
-      {schools?.length ?
-        <div className="space-y-1 my-3">
-          <h2 className="font-semibold">{schoolCount} Universit{schoolCount === 1 ? 'y' : 'ies'} Found</h2>
-          <p className="text-sm text-gray-500">Explore {schools?.length} top universit{schoolCount === 1 ? 'y' : 'ies'}</p>
-        </div> : null}
-      <div className="flex flex-col md:flex-row md:justify-between md:items-end">
-        <div className="hidden relative md:flex">
-          {
-            schools?.length ? <>
+      {(activeStates?.length > 0 && !isLoading) ? (
+        <div className="w-full flex items-end">
+          <div className="space-y-1 my-3">
+            <h2 className="font-semibold">{schoolCount} Universit{schoolCount === 1 ? 'y' : 'ies'} Found</h2>
+            <p className="text-sm text-gray-500">Explore {schools?.length} top universit{schoolCount === 1 ? 'y' : 'ies'}</p>
+          </div>
+          <div className="flex-grow"></div>
+          <div className="flex flex-col md:flex-row md:justify-between md:items-end">
+            <div className="relative md:flex">
               <Search width={15} height={15} className="text-[#AAAAAA] absolute left-3 top-1/2 transform -translate-y-1/2" />
               <Input
                 placeholder="Search schools by name"
                 containerClass="mb-0"
                 className="rounded-lg p-[1rem] pl-8 placeholder:text-[#AAAAAA]"
                 onChange={handleOnChange}
-                value={searchTerm}
-              /></> : null
-          }
-        </div>
-      </div>
+                value={termText}
+              />
+            </div>
+          </div>
+        </div>) : null }
 
       {
         (isLoading || isFetching) ? <LoadingSpinner className="h-[250px]" /> :
+          activeStates?.length > 0 && (<>
           <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-3 mt-5">
-            {schools?.length
+            {schools?.length > 0
               ? schools.map((school, index) => (
-                <li key={index} className="flex rounded bg-slate-50 relative justify-center items-center text-sm w-[200px] h-[150px] p-6 m-1 border border-red">
+                <li key={index} className="flex rounded bg-slate-50 relative justify-center items-center text-sm w-[160px] h-[120px] md:w-[200px] md:h-[150px] p-3 md:p-6 m-1 border">
                   <Link href='#' onClick={() => setActiveSchoolId(school.id)}>
                     {school.name}
                   </Link>
@@ -224,13 +166,12 @@ export default function Page() {
                   </div>
                 </li>
               ))
-              : null}
+              : <p className="text-sm text-gray-500">No matches found.</p>}
           </ul>
-      }
-
-      {
-        schools?.length ?
-          <div className="flex mt-5">
+          <div className={cn(
+              "flex mt-5",
+              schools?.length === 0 && "hidden",
+              )}>
             <ReactPaginate
               activeClassName={"flex items-center justify-center text-primary border border-primary rounded- p- h-8 w-8"}
               breakClassName={"item break-me "}
@@ -248,7 +189,7 @@ export default function Page() {
               previousClassName={"bg-primary text-white h-9 w-9 flex justify-center items-center rounded-sm"}
               previousLabel={<ChevronLeft className="text-sm" />}
             />
-          </div> : null
+          </div></>)
       }
     </PageContent>
     </>

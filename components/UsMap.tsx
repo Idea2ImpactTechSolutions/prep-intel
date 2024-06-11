@@ -112,7 +112,7 @@ export default function USMap({ activeStates, setActiveStates, useStateCode=true
       {
         stateLabels.map((item, index) => (
           <text onMouseDown={elemMouseDown}
-            font-weight="lighter"
+            fontWeight="lighter"
             key={index}
             x={item.x}
             y={item.y}
