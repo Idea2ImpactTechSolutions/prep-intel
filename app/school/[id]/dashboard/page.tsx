@@ -10,7 +10,7 @@ export default function Page() {
   const pageParams = useParams();
 
   const schoolId = pageParams?.id;
-  const { data: schoolMetrics, error, isLoading } = useGetSchoolMetricsQuery({ school_id: schoolId });
+  const { data: schoolMetrics, isLoading } = useGetSchoolMetricsQuery({ school_id: schoolId });
 
   // Handle loading and error states
   if (isLoading) {
