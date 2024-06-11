@@ -8,6 +8,12 @@ const studentApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    getSchoolPrepScores: builder.query({
+      query: ({schoolId, studentId}) => ({
+        url: `/schools/${schoolId}/prep-scores?schoolId=${schoolId}&studentId=${studentId}`,
+        method: "GET",
+      }),
+    }),
     getStudentVitals: builder.query({
       query: (studentId) => ({
         url: `/students/${studentId}/vitals`,
@@ -117,4 +123,5 @@ export const {
   useUpdateConnectionRequestsMutation,
   useLazyGetStudentRecruiterConnectionsQuery,
   useGetStudentSchoolsQuery,
+  useGetSchoolPrepScoresQuery,
 } = studentApi;

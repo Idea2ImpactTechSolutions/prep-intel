@@ -1,6 +1,6 @@
 import SingleStat from '@/components/single-stat'
 import { Button } from '@/components/ui/button'
-import { useConnectWithRecruiterMutation } from '@/redux/services/student/studentApi'
+import { useConnectWithRecruiterMutation, useGetSchoolPrepScoresQuery } from '@/redux/services/student/studentApi'
 import { Dictionary } from '@/types/dictionary'
 import { Facebook, Instagram, Twitter } from 'lucide-react'
 import { useSession } from 'next-auth/react'
@@ -12,14 +12,20 @@ import { FaSchool } from "react-icons/fa6";
 import { cacheBust } from '@/app/config/helpers'
 
 interface SchoolInformationProps {
-    schoolData: Dictionary
+    schoolData: Dictionary;
+    studentId: string;
+    userRole: string;
 }
 
 export default function SchoolInformation({ schoolData }: SchoolInformationProps) {
-    const [connectWithRecruiter, {isLoading}] = useConnectWithRecruiterMutation()
-    const session = useSession()
-    const studentId = session.data?.user?.roleId
-    const userRole = session.data?.user?.role
+    const session = useSession();
+    const studentId = session.data?.user?.roleId;
+    const userRole = session.data?.user?.role;
+
+    console.log("schoolData", schoolData)
+
+    const [connectWithRecruiter, {isLoading}] = useConnectWithRecruiterMutation();
+    const {data: response, isLoading: isScoreLoading } = useGetSchoolPrepScoresQuery(studentId, schoolData.id);
 
     const handleConnectWithRecruiter = async()=>{
        connectWithRecruiter({school_id:schoolData?.id, studentId})
