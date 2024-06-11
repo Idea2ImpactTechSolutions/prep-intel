@@ -102,8 +102,8 @@ export default function Page() {
              emptyMessage="No recruits found."
              isLoading={isLoading}
            />
-            ) :( 
-            <StudentPanel goBack={() => setStudentId("")} studentId={studentId} recruiterId={recruiterId} />
+            ) :(
+            <StudentPanel studentId={studentId} recruiterId={recruiterId} />
          )}
        </PageContent>
      </>
