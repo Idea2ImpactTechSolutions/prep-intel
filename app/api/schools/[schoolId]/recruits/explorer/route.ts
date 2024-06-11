@@ -2,11 +2,10 @@ import * as yup from 'yup';
 import type { NextRequest } from "next/server";
 import { apiResponse } from "app/config/helpers";
 import { models } from "@/app/models";
-import { col, Op, fn } from 'sequelize';
+import { col, fn, literal, Op } from 'sequelize';
 
 const {
   ConnectionRequest,
-  Recruits,
   School,
   Students,
 } = models;
@@ -130,8 +129,10 @@ export async function GET(
     const limit = parseInt(searchParams.get("pageSize") || "10", 10);
     const offset = (page - 1) * limit;
 
+
     const {count, rows} : any = await Students.findAndCountAll({
       where: whereConditions,
+      replacements: {school_id: params.schoolId},
       limit: limit,
       offset: offset,
       order: ['connectionRequestId'],
@@ -142,11 +143,6 @@ export async function GET(
           where: {
             school_id: params.schoolId,
           },
-          attributes: [],
-          required: false
-        },
-        {
-          model: Recruits,
           attributes: [],
           required: false
         },
@@ -205,12 +201,7 @@ function getFilters(searchParams) {
 }
 
 function prepareQueryFilters(filters, school) {
-  let schoolMins: object = {
-    [Op.or]: [
-      {'$recruits.student_id$': null },
-      {'$recruits.school_id$': { [Op.ne]: school.id }}
-    ]
-  };
+  let schoolMins: object = {};
 
   if ( filters ) {
     Object.entries(filters).forEach(([key, value]) => {
@@ -229,6 +220,9 @@ function prepareQueryFilters(filters, school) {
   }
 
   const filterConditions: object = {
+    id: { [Op.notIn]: literal(
+        '(SELECT DISTINCT student_id FROM recruits WHERE school_id =:school_id)'
+    )},
     [Op.or]: [
       schoolMins,
       {
