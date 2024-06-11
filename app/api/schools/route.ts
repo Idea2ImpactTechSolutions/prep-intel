@@ -85,7 +85,7 @@ export async function GET(req: NextRequest) {
       const searchTerm = searchParams.get("searchTerm");
 
       const stateString = searchParams.get("states");
-      const states = stateString?.split(",");
+      const states = !stateString ? [] : stateString?.split(",");
 
       // Pagination parameters
       const page = parseInt(searchParams.get("page") || "1", 10);
@@ -93,7 +93,6 @@ export async function GET(req: NextRequest) {
       const offset = (page - 1) * limit;
 
       // Fetching data and count
-   
       const result = await getSchoolsInStates(states, searchTerm, { limit, offset });
       const totalItems = result.count;
       const totalPages = Math.ceil(totalItems / limit);
@@ -122,7 +121,7 @@ export async function GET(req: NextRequest) {
 
 function getSchoolsInStates(states, searchTerm, { limit, offset }) {
   const whereConditions = searchTerm ? { name: { [Op.iLike]: `%${searchTerm}%` } } : {};
-
+  const where = states?.length > 0 ? { state: { [Op.in]: states } } : {};
 
   return School.findAndCountAll({
     attributes: ["id", "name"],
@@ -131,7 +130,7 @@ function getSchoolsInStates(states, searchTerm, { limit, offset }) {
         model: SchoolAddress,
         as: "school_address",
         attributes: ["state"],
-        where: { state: { [Op.in]: states } },
+        where,
       },
     ],
     where: whereConditions,

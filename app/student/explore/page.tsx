@@ -56,7 +56,7 @@ export default function Page() {
     pageSize: itemsPerPage,
   },
   {
-    skip: activeStates.length === 0,
+    skip: (activeStates.length === 0 && !searchTerm),
   });
 
   // Destructure the response from getSchoolData, extracting the schools, totalPages,
@@ -118,6 +118,16 @@ export default function Page() {
         </div>
 
         <span className="flex-1"></span>
+        <div className="relative md:flex">
+          <Search width={15} height={15} className="text-[#AAAAAA] absolute left-3 top-1/2 transform -translate-y-1/2" />
+          <Input
+            placeholder="Search schools by name"
+            containerClass="mb-0"
+            className="rounded-lg p-[1rem] pl-8 placeholder:text-[#AAAAAA]"
+            onChange={handleOnChange}
+            value={termText}
+          />
+        </div>
 
       </div>
 
@@ -130,30 +140,17 @@ export default function Page() {
         />
       </div>
 
-      {(activeStates?.length > 0 && !isLoading) ? (
+      {((activeStates?.length > 0 || !!searchTerm) && !isLoading) ? (
         <div className="w-full flex items-end">
           <div className="space-y-1 my-3">
             <h2 className="font-semibold">{schoolCount} Universit{schoolCount === 1 ? 'y' : 'ies'} Found</h2>
             <p className="text-sm text-gray-500">Explore {schools?.length} top universit{schoolCount === 1 ? 'y' : 'ies'}</p>
           </div>
-          <div className="flex-grow"></div>
-          <div className="flex flex-col md:flex-row md:justify-between md:items-end">
-            <div className="relative md:flex">
-              <Search width={15} height={15} className="text-[#AAAAAA] absolute left-3 top-1/2 transform -translate-y-1/2" />
-              <Input
-                placeholder="Search schools by name"
-                containerClass="mb-0"
-                className="rounded-lg p-[1rem] pl-8 placeholder:text-[#AAAAAA]"
-                onChange={handleOnChange}
-                value={termText}
-              />
-            </div>
-          </div>
         </div>) : null }
 
       {
         (isLoading || isFetching) ? <LoadingSpinner className="h-[250px]" /> :
-          activeStates?.length > 0 && (<>
+          (activeStates?.length > 0 || !!searchTerm) && (<>
           <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-3 mt-5">
             {schools?.length > 0
               ? schools.map((school, index) => (
