@@ -4,6 +4,7 @@
 import { render, screen } from "@testing-library/react";
 import Page from "@/app/page";
 import SchoolDashboard from "@/app/school/[id]/dashboard/page"
+import * as managerApi from "@/redux/services/school/managerApi"; // Import the whole module
 
 jest.mock("next/navigation", () => ({
   useRouter() {
@@ -41,6 +42,10 @@ jest.mock("next-auth/react", () => ({
   }
 }));
 
+// Mock the data fetching hook
+jest.mock("../redux/services/school/managerApi");
+
+
 describe("Home", () => {
   it("renders a heading", () => {
     render(<Page/>);
@@ -51,9 +56,23 @@ describe("Home", () => {
 });
 
 describe("School Dashboard", () => {
+  beforeEach(() => {
+    // Provide a mock implementation for the hook
+    jest.spyOn(managerApi, 'useGetSchoolMetricsQuery').mockReturnValue({
+      data: {
+        totalRecruits: 100,
+        pendingApplicants: 10,
+        admittedStudents: 60,
+        schoolAdmissionConversionRate: 0.6,
+        enrolledStudents: 50,
+        applicationGrowthRate: 5.7,
+      },
+      isLoading: false,
+      error: null,
+    });
+  });
   it("renders a heading", () => {
     render(<SchoolDashboard/>);
-
     const heading = screen.getByText("My Dashboard");
     expect(heading).toBeInTheDocument();
   });
