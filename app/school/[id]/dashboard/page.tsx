@@ -2,20 +2,39 @@
 import React from "react";
 import { useParams } from "next/navigation";
 import { PageHeader, PageContent } from "@/components/common-page";
+import { useGetSchoolMetricsQuery } from "@/redux/services/school/managerApi";
+import LoadingSpinner from "@/components/loading-spinner";
+
 
 export default function Page() {
   const pageParams = useParams();
 
-  // TODO: Use schoolId to query for data matching the given id
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const schoolId = pageParams?.id;
+  const { data: schoolMetrics, isLoading } = useGetSchoolMetricsQuery({ school_id: schoolId });
+
+  // Handle loading and error states
+  if (isLoading) {
+    return (
+      <div className="h-fit w-full">
+        <LoadingSpinner className="mt-5 h-full" />
+      </div>
+    );
+  }
+
+  const {
+    totalRecruits,
+    pendingApplicants,
+    admittedStudents,
+    schoolAdmissionConversionRate,
+    enrolledStudents,
+  } = schoolMetrics?.data || {};
+
   const dashInfo = {
-    applicationCount: 13.299,
-    admissionsCount: 8339,
-    enrollmentCount: 5399,
-    admissionRate: 60.0,
-    pendingCount: 849,
-    growthRate: 5.7,
+    applicationCount: totalRecruits || 0,
+    admissionsCount: admittedStudents || 0,
+    enrollmentCount: enrolledStudents || 0,
+    admissionRate: (schoolAdmissionConversionRate * 100).toFixed(2) || 0,
+    pendingCount: pendingApplicants,
   };
 
   return (
@@ -53,10 +72,7 @@ export default function Page() {
           </div>
           <div className="bg-gray-100 p-4 rounded">
             <label className="font-bold">Application Growth Rate</label>
-            <h2>{dashInfo.growthRate}%</h2>
-          </div>
-          <div className="bg-gray-100 p-4 rounded col-span-4">
-            <label className="font-bold">Student Funnel</label>
+            <h2>NA</h2>
           </div>
         </div>
       </section>
