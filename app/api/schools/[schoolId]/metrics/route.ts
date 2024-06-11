@@ -3,7 +3,6 @@ const { School, Recruits } = models;
 import { apiResponse } from "@/app/config/helpers";
 import { type NextRequest } from "next/server";
 import logger from "@/lib/logger";
-import { ApplicationStatus } from "@/app/enums/application-status";
 import { ApplicantStatus } from "@/app/enums/applicant-status";
 
 /**
