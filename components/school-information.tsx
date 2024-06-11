@@ -10,22 +10,24 @@ import React from 'react'
 import { toast } from 'sonner'
 import { FaSchool } from "react-icons/fa6";
 import { cacheBust } from '@/app/config/helpers'
+import LoadingSpinner from './loading-spinner'
 
 interface SchoolInformationProps {
     schoolData: Dictionary;
-    studentId: string;
-    userRole: string;
 }
 
 export default function SchoolInformation({ schoolData }: SchoolInformationProps) {
     const session = useSession();
     const studentId = session.data?.user?.roleId;
     const userRole = session.data?.user?.role;
-
-    console.log("schoolData", schoolData)
+    const schoolId = schoolData?.id;
 
     const [connectWithRecruiter, {isLoading}] = useConnectWithRecruiterMutation();
-    const {data: response, isLoading: isScoreLoading } = useGetSchoolPrepScoresQuery(studentId, schoolData.id);
+    const {data: scoreResponse, isLoading: isScoreLoading } = useGetSchoolPrepScoresQuery(
+      {studentId, schoolId}, {
+        skip: !studentId || !schoolId
+      }
+    );
 
     const handleConnectWithRecruiter = async()=>{
        connectWithRecruiter({school_id:schoolData?.id, studentId})
@@ -144,7 +146,13 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
                     </div>
                 </div>
                 <div className="bg-gray-200 p-4 lg:w-[60rem] xl:w-[30rem] rounded-xl">
-                    <div className="w-full h-[308px] border border-dashed border-[#333] mb-10 rounded-lg"></div>
+                    <div className="w-full flex gap-2 p-4 border border-dashed border-[#333] mb-10 rounded-lg bg-white">
+                      { isScoreLoading ?  <LoadingSpinner className="h-200 w-full" />
+                        :  (scoreResponse && <>
+                        <SingleStat title="Prep Score" value={scoreResponse?.data.prepScore} />
+                        </>)
+                      }
+                      </div>
                     {
                         userRole === "student"?
                             <>
