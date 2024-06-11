@@ -41,6 +41,19 @@ const managerApi = baseApi.injectEndpoints({
         }
       },
     }),
+    getSchoolMetrics: builder.query({
+      query: ({ school_id }) => ({
+        url: `/schools/${school_id}/metrics`,
+        method: "GET",
+      }),
+      async onQueryStarted(_, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    }),
     managerCreateSchoolProfile: builder.mutation({
       query: (payload) => ({
         url: `/manager/profile/school-profile`,
@@ -106,4 +119,5 @@ export const {
   useCreateManagerMutation,
   useLazyGetRecruitsQuery,
   useGetRecruitsQuery,
+  useGetSchoolMetricsQuery
 } = managerApi;
