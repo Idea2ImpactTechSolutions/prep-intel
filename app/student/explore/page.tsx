@@ -1,7 +1,6 @@
 "use client";
 import UsMap from "@/components/UsMap";
 import LoadingSpinner from "@/components/loading-spinner";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useGetSchoolDataQuery } from "@/redux/services/student/studentApi";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
@@ -120,15 +119,6 @@ export default function Page() {
 
         <span className="flex-1"></span>
 
-        <Button
-          type="button"
-          variant="default"
-          loadingText="Search..."
-          loading={isLoading || isFetching}
-          onClick={() => fetchSchoolData()}
-        >
-          Search
-        </Button>
       </div>
 
       <div className={cn(
