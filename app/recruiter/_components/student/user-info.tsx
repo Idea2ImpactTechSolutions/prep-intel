@@ -1,6 +1,6 @@
 "use client"
 import React from 'react'
-import { FileCheck } from 'lucide-react'
+
 
 const UserInformation = ({user_info}) => {
   return (
@@ -12,10 +12,6 @@ const UserInformation = ({user_info}) => {
                         <h2 className='text-3xl md:text-[32px] font-extrabold leading-10'>
                             {user_info?.student_first_name + " " + user_info?.student_last_name}
                         </h2>
-                        <div className='flex items-center gap-x-1 bg-[#57BFC7]/10 text-[#57BFC7] text-sm py-1 px-3 rounded-sm w-fit'>
-                            <FileCheck size={14}/>
-                            <span>68% Complete</span>
-                        </div>
                     </>
                 )
             }
