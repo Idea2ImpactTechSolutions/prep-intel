@@ -104,13 +104,13 @@ export async function GET(
 
       const studentPrepScore = getStudentPrepScore(school, student);
 
-      return apiResponse('Prep Score successfully calculated', 200, { prepScore: studentPrepScore.prepScore, details: studentPrepScore.details });
+      return apiResponse('Prep Score successfully calculated', 200, {
+        prepScore: studentPrepScore.prepScore,
+        details: studentPrepScore.details
+      });
     } catch (error: any) {
       logger.error(error.message);
-      return Response.json(
-        apiResponse("Error occurred", 400, { error: error.message }),
-        { status: 400 }
-      );
+      return apiResponse("Error occurred", 400, { error: error.message });
     }
 }
 
