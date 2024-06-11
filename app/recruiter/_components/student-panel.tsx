@@ -4,12 +4,11 @@ import StudentInformation from './student/student-information';
 import LoadingSpinner from '@/components/loading-spinner';
 
 interface PageProps {
-  goBack: () => void;
   studentId: string;
   recruiterId: string;
 }
 
-export default function StudentPanel({goBack, studentId, recruiterId }:PageProps) {
+export default function StudentPanel({ studentId, recruiterId }:PageProps) {
   const {data: response, isLoading} = useGetStudentProfileQuery({studentId,recruiterId});
   // Alias response data as student
   const student = response?.data;

@@ -31,8 +31,8 @@ export default function Page() {
           onStudentSelected={id => setStudentId(id)}
           className={cn(studentId && 'hidden')} />
         {
-          /* Conditionally details view */
-          studentId && <StudentPanel goBack={() => setStudentId('')} studentId={studentId} recruiterId={recruiterId} />
+          /* Conditionally render student details view */
+          studentId && <StudentPanel studentId={studentId} recruiterId={recruiterId} />
         }
       </PageContent>
     </>
