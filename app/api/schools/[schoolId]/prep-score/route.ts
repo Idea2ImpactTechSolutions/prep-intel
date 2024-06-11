@@ -115,17 +115,19 @@ export async function GET(
 }
 
 function getStudentPrepScore(school, student) {
-  let studentPrepScore = 0;
-  let details = { gpaScore: 5, satScore: 5, actScore: 5 };
+  // Non-required scores are given a default score of 5
+  const scores = {
+    gpaScore: school.diploma_required ? getGPAPrepScore(school, student) : 5,
+    satScore: school.sat_required ? getSATPrepScore(school, student) : 5,
+    actScore: school.act_required ? getACTPrepScore(school, student) : 5,
+  };
 
-  if (school.act_required || school.sat_required || school.diploma_required) {
-    details.gpaScore = school.diploma_required ? getGPAPrepScore(school, student) : 5;
-    details.satScore = school.sat_required ? getSATPrepScore(school, student) : 5;
-    details.actScore = school.act_required ? getACTPrepScore(school, student) : 5;
-    studentPrepScore = Math.ceil((details.gpaScore + details.satScore + details.actScore) / 3);
-  }
-
-  return { prepScore: studentPrepScore, details };
+  // Alternatively, if we want to a generic non-var aware approach...
+  // prepScore: scores.reduce(Math.ceil((acc, val) => acc + val, 0) / scores.length);
+  return {
+    prepScore: Math.ceil((scores.gpaScore + scores.satScore + scores.actScore) / 3.0),
+    details: scores
+  };
 }
 
 function getACTPrepScore(school, student) {
