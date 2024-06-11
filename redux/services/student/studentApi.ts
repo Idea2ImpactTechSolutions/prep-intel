@@ -102,7 +102,7 @@ const studentApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useLazyGetSchoolDataQuery,
+  useGetSchoolDataQuery,
   useLazyGetStudentVitalsQuery,
   useAddStudentVitalsMutation,
   useAddStudentSchoolsMutation,
