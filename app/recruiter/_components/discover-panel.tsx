@@ -149,7 +149,7 @@ export default function DiscoverPanel({ recruiterId, className, schoolID, onStud
             onChange={handleChange}
             touched={touched.states}
             error={errors.states}
-            placeholder="GL,AL"
+            placeholder="GA,AL"
             label="States"
           />
 
