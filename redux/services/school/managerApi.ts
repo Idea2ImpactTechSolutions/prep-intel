@@ -33,13 +33,6 @@ const managerApi = baseApi.injectEndpoints({
         url: `/schools/${school_id}/recruits`,
         method: "GET",
       }),
-      async onQueryStarted(_, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled;
-        } catch (error) {
-          console.log(error);
-        }
-      },
     }),
     getSchoolMetrics: builder.query({
       query: ({ school_id }) => ({
