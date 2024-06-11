@@ -10,7 +10,7 @@ const studentApi = baseApi.injectEndpoints({
     }),
     getSchoolPrepScores: builder.query({
       query: ({schoolId, studentId}) => ({
-        url: `/schools/${schoolId}/prep-scores?schoolId=${schoolId}&studentId=${studentId}`,
+        url: `/schools/${schoolId}/prep-score?studentId=${studentId}`,
         method: "GET",
       }),
     }),
@@ -25,7 +25,7 @@ const studentApi = baseApi.injectEndpoints({
         url: `/students/${payload.studentId}/vitals`,
         method: "POST",
         body: payload.data
-      }),
+    }),
     }),
     connectWithRecruiter: builder.mutation({
       query:(payload)=>({
