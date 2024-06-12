@@ -11,6 +11,9 @@ import { toast } from 'sonner'
 import { FaSchool } from "react-icons/fa6";
 import { cacheBust } from '@/app/config/helpers'
 import LoadingSpinner from './loading-spinner'
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import "react-circular-progressbar/dist/styles.css";
+import { cn } from "@/lib/utils";
 
 interface SchoolInformationProps {
     schoolData: Dictionary;
@@ -21,13 +24,17 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
     const studentId = session.data?.user?.roleId;
     const userRole = session.data?.user?.role;
     const schoolId = schoolData?.id;
-
+    const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--primaryCC');
     const [connectWithRecruiter, {isLoading}] = useConnectWithRecruiterMutation();
     const {data: scoreResponse, isLoading: isScoreLoading } = useGetSchoolPrepScoresQuery(
       {studentId, schoolId}, {
         skip: !studentId || !schoolId
       }
     );
+
+    const scoreMax = 5;
+    const prepScore = parseFloat(scoreResponse?.data?.prepScore || "0");
+    const prepScorePercent = prepScore/scoreMax * 100;
 
     const handleConnectWithRecruiter = async()=>{
        connectWithRecruiter({school_id:schoolData?.id, studentId})
@@ -48,9 +55,16 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
       return schoolData?.assets?.filter((f) => f.category === 'school-banner-image')?.[0]?.location;
     }
 
+    function formatNumber(num: number, precision: number = 1): number {
+      // Use toFixed to format the number to the desired precision
+      const formatted = num.toFixed(precision);
+      // Convert the string back to a number to remove trailing zeros
+      return parseFloat(formatted);
+    }
+
     return (
         <section>
-            <div className="rounded-lg shadow-md">
+            <div className="rounded-lg shadow-md shadow-gray-100">
                 <div className="relative bg-gray-200 h-32 rounded-ss-lg rounded-se-lg lg:h-44 xl:h-52"
                   style={{backgroundImage: `url("${cacheBust(bannerImage(schoolData))}")`}}>
                     <div className="absolute left-8 -bottom-10 w-24 h-24 bg-white rounded-full border grid place-content-center md:w-28 md:h-28 md:-bottom-12 lg:w-32 lg:h-32">
@@ -88,52 +102,45 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
                     </div>
                 </div>
             </div>
-            <div className="mt-8 flex flex-col gap-4 lg:flex-row">
-                <div className="xl:w-[calc(100vw_-_30rem)]">
-                    <div>
-                        <h2 className="text-[#030712] font-bold text-sm md:text-lg">School Overview</h2>
+            <div className="mt-4 flex flex-col gap-4 lg:flex-row">
+                <div className="w-full bg-white rounded-xl p-6 pt-4">
+                    <div >
+                        <h2 className={cn(
+                          "text-[#030712] font-bold text-sm md:text-lg",
+                          !schoolData?.intro_paragraph && "hidden")}
+                          >Overview</h2>
                         <div className="text-xs text-[#312B2B] md:text-sm lg:w-4/5">
                             {schoolData?.intro_paragraph}</div>
                     </div>
                     <div className="mt-4">
-                        <h2 className="text-[#030712] font-bold text-sm md:text-lg">Contact Information</h2>
-                        <div className="mt-1 overflow-auto xl:w-[90%]">
-                            <table className="whitespace-nowrap border-separate border-spacing-y-2" style={{ boxShadow: "none", margin: "0" }}>
-                                <tbody>
-                                    <tr className="bg-transparent">
-                                        <td className="text-[#030712] text-sm font-bold border-b-transparent p-0">Physical Address:</td>
-                                        <td className="border-b-transparent p-0 pl-8">{schoolData?.school_address?.street_address_1}</td>
-                                    </tr>
-                                    {
-                                        schoolData?.school_contacts?.map(({ contact_type, email, id, phone }) => (
-                                            <tr key={id} className="bg-transparent">
-                                                <td className="text-[#030712] text-sm font-bold border-b-transparent p-0 capitalize">{contact_type}:</td>
-                                                <td className="border-b-transparent p-0 pl-8">Phone: {phone}</td>
-                                                <td className="border-b-transparent p-0 pl-8">Email: {email}</td>
-                                            </tr>
-                                        ))
-                                    }
-                                    <tr className="bg-transparent">
-                                        <td className="text-[#030712] text-sm font-bold border-b-transparent p-0">Social Media Accounts:</td>
-                                        <td className="border-b-transparent p-0 pl-8">
-                                            <div className="flex gap-4">
-                                                <Link href={
-                                                    schoolData?.school_social_medias?.filter((f) => f.social_media === 'facebook')[0]?.url || '#'
-                                                } target="_blank" className="w-6 h-6 border border-primary rounded-full grid place-content-center text-primary"><Facebook width={15} height={15} /></Link>
-                                                <Link href={
-                                                    schoolData?.school_social_medias?.filter((f) => f.social_media === 'twitter')[0]?.url || '#'
-                                                } target="_blank" className="w-6 h-6 border border-primary rounded-full grid place-content-center text-primary"><Instagram width={15} height={15} /></Link>
-                                                <Link href={
-                                                    schoolData?.school_social_medias?.filter((f) => f.social_media === 'instagram')[0]?.url || '#'
-                                                } target="_blank" className="w-6 h-6 border border-primary rounded-full grid place-content-center text-primary"><Twitter width={15} height={15} /></Link>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <h2 className="text-[#030712] font-bold text-sm md:text-lg">Contact</h2>
+                        <div className="mt-1 overflow-auto xl:w-[90%] px-4 py-2">
+
+                            <div>{schoolData?.school_address?.street_address_1}</div>
+                            <div>{schoolData?.school_address?.street_address_2}</div>
+                            <div>{schoolData?.school_address?.city}, {schoolData?.school_address?.state} {schoolData?.school_address?.postal}</div>
+                              {
+                                schoolData?.school_contacts?.map(({ contact_type, email, id, phone }) => (
+                                  <div key={id}>
+                                      <div>{contact_type}</div>
+                                      <div>{phone}</div>
+                                      <div>{email}</div>
+                                  </div>))
+                              }
+                              <div className="flex gap-4 mt-2">
+                                  <Link href={
+                                      schoolData?.school_social_medias?.filter((f) => f.social_media === 'facebook')[0]?.url || '#'
+                                  } target="_blank" className="w-6 h-6 border border-primary rounded-full grid place-content-center text-primary"><Facebook width={15} height={15} /></Link>
+                                  <Link href={
+                                      schoolData?.school_social_medias?.filter((f) => f.social_media === 'twitter')[0]?.url || '#'
+                                  } target="_blank" className="w-6 h-6 border border-primary rounded-full grid place-content-center text-primary"><Instagram width={15} height={15} /></Link>
+                                  <Link href={
+                                      schoolData?.school_social_medias?.filter((f) => f.social_media === 'instagram')[0]?.url || '#'
+                                  } target="_blank" className="w-6 h-6 border border-primary rounded-full grid place-content-center text-primary"><Twitter width={15} height={15} /></Link>
+                              </div>
                         </div>
                     </div>
-                    <div className="lg:w-4/5">
+                    <div className="lg:w-4/5 mt-6">
                         <h2 className="mt-2 text-[#030712] font-bold text-sm md:text-lg">Admissions Information</h2>
                         <div className="mt-2 grid grid-cols-2 gap-4 md:grid-cols-3">
                             <SingleStat title="ACT Required" value={schoolData?.min_act_score || 'NA'} />
@@ -145,11 +152,24 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
                         </div>
                     </div>
                 </div>
-                <div className="bg-gray-200 p-4 lg:w-[60rem] xl:w-[30rem] rounded-xl">
-                    <div className="w-full flex gap-2 p-4 border border-dashed border-[#333] mb-10 rounded-lg bg-white">
+                <div className="border-gray bg-white p-4 md:w-[25rem] rounded-xl">
+                    <div className="w-full flex gap-2 border mb-8 p-10 rounded-lg bg-white">
                       { isScoreLoading ?  <LoadingSpinner className="h-200 w-full" />
                         :  (scoreResponse && <>
-                        <SingleStat title="Prep Score" value={scoreResponse?.data.prepScore} />
+                            <CircularProgressbar
+                              className="h-[120px] font-bold"
+                              text={`${formatNumber(prepScore, 1)}`}
+                              strokeWidth={14}
+                              value={prepScorePercent}
+                              styles={ buildStyles({
+                                pathColor: `${primaryColor}`,
+                                textColor: `${primaryColor}`,
+                                trailColor: '#D6D6D6',
+                                textSize: '20px',
+                                pathTransitionDuration: 3.15,
+                              })}
+                              />
+
                         </>)
                       }
                       </div>
