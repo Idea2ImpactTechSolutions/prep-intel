@@ -6,9 +6,9 @@ interface SingleStatProps {
 
 export default function SingleStat({title, value}: SingleStatProps) {
     return (
-        <div className="bg-[#F0F4F7] rounded-md flex flex-col gap-2 items-center p-5">
+        <div className="border rounded-md flex flex-col gap-1 p-5">
+            <h3 className="text-[#000000] font-medium lg:text-xl">{value}</h3>
             <span className="text-sm">{title}</span>
-            <h3 className="text-[#000000] font-medium lg:text-2xl">{value}</h3>
         </div>
     )
 }
