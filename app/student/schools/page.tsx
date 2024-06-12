@@ -30,10 +30,6 @@ export default function StudentConnection() {
     },
   ];
 
-  if (isLoading || isFetching) {
-    return <LoadingSpinner />;
-  }
-
   return (
     <>
       <PageHeader title="Schools" />
@@ -42,7 +38,7 @@ export default function StudentConnection() {
           title="Schools"
           columns={COLUMNS}
           data={schoolData}
-          isLoading={false}
+          isLoading={isLoading || isFetching}
         />
       </PageContent>
     </>
