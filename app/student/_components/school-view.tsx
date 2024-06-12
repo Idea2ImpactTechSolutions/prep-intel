@@ -28,9 +28,11 @@ export default function SchoolView({goBack, schoolId}:PageProps) {
                 {school_data?.name}
               </div>
             } />
+        <div className="bg-gray-100 h-[90vh]">
         <PageContent>
           <SchoolInformation schoolData={school_data} />
         </PageContent>
+        </div>
     </>
   );
 }
