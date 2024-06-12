@@ -19,7 +19,7 @@ export default function SchoolView({goBack, schoolId}:PageProps) {
         <PageHeader
             className="bg-white"
             title={
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
                 <Link href="#" className="underline" onClick={() => { goBack(); return false;}}>Explore Schools</Link> <GoChevronRight className="mt-1" />
                 {schoolData?.name}
               </div>
@@ -27,7 +27,7 @@ export default function SchoolView({goBack, schoolId}:PageProps) {
         <div className="bg-gray-100 h-[90vh]">
         <PageContent>
           {
-            isLoading ? <LoadingSpinner /> : (
+            isLoading ? <LoadingSpinner className="!h-[40rem]" /> : (
               <SchoolInformation schoolData={schoolData} />
             )
           }
