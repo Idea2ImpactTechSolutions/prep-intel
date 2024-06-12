@@ -76,7 +76,7 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
 
   const session = useSession()
   const roleId = session?.data?.user?.roleId
-  const senderRole = session?.data?.user?.role
+  const currentUserRole = session?.data?.user?.role
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -89,8 +89,9 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
       try {
         const res = await sendMessage({
                                         recruiterId: viewMessages[0]?.recruiter_id, 
-                                        studentId:viewMessages[0]?.student_id, 
-                                        senderRole:senderRole, 
+                                        studentId:viewMessages[0]?.student_id,
+                                        schoolId:'' ,
+                                        senderRole:currentUserRole, 
                                         message:values?.message})
                                         .unwrap()
         if(res?.status === 201){
@@ -107,13 +108,13 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
 
   const getMessagesFunc = useCallback(async ()=>{
     try {
-      if(senderRole === "student"){
+      if(currentUserRole === "student"){
         getConnections(roleId)
         const res = await getMessages({recruiter_id:"" ,school_id:"", student_id:roleId, recent}).unwrap()
         setMessages(res?.data)
       }
 
-      if(senderRole === "recruiter"){
+      if(currentUserRole === "recruiter"){
         const res = await getMessages({recruiter_id:roleId ,school_id:"", student_id:"", recent}).unwrap()
         setMessages(res?.data)
       }
@@ -122,16 +123,16 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
       toast.error(error?.message)
     }
 
-  }, [roleId, senderRole])
+  }, [roleId, currentUserRole])
 
   const handleViewMessage = async (message:any)=>{
     setOpenMessage(true)
-    if(senderRole === "student"){
+    if(currentUserRole === "student"){
       const res = await getMessages({recruiter_id: message?.recruiter_id ,school_id:"", student_id:roleId}).unwrap()
       setViewMessages(res?.data)
     }
 
-    if(senderRole === "recruiter"){
+    if(currentUserRole === "recruiter"){
       const res = await getMessages({recruiter_id:roleId ,school_id:"", student_id:message?.student_id})
       setViewMessages(res?.data?.data)
     }
@@ -170,7 +171,7 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
 
   useEffect(()=>{
     getMessagesFunc()
-  }, [senderRole, roleId, recent])
+  }, [currentUserRole, roleId, recent])
 
   useEffect(()=>{
     if(openMessage){
@@ -184,14 +185,14 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
 
 
   const getLastMessagePreview = (message) => {
-    if (message.sender_role === senderRole) {
+    if (message.sender_role === currentUserRole) {
       return `You: ${message.message_text}`;
     }
     return message.message_text;
   };
 
   const getProfileImage = (message) => {
-    const imgUrl = message.sender_role !== senderRole ? message.sender_image : message.receiver_image;
+    const imgUrl = message.sender_role == currentUserRole ? message.receiver_image : message.sender_image;
     return imgUrl ? <img src={imgUrl} alt="Profile" className="w-full h-full object-cover" /> : <DefaultProfileImage />;
   };
 
