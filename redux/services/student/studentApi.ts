@@ -8,6 +8,12 @@ const studentApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    getSchoolPrepScores: builder.query({
+      query: ({schoolId, studentId}) => ({
+        url: `/schools/${schoolId}/prep-score?studentId=${studentId}`,
+        method: "GET",
+      }),
+    }),
     getStudentVitals: builder.query({
       query: (studentId) => ({
         url: `/students/${studentId}/vitals`,
@@ -19,7 +25,7 @@ const studentApi = baseApi.injectEndpoints({
         url: `/students/${payload.studentId}/vitals`,
         method: "POST",
         body: payload.data
-      }),
+    }),
     }),
     connectWithRecruiter: builder.mutation({
       query:(payload)=>({
@@ -117,4 +123,5 @@ export const {
   useUpdateConnectionRequestsMutation,
   useLazyGetStudentRecruiterConnectionsQuery,
   useGetStudentSchoolsQuery,
+  useGetSchoolPrepScoresQuery,
 } = studentApi;
