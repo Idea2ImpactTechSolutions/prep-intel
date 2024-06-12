@@ -12,15 +12,12 @@ interface PageProps {
 }
 
 export default function SchoolView({goBack, schoolId}:PageProps) {
-
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
   const {data: {data: schoolData} = {}, isLoading } = useGetSchoolProfileQuery(schoolId);
 
   return (
     <>
         <PageHeader
+            className="bg-white"
             title={
               <div className="flex items-center gap-4">
                 <Link href="#" className="underline" onClick={() => { goBack(); return false;}}>Explore Schools</Link> <GoChevronRight className="mt-1" />
@@ -29,7 +26,11 @@ export default function SchoolView({goBack, schoolId}:PageProps) {
             } />
         <div className="bg-gray-100 h-[90vh]">
         <PageContent>
+          {
+            isLoading ? <LoadingSpinner /> : (
               <SchoolInformation schoolData={schoolData} />
+            )
+          }
         </PageContent>
         </div>
     </>
