@@ -30,7 +30,6 @@ interface NavbarProps {
 export function Navbar({tabs, leftContent, showTabs=true }: NavbarProps) {
 
     const [getConnections] = useLazyGetConnectionRequestsQuery()
-
     const { width } = useWindowSize()
     const [ showSidebar, setShowSidebar] = useState<boolean>(true)
 
@@ -54,8 +53,9 @@ export function Navbar({tabs, leftContent, showTabs=true }: NavbarProps) {
     const dispatch = useAppDispatch()
 
     const handleLogout = async () => {
-        await signOut()
-        dispatch(managerReset());
+      await signOut()
+      dispatch(managerReset());
+      window.location.href = "/login";
     }
 
     useEffect(() => {
@@ -160,7 +160,7 @@ export function Navbar({tabs, leftContent, showTabs=true }: NavbarProps) {
                             <Bell className="w-4 h-4 "/>
                             <div className="ml-2 w-1 h-1 rounded-full bg-red-500 absolute right-0 top-0.5"></div>
                         </div>
-                        <UserMenu />
+                        <UserMenu sharedLogout={handleLogout} />
                     </div>
                 </div>
                 <NotificationPanel open={open} setOpen={setOpen}/>
