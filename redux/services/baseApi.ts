@@ -5,21 +5,11 @@ import {
   createApi,
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
-import Cookies from "js-cookie";
+
 import { toast } from "sonner";
-import { reset } from "../features/auth/authSlice";
-import { clearStorageItem } from "@/utils/hooks/useLocalStorage";
 
 export const baseQuery = fetchBaseQuery({
   baseUrl: `/api`,
-  prepareHeaders: (headers) => {
-    const accessToken: string = Cookies.get("token") || "";
-    if (accessToken) {
-      headers.set("Authorization", `Bearer ${accessToken}`);
-    }
-
-    return headers;
-  },
 });
 
 export const baseQueryInterceptor: BaseQueryFn<
@@ -29,19 +19,8 @@ export const baseQueryInterceptor: BaseQueryFn<
 > = async (args, api, extraOptions) => {
   const result: any = await baseQuery(args, api, extraOptions);
 
-  // if (result.status === 200) {
-  //   let message =result.message
-  //         toast.error(message)
-  // }
-  
   if (result.error) {
       let res: any = result.error
-      if (res.status === 403) {
-          api.dispatch(reset())
-          Cookies.remove('token');
-          clearStorageItem()
-          window.location.href = '/';
-      }
       if (res.status === 401) {
           let message = Array?.isArray(res?.data?.error?.message)
           ? res.data.error.message[0]
