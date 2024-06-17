@@ -4,3 +4,4 @@ psycopg2-binary
 pypeds
 pandas
 pyarrow
+python-dotenv
