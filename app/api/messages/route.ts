@@ -54,22 +54,22 @@ export async function GET(req: NextRequest) {
     if (recruiter_id && student_id) {
       // Return all messages between a specific recruiter and student
       const messagesList = await getMessagesBetweenRecruiterAndStudent(recruiter_id,student_id);
-      const formattedMessages = formatMessages(messagesList, false);
+      const formattedMessages = formatFullMessages(messagesList, false);
       return apiResponse("Messages retrieved successfully", 200,formattedMessages);
     } else if (student_id && school_id) {
       // Return all messages between a student and a school
       const messagesList = await getMessagesBetweenStudentAndSchool(student_id, school_id);
-      const formattedMessages = formatMessages(messagesList, false);
+      const formattedMessages = formatFullMessages(messagesList, false);
       return apiResponse("Messages retrieved successfully", 200, formattedMessages);
     }
     else if (recruiter_id && recent) {
       const messagesList = await getRecentMessagesForRecruiter(recruiter_id);
-      const formattedMessages = formatMessages(messagesList, true);
+      const formattedMessages = formatRecentMessages(messagesList, true);
       return apiResponse("Messages retrieved successfully", 200, formattedMessages);
     }
     else if (student_id && recent) {
       const messagesList = await getRecentMessagesForStudent(student_id);
-      const formattedMessages = formatMessages(messagesList, true);
+      const formattedMessages = formatRecentMessages(messagesList, true);
       return apiResponse("Messages retrieved successfully", 200, formattedMessages);
     } else {
       return apiResponse("Invalid parameter combination", 400);
@@ -201,7 +201,44 @@ async function getRecentMessagesForStudent(student_id) {
   return messagesList;
 }
 
-function formatMessages(messagesList, isRawQuery) {
+function formatRecentMessages(messagesList, isRawQuery) {
+  return messagesList.map((message) => {
+    const isSenderRecruiter = message.sender_role === 'recruiter';
+    const senderName = isSenderRecruiter
+      ? `${message.recruiter_first_name} ${message.recruiter_last_name}`
+      : `${message.student_first_name} ${message.student_last_name}`;
+    const senderImage = isSenderRecruiter
+      ? message.recruiter_profile_image
+      : message.student_profile_image;
+    const recipientName = !isSenderRecruiter
+      ? `${message.recruiter_first_name} ${message.recruiter_last_name}`
+      : `${message.student_first_name} ${message.student_last_name}`;
+    const recipientImage = !isSenderRecruiter
+      ? message.recruiter_profile_image
+      : message.student_profile_image;
+
+    return {
+      id: message.id,
+      message_text: message.message_text,
+      create_date: message.create_date,
+      recipient_role: message.recipient_role,
+      recruiter_id: message.recruiter_id,
+      school_id: message.school_id,
+      sender_role: message.sender_role,
+      status: message.status,
+      student_id: message.student_id,
+      sender_name: senderName,
+      sender_image: senderImage,
+      receiver_name: recipientName,
+      receiver_image: recipientImage,
+      type: "message", // Adding type key to indicate the type of item
+    };
+  });
+}
+
+
+
+function formatFullMessages(messagesList, isRawQuery) {
   return messagesList.map((message) => {
     const isSenderRecruiter = isRawQuery
       ? message.sender_role === 'recruiter'
@@ -233,7 +270,7 @@ function formatMessages(messagesList, isRawQuery) {
       sender_image: senderImage,
       receiver_name: recipientName,
       receiver_image: recipientImage,
-      type: message.type, // Adding type key to indicate the type of item
+      type: "message", // Adding type key to indicate the type of item
     };
   });
 }

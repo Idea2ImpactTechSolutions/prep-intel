@@ -27,10 +27,8 @@ const POST_VALIDATION_SCHEMA = yup.object({
 const GET_FIELDS = [
   'id',
   [ col('school.name'), 'schoolName'],
-  [ fn('CONCAT',
-       col('recruiter->user.first_name'), ' ', col('recruiter->user.last_name')
-    ), 'recruiterName'
-  ],
+  [ fn('CONCAT',col('recruiter->user.first_name'), ' ', col('recruiter->user.last_name')), 'recruiterName'],
+  [col('recruiter->user.profile_image'), 'recruiterProfileImage'],
   [ 'create_date', 'requestDate' ],
   ['connection_accepted', 'requestStatus']
 ];
