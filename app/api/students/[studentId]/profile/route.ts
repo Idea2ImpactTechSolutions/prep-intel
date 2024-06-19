@@ -1,5 +1,5 @@
-import { responseBody } from "../../../../config/helpers";
-import { models } from "../../../../models";
+import { apiResponse } from "@/app/config/helpers";
+import { models } from "@/app/models";
 const {
   ConnectionRequest,
   Recruits,
@@ -21,27 +21,11 @@ export async function GET(
       searchParams,
     });
     if (!studentProfile) {
-      return Response.json(
-        responseBody("Student profile not found", 404, null),
-        {
-          status: 404,
+      return apiResponse("Student profile not found", 404);
         }
-      );
-    }
-    return Response.json(
-      responseBody(
-        "Student profile retrieved successfully",
-        200,
-        studentProfile
-      )
-    );
+    return apiResponse("Student profile retrieved successfully", 200, studentProfile);
   } catch (error: any) {
-    return Response.json(
-      responseBody("Internal Server Error", 500, { error: error.message }),
-      {
-        status: 500,
-      }
-    );
+    return apiResponse("Internal Server Error", 500, { error: error.message });
   }
 }
 
