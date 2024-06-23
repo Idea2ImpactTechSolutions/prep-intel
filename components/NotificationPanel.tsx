@@ -5,7 +5,7 @@ import SheetPanel from "@/components/custom-sheet"
 import LoadingSpinner from "@/components/loading-spinner";
 import { Button } from "@/components/ui/button"
 import { useSession } from "next-auth/react";
-import { ChevronLeft, X } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { useFormik } from "formik";
 import * as yup from "yup"
 import { Textarea } from "./ui/textarea";
@@ -80,7 +80,7 @@ const NotificationPanel =({open, setOpen}:NotificationPanelProp)=>{
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const {values, errors, touched, handleSubmit, handleBlur, handleChange, resetForm} = useFormik({
+  const {values, errors, touched, handleSubmit, handleBlur, handleChange } = useFormik({
     initialValues: {message: ""},
     validationSchema: yup.object().shape({
         message: yup.string().required('message is required'),

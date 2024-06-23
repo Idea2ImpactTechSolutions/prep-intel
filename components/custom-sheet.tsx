@@ -3,7 +3,6 @@ import {
   SheetContent,
   SheetTitle
 } from "@/components/ui/sheet"
-import { cn } from "@/lib/utils"
 import { X } from "lucide-react"
 
 interface SheetPanelProps {
