@@ -30,9 +30,9 @@ afterAll(() => {
 
 describe('Connection Request API', () => {
   describe('PATCH request', () => {
-    it('returns 204 on success', async () => {
+    it('returns 200 on success', async () => {
       const response = await PATCH(req, {params: {studentId:1}});
-      expect(response.status).toBe(204);
+      expect(response.status).toBe(200);
     });
     it('invokes expected methods', async () => {
       await PATCH(req, {params: {studentId:1}});

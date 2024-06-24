@@ -33,16 +33,15 @@ const userApi = baseApi.injectEndpoints({
     sendMessage: builder.mutation({
       query: ({ studentId, recruiterId, schoolId, senderRole, message }) => {
         // Add validation to ensure none of the required parameters are undefined
-        console.log('In userAPI')
-        console.log(`Student: ${studentId}. RecruiterId: ${recruiterId} SchoolId: ${schoolId} SenderRole: ${senderRole}. Message: ${message}`)
-
+        console.log('We are about send a message')
         if (!studentId || !recruiterId || !senderRole || !message) {
           throw new Error("Missing required parameters");
         }
     
         return {
-          url: `/messages/?recruiter_id=${recruiterId}&student_id=${studentId}&school_id=${schoolId}&sender_role=${senderRole}&message_text=${message}`,
+          url: `/messages`,
           method: "POST",
+          body : {message_text: message,recruiter_id : recruiterId,student_id:studentId,school_id: schoolId,sender_role:senderRole}
         };
       },
       invalidatesTags: ["STUDENT"],

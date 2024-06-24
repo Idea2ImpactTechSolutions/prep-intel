@@ -37,20 +37,6 @@ const recruiterApi = baseApi.injectEndpoints({
       }),
       providesTags:["STUDENT"]
     }),
-    sendMessage: builder.mutation({
-      query: ({ studentId, recruiterId, schoolId, senderRole, message }) => {
-        // Add validation to ensure none of the required parameters are undefined
-        if (!studentId || !recruiterId || !senderRole || !message) {
-          throw new Error("Missing required parameters");
-        }
-    
-        return {
-          url: `/messages/?recruiter_id=${recruiterId}&student_id=${studentId}&school_id=${schoolId}&sender_role=${senderRole}&message_text=${message}`,
-          method: "POST",
-        };
-      },
-      invalidatesTags: ["STUDENT"],
-    }),
     
     updateRecruiterPersonalInfo: builder.mutation({
       query: function(payload){
@@ -72,7 +58,6 @@ export const {
   useLazyGetRecruiterQuery,
   useGetRecruiterQuery,
   useGetStudentProfileQuery,
-  useSendMessageMutation,
   useLazyExploreRecruitsQuery,
   useUpdateRecruiterPersonalInfoMutation
 } = recruiterApi;

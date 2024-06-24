@@ -247,11 +247,9 @@ export async function GET(req: NextRequest) {
  */
 export async function POST(req: NextRequest) {
   try {
-    const recruiter_id = req.nextUrl.searchParams.get("recruiter_id");
-    const school_id = req.nextUrl.searchParams.get("school_id");
-    const student_id = req.nextUrl.searchParams.get("student_id");
-    const sender_role = req.nextUrl.searchParams.get("sender_role");
-    const message_text = req.nextUrl.searchParams.get("message_text");
+   
+    const jsonBody = await req.json();
+    const {recruiter_id,school_id,student_id,sender_role,message_text} = jsonBody;
 
     if (!(recruiter_id || school_id) || !student_id) {
       return apiResponse(
