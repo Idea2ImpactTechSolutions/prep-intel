@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import DiscoverPanel from "../_components/discover-panel";
-import StudentPanel from "../_components/student-panel";
+import StudentInformation from "@/components/student/student-information";
 import Link from "next/link";
 import { GoChevronRight } from "react-icons/go";
 import { PageHeader, PageContent } from "@/components/common-page";
@@ -32,7 +32,10 @@ export default function Page() {
           className={cn(studentId && 'hidden')} />
         {
           /* Conditionally render student details view */
-          studentId && <StudentPanel studentId={studentId} recruiterId={recruiterId} />
+          studentId && <StudentInformation
+            studentId={studentId}
+            recruiterId={recruiterId}
+            schoolId={schoolId} />
         }
       </PageContent>
     </>

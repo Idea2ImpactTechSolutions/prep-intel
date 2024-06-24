@@ -18,16 +18,28 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import GoalAndSkills from './goals-skills-section'
 
-const StudentInformation = ({student_details, recruiterId, studentId }) => {
+import { useGetStudentProfileQuery } from '@/redux/services/recruiter/recruiterApi';
+import LoadingSpinner from '@/components/loading-spinner';
+
+interface PageProps {
+  studentId: string;
+  schoolId: string;
+  recruiterId: string;
+}
+
+export default function StudentInformation({ studentId, schoolId, recruiterId }:PageProps) {
+    const {data: response, isLoading} = useGetStudentProfileQuery({studentId,recruiterId, schoolId});
     const [showModal, setShowModal] = useState<boolean>(false)
     const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false)
-    const [disableConnectionButton, setDisableConnectionButton] = useState<boolean>(student_details?.open_connection_request)
     const {data: session}: any = useSession()
-    const schoolId = session?.user?.schoolID;
     const router = useRouter()
 
     const [createConnectionRequest, { isLoading: isLoadingConnectionRequest }] = useCreateConnectionRequestsMutation();
-    const [sendMessage, { isLoading }] = useSendMessageMutation()
+    const [sendMessage, { isLoading: isSending }] = useSendMessageMutation()
+
+    // Alias response data as student
+    const student_details = response?.data;
+    const [disableConnectionButton, setDisableConnectionButton] = useState<boolean>(student_details?.open_connection_request || true)
 
     function sendConnectRequest() {
       createConnectionRequest({
@@ -71,7 +83,11 @@ const StudentInformation = ({student_details, recruiterId, studentId }) => {
         onSubmit:()=>setShowConfirmationModal(true)
     })
 
-  return (
+    if (isLoading) {
+      return <LoadingSpinner />;
+    }
+
+    return (
     <div className='w-full flex flex-col space-y-2 md:space-y-6'>
         <div className="shadow-sm rounded-xl border overflow-hidden">
           <div className='relative'>
@@ -87,7 +103,7 @@ const StudentInformation = ({student_details, recruiterId, studentId }) => {
           </div>
           <div className='p-10 bg-white'>
               <div className='flex justify-end'>
-                  {(disableConnectionButton) ?
+                  { !recruiterId ? null : (disableConnectionButton) ?
                       <Button variant="outline" className='text-xl' disabled
                       >Invite Sent</Button>
                       : (!student_details?.connection_date &&  !student_details?.interested) ?
@@ -127,7 +143,7 @@ const StudentInformation = ({student_details, recruiterId, studentId }) => {
                     <Button
                         type='button'
                         variant="outline"
-                        disabled={isLoading}
+                        disabled={isSending}
                         onClick={()=>{
                             setShowModal(false)
                             resetForm()
@@ -141,8 +157,8 @@ const StudentInformation = ({student_details, recruiterId, studentId }) => {
                         type='submit'
                         variant="orange"
                         className='w-full sm:w-fit md:px-10 rounded-lg font-[500]'
-                        loading={isLoading}
-                        disabled={isLoading}
+                        loading={isSending}
+                        disabled={isSending}
                         loadingText={"Sending..."}
                     >
                         Send Message
@@ -163,5 +179,3 @@ const StudentInformation = ({student_details, recruiterId, studentId }) => {
     </div>
   )
 }
-
-export default StudentInformation
