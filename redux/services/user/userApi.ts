@@ -33,7 +33,6 @@ const userApi = baseApi.injectEndpoints({
     sendMessage: builder.mutation({
       query: ({ studentId, recruiterId, schoolId, senderRole, message }) => {
         // Add validation to ensure none of the required parameters are undefined
-        console.log('We are about send a message')
         if (!studentId || !recruiterId || !senderRole || !message) {
           throw new Error("Missing required parameters");
         }
