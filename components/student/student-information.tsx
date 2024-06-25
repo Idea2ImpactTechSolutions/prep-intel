@@ -28,7 +28,8 @@ interface PageProps {
 }
 
 export default function StudentInformation({ studentId, schoolId, recruiterId }:PageProps) {
-    const {data: response, isLoading} = useGetStudentProfileQuery({studentId,recruiterId, schoolId});
+    // Invoke getStudentProfile and destructure into student_details
+    const {data: { data: studentDetails } = {}, isLoading} = useGetStudentProfileQuery({studentId,recruiterId, schoolId});
     const [showModal, setShowModal] = useState<boolean>(false)
     const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false)
     const {data: session}: any = useSession()
@@ -37,9 +38,7 @@ export default function StudentInformation({ studentId, schoolId, recruiterId }:
     const [createConnectionRequest, { isLoading: isLoadingConnectionRequest }] = useCreateConnectionRequestsMutation();
     const [sendMessage, { isLoading: isSending }] = useSendMessageMutation()
 
-    // Alias response data as student
-    const student_details = response?.data;
-    const [disableConnectionButton, setDisableConnectionButton] = useState<boolean>(student_details?.open_connection_request || true)
+    const [disableConnectionButton, setDisableConnectionButton] = useState<boolean>(!!studentDetails?.open_connection_request)
 
     function sendConnectRequest() {
       createConnectionRequest({
@@ -54,7 +53,7 @@ export default function StudentInformation({ studentId, schoolId, recruiterId }:
     const handleSubmitMessage = (values:any, resetForm:()=>void)=>{
         setShowConfirmationModal(false)
         sendMessage({
-            studentId:student_details?.student_id,
+            studentId:studentDetails?.student_id,
             recruiterId:session?.user?.roleId,
             schoolId:"",
             senderRole:session?.user?.role,
@@ -87,30 +86,28 @@ export default function StudentInformation({ studentId, schoolId, recruiterId }:
       return <LoadingSpinner />;
     }
 
-    const scaledBg = { backgroundSize: '10%' };
-
     return (
     <div className='w-full flex flex-col space-y-2 md:space-y-6'>
         <div className="shadow-sm rounded-xl border overflow-hidden">
           <div className='relative'>
               <div
-                style={scaledBg}
+                style={{ backgroundSize: '10%' }}
                  className="w-full bg-[url('/images/student-profile-banner.png')] min-h-[120px] md:min-h-[140px]">
               </div>
               <div className='absolute w-[100px] h-[100px] bg-gray-300 rounded-full bg-white left-[50px] -bottom-[50px] flex justify-center items-center'>
-                  {student_details?.connection_date && student_details?.interested && student_details.profile_image ?
-                      <Image src={student_details.profile_image} fill objectFit='cover' alt='student-profile' className='rounded-full'/>
+                  {studentDetails?.connection_date && studentDetails?.interested && studentDetails.profile_image ?
+                      <Image src={studentDetails.profile_image} fill objectFit='cover' alt='student-profile' className='rounded-full'/>
                       :
                       <CircleUserRound size={100} stroke="#888" />
                   }
               </div>
           </div>
-          <div className='p-10 bg-white'>
-              <div className='flex justify-end'>
+          <div className='p-10 pt-4'>
+              <div className='flex justify-end  min-h-[2rem]'>
                   { !recruiterId ? null : (disableConnectionButton) ?
                       <Button variant="outline" className='text-xl' disabled
                       >Invite Sent</Button>
-                      : (!student_details?.connection_date &&  !student_details?.interested) ?
+                      : (!studentDetails?.connected) ?
                       <Button variant="outline"
                         loading={isLoadingConnectionRequest}
                         onClick={sendConnectRequest}
@@ -118,13 +115,13 @@ export default function StudentInformation({ studentId, schoolId, recruiterId }:
                       : <Button variant="outline" className='text-xl' onClick={()=>setShowModal(true)}>Message</Button>
                   }
               </div>
-              <UserInformation userInfo={student_details} className="mt-4"/>
+              <UserInformation userInfo={studentDetails} />
           </div>
         </div>
 
         <TranscriptSection />
 
-        <GoalAndSkills student_details={student_details}/>
+        <GoalAndSkills student_details={studentDetails}/>
 
         <CustomModal handleClose={()=>setShowModal(false)} show={showModal}   title="Connect with Student" modalClass="w-full max-w-[85%] lg:w-[750px] !rounded-2xl">
             <form onSubmit={handleSubmit}>

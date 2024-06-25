@@ -103,7 +103,7 @@ export default function Page() {
              isLoading={isLoading}
            />
             ) :(
-            <StudentInformation studentId={studentId} recruiterId={recruiterId} />
+            <StudentInformation studentId={studentId} schoolId={schoolId} recruiterId={recruiterId} />
          )}
        </PageContent>
      </>

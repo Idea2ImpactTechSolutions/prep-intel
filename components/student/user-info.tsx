@@ -3,7 +3,7 @@ import React from 'react'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 
-export default function UserInformation ({userInfo, className}) {
+export default function UserInformation ({userInfo, className = ''}) {
   return (
     <div>
         <div className={cn(`flex flex-col md:flex-row justify-start md:items-center gap-x-2`, className)}>
