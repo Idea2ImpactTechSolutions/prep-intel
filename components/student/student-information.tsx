@@ -41,6 +41,8 @@ export default function StudentInformation({ studentId, schoolId, recruiterId }:
     const [disableConnectionButton, setDisableConnectionButton] = useState<boolean>(!!studentDetails?.open_connection_request)
 
     function sendConnectRequest() {
+      if (!recruiterId) return;
+
       createConnectionRequest({
         studentId: parseInt(studentId),
         recruiterId: parseInt(recruiterId),
