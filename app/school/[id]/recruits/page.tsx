@@ -8,12 +8,17 @@ import StudentInformation from "@/components/student/student-information";
 import Link from "next/link";
 import { GoChevronRight } from "react-icons/go";
 
+
+interface RouteParams {
+  id: string; // Asserting that id will always be a string
+}
+
 export default function Page() {
   const [recruits, setRecruits] = useState<any[]>([]);
   const [studentId, setStudentId] = useState("");
   const [getRecruits, { isLoading }] = useLazyGetRecruitsQuery();
-  const pageParams = useParams();
-  const schoolId = pageParams?.id;
+  const pageParams = useParams() as unknown as RouteParams;
+  const schoolId = pageParams.id;
 
   const COLUMNS = [
     {
