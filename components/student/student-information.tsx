@@ -24,7 +24,7 @@ import LoadingSpinner from '@/components/loading-spinner';
 interface PageProps {
   studentId: string;
   schoolId: string;
-  recruiterId: string;
+  recruiterId?: string;
 }
 
 export default function StudentInformation({ studentId, schoolId, recruiterId }:PageProps) {
@@ -87,17 +87,21 @@ export default function StudentInformation({ studentId, schoolId, recruiterId }:
       return <LoadingSpinner />;
     }
 
+    const scaledBg = { backgroundSize: '10%' };
+
     return (
     <div className='w-full flex flex-col space-y-2 md:space-y-6'>
         <div className="shadow-sm rounded-xl border overflow-hidden">
           <div className='relative'>
-              <div className="w-full bg-[#F6F8FA] min-h-[120px] md:min-h-[140px] object-cover bg-no-repeat">
+              <div
+                style={scaledBg}
+                 className="w-full bg-[url('/images/student-profile-banner.png')] min-h-[120px] md:min-h-[140px]">
               </div>
-              <div className='absolute w-[140px] h-[140px] rounded-full bg-white left-[43px] -bottom-[70px] flex justify-center items-center'>
+              <div className='absolute w-[100px] h-[100px] bg-gray-300 rounded-full bg-white left-[50px] -bottom-[50px] flex justify-center items-center'>
                   {student_details?.connection_date && student_details?.interested && student_details.profile_image ?
                       <Image src={student_details.profile_image} fill objectFit='cover' alt='student-profile' className='rounded-full'/>
                       :
-                      <CircleUserRound size={100} />
+                      <CircleUserRound size={100} stroke="#888" />
                   }
               </div>
           </div>
@@ -114,7 +118,7 @@ export default function StudentInformation({ studentId, schoolId, recruiterId }:
                       : <Button variant="outline" className='text-xl' onClick={()=>setShowModal(true)}>Message</Button>
                   }
               </div>
-              <UserInformation user_info ={student_details}/>
+              <UserInformation userInfo={student_details} className="mt-4"/>
           </div>
         </div>
 
