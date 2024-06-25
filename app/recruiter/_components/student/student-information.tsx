@@ -11,7 +11,7 @@ import * as yup from 'yup'
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import ConfirmationModal from '@/components/modal/confirmation-modal'
-import { useSendMessageMutation } from '@/redux/services/recruiter/recruiterApi'
+import { useSendMessageMutation } from '@/redux/services/user/userApi'
 import { useCreateConnectionRequestsMutation } from '@/redux/services/student/studentApi'
 import { useSession } from 'next-auth/react'
 import { toast } from 'sonner'

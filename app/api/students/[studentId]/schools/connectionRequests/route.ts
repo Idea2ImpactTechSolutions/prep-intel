@@ -31,6 +31,7 @@ const GET_FIELDS = [
        col('recruiter->user.first_name'), ' ', col('recruiter->user.last_name')
     ), 'recruiterName'
   ],
+  [col('recruiter->user.profile_image'), 'recruiterProfileImage'],
   [ 'create_date', 'requestDate' ],
   ['connection_accepted', 'requestStatus']
 ];
@@ -178,7 +179,7 @@ export async function PATCH(
     await addStudentResponse(connectionRequest, updateAttributes);
 
     //Report
-    return apiResponse("No Content", 204);
+    return apiResponse("Connection Request updated", 200);
   } catch (error: any) {
     // Report
     return apiResponse("Internal Server Error", 500, { error: error.message });
