@@ -105,28 +105,32 @@ async function getInstitutionView(studentId, schoolId) {
     connection_date: recruit?.create_date || null,
   });
 
-  // Lookup details for the *primary* recruiter
-  const recruiter = await Recruiters.findByPk(recruit.recruiter_id, {
-    include: {
-      model: Users,
-      attributes: ["first_name", "last_name", "email"],
-    },
-  });
+  // Conditionally lookup and push primary recruiter information on recruit record to 
+  // to output variable
+  if (recruit?.recruiter_id) {
+    // Lookup details for the recruiter
+    const recruiter = await Recruiters.findByPk(recruit.recruiter_id, {
+      include: {
+        model: Users,
+        attributes: ["first_name", "last_name", "email"],
+      },
+    });
 
-  // Push recruiter info to output variable
-  if (recruiter) {
-    Object.assign(recruitProfile, {
-        recruiter_id: recruiter.id || null,
-        recruiter_first_name: recruiter.user.first_name || null,
-        recruiter_last_name: recruiter.user.last_name || null,
-      });
+    // Push primary recruiter info to output variable
+    if (recruiter) {
+      Object.assign(recruitProfile, {
+          recruiter_id: recruiter.id || null,
+          recruiter_first_name: recruiter.user.first_name || null,
+          recruiter_last_name: recruiter.user.last_name || null,
+        });
+    }
   }
 
    // Lookup connection requests to determine if a connection request is open and pending
    const connectionRequest = await ConnectionRequest.findOne({
     where: {
       student_id: studentId,
-      school_id: recruiter.school_id,
+      school_id: schoolId,
       connection_accepted: null,
     },
   });
