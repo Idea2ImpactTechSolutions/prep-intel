@@ -6,7 +6,6 @@ import { AiFillPrinter } from "react-icons/ai";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import logoImage from "public/images/logo.png";
 import bulletImage from "public/images/bullet.png";
 import workWithImage from "public/images/work-with.png";
 import Link from "next/link";
@@ -29,11 +28,11 @@ export default function Home() {
 
       <div className="flex justify-between items-center">
         <Image
-          src={logoImage}
-          alt="logo"
-          className="object-contain"
-        />
-
+          src='/images/logo.svg'
+          width={150}
+          height={150}
+          alt='logo'
+          />
         <div className="flex space-x-24 font-bold">
           {
             PAGE_TABS.map((item, index) => (
