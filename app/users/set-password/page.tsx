@@ -57,14 +57,14 @@ export default function UserSetPasswordPage() {
       <div className='bg-[#F0F4F7] p-6 px-16 mt-20 m-6 rounded-[6px] sm:max-w-[28rem] sm:mx-auto'>
         <div className='pt-2 flex flex-col items-center justify-center'>
           <Image
-            src='/images/logo/text-logo.png'
+            src='/images/logo.svg'
             width={150}
             height={150}
             alt='logo'
             className='md:hidden'
           />
           <Image
-            src='/images/logo/text-logo.png'
+            src='/images/logo.svg'
             width={180}
             height={180}
             alt='logo'

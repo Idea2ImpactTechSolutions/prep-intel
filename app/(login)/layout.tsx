@@ -15,7 +15,7 @@ export default function AuthLayout({
                 <div className="bg-white p-5 sm:w-[32rem] sm:mx-auto">
                     <Link href="/">
                         <Image
-                            src='/images/logo/text-logo.png'
+                            src='/images/logo.svg'
                             width={100}
                             height={100}
                             alt="logo"

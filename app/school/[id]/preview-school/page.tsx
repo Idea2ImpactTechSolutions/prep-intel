@@ -86,10 +86,10 @@ export default function SchoolPreview() {
                         <PageHeader
                             title={
                                 <>
-                                    {school_data?.name || "University of Saturn"}
+                                    {school_data?.name || ""}
                                     <div className="flex flex-col text-xs font-normal">
-                                        <span className="capitalize">{school_data?.tagline || "You’re going to love it out here"}</span>
-                                        <span className="italic">Founded {moment(school_data?.found_date).format('YYYY') || "2046"}</span>
+                                        <span className="capitalize">{school_data?.tagline || ""}</span>
+                                        <span className="italic">Founded {moment(school_data?.found_date).format('YYYY') || ""}</span>
                                     </div>
                                 </>
                             }

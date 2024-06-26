@@ -87,7 +87,7 @@ export function Navbar({tabs, leftContent, showTabs=true }: NavbarProps) {
                     className="hidden md:block"
                 >
                     <Image
-                        src="/images/logo/text-logo.png"
+                        src="/images/logo.svg"
                         width={100}
                         height={100}
                         alt="logo"
@@ -99,7 +99,7 @@ export function Navbar({tabs, leftContent, showTabs=true }: NavbarProps) {
                     <div className={`fixed top-0 left-0 h-screen bg-white w-[12rem] pt-4 z-30 transition-all duration-500 ease-in-out border-r border-r-gray-100 md:relative md:x-7 lg:w-[16rem] ${showSidebar || width >= 768 ? 'translate-x-0' : '-translate-x-full'} dark:bg-gray-800`}>
                         <div className="flex justify-center border-b border-b-gray-100 pb-4">
                             <Image
-                                src="/images/logo/text-logo.png"
+                                src="/images/logo.svg"
                                 width={100}
                                 height={100}
                                 alt="logo"
