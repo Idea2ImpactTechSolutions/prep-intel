@@ -69,7 +69,7 @@ export async function GET(req: Request) {
 
     // Collect
     let schools;
-    if (searchTerm) {
+    if (searchTerm) {``
       schools = await School.findAll({
         limit: 10,
         attributes: ["id", "name", "is_active", "publish_date"],

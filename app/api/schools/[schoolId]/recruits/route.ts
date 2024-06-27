@@ -56,6 +56,13 @@ const VALID_QUERY_PARAMS = [
  *           type: string
  *         description: The search query to filter first/last names by.
  *         required: false
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: number
+ *         description: The page index
+ *         required: false
+
  *     responses:
  *       '200':
  *         description: A list of matching recruits

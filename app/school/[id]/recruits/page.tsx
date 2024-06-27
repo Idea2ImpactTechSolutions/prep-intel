@@ -2,23 +2,23 @@
 import { useState, useEffect } from "react";
 import { PageHeader, PageContent } from "@/components/common-page";
 import { useParams } from "next/navigation";
-import { useLazyGetRecruitsQuery } from "@/redux/services/school/managerApi";
-import DataTable from "components/ui/data-table";
+import { useGetRecruitsQuery } from "@/redux/services/school/managerApi";
+import DataTable from "@/components/ui/data-table";
 import StudentInformation from "@/components/student/student-information";
 import Link from "next/link";
 import { GoChevronRight } from "react-icons/go";
-
 
 interface RouteParams {
   id: string; // Asserting that id will always be a string
 }
 
 export default function Page() {
-  const [recruits, setRecruits] = useState<any[]>([]);
   const [studentId, setStudentId] = useState("");
-  const [getRecruits, { isLoading }] = useLazyGetRecruitsQuery();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const pageParams = useParams() as unknown as RouteParams;
   const schoolId = pageParams.id;
+  const { data: {data: { recruits, totalItems, totalPages} = {}} = {}, isLoading: recruitsLoading  } = useGetRecruitsQuery({school_id: schoolId, searchTerm, currentPage});
 
   const COLUMNS = [
     {
@@ -64,19 +64,6 @@ export default function Page() {
     },
   ];
 
-  async function handleGetRecruits() {
-    const recruits = await getRecruits({ school_id: schoolId });
-
-    // TODO: Fix the endpoint to eliminate excess path steps
-    setRecruits(recruits?.data.data);
-  }
-
-  useEffect(() => {
-    if (schoolId) {
-      handleGetRecruits();
-    }
-  }, [schoolId]);
-
   return (
     <>
       <PageHeader
@@ -92,7 +79,12 @@ export default function Page() {
             title="Recruits"
             columns={COLUMNS}
             data={recruits}
-            isLoading={isLoading}
+            page={currentPage}
+            totalPages={totalPages}
+            nextPage={() => setCurrentPage(currentPage + 1)}
+            prevPage={() => setCurrentPage(currentPage - 1)}
+            isLoading={recruitsLoading}
+            onSearchChange={(x:any) => setSearchTerm(x.target.value)}
           />
             ) :(
             <StudentInformation studentId={studentId} schoolId={schoolId} />
