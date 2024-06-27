@@ -32,8 +32,8 @@ const recruiterApi = baseApi.injectEndpoints({
       },
     }),
     getStudentProfile: builder.query({
-      query: ({studentId,recruiterId}) => ({
-        url: `/students/${studentId}/profile?recruiter_id=${recruiterId}`,
+      query: ({studentId,recruiterId,schoolId}) => ({
+        url: `/students/${studentId}/profile?recruiter_id=${recruiterId}&schoolId=${schoolId}`,
       }),
       providesTags:["STUDENT"]
     }),

@@ -18,18 +18,31 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import GoalAndSkills from './goals-skills-section'
 
-const StudentInformation = ({student_details, recruiterId, studentId }) => {
+import { useGetStudentProfileQuery } from '@/redux/services/recruiter/recruiterApi';
+import LoadingSpinner from '@/components/loading-spinner';
+
+interface PageProps {
+  studentId: string;
+  schoolId: string;
+  recruiterId?: string;
+}
+
+export default function StudentInformation({ studentId, schoolId, recruiterId }:PageProps) {
+    // Invoke getStudentProfile and destructure into student_details
+    const {data: { data: studentDetails } = {}, isLoading} = useGetStudentProfileQuery({studentId,recruiterId, schoolId});
     const [showModal, setShowModal] = useState<boolean>(false)
     const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false)
-    const [disableConnectionButton, setDisableConnectionButton] = useState<boolean>(student_details?.open_connection_request)
     const {data: session}: any = useSession()
-    const schoolId = session?.user?.schoolID;
     const router = useRouter()
 
     const [createConnectionRequest, { isLoading: isLoadingConnectionRequest }] = useCreateConnectionRequestsMutation();
-    const [sendMessage, { isLoading }] = useSendMessageMutation()
+    const [sendMessage, { isLoading: isSending }] = useSendMessageMutation()
+
+    const [disableConnectionButton, setDisableConnectionButton] = useState<boolean>(!!studentDetails?.open_connection_request)
 
     function sendConnectRequest() {
+      if (!recruiterId) return;
+
       createConnectionRequest({
         studentId: parseInt(studentId),
         recruiterId: parseInt(recruiterId),
@@ -42,7 +55,7 @@ const StudentInformation = ({student_details, recruiterId, studentId }) => {
     const handleSubmitMessage = (values:any, resetForm:()=>void)=>{
         setShowConfirmationModal(false)
         sendMessage({
-            studentId:student_details?.student_id,
+            studentId:studentDetails?.student_id,
             recruiterId:session?.user?.roleId,
             schoolId:"",
             senderRole:session?.user?.role,
@@ -71,26 +84,32 @@ const StudentInformation = ({student_details, recruiterId, studentId }) => {
         onSubmit:()=>setShowConfirmationModal(true)
     })
 
-  return (
+    if (isLoading) {
+      return <LoadingSpinner />;
+    }
+
+    return (
     <div className='w-full flex flex-col space-y-2 md:space-y-6'>
         <div className="shadow-sm rounded-xl border overflow-hidden">
           <div className='relative'>
-              <div className="w-full bg-[#F6F8FA] min-h-[120px] md:min-h-[140px] object-cover bg-no-repeat">
+              <div
+                style={{ backgroundSize: '10%' }}
+                 className="w-full bg-[url('/images/student-profile-banner.png')] min-h-[120px] md:min-h-[140px]">
               </div>
-              <div className='absolute w-[140px] h-[140px] rounded-full bg-white left-[43px] -bottom-[70px] flex justify-center items-center'>
-                  {student_details?.connection_date && student_details?.interested && student_details.profile_image ?
-                      <Image src={student_details.profile_image} fill objectFit='cover' alt='student-profile' className='rounded-full'/>
+              <div className='absolute w-[100px] h-[100px] bg-gray-300 rounded-full bg-white left-[50px] -bottom-[50px] flex justify-center items-center'>
+                  {studentDetails?.connection_date && studentDetails?.interested && studentDetails.profile_image ?
+                      <Image src={studentDetails.profile_image} fill objectFit='cover' alt='student-profile' className='rounded-full'/>
                       :
-                      <CircleUserRound size={100} />
+                      <CircleUserRound size={100} stroke="#888" />
                   }
               </div>
           </div>
-          <div className='p-10 bg-white'>
-              <div className='flex justify-end'>
-                  {(disableConnectionButton) ?
+          <div className='p-10 pt-4'>
+              <div className='flex justify-end  min-h-[2rem]'>
+                  { !recruiterId ? null : (disableConnectionButton) ?
                       <Button variant="outline" className='text-xl' disabled
                       >Invite Sent</Button>
-                      : (!student_details?.connection_date &&  !student_details?.interested) ?
+                      : (!studentDetails?.connected) ?
                       <Button variant="outline"
                         loading={isLoadingConnectionRequest}
                         onClick={sendConnectRequest}
@@ -98,13 +117,13 @@ const StudentInformation = ({student_details, recruiterId, studentId }) => {
                       : <Button variant="outline" className='text-xl' onClick={()=>setShowModal(true)}>Message</Button>
                   }
               </div>
-              <UserInformation user_info ={student_details}/>
+              <UserInformation userInfo={studentDetails} />
           </div>
         </div>
 
         <TranscriptSection />
 
-        <GoalAndSkills student_details={student_details}/>
+        <GoalAndSkills student_details={studentDetails}/>
 
         <CustomModal handleClose={()=>setShowModal(false)} show={showModal}   title="Connect with Student" modalClass="w-full max-w-[85%] lg:w-[750px] !rounded-2xl">
             <form onSubmit={handleSubmit}>
@@ -127,7 +146,7 @@ const StudentInformation = ({student_details, recruiterId, studentId }) => {
                     <Button
                         type='button'
                         variant="outline"
-                        disabled={isLoading}
+                        disabled={isSending}
                         onClick={()=>{
                             setShowModal(false)
                             resetForm()
@@ -141,8 +160,8 @@ const StudentInformation = ({student_details, recruiterId, studentId }) => {
                         type='submit'
                         variant="orange"
                         className='w-full sm:w-fit md:px-10 rounded-lg font-[500]'
-                        loading={isLoading}
-                        disabled={isLoading}
+                        loading={isSending}
+                        disabled={isSending}
                         loadingText={"Sending..."}
                     >
                         Send Message
@@ -163,5 +182,3 @@ const StudentInformation = ({student_details, recruiterId, studentId }) => {
     </div>
   )
 }
-
-export default StudentInformation

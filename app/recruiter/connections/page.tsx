@@ -7,7 +7,7 @@ import Link from "next/link";
 import { GoChevronRight } from "react-icons/go";
 import { PageHeader, PageContent } from "@/components/common-page";
 import DataTable from "@/components/ui/data-table";
-import StudentPanel from "../_components/student-panel";
+import StudentInformation from "@/components/student/student-information";
 
 export default function Page() {
   const session = useSession();
@@ -103,7 +103,7 @@ export default function Page() {
              isLoading={isLoading}
            />
             ) :(
-            <StudentPanel studentId={studentId} recruiterId={recruiterId} />
+            <StudentInformation studentId={studentId} schoolId={schoolId} recruiterId={recruiterId} />
          )}
        </PageContent>
      </>
