@@ -7,26 +7,12 @@ const managerApi = baseApi.injectEndpoints({
         url: `/manager/profile/school-profile?school_id=${schoolId}`,
         method: "GET",
       }),
-      async onQueryStarted(_, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled;
-        } catch (error) {
-          console.log(error);
-        }
-      },
     }),
     getPersonnel: builder.query({
       query: ({ school_id }) => ({
         url: `/manager/profile/personnel?school_id=${school_id}`,
         method: "GET",
       }),
-      async onQueryStarted(_, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled;
-        } catch (error) {
-          console.log(error);
-        }
-      },
     }),
     getRecruits: builder.query({
       query: ({ school_id, searchTerm, currentPage }) => ({
@@ -39,13 +25,6 @@ const managerApi = baseApi.injectEndpoints({
         url: `/schools/${school_id}/metrics`,
         method: "GET",
       }),
-      async onQueryStarted(_, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled;
-        } catch (error) {
-          console.log(error);
-        }
-      },
     }),
     managerCreateSchoolProfile: builder.mutation({
       query: (payload) => ({
@@ -53,14 +32,6 @@ const managerApi = baseApi.injectEndpoints({
         method: "POST",
         body: payload,
       }),
-      async onQueryStarted(_, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled;
-          console.log(result);
-        } catch (error) {
-          console.log(error);
-        }
-      },
     }),
     publishSchoolProfile: builder.mutation({
       query: (payload) => ({
@@ -68,14 +39,6 @@ const managerApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: payload,
       }),
-      async onQueryStarted(_, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled;
-          console.log(result);
-        } catch (error) {
-          console.log(error);
-        }
-      },
     }),
     createRecruiter: builder.mutation({
       query: (payload) => ({
@@ -83,14 +46,6 @@ const managerApi = baseApi.injectEndpoints({
         method: "POST",
         body: payload,
       }),
-      async onQueryStarted(_, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled;
-          // console.log(result)
-        } catch (error) {
-          console.log(error);
-        }
-      },
     }),
     createManager: builder.mutation({
         query: (payload) => ({
