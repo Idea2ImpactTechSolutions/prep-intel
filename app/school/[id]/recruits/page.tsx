@@ -7,6 +7,7 @@ import DataTable from "@/components/ui/data-table";
 import StudentInformation from "@/components/student/student-information";
 import Link from "next/link";
 import { GoChevronRight } from "react-icons/go";
+import { SearchInput } from "@/components/ui/search-input";
 
 interface RouteParams {
   id: string; // Asserting that id will always be a string
@@ -18,7 +19,7 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState(1);
   const pageParams = useParams() as unknown as RouteParams;
   const schoolId = pageParams.id;
-  const { data: {data: { recruits, totalItems, totalPages} = {}} = {}, isLoading: recruitsLoading  } = useGetRecruitsQuery({school_id: schoolId, searchTerm, currentPage});
+  const { data: {data: { recruits, totalItems, totalPages} = {}} = {}, isLoading: recruitsLoading } = useGetRecruitsQuery({school_id: schoolId, searchTerm, currentPage});
 
   const COLUMNS = [
     {
@@ -72,7 +73,20 @@ export default function Page() {
               <Link href="#" className="underline" onClick={() => { setStudentId(''); return false;}}>Recruits</Link>
               <GoChevronRight className="mt-1" />
               <span>Student Profile</span>
-            </div>} />
+            </div>}
+        rightContent={
+          <SearchInput
+            type="text"
+            id='q'
+            name="search"
+            containerClass="mb-0"
+            iconClass={searchTerm && "hidden"}
+s           variant="right"
+            className="w-[450px]"
+            placeHolder="Type to search..."
+            onChange={(x:any) => setSearchTerm(x.target.value)}
+          />}
+            />
       <PageContent>
       {!studentId ? (
           <DataTable
@@ -81,10 +95,10 @@ export default function Page() {
             data={recruits}
             page={currentPage}
             totalPages={totalPages}
+            totalItems={totalItems}
             nextPage={() => setCurrentPage(currentPage + 1)}
             prevPage={() => setCurrentPage(currentPage - 1)}
             isLoading={recruitsLoading}
-            onSearchChange={(x:any) => setSearchTerm(x.target.value)}
           />
             ) :(
             <StudentInformation studentId={studentId} schoolId={schoolId} />

@@ -4,7 +4,6 @@ import { Dictionary } from '@/types/dictionary'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import React from 'react'
 import LoadingSpinner from "components/loading-spinner";
-import { SearchInput } from './search-input';
 
 interface PageProps {
   title?:string;
@@ -18,12 +17,12 @@ interface PageProps {
   page?: number;
   offset?: number;
   totalPages?: number;
+  totalItems?: number;
   nextPage?: ()=>void;
   prevPage?: ()=>void;
-  onSearchChange?: (event: any) => void;
 }
 
-export default function DataTable({ title, titleNode, className, isLoading, columnHeaderStyle, columns, data, page=1, totalPages=0, nextPage, prevPage, onSearchChange, offset=10, emptyMessage="No results." }: PageProps) {
+export default function DataTable({ title, titleNode, className, isLoading, columnHeaderStyle, columns, data, totalItems, page=1, totalPages=0, nextPage, prevPage, offset=10, emptyMessage="No results." }: PageProps) {
   const minusOne = page-1;
   const start = minusOne * offset + 1;
   const end = minusOne * offset + 10;
@@ -32,18 +31,7 @@ export default function DataTable({ title, titleNode, className, isLoading, colu
     <div className={cn("overflow-hidden rounded-lg border", className)}>
       <div className='flex items-center p-4 py-3 bg-[#F6F8FA] border-b gap-x-2'>
         <div className="text-md text-[#141111]">{title} {titleNode} </div>
-        <div className="flex flex-grow justify-end">
-          {
-            onSearchChange && <SearchInput
-                type="text"
-                id='q'
-                name="search"
-                containerClass="mb-0"
-                className="py-1 bg-[#F6F8FA] focus:bg-white w-[0px] focus:w-[300px]"
-                onChange={onSearchChange}
-              />
-          }
-        </div>
+        <div className="flex flex-grow justify-end"></div>
       </div>
       <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
         <thead className='text-xs text-gray-700 uppercase bg-[#F6F8FA] border-b'>
