@@ -107,8 +107,6 @@ export async function GET(req: Request) {
     logger.error(error);
 
     // Report
-    // TODO: determine which of these two styles is preferred and implement consistently
-    // return apiResponse("Internal Server Error", 500, {error: error.message});
-    return apiResponse(error.message, 500);
+    return apiResponse("Internal Server Error", 500, {error: error.message});
   }
 }
