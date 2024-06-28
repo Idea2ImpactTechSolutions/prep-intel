@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { PageHeader, PageContent } from "@/components/common-page";
 import { useParams } from "next/navigation";
 import { useGetRecruitsQuery } from "@/redux/services/school/managerApi";
