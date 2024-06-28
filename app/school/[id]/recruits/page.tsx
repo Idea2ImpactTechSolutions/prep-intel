@@ -9,16 +9,12 @@ import Link from "next/link";
 import { GoChevronRight } from "react-icons/go";
 import { SearchInput } from "@/components/ui/search-input";
 
-interface RouteParams {
-  id: string; // Asserting that id will always be a string
-}
-
 export default function Page() {
   const [studentId, setStudentId] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const pageParams = useParams() as unknown as RouteParams;
-  const schoolId = pageParams.id;
+  const pageParams = useParams();
+  const schoolId = pageParams?.id as string;
   const { data: {data: { recruits = [], totalItems = 0, totalPages = 0} = {}} = {}, isLoading: recruitsLoading } = useGetRecruitsQuery({school_id: schoolId, searchTerm, currentPage});
 
   const COLUMNS = [
