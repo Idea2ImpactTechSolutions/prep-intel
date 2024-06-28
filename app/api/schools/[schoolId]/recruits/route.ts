@@ -3,8 +3,6 @@ const { ConnectionRequest, Recruits, Recruiters, Students, Users } = models;
 import { apiResponse } from "app/config/helpers";
 import { type NextRequest } from 'next/server'
 import logger from 'lib/logger';
-import fs from 'fs';
-import path from 'path';
 import { Op } from "sequelize";
 
 const VALID_QUERY_PARAMS = [
@@ -62,7 +60,6 @@ const VALID_QUERY_PARAMS = [
  *           type: number
  *         description: The page index
  *         required: false
-
  *     responses:
  *       '200':
  *         description: A list of matching recruits
@@ -125,9 +122,9 @@ async function getRecruits({
   //   1. student applicants
   //   2. students who accepted connection requests
   //   3. specific recruiter ids
-  const options = {
+  const {count: totalItems, rows: results} = await Recruits.findAndCountAll({
     where: {
-      //school_id: schoolId,
+      school_id: schoolId,
       // Conditionally add applicants only constraint
       ...(applicants ? { is_applicant: true } : {}),
     },
@@ -153,20 +150,20 @@ async function getRecruits({
           required: true,
           attributes: ["id", "first_name", "last_name"],
           ...(searchTerm ? {
-                where: {
-                [Op.or]: [
-                  {
-                    first_name: {
-                      [Op.like]: `%${searchTerm}%`,
-                    },
+            where: {
+              [Op.or]: [
+                {
+                  first_name: {
+                    [Op.iLike]: `%${searchTerm}%`,
                   },
-                  {
-                    last_name: {
-                      [Op.like]: `%${searchTerm}%`,
-                    },
+                },
+                {
+                  last_name: {
+                    [Op.iLike]: `%${searchTerm}%`,
                   },
-                ],
-              }
+                },
+              ],
+            }
           } : {}),
         },
         // Conditionally add the ConnectionRequest constraint when showing only accepted connections
@@ -190,11 +187,9 @@ async function getRecruits({
       },
     ],
     nest: true,
-  };
+  });
 
-  const {count: totalItems, rows: results} = await Recruits.findAndCountAll(options);
-  saveContraints("case-1", options, results);
-
+  // Return results enumeration with additional paging variables
   return {
     recruits: results,
     totalItems,
@@ -204,17 +199,7 @@ async function getRecruits({
   };
 }
 
-function saveContraints(title, obj, results) {
-  // The path to the file where you want to write the JSON data
-  const filePath = path.join(process.cwd(), 'public', title + '.json');
-
-  // Write the JSON data to the file
-  fs.writeFileSync(filePath, JSON.stringify({ sql: obj, results }, null, 2));
-
-}
-
 function validParams(searchParams) {
-
   for (const key of searchParams.keys()) {
     if (!VALID_QUERY_PARAMS.includes(key)) {
       return false;
