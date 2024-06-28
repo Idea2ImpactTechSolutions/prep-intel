@@ -22,10 +22,12 @@ interface PageProps {
   prevPage?: ()=>void;
 }
 
-export default function DataTable({ title, titleNode, className, isLoading, columnHeaderStyle, columns, data, totalItems, page=1, totalPages=0, nextPage, prevPage, offset=10, emptyMessage="No results." }: PageProps) {
+export default function DataTable({ title, titleNode, className, isLoading, columnHeaderStyle, columns, data, totalItems = 0, page=1, totalPages=0, nextPage, prevPage, offset=10, emptyMessage="No results." }: PageProps) {
   const minusOne = page-1;
   const start = minusOne * offset + 1;
-  const end = minusOne * offset + 10;
+  const pageMax = (minusOne * offset) + offset;
+  // End count is either the smaller of pageMax or totalItems, except when totalItem <= 0
+  const end = totalPages ? Math.min(pageMax, totalItems) : pageMax;
 
    return (
     <div className={cn("overflow-hidden rounded-lg border", className)}>
@@ -74,7 +76,7 @@ export default function DataTable({ title, titleNode, className, isLoading, colu
             </span>{" "}
             of{" "}
             <span className='font-semibold text-gray-900 dark:text-white'>
-              {totalPages*offset}
+              {totalItems || totalPages*offset}
             </span>
           </span>
           <ul className='inline-flex items-center -space-x-px rtl:space-x-reverse text-sm h-8 gap-x-2'>
