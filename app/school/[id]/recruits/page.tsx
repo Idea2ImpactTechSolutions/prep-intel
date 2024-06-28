@@ -19,7 +19,7 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState(1);
   const pageParams = useParams() as unknown as RouteParams;
   const schoolId = pageParams.id;
-  const { data: {data: { recruits, totalItems, totalPages} = {}} = {}, isLoading: recruitsLoading } = useGetRecruitsQuery({school_id: schoolId, searchTerm, currentPage});
+  const { data: {data: { recruits = [], totalItems = 0, totalPages = 0} = {}} = {}, isLoading: recruitsLoading } = useGetRecruitsQuery({school_id: schoolId, searchTerm, currentPage});
 
   const COLUMNS = [
     {
