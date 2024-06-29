@@ -37,7 +37,6 @@ const recruiterApi = baseApi.injectEndpoints({
       }),
       providesTags:["STUDENT"]
     }),
-    
     updateRecruiterPersonalInfo: builder.mutation({
       query: function(payload){
         const { id } = payload;

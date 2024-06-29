@@ -15,7 +15,12 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState(1);
   const pageParams = useParams();
   const schoolId = pageParams?.id as string;
-  const { data: {data: { recruits = [], totalItems = 0, totalPages = 0} = {}} = {}, isLoading: recruitsLoading, isFetching } = useGetRecruitsQuery({school_id: schoolId, searchTerm, currentPage});
+  const { data: {data: { recruits = [], totalItems = 0, totalPages = 0} = {}} = {}, isLoading, isFetching } = useGetRecruitsQuery({
+    school_id:
+    schoolId,
+    searchTerm,
+    currentPage
+  });
 
   const COLUMNS = [
     {
@@ -94,7 +99,7 @@ s           variant="right"
             totalItems={totalItems}
             nextPage={() => setCurrentPage(currentPage + 1)}
             prevPage={() => setCurrentPage(currentPage - 1)}
-            isLoading={recruitsLoading || isFetching}
+            isLoading={isLoading || isFetching}
           />
             ) :(
             <StudentInformation studentId={studentId} schoolId={schoolId} />
