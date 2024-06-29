@@ -22,12 +22,12 @@ interface PageProps {
   prevPage?: ()=>void;
 }
 
-export default function DataTable({ title, titleNode, className, isLoading, columnHeaderStyle, columns, data, totalItems = 0, page=1, totalPages=0, nextPage, prevPage, offset=10, emptyMessage="No results." }: PageProps) {
+export default function DataTable({ title, titleNode, className, isLoading, columnHeaderStyle, columns, data = [], totalItems = 0, page=1, totalPages=0, nextPage, prevPage, offset=10, emptyMessage="No results." }: PageProps) {
   const minusOne = page-1;
   const start = minusOne * offset + 1;
   const pageMax = (minusOne * offset) + offset;
   // End count is either the smaller of pageMax or totalItems, except when totalItem <= 0
-  const end = totalPages ? Math.min(pageMax, totalItems) : pageMax;
+  const end = totalItems ? Math.min(pageMax, totalItems) : pageMax;
 
    return (
     <div className={cn("overflow-hidden rounded-lg border", className)}>
@@ -53,7 +53,7 @@ export default function DataTable({ title, titleNode, className, isLoading, colu
             </tr>
           }
           {
-            !isLoading && data?.map((row, index) => (
+            !isLoading && (data?.length > 0) && data?.map((row, index) => (
               <tr key={index} className={cn(
                 "bg-white hover:bg-gray-50",
                 (totalPages > 0 || index < (data.length -1)) && "border-b" // Prevent bottom border on last row
