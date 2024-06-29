@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PageHeader, PageContent } from "@/components/common-page";
 import { useParams } from "next/navigation";
 import { useGetRecruitsQuery } from "@/redux/services/school/managerApi";
@@ -16,7 +16,6 @@ export default function Page() {
   const pageParams = useParams();
   const schoolId = pageParams?.id as string;
   const { data: {data: { recruits = [], totalItems = 0, totalPages = 0} = {}} = {}, isLoading, isFetching } = useGetRecruitsQuery({
-    school_id:
     schoolId,
     searchTerm,
     currentPage
@@ -66,6 +65,12 @@ export default function Page() {
     },
   ];
 
+  // Anytime the search term changes, the page index must reset, to ensure we scroll
+  // to the first page of results.
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
   return (
     <>
       <PageHeader
@@ -82,9 +87,9 @@ export default function Page() {
             name="search"
             containerClass="mb-0"
             iconClass={searchTerm && "hidden"}
-s           variant="right"
+            variant="right"
             className="w-[450px]"
-            placeHolder="Type to search..."
+            placeholder="Type to search..."
             onChange={(x:any) => setSearchTerm(x.target.value)}
           />}
             />

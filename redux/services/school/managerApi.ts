@@ -15,8 +15,8 @@ const managerApi = baseApi.injectEndpoints({
       }),
     }),
     getRecruits: builder.query({
-      query: ({ school_id, searchTerm, currentPage }) => ({
-        url: `/schools/${school_id}/recruits?searchTerm=${searchTerm}&page=${currentPage}`,
+      query: ({schoolId, searchTerm, currentPage}) => ({
+        url: `/schools/${schoolId}/recruits?&searchTerm=${searchTerm}&page=${currentPage}`,
         method: "GET",
       }),
     }),

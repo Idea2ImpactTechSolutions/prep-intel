@@ -1,5 +1,5 @@
 import { models } from "app/models";
-const { ConnectionRequest, Recruits, Recruiters, Students, Users } = models;
+const { Recruits, Recruiters, Students, Users } = models;
 import { apiResponse } from "app/config/helpers";
 import { type NextRequest } from 'next/server'
 import logger from 'lib/logger';
@@ -166,13 +166,6 @@ async function getRecruits({
             }
           } : {}),
         },
-        // Conditionally add the ConnectionRequest constraint when showing only accepted connections
-        ...(accepted_connection ? [{
-          model: ConnectionRequest,
-          required: true,
-          attributes: [],
-          where: { connection_accepted: true }
-        }] : [])
         ]
       },
       {

@@ -2,9 +2,9 @@ import { baseApi } from "../baseApi";
 
 const recruiterApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getRecruits: builder.query({
-      query: ({schoolId, recruiterId, acceptedConnection, applicants}) => ({
-        url: `/schools/${schoolId}/recruits?recruiterId=${recruiterId}&accepted_connection=${acceptedConnection}&applicants=${applicants}`,
+    getConnections: builder.query({
+      query: ({schoolId, searchTerm, recruiterId, currentPage}) => ({
+        url: `/schools/${schoolId}/recruits?recruiterId=${recruiterId}&searchTerm=${searchTerm}&page=${currentPage}`,
         method: "GET",
       }),
     }),
@@ -52,7 +52,7 @@ const recruiterApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useGetRecruitsQuery,
+  useGetConnectionsQuery,
   useSetTerritoriesMutation,
   useLazyGetRecruiterQuery,
   useGetRecruiterQuery,
