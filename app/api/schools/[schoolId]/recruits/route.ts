@@ -1,38 +1,18 @@
 import { models } from "app/models";
-const { ConnectionRequest, Recruits, Recruiters, Students, Users } = models;
+const { Recruits, Recruiters, Students, Users } = models;
 import { apiResponse } from "app/config/helpers";
 import { type NextRequest } from 'next/server'
 import logger from 'lib/logger';
-
-const STUDENT_DETAILS = [
-  "act_score",
-  "sat_score",
-  "gpa",
-  "graduation_year",
-  "high_school",
-  "majors",
-  "extracurriculars"
-];
-
-const STUDENT_USERS_INCLUSION = {
-  model: Users,
-  attributes: ["first_name", "last_name"],
-  required: true,
-};
-
-const RECRUITERS_MODEL_INCLUSION = {
-  model: Recruiters,
-  attributes: ["id"],
-  include: {
-    model: Users,
-    attributes: ["first_name", "last_name"],
-  }
-};
+import { Op } from "sequelize";
 
 const VALID_QUERY_PARAMS = [
-  "applicants", 
-  "recruiterId", 
-  "accepted_connection"
+  "applicants",
+  "recruiterId",
+  "accepted_connection",
+  "searchTerm",
+  "page",
+  "pageSize",
+  ""
 ];
 
 /**
@@ -68,23 +48,27 @@ const VALID_QUERY_PARAMS = [
  *           type: string
  *         description: The search query to filter recruiters by who have applied to the school.
  *         required: false
+ *       - in: query
+ *         name: searchTerm
+ *         schema:
+ *           type: string
+ *         description: The search query to filter first/last names by.
+ *         required: false
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: number
+ *         description: The page index
+ *         required: false
  *     responses:
  *       '200':
- *         description: A list of recruits
+ *         description: A list of matching recruits
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
  *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   first_name:
- *                     type: string
- *             examples:
- *               One Sample:
- *                 value: '[{"id": 1, "first_name": "John"}]'
  */
 export async function GET(
   req: NextRequest,
@@ -95,21 +79,28 @@ export async function GET(
     const searchParams = req.nextUrl.searchParams
 
     if (searchParams.size > 0) {
-      const validParams = checkQueryParams(searchParams)
-      if (!validParams) {
+      if (!validParams(searchParams)) {
         return apiResponse("Bad request", 400);
       }
     }
+
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const limit = parseInt(searchParams.get("pageSize") || "10", 10);
 
     const requestData = {
       schoolId,
       accepted_connection :searchParams.get('accepted_connection') === 'true',
       applicants : searchParams.get('applicants') === 'true',
-      recruiterId : searchParams.get('recruiterId')
+      recruiterId : searchParams.get('recruiterId'),
+      searchTerm: searchParams.get('searchTerm'),
+      // Pagination parameters
+      page,
+      limit,
+      offset: (page - 1) * limit,
     }
 
-    const getRecruitsRequest = await getRecruits(requestData);
-    return apiResponse("Recruits successfully retrieved", 200, getRecruitsRequest);
+    const recruits = await getRecruits(requestData);
+    return apiResponse("Recruits successfully retrieved", 200, recruits);
   } catch (error: any) {
     // Report
     logger.error(error.message);
@@ -117,86 +108,91 @@ export async function GET(
   }
 }
 
-async function getRecruits(requestData) {
-
-  let recruits;
-  const {
-    schoolId,
-    accepted_connection,
-    applicants,
-    recruiterId,
-  } = requestData;
-
-  if (recruiterId) {
-    recruits = await Recruits.findAll({
-      include: [
-        {
-          model: Students,
-          attributes: STUDENT_DETAILS,
-          include: STUDENT_USERS_INCLUSION
-        },
-        {...RECRUITERS_MODEL_INCLUSION, where: { id: Number(recruiterId) }},
-      ],
-    }); 
-  } else if (accepted_connection) {
-      recruits = await Recruits.findAll({
-        where: { 
-          school_id: schoolId,
-         },
-        include: [
-          {
-            model: Students,
-            attributes: STUDENT_DETAILS,
-            required: true,
-            include: [
-              STUDENT_USERS_INCLUSION,
-              { 
-                model: ConnectionRequest, 
-                attributes: [], 
-                required: true,
-                where: { connection_accepted: true } 
-              },
-            ],
-          },
-          RECRUITERS_MODEL_INCLUSION,
+async function getRecruits({
+  schoolId,
+  accepted_connection,
+  applicants,
+  recruiterId,
+  searchTerm,
+  page,
+  limit,
+  offset
+}) {
+  // Find Recruits by schoolId, conditionally limiting to:
+  //   1. student applicants
+  //   2. students who accepted connection requests
+  //   3. specific recruiter ids
+  const {count: totalItems, rows: results} = await Recruits.findAndCountAll({
+    where: {
+      school_id: schoolId,
+      // Conditionally add applicants only constraint
+      ...(applicants ? { is_applicant: true } : {}),
+    },
+    limit: limit,
+    offset: offset,
+    //order: ['connectionRequestId'],
+    raw: true,
+    include: [
+      {
+        model: Students,
+        required: true,
+        attributes: [
+          "act_score",
+          "sat_score",
+          "gpa",
+          "graduation_year",
+          "high_school",
+          "majors",
+          "extracurriculars"
         ],
-      });
-  } else if (applicants) {
-    recruits = await Recruits.findAll({
-      where: { school_id: schoolId, is_applicant: true },
-      include: [
-        {
-          model: Students,
-          attributes: STUDENT_DETAILS,
+        include: [{
+          model: Users,
           required: true,
-          include: STUDENT_USERS_INCLUSION,
+          attributes: ["id", "first_name", "last_name"],
+          ...(searchTerm ? {
+            where: {
+              [Op.or]: [
+                {
+                  first_name: {
+                    [Op.iLike]: `%${searchTerm}%`,
+                  },
+                },
+                {
+                  last_name: {
+                    [Op.iLike]: `%${searchTerm}%`,
+                  },
+                },
+              ],
+            }
+          } : {}),
         },
-        RECRUITERS_MODEL_INCLUSION,
-      ],
-      raw: true,
-      nest: true,
-    });
-  } else {
-    recruits = await Recruits.findAll({
-      where: { 
-        school_id: schoolId, 
+        ]
       },
-      include: [
-        {
-          model: Students,
-          attributes: STUDENT_DETAILS,
-          include: STUDENT_USERS_INCLUSION
+      {
+        model: Recruiters,
+        attributes: ["id"],
+        include: {
+          model: Users,
+          attributes: ["id", "first_name", "last_name"],
         },
-        RECRUITERS_MODEL_INCLUSION
-      ],
-      raw: true,
-      nest: true,
-    });
-  }
-  return recruits;
+        // Conditionally add  recruiters constraint
+        ...(recruiterId ? { where: { id: Number(recruiterId) } } : {}),
+      },
+    ],
+    nest: true,
+  });
+
+  // Return results enumeration with additional paging variables
+  return {
+    recruits: results,
+    totalItems,
+    totalPages: Math.ceil(totalItems / limit),
+    currentPage: page,
+    pageSize: limit
+  };
 }
 
-function checkQueryParams(searchParams) {
+function validParams(searchParams) {
   for (const key of searchParams.keys()) {
     if (!VALID_QUERY_PARAMS.includes(key)) {
       return false;

@@ -17,19 +17,23 @@ interface PageProps {
   page?: number;
   offset?: number;
   totalPages?: number;
+  totalItems?: number;
   nextPage?: ()=>void;
   prevPage?: ()=>void;
 }
 
-export default function DataTable({ title, titleNode, className, isLoading, columnHeaderStyle, columns, data, page=1, totalPages=0, nextPage, prevPage, offset=10, emptyMessage="No results." }: PageProps) {
+export default function DataTable({ title, titleNode, className, isLoading, columnHeaderStyle, columns, data = [], totalItems = 0, page=1, totalPages=0, nextPage, prevPage, offset=10, emptyMessage="No results." }: PageProps) {
   const minusOne = page-1;
   const start = minusOne * offset + 1;
-  const end = minusOne * offset + 10;
+  const pageMax = (minusOne * offset) + offset;
+  // End count is either the smaller of pageMax or totalItems, except when totalItem <= 0
+  const end = totalItems ? Math.min(pageMax, totalItems) : pageMax;
 
    return (
     <div className={cn("overflow-hidden rounded-lg border", className)}>
-      <div className='flex items-center p-4 bg-[#F6F8FA] border-b gap-x-2'>
-        <span className='text-md text-[#141111] '>{title} {titleNode} </span>
+      <div className='flex items-center p-4 py-3 bg-[#F6F8FA] border-b gap-x-2'>
+        <div className="text-md text-[#141111]">{title} {titleNode} </div>
+        <div className="flex flex-grow justify-end"></div>
       </div>
       <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
         <thead className='text-xs text-gray-700 uppercase bg-[#F6F8FA] border-b'>
@@ -49,7 +53,7 @@ export default function DataTable({ title, titleNode, className, isLoading, colu
             </tr>
           }
           {
-            !isLoading && data?.map((row, index) => (
+            !isLoading && (data?.length > 0) && data?.map((row, index) => (
               <tr key={index} className={cn(
                 "bg-white hover:bg-gray-50",
                 (totalPages > 0 || index < (data.length -1)) && "border-b" // Prevent bottom border on last row
@@ -72,7 +76,7 @@ export default function DataTable({ title, titleNode, className, isLoading, colu
             </span>{" "}
             of{" "}
             <span className='font-semibold text-gray-900 dark:text-white'>
-              {totalPages*offset}
+              {totalItems || totalPages*offset}
             </span>
           </span>
           <ul className='inline-flex items-center -space-x-px rtl:space-x-reverse text-sm h-8 gap-x-2'>

@@ -2,23 +2,24 @@
 import { useState, useEffect } from "react";
 import { PageHeader, PageContent } from "@/components/common-page";
 import { useParams } from "next/navigation";
-import { useLazyGetRecruitsQuery } from "@/redux/services/school/managerApi";
-import DataTable from "components/ui/data-table";
+import { useGetRecruitsQuery } from "@/redux/services/school/managerApi";
+import DataTable from "@/components/ui/data-table";
 import StudentInformation from "@/components/student/student-information";
 import Link from "next/link";
 import { GoChevronRight } from "react-icons/go";
-
-
-interface RouteParams {
-  id: string; // Asserting that id will always be a string
-}
+import { SearchInput } from "@/components/ui/search-input";
 
 export default function Page() {
-  const [recruits, setRecruits] = useState<any[]>([]);
   const [studentId, setStudentId] = useState("");
-  const [getRecruits, { isLoading }] = useLazyGetRecruitsQuery();
-  const pageParams = useParams() as unknown as RouteParams;
-  const schoolId = pageParams.id;
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageParams = useParams();
+  const schoolId = pageParams?.id as string;
+  const { data: {data: { recruits = [], totalItems = 0, totalPages = 0} = {}} = {}, isLoading, isFetching } = useGetRecruitsQuery({
+    schoolId,
+    searchTerm,
+    currentPage
+  });
 
   const COLUMNS = [
     {
@@ -64,18 +65,11 @@ export default function Page() {
     },
   ];
 
-  async function handleGetRecruits() {
-    const recruits = await getRecruits({ school_id: schoolId });
-
-    // TODO: Fix the endpoint to eliminate excess path steps
-    setRecruits(recruits?.data.data);
-  }
-
+  // Anytime the search term changes, the page index must reset, to ensure we scroll
+  // to the first page of results.
   useEffect(() => {
-    if (schoolId) {
-      handleGetRecruits();
-    }
-  }, [schoolId]);
+    setCurrentPage(1);
+  }, [searchTerm]);
 
   return (
     <>
@@ -85,14 +79,32 @@ export default function Page() {
               <Link href="#" className="underline" onClick={() => { setStudentId(''); return false;}}>Recruits</Link>
               <GoChevronRight className="mt-1" />
               <span>Student Profile</span>
-            </div>} />
+            </div>}
+        rightContent={
+          <SearchInput
+            type="text"
+            id='q'
+            name="search"
+            containerClass="mb-0"
+            iconClass={searchTerm && "hidden"}
+            variant="right"
+            className="w-[450px]"
+            placeholder="Type to search..."
+            onChange={(x:any) => setSearchTerm(x.target.value)}
+          />}
+            />
       <PageContent>
       {!studentId ? (
           <DataTable
             title="Recruits"
             columns={COLUMNS}
             data={recruits}
-            isLoading={isLoading}
+            page={currentPage}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            nextPage={() => setCurrentPage(currentPage + 1)}
+            prevPage={() => setCurrentPage(currentPage - 1)}
+            isLoading={isLoading || isFetching}
           />
             ) :(
             <StudentInformation studentId={studentId} schoolId={schoolId} />

@@ -6,8 +6,7 @@ import CreateSiteAdmin from "./_components/CreateSiteAdmin";
 import InviteLink from "components/ui/invite-link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { IconInput } from "@/components/ui/icon-input";
-import { FaSearch } from "react-icons/fa";
+import { SearchInput } from "@/components/ui/search-input";
 import { useLazyGetSchoolsQuery } from "@/redux/services/admin/adminApi";
 import Link from "next/link";
 import { PageHeader, PageContent } from "@/components/common-page";
@@ -82,13 +81,12 @@ export default function AdminPage() {
 
         </div>
 
-        <IconInput
+        <SearchInput
               type="text"
               id='q'
               label='Schools'
               name="search"
               onChange={handleOnChange}
-              icon={<FaSearch className="w-4 h-4" />}
             />
           { isLoading && <div className="my-2 py-3 px-4 rounded bg-gray-100 ">Loading..</div>}
           {
