@@ -12,6 +12,7 @@ import SchoolView from "../_components/school-view";
 import { PageHeader, PageContent } from "@/components/common-page";
 import { cn } from "@/lib/utils";
 import { statePaths } from "@/data/state-paths";
+import { useSearchParams } from "next/navigation";
 
 const options = statePaths
   .sort((a, b) => a.name.localeCompare(b.name))
@@ -36,12 +37,13 @@ function useDebouncedValue(inputValue, delay) {
 export default function Page() {
   const [activeSelection, setActiveSelection] = useState<any[]>([]);
   const [activeStates, setActiveStates] = useState<string[]>([]);
-  const [activeSchoolId, setActiveSchoolId] = useState("");
   const [page, setPage] = useState(0);
   const [termText, setTermText] = useState("");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const itemsPerPage = 18;
   const debouncedSearchTerm = useDebouncedValue(termText, 500);
+  const searchParams = useSearchParams();
+  const activeSchoolId = searchParams?.get("id") || '';
 
   // After debounced search term (termText) settles, update searchTerm variable, kicking off the query
   useEffect(() => {
@@ -94,7 +96,7 @@ export default function Page() {
   }, [activeStates]);
 
   if (activeSchoolId) {
-    return <SchoolView schoolId={activeSchoolId} goBack={() => setActiveSchoolId("")} />
+    return <SchoolView headerTitle="Explore Schools" schoolId={activeSchoolId} />
   }
 
   return (
@@ -155,7 +157,7 @@ export default function Page() {
             {schools?.length > 0
               ? schools.map((school, index) => (
                 <li key={index} className="flex rounded bg-slate-50 relative justify-center items-center text-sm w-[160px] h-[120px] md:w-[200px] md:h-[150px] p-3 md:p-6 m-1 border">
-                  <Link href='#' onClick={() => setActiveSchoolId(school.id)}>
+                  <Link href={`?id=${school.id}`}>
                     {school.name}
                   </Link>
                   <div className="absolute right-3 bottom-3 text-slate-400">

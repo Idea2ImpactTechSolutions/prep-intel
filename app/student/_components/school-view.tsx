@@ -7,11 +7,11 @@ import { GoChevronRight } from "react-icons/go";
 import Link from "next/link";
 
 interface PageProps {
-  goBack: () => void;
   schoolId: string;
+  headerTitle:string;
 }
 
-export default function SchoolView({goBack, schoolId}:PageProps) {
+export default function SchoolView({schoolId, headerTitle}:PageProps) {
   const {data: {data: schoolData} = {}, isLoading } = useGetSchoolProfileQuery(schoolId);
 
   return (
@@ -20,7 +20,7 @@ export default function SchoolView({goBack, schoolId}:PageProps) {
             className="bg-white"
             title={
               <div className="flex items-center gap-2">
-                <Link href="#" className="underline" onClick={() => { goBack(); return false;}}>Explore Schools</Link> <GoChevronRight className="mt-1" />
+                <Link className="underline" href="?">{headerTitle}</Link> <GoChevronRight className="mt-1" />
                 {schoolData?.name}
               </div>
             } />
