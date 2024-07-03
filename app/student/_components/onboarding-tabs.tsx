@@ -79,8 +79,6 @@ export default function OnboardingTabs({ active_step: activeTabName, className, 
         '!p-4',
         )}>
       {
-          // Use the array index as the item key - it's stable in this context,
-          // isn't used for anything and eliminates unnecessary UUIDs
           tabs.map(({ title, path }, index) => (
             <Link
                   key={index}
@@ -106,7 +104,6 @@ export default function OnboardingTabs({ active_step: activeTabName, className, 
       <nav className={cn(`p-4 pb-8`, className)}>
         <div className="">
           <div className="flex-1">
-            {/* <span className='block border-b border-[#D0CFCF]'></span> */}
             <div className='grid grid-cols-5 w-full'>
               {
                 tabs.map(({ step, title, path }, idx) => (
