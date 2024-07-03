@@ -34,6 +34,7 @@ export default function SchoolPage() {
     const [getMatchingSchools, { isLoading, isFetching }] = useLazyGetSchoolsQuery();
     const [addStudentSchools, { isLoading: isAddingStudentSchool }] = useAddStudentSchoolsMutation()
     const [getStudentSchools, { isLoading: isGettingStudentSchool, isFetching: isFetchingStudentSchool }] = useLazyGetStudentSchoolsQuery()
+    const useSteppedWizard = false;
 
     // fetch student interested schools
     const handleGetStudentSchools = async (studentId) => {
@@ -60,8 +61,12 @@ export default function SchoolPage() {
         addStudentSchools({ data: schools, studentId: studentId })
             .unwrap()
             .then(data => {
+              if (useSteppedWizard) {
                 toast.success(data.message)
                 router.push('/student/onboarding/majors')
+              } else {
+                router.push('/student/explore');
+              }
             })
     }
 
@@ -247,7 +252,7 @@ export default function SchoolPage() {
                         </div>
                         <OnboardingFooter
                             prevPageHandler={() => router.push('/student/onboarding/vitals')}
-                            nextPageHandler={() => handleSubmitSchool()}
+                            nextPageHandler={handleSubmitSchool}
                             preventGoBack={false}
                             loading={isAddingStudentSchool}
                         />

@@ -34,8 +34,6 @@ export function Navbar({tabs, leftContent, showTabs=true }: NavbarProps) {
     const { width } = useWindowSize()
     const [ showSidebar, setShowSidebar] = useState<boolean>(true)
 
-
-
     const normal = 'relative p-1.5 mb-2 block flex items-center gap-x-2 text-sm'
     const defaultLink = normal + ' text-grey-500 pl-4 dark:text-slate-400 dark:hover:text-slate-300 hover:text-primary hover:p-1.5 hover:pl-4'
     const activeLink = normal + ' text-white bg-primary rounded-[4px] pl-4 dark:text-slate-300'
@@ -108,8 +106,6 @@ export function Navbar({tabs, leftContent, showTabs=true }: NavbarProps) {
                         <div className="p-4 mt-5 flex flex-col">
                             <div className="">
                                 {
-                                    // Use the array index as the item key - it's stable in this context,
-                                    // isn't used for anything and eliminates unnecessary UUIDs
                                     tabs.map(({ title, url, icon }, index) => (
                                         <Link
                                             key={index}

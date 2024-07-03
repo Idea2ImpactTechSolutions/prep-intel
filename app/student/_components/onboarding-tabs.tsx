@@ -1,5 +1,6 @@
 "use client"
 import { cn } from '@/lib/utils'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 type ACTIVE_STEP = 'Vitals' | 'Schools' | 'Majors' | 'Extracurricular' | 'Transcript'
@@ -8,36 +9,41 @@ const tabs = [
   {
     step: 1,
     title: 'Vitals',
-    path: '/school/onboarding/vitals'
+    path: '/student/onboarding/vitals'
   },
   {
     step: 2,
     title: 'Schools',
-    path: '/school/onboarding/schools'
+    path: '/student/onboarding/schools'
   },
   {
     step: 3,
     title: 'Majors',
-    path: '/school/onboarding/majors'
+    path: '/student/onboarding/majors'
   },
   {
     step: 4,
     title: 'Extracurricular',
-    path: '/school/onboarding/extracurricular'
+    path: '/student/onboarding/extracurricular'
   },
   {
     step: 5,
     title: 'Transcript',
-    path: '/school/onboarding/transcript'
+    path: '/student/onboarding/transcript'
   },
 ]
 
 interface OnboardingTabsProps {
   active_step: ACTIVE_STEP;
   className?: string;
+  originalSteppedWizardView?: boolean;
 }
 
-export default function OnboardingTabs({ active_step: activeTabName, className }: OnboardingTabsProps) {
+const normal = 'relative flex items-center text-sm rounded-[4px]'
+const defaultLink = normal + ' text-grey-500 dark:text-slate-400 dark:hover:text-slate-300 hover:text-primary bg-gray-100'
+const activeLink = normal + ' text-white bg-primary dark:text-slate-300'
+
+export default function OnboardingTabs({ active_step: activeTabName, className, originalSteppedWizardView=false}: OnboardingTabsProps) {
   const [activeIndex, setActiveIndex] = useState<any>("")
   const [nextIndex, setNextIndex] = useState<any>("")
 
@@ -54,6 +60,44 @@ export default function OnboardingTabs({ active_step: activeTabName, className }
       }
     }
   },[activeTabName])
+
+  function url(path) {
+    return path;
+  }
+
+  type TabStyle = 'material-tabs' | 'pills';
+
+  const mode : TabStyle = "material-tabs";
+
+  if (!originalSteppedWizardView) {
+    return (
+      <div className={cn(
+        "hidden p-0 md:flex md:items-center gap-x-2 mt-3",
+        className,
+        '!pt-0',
+        )}>
+      {
+          // Use the array index as the item key - it's stable in this context,
+          // isn't used for anything and eliminates unnecessary UUIDs
+          tabs.map(({ title, path }, index) => (
+            <Link
+                  key={index}
+                  href={url(path)}
+                  className={cn(
+                    mode === 'pills' && `relative p-3 py-1 items-center border-blue-gray border`,
+                    mode === 'pills' && (location.pathname === url(path)) ? activeLink : defaultLink,
+                    mode === 'material-tabs' &&  "text-sm pb-1 ml-10 hover:text-primary",
+                    mode === 'material-tabs' && (location.pathname === url(path)) && 'text-primary border-b-2 border-b-primary',
+                  )}
+              >
+                  <span className="">{title}</span>
+              </Link>
+          ))
+      }
+  </div>
+
+    );
+  }
 
   // Original stepped progress control
   return (
