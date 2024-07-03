@@ -1,88 +1,130 @@
 "use client"
+import { PageHeader } from '@/components/common-page'
 import { cn } from '@/lib/utils'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 type ACTIVE_STEP = 'Vitals' | 'Schools' | 'Majors' | 'Extracurricular' | 'Transcript'
 
-
-const STEPPERS = [
+export const tabs = [
   {
     step: 1,
     title: 'Vitals',
-    path: '/school/onboarding/vitals'
+    path: '/student/onboarding/vitals'
   },
   {
     step: 2,
     title: 'Schools',
-    path: '/school/onboarding/schools'
+    path: '/student/onboarding/schools'
   },
   {
     step: 3,
     title: 'Majors',
-    path: '/school/onboarding/majors'
+    path: '/student/onboarding/majors'
   },
   {
     step: 4,
     title: 'Extracurricular',
-    path: '/school/onboarding/extracurricular'
+    path: '/student/onboarding/extracurricular'
   },
   {
     step: 5,
-    title: 'Transcript',
-    path: '/school/onboarding/transcript'
+    title: 'Transcripts',
+    path: '/student/onboarding/transcripts'
   },
 ]
 
 interface OnboardingTabsProps {
   active_step: ACTIVE_STEP;
   className?: string;
+  useSteppedWizard?: boolean;
 }
 
-export default function OnboardingTabs({ active_step, className }: OnboardingTabsProps) {
-  const [activeIndex, setActiveIndex] = useState<any>("")
-  const [nextStepperIndex, setnextStepperIndex] = useState<any>("")
+type TabStyle = 'material-tabs' | 'pills';
+const mode : TabStyle = "material-tabs";
 
+export default function OnboardingTabs({ active_step: activeTabName, className, useSteppedWizard=false}: OnboardingTabsProps) {
+  const [activeIndex, setActiveIndex] = useState<any>("")
+  const [nextIndex, setNextIndex] = useState<any>("")
 
   useEffect(() => {
-    if (active_step) {
-      const foundIndex = STEPPERS.findIndex(step => step.title === active_step)
-      setActiveIndex(foundIndex)
-      if (foundIndex === 4) {
-        setnextStepperIndex(foundIndex)
-        return
+    if (activeTabName) {
+      const tabIndex = tabs.findIndex(step => step.title === activeTabName)
+      setActiveIndex(tabIndex)
+
+      if (tabIndex ===tabs.length - 1) {
+        // Seemingly handle last tab case
+        setNextIndex(tabIndex)
+      } else {
+        setNextIndex(tabIndex + 1)
       }
-
-      const newStepperIndex = foundIndex + 1
-      setnextStepperIndex(newStepperIndex)
     }
-  },[active_step])
+  },[activeTabName])
 
+  function url(path) {
+    return path;
+  }
+
+  const normal = 'relative flex justify-center items-center text-xs md:text-sm p-2 md:px-10 md:min-w-[120px] bg-gray-100'
+  const defaultLink = normal + ' text-grey-500 hover:text-primary'
+  const activeLink = normal + ' text-white bg-primary'
+
+  if (!useSteppedWizard) {
+    return (
+      <>
+      <PageHeader title="Edit Profile" />
+      <div className={cn(
+        "p-0 flex gap-x-2",
+        className,
+        '!p-4',
+        )}>
+      {
+          tabs.map(({ title, path }, index) => (
+            <Link
+                  key={index}
+                  href={url(path)}
+                  className={cn(
+                    mode === 'pills' && `relative p-3 py-1 items-center border-blue-gray border`,
+                    mode === 'pills' && (location.pathname === url(path)) ? activeLink : defaultLink,
+                    mode === 'material-tabs' &&  "hover:text-primary",
+                    mode === 'material-tabs' && (location.pathname === url(path)) && 'text-primary border-b-2 border-b-primary',
+                  )}
+              >
+                  <span className="">{title}</span>
+              </Link>
+          ))
+      }
+      </div>
+    </>
+    );
+  }
+
+  // Original stepped progress control
   return (
       <nav className={cn(`p-4 pb-8`, className)}>
         <div className="">
           <div className="flex-1">
-            {/* <span className='block border-b border-[#D0CFCF]'></span> */}
             <div className='grid grid-cols-5 w-full'>
               {
-                STEPPERS.map(({ step, title, path }, idx) => (
+                tabs.map(({ step, title, path }, idx) => (
                   <div key={step} className={cn(
                     "flex flex-col items-center gap-y-2 z-0 relative",
                     idx !== 4 && "after:right-0 after:top-[25%] after:block after:contents-[''] after:absolute after:h-[2px] after:bg-[#D0CFCF] after:w-[50%] after:-z-10",
                     idx !== 0 && "before:left-0 before:top-[25%] before:block before:contents-[''] before:absolute before:h-[2px] before:bg-[#D0CFCF] before:w-[50%] before:-z-10",
-                    nextStepperIndex -1 !== 0 && idx < nextStepperIndex - 1  && "after:bg-[#A81D28]",
-                    idx !== 0 && idx < nextStepperIndex  && "before:bg-[#A81D28]",
+                    nextIndex -1 !== 0 && idx < nextIndex - 1  && "after:bg-[#A81D28]",
+                    idx !== 0 && idx < nextIndex  && "before:bg-[#A81D28]",
                      (idx === 3 && activeIndex + 1 === 5) && "after:bg-[#A81D28]",
                      (idx === 4 && activeIndex + 1 === 5) && "before:bg-[#A81D28]",
                   )}>
                     <span className={cn(
                       "grid place-content-center bg-[#D0CFCF] text-white w-7 h-7 font-bold rounded-full",
-                     idx < nextStepperIndex && "bg-[#A81D28]",
-                     (active_step === title) && "bg-[#A81D28]",
+                     idx < nextIndex && "bg-[#A81D28]",
+                     (activeTabName === title) && "bg-[#A81D28]",
                     )}>{step}</span>
                     <span className={cn(
                       "text-[.6rem] md:text-sm",
-                      idx < nextStepperIndex && "text-[#A81D28]",
-                      (active_step === title) && "text-[#A81D28]",
+                      idx < nextIndex && "text-[#A81D28]",
+                      (activeTabName === title) && "text-[#A81D28]",
                     )}>{title}</span>
                   </div>
                 ))

@@ -31,7 +31,7 @@ export default function MajorPage() {
   const studentId = data?.user?.roleId
 
   const { delayedFunction } = useDelayedFunction(500)
-
+  const useSteppedWizard = false;
 
   // fetch student interested schools
   const handleGetStudentMajors = async (studentId) => {
@@ -48,8 +48,12 @@ export default function MajorPage() {
     addStudentMajors({ data: selectedMajors, studentId: studentId })
       .unwrap()
       .then(data => {
-        toast.success('Record submitted successfully')
-        router.push('/student/onboarding/extracurricular')
+        if (useSteppedWizard) {
+          toast.success('Record submitted successfully')
+          router.push('/student/onboarding/extracurricular')
+        } else {
+          router.push('/student/explore');
+        }
       })
   }
 
@@ -226,7 +230,7 @@ export default function MajorPage() {
             </div>
             <OnboardingFooter
               prevPageHandler={() => router.push('/student/onboarding/schools')}
-              nextPageHandler={() => handleSubmitMajors()}
+              nextPageHandler={handleSubmitMajors}
               preventGoBack={false}
               loading={isAddingStudentMajor}
             />
