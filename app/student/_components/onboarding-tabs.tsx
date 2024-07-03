@@ -29,7 +29,7 @@ export const tabs = [
   },
   {
     step: 5,
-    title: 'Transcript',
+    title: 'Transcripts',
     path: '/student/onboarding/transcripts'
   },
 ]
