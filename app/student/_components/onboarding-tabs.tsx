@@ -37,13 +37,13 @@ export const tabs = [
 interface OnboardingTabsProps {
   active_step: ACTIVE_STEP;
   className?: string;
-  originalSteppedWizardView?: boolean;
+  useSteppedWizard?: boolean;
 }
 
 type TabStyle = 'material-tabs' | 'pills';
 const mode : TabStyle = "material-tabs";
 
-export default function OnboardingTabs({ active_step: activeTabName, className, originalSteppedWizardView=false}: OnboardingTabsProps) {
+export default function OnboardingTabs({ active_step: activeTabName, className, useSteppedWizard=false}: OnboardingTabsProps) {
   const [activeIndex, setActiveIndex] = useState<any>("")
   const [nextIndex, setNextIndex] = useState<any>("")
 
@@ -69,7 +69,7 @@ export default function OnboardingTabs({ active_step: activeTabName, className, 
   const defaultLink = normal + ' text-grey-500 hover:text-primary'
   const activeLink = normal + ' text-white bg-primary'
 
-  if (!originalSteppedWizardView) {
+  if (!useSteppedWizard) {
     return (
       <>
       <PageHeader title="Edit Profile" />

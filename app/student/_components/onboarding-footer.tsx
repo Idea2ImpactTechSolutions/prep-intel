@@ -11,12 +11,12 @@ type OnboardingFooterType = {
     nextBtnLabel?: string,
     preventGoBack?: boolean,
     loading?: boolean,
-    originalSteppedWizardView?: boolean;
+    useSteppedWizard?: boolean;
 }
 
-export default function OnboardingFooter({prevPageHandler, nextPageHandler, nextBtnLabel, originalSteppedWizardView=false, preventGoBack = true, loading = false}: OnboardingFooterType) {
+export default function OnboardingFooter({prevPageHandler, nextPageHandler, nextBtnLabel, useSteppedWizard=false, preventGoBack = true, loading = false}: OnboardingFooterType) {
   const router = useRouter();
-  if (!originalSteppedWizardView) {
+  if (!useSteppedWizard) {
     return (
       <div className="pt-8 flex gap-x-4 items-center justify-end h-[4rem]">
         <Button
