@@ -1,4 +1,5 @@
 "use client"
+import { PageHeader } from '@/components/common-page'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -29,7 +30,7 @@ const tabs = [
   {
     step: 5,
     title: 'Transcript',
-    path: '/student/onboarding/transcript'
+    path: '/student/onboarding/transcripts'
   },
 ]
 
@@ -39,9 +40,8 @@ interface OnboardingTabsProps {
   originalSteppedWizardView?: boolean;
 }
 
-const normal = 'relative flex items-center text-sm rounded-[4px]'
-const defaultLink = normal + ' text-grey-500 dark:text-slate-400 dark:hover:text-slate-300 hover:text-primary bg-gray-100'
-const activeLink = normal + ' text-white bg-primary dark:text-slate-300'
+type TabStyle = 'material-tabs' | 'pills';
+const mode : TabStyle = "material-tabs";
 
 export default function OnboardingTabs({ active_step: activeTabName, className, originalSteppedWizardView=false}: OnboardingTabsProps) {
   const [activeIndex, setActiveIndex] = useState<any>("")
@@ -65,16 +65,18 @@ export default function OnboardingTabs({ active_step: activeTabName, className, 
     return path;
   }
 
-  type TabStyle = 'material-tabs' | 'pills';
-
-  const mode : TabStyle = "material-tabs";
+  const normal = 'relative flex justify-center items-center text-xs md:text-sm p-2 md:px-10 md:min-w-[120px] bg-gray-100'
+  const defaultLink = normal + ' text-grey-500 hover:text-primary'
+  const activeLink = normal + ' text-white bg-primary'
 
   if (!originalSteppedWizardView) {
     return (
+      <>
+      <PageHeader title="Edit Profile" />
       <div className={cn(
-        "hidden p-0 md:flex md:items-center gap-x-2 mt-3",
+        "p-0 flex gap-x-2",
         className,
-        '!pt-0',
+        '!p-4',
         )}>
       {
           // Use the array index as the item key - it's stable in this context,
@@ -86,7 +88,7 @@ export default function OnboardingTabs({ active_step: activeTabName, className, 
                   className={cn(
                     mode === 'pills' && `relative p-3 py-1 items-center border-blue-gray border`,
                     mode === 'pills' && (location.pathname === url(path)) ? activeLink : defaultLink,
-                    mode === 'material-tabs' &&  "text-sm pb-1 ml-10 hover:text-primary",
+                    mode === 'material-tabs' &&  "hover:text-primary",
                     mode === 'material-tabs' && (location.pathname === url(path)) && 'text-primary border-b-2 border-b-primary',
                   )}
               >
@@ -94,8 +96,8 @@ export default function OnboardingTabs({ active_step: activeTabName, className, 
               </Link>
           ))
       }
-  </div>
-
+      </div>
+    </>
     );
   }
 
