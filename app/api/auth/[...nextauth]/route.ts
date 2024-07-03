@@ -24,7 +24,7 @@ const handler = NextAuth({
         }
         try
         {
-          let user = await Users.findOne({
+          const user = await Users.findOne({
             where: {
               email: credentials.email,
             },
@@ -32,8 +32,7 @@ const handler = NextAuth({
 
         const credentialsMatch = await bcrypt.compare(credentials.password, user.password);
         if (user && credentialsMatch) {
-          // Any object returned will be saved in `user` property of the JWT
-          let roleId =  await getUsersRoleId(user.id,user.role);
+          const roleId =  await getUsersRoleId(user.id, user.role);
           return {
             id: user.id,
             firstName: user.first_name,

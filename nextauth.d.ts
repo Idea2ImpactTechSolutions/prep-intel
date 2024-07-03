@@ -1,3 +1,7 @@
+
+import { DefaultSession, DefaultUser } from "next-auth";
+import { DefaultJWT } from "next-auth/jwt";
+
 export enum Role {
   student = "student",
   admin = "admin",
@@ -5,23 +9,23 @@ export enum Role {
 }
 
 declare module "next-auth" {
-  interface User {
+  interface User extends DefaultUser {
     id: string;
-    roleId: string;
+    roleId: string; // The student/recruiter/admin id associated with the given user
     schoolID: string;
     role?: Role;
   }
 
   interface Session extends DefaultSession {
-    user?: User;
+    user: User;
   }
 }
 
 declare module "next-auth/jwt" {
-  interface JWT {
+  interface JWT extends DefaultJWT {
     id: string;
     roleId: string;
     schoolID: string;
-    role?: Role;
+    role: Role;
   }
 }
