@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 
 type ACTIVE_STEP = 'Vitals' | 'Schools' | 'Majors' | 'Extracurricular' | 'Transcript'
 
-const tabs = [
+export const tabs = [
   {
     step: 1,
     title: 'Vitals',

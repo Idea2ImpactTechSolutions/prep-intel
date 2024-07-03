@@ -8,6 +8,9 @@ import { managerReset } from "@/redux/features/school/managerSlice";
 import { useRouter } from "next/navigation";
 import { useState } from 'react';
 import { LucideLoader } from "lucide-react";
+import {tabs} from "@/app/student/_components/onboarding-tabs";
+
+const expandProfileMenu = true;
 
 const UserProfileMenu = () => {
     const dispatch = useAppDispatch();
@@ -40,8 +43,8 @@ const UserProfileMenu = () => {
     }
 
   const menuItem = "group hover:bg-gray-200 leading-none rounded-[3px] flex items-center h-[25px] px-[5px] relative pl-[25px] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-primary";
-  //const menuItem = "flex items-center space-x-2 p-2 hover:bg-sky-200";
   const separator = "h-[1px] bg-gray-200 m-[5px]";
+
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
@@ -69,9 +72,26 @@ const UserProfileMenu = () => {
 
           </DropdownMenu.Label>
           <DropdownMenu.Separator className={separator} />
-          <DropdownMenu.Item className={cn(menuItem, "pl-1")} onClick={openProfilePage}>
-            <User className="w-4 h-4 mr-1" /> Profile
-          </DropdownMenu.Item>
+          {
+            expandProfileMenu ? (
+              <>
+                <DropdownMenu.Label className="pl-1 text-sm leading-[24px] text-gray">
+                  <div className="all-small-caps ml-0 text-gray-400">Profile</div>
+                </DropdownMenu.Label>
+                {
+                  tabs.map(({ title, path}, index) => (
+                    <DropdownMenu.Item  key={index} className={cn(menuItem, "pl-1")} onClick={() => router.push(path)}>
+                      {title}
+                    </DropdownMenu.Item>
+                  ))
+                }
+              </> ) : (
+                <DropdownMenu.Item className={cn(menuItem, "pl-1")} onClick={openProfilePage}>
+                  <User className="w-4 h-4 mr-1" /> Profile
+                </DropdownMenu.Item>
+              )
+          }
+
           <DropdownMenu.Separator className={separator} />
           <DropdownMenu.Item className={cn(menuItem, "pl-1")} onClick={logoutUser}>
             <BiLogOut className="w-4 h-4 mr-1" />Logout
