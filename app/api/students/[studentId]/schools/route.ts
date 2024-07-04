@@ -223,7 +223,7 @@ export async function POST(
   try {
     // Collect
     const student = await Students.findByPk(params.studentId);
-    if (student) {
+    if (!student) {
       return apiResponse("Not Found", 404);
     }
 
