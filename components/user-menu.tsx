@@ -2,9 +2,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BiLogOut } from "react-icons/bi";
-import { useAppDispatch } from "@/redux/store";
-import { signOut, useSession } from "next-auth/react";
-import { managerReset } from "@/redux/features/school/managerSlice";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from 'react';
 import { LucideLoader } from "lucide-react";
@@ -12,21 +10,20 @@ import {tabs} from "@/app/student/_components/onboarding-tabs";
 
 const expandProfileMenu = true;
 
-const UserProfileMenu = () => {
-    const dispatch = useAppDispatch();
+export interface Props
+{
+  sharedLogout: () => void;
+}
+
+export function UserProfileMenu ({sharedLogout}: Props){
     const session:any = useSession();
     const router = useRouter();
     const [loggingOff, setLoggingOff] = useState(false);
-
     const name = session?.data?.user?.firstName;
 
     function logoutUser(){
       setLoggingOff(true);
-      signOut()
-      dispatch(managerReset());
-      // Cookies.remove("token");
-      // dispatch(reset());
-      // window.location.href = "/login";
+      sharedLogout();
     }
 
     function openProfilePage() {
