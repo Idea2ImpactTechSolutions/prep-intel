@@ -12,9 +12,10 @@ interface SingleRecruiterCardProps {
   school_email: string,
   phone: string,
   email: string,
+  onMessageClick?: () => void,
 }
 
-export default function SingleRecruiterCard({ imgUrl, name, school_name, school_state, school_email, phone, email}: SingleRecruiterCardProps) {
+export default function SingleRecruiterCard({ imgUrl, name, school_name, school_state, school_email, phone, email, onMessageClick}: SingleRecruiterCardProps) {
   return (
     <div className="w-full sm:w-[19rem rounded-[12px] p-5 bg-white card-shadow">
       <div className="border-b border-[#E9E9EA]">
@@ -51,7 +52,7 @@ export default function SingleRecruiterCard({ imgUrl, name, school_name, school_
           </div> */}
         </div>
       </div>
-      <div className="py-4">
+      <div className="pt-4">
         <div className="flex gap-2">
           <span><Phone width={16} height={16} className="text-xs text-[#757575]" /></span>
           <span className="text-xs text-[#141111] font-normal">{formatPhoneNumber(phone)}</span>
@@ -59,6 +60,14 @@ export default function SingleRecruiterCard({ imgUrl, name, school_name, school_
         <div className="mt-3 flex gap-2">
           <span><Mail width={16} height={16} className="text-xs text-[#757575]" /></span>
           <span className="text-xs text-[#141111] font-normal">{email}</span>
+        </div>
+        <div className="flex pt-4 justify-end">
+          <button
+            onClick={onMessageClick}
+            className="bg-[#FFC107] text-[#141111] font-semibold text-sm rounded-[12px] py-2 px-6 md:px-8"
+          >
+            Message
+          </button>
         </div>
         {/*
         Disable fake school url for now

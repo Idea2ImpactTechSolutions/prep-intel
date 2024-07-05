@@ -36,11 +36,16 @@ const userApi = baseApi.injectEndpoints({
         if (!studentId || !recruiterId || !senderRole || !message) {
           throw new Error("Missing required parameters");
         }
-    
+
         return {
           url: `/messages`,
           method: "POST",
-          body : {message_text: message,recruiter_id : recruiterId,student_id:studentId,school_id: schoolId,sender_role:senderRole}
+          body : {
+            message_text: message,
+            recruiter_id: recruiterId,
+            student_id: studentId,
+            school_id: schoolId,
+            sender_role:senderRole }
         };
       },
       invalidatesTags: ["STUDENT"],
