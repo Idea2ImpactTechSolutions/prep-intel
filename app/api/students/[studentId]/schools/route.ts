@@ -106,9 +106,8 @@ export async function GET(
   ) {
   try {
     // Collect
-    const userRole : {role: string} = await getUserRole(params.studentId);
-
-    if (userRole.role !== 'student') {
+    const student = Students.findByPk(params.studentId);
+    if (!student) {
       return apiResponse("Not Found", 404);
     }
 
@@ -223,9 +222,8 @@ export async function POST(
 ) {
   try {
     // Collect
-    const userRole : { role: string } = await getUserRole(params.studentId);
-
-    if (userRole.role !== 'student') {
+    const student = await Students.findByPk(params.studentId);
+    if (!student) {
       return apiResponse("Not Found", 404);
     }
 
@@ -331,9 +329,8 @@ export async function PATCH(
   ) {
   try {
     // Collect
-    const userRole : { role: string } = await getUserRole(params.studentId);
-
-    if (userRole.role !== 'student') {
+    const student = await Students.findByPk(params.studentId);
+    if (!student) {
       return apiResponse("Not Found", 404);
     }
 
@@ -365,24 +362,6 @@ export async function PATCH(
     // Report
     return apiResponse("Internal Server Error", 500, { error: error.message });
   }
-}
-
-async function getUserRole(studentId) {
-  return await Students.findOne({
-    where: {
-      id: studentId,
-    },
-    attributes: ['user.role'],
-    include: [{
-      model: Users,
-      required: true,
-      attributes: [],
-      where: {
-        role: 'student'
-      }
-    }],
-    raw: true
-  });
 }
 
 function checkSearchParams(searchParams) {
