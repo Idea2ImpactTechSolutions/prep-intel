@@ -39,7 +39,7 @@ const studentApi = baseApi.injectEndpoints({
         url: `/students/${studentId}/schools`,
         method: "GET",
       }),
-      providesTags: ['Schools'],
+      providesTags: ['SCHOOLS'],
     }),
     addStudentSchools: builder.mutation({
       query: (payload) => ({
@@ -54,7 +54,7 @@ const studentApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: payload.data,
       }),
-      invalidatesTags: ['Schools'],
+      invalidatesTags: ['SCHOOLS'],
     }),
     getStudentMajors: builder.query({
       query: (studentId) => ({
