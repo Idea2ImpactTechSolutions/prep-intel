@@ -20,6 +20,7 @@ export function UserProfileMenu ({sharedLogout}: Props){
     const router = useRouter();
     const [loggingOff, setLoggingOff] = useState(false);
     const name = session?.data?.user?.firstName;
+    const role = session?.data?.user?.role;
 
     function logoutUser(){
       setLoggingOff(true);
@@ -70,7 +71,7 @@ export function UserProfileMenu ({sharedLogout}: Props){
           </DropdownMenu.Label>
           <DropdownMenu.Separator className={separator} />
           {
-            expandProfileMenu ? (
+            (expandProfileMenu && role === "student") ? (
               <>
                 <DropdownMenu.Label className="pl-1 text-sm leading-[24px] text-gray">
                   <div className="all-small-caps ml-0 text-gray-400">Profile</div>
