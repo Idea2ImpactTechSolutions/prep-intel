@@ -2,21 +2,21 @@ import * as yup from 'yup';
 import type { NextRequest } from "next/server";
 import { apiResponse, responseBody } from "app/config/helpers";
 import { models } from "@/app/models";
+import { ApplicationStatus } from '@/app/enums/application-status';
+import { ApplicantStatus } from '@/app/enums/applicant-status';
 const { Recruiters, Recruits, School, SchoolAddress, Students, Users } = models;
 
 const POST_VALIDATION_SCHEMA = yup.array().of(
   yup.number().required()
 );
 
-const APPLICATION_STATUSES = ['Accepted', 'Rejected', 'Waitlisted'];
-
 const PATCH_VALIDATION_SCHEMA = yup.object({
   school_id: yup.number().required(),
   criteria: yup.string().oneOf(['INTERESTED']).notRequired(),
   interested: yup.boolean().notRequired(),
   is_viewable: yup.boolean().notRequired(),
-  application_status: yup.string().oneOf(APPLICATION_STATUSES).notRequired(),
-  applicant_status: yup.string().oneOf(['Yes', 'No']).notRequired()
+  application_status: yup.string().oneOf(Object.values(ApplicationStatus)).notRequired(),
+  applicant_status: yup.string().oneOf(Object.values(ApplicantStatus)).notRequired()
 });
 
 /**

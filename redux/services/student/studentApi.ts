@@ -39,6 +39,7 @@ const studentApi = baseApi.injectEndpoints({
         url: `/students/${studentId}/schools`,
         method: "GET",
       }),
+      providesTags: ['SCHOOLS'],
     }),
     addStudentSchools: builder.mutation({
       query: (payload) => ({
@@ -46,6 +47,14 @@ const studentApi = baseApi.injectEndpoints({
         method: "POST",
         body: payload.data
       }),
+    }),
+    updateRecruit: builder.mutation({
+      query: (payload) => ({
+        url: `/students/${payload.studentId}/schools`,
+        method: "PATCH",
+        body: payload.data,
+      }),
+      invalidatesTags: ['SCHOOLS'],
     }),
     getStudentMajors: builder.query({
       query: (studentId) => ({
@@ -124,4 +133,5 @@ export const {
   useLazyGetStudentRecruiterConnectionsQuery,
   useGetStudentSchoolsQuery,
   useGetSchoolPrepScoresQuery,
+  useUpdateRecruitMutation,
 } = studentApi;
