@@ -49,7 +49,11 @@ export default function LoginPage() {
               router.push('/recruiter/dashboard')
               break;
             case 'student':
-              router.push('/student/onboarding/vitals')
+              if(session.user.profileComplete){
+                router.push('/student/explore');
+              }else{
+                router.push('/student/onboarding/vitals')
+              }
               break;
           }
         }

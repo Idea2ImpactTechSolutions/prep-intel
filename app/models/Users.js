@@ -44,6 +44,10 @@ const Users = sequelize.define(
         account_claimed: {
             type: DataTypes.BOOLEAN,
         },
+        profile_complete: {
+            type: DataTypes.BOOLEAN,
+            default: false
+        },
         date_claimed: {
             type: DataTypes.DATE,
         },

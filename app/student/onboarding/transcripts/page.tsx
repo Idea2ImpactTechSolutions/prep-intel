@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useUploadAssetMutation, useGetAssetsQuery } from "@/redux/services/assets/assetApi";
+import { useUpdateStudentProfileMutation } from "@/redux/services/student/studentApi";
 import LoadingSpinner from '@/components/loading-spinner';
 import { FaFileAlt } from "react-icons/fa";
 import { PageContent } from "@/components/common-page";
@@ -17,14 +18,29 @@ export default function TranscriptsPage() {
   const [documentType, setDocumentType] = useState("");
   const router = useRouter();
   const [ uploadAsset , { isLoading: isLoadingUpload, isSuccess }] = useUploadAssetMutation()
+  const [updateStudentProfile,{ isLoading: isUpdatingStudentProfile }] = useUpdateStudentProfileMutation()
 
   const { data } = useSession()
   const userId = data?.user?.id
+  const studentId = data?.user?.roleId
 
+  const profileComplete = data?.user?.profileComplete;
   const { data: assets, isLoading:isLoadingAssets, refetch } = useGetAssetsQuery({ userId: userId, category: "user-document" });
 
   async function handleUploadFile(bodyContent){
     await uploadAsset(bodyContent).unwrap()
+  }
+
+  const handleSubmitTranscripts = async () => {
+    if(!profileComplete){
+      updateStudentProfile({ studentId: studentId, data : {profile_complete:true} })
+      .unwrap()
+      .then(() => {
+        router.push("/student/explore")
+      })
+    }else{
+      router.push("/student/explore")
+    } 
   }
 
   useEffect(() => {
@@ -43,6 +59,12 @@ export default function TranscriptsPage() {
       handleUploadFile(payload)
     }
   }, [insertedFile])
+
+
+  
+  if (isUpdatingStudentProfile) {
+    return <LoadingSpinner />
+  }
 
   return (
     <>
@@ -112,7 +134,7 @@ export default function TranscriptsPage() {
 
           <OnboardingFooter
             prevPageHandler={() => router.push('/student/onboarding/extracurricular')}
-            nextPageHandler={() => router.push("/student/explore")}
+            nextPageHandler={handleSubmitTranscripts}
             preventGoBack={false}
             nextBtnLabel="Finish"
           />

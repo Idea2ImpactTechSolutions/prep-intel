@@ -28,13 +28,13 @@ export default function SchoolPage() {
 
     const { data } = useSession()
     const studentId = data?.user?.roleId
+    const profileComplete = data?.user?.profileComplete;
 
     const { delayedFunction } = useDelayedFunction(500)
 
     const [getMatchingSchools, { isLoading, isFetching }] = useLazyGetSchoolsQuery();
     const [addStudentSchools, { isLoading: isAddingStudentSchool }] = useAddStudentSchoolsMutation()
     const [getStudentSchools, { isLoading: isGettingStudentSchool, isFetching: isFetchingStudentSchool }] = useLazyGetStudentSchoolsQuery()
-    const useSteppedWizard = false;
 
     // fetch student interested schools
     const handleGetStudentSchools = async (studentId) => {
@@ -61,7 +61,7 @@ export default function SchoolPage() {
         addStudentSchools({ data: schools, studentId: studentId })
             .unwrap()
             .then(data => {
-              if (useSteppedWizard) {
+              if (!profileComplete) {
                 toast.success(data.message)
                 router.push('/student/onboarding/majors')
               } else {

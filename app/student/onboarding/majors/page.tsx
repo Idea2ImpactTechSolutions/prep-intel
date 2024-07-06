@@ -29,9 +29,10 @@ export default function MajorPage() {
 
   const { data } = useSession()
   const studentId = data?.user?.roleId
+  const profileComplete = data?.user?.profileComplete;
+
 
   const { delayedFunction } = useDelayedFunction(500)
-  const useSteppedWizard = false;
 
   // fetch student interested schools
   const handleGetStudentMajors = async (studentId) => {
@@ -48,7 +49,7 @@ export default function MajorPage() {
     addStudentMajors({ data: selectedMajors, studentId: studentId })
       .unwrap()
       .then(data => {
-        if (useSteppedWizard) {
+        if (!profileComplete) {
           toast.success('Record submitted successfully')
           router.push('/student/onboarding/extracurricular')
         } else {
