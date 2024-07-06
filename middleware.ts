@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import { withAuth, NextRequestWithAuth } from "next-auth/middleware";
 import { Role } from "@/nextauth.d";
 
+function isRegisterRequest(path, method) {
+  return path === "/api/students" && method === "POST";
+}
+
 export default withAuth(
   function middleware(req: NextRequestWithAuth) {
     const path = req.nextUrl.pathname;
@@ -22,7 +26,7 @@ export default withAuth(
     // Allowed Anonymous access
     const allowedPaths = ["/", "/register"]
     const isAllowedPath = allowedPaths.includes(path);
-    const isRegisterPost = path === "/api/students" && req.method === "POST";
+    const isRegisterPost = isRegisterRequest(path, req.method);
     const isAuthRequest = path.startsWith("/api/auth")
 
     // Redirect to login if there is no session and the request is not to an anonymous endpoint
@@ -38,13 +42,15 @@ export default withAuth(
   },
   {
     callbacks: {
-      authorized: async ({token}) => !!token,
+      authorized: async ({token, req}) => !!token ||
+        // Also allow register/create-account requests to pass through to middleware validation
+        isRegisterRequest(req.nextUrl.pathname, req.method),
     }
   }
 )
 
 export const config = {
   matcher: [
-    "/((?!_next/static|api/spec|login/*|api/auth/*|_next/image|favicon.ico|public|api/healthcheck|users/claim|users/set-password|api/users/claim|api/users/set-password|.*\\.png$|.*\\.svg$).*)",
+    "/((?!_next/static|register|api/spec|login/*|api/auth/*|_next/image|favicon.ico|public|api/healthcheck|users/claim|users/set-password|api/users/claim|api/users/set-password|.*\\.png$|.*\\.svg$).*)",
   ],
 };

@@ -32,6 +32,9 @@ error.log
 # local env files
 .env*.local
 
+db/docker/nces/tmp/
+db/tmp/
+
 .env
 
 # vercel
