@@ -125,6 +125,7 @@ export default function StudentInformation({ studentId, schoolId, recruiterId }:
                             labelClass="mt-3 text-xs font-normal text-[#61646B]"
                             name="applicantStatus"
                             showSearch={false}
+                            error={false}
                             disabled={isSendingApplicantStatus}
                             selected={studentDetails?.applicant_status}
                             setSelected={(selected) => updateRecruit({
