@@ -104,7 +104,7 @@ export default function Page() {
           </div>
         }
         rightContent={
-          <SearchInput
+          !studentId ? <SearchInput
             type="text"
             id='q'
             name="search"
@@ -114,7 +114,7 @@ export default function Page() {
             className="w-[450px]"
             placeholder="Type to search..."
             onChange={(x:any) => setSearchTerm(x.target.value)}
-          />}
+          /> : null}
 
         titleClass="text-sm"
       />
