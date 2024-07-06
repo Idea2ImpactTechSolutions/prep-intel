@@ -137,7 +137,7 @@ export default function StudentInformation({ studentId, schoolId, recruiterId }:
                               })
                             }
                             options={
-                              Object.values(ApplicantStatus).map((status) => (
+                              Object.values(ApplicantStatus).filter(status => status !== 'NONE' && status !== 'APPLIED').map((status) => (
                                 {
                                   label: status,
                                   value: status,
