@@ -28,10 +28,10 @@ export default function VitalsPage() {
   const { data } = useSession();
   const router = useRouter()
   const studentId = data?.user?.roleId;
+  const profileComplete = data?.user?.profileComplete;
   const userId = data?.user?.id;
   const [getStudentVitals, { isLoading, isFetching }] = useLazyGetStudentVitalsQuery()
   const [addStudentVitals, { isLoading: isAddingVitals }] = useAddStudentVitalsMutation()
-  const useSteppedWizard = false;
 
   const [studentData, setStudentData] = useState({
     user: {
@@ -65,7 +65,7 @@ export default function VitalsPage() {
     addStudentVitals({ data: { ...values }, studentId: studentId })
       .unwrap()
       .then(data => {
-        if (useSteppedWizard) {
+        if (!profileComplete) {
           toast.success(data.message)
           router.push("/student/onboarding/schools")
         } else {

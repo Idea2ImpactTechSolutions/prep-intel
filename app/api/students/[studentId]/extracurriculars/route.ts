@@ -1,7 +1,7 @@
 import { apiResponse } from "app/config/helpers";
 import { NextRequest } from "next/server";
 import { models } from "@/app/models";
-const { Students } = models;
+const { Students, Users } = models;
 
 /**
  * @openapi
@@ -83,13 +83,26 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: { studentId: string } }
 ) {
-  const student = await Students.findByPk(params.studentId);
+  const student = await Students.findByPk(params.studentId, {
+    include: {
+      model: Users,
+      attributes: ["id","profile_complete"],
+    },
+  });
   if (!student) {
     return apiResponse("Student not found", 404);
   }
   const extracurriculars = await req.json()
 
   const studentMajorInterests = await updateStudentExtracurriculars(student, extracurriculars);
+  if(!student.user.profile_complete){
+    await Users.update(
+      {
+        profile_complete: true,
+      },
+      { where: { id: student.user.id } }
+    );
+  }
   if (!studentMajorInterests) {
     return apiResponse("No extracurriculars selected", 200);
   }

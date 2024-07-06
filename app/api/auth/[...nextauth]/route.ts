@@ -39,6 +39,7 @@ const handler = NextAuth({
             email : user.email,
             role: user.role,
             roleId : roleId,
+            profileComplete: user.profile_complete,
             schoolID: user.school_id
           };
         } else {

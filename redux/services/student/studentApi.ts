@@ -82,6 +82,13 @@ const studentApi = baseApi.injectEndpoints({
         body: payload.data
       }),
     }),
+    updateStudentProfile: builder.mutation({
+      query: (payload) => ({
+        url: `/students/${payload.studentId}`,
+        method: "PATCH",
+        body: payload.data
+      }),
+    }),
     getStudentRecruiterConnections: builder.query({
       query: (studentId) => ({
         url: `/students/${studentId}/schools?view=connections`,
@@ -126,6 +133,7 @@ export const {
   useAddStudentMajorsMutation,
   useLazyGetStudentMajorsQuery,
   useAddStudentExtracurricularMutation,
+  useUpdateStudentProfileMutation,
   useLazyGetStudentExtracurricularQuery,
   useLazyGetConnectionRequestsQuery,
   useCreateConnectionRequestsMutation,

@@ -38,7 +38,7 @@ export default function ExtracurricularPage() {
   const [getStudentExtracurriculars, { isLoading: isGettingStudentExtracurricular, isFetching: isFetchingStudentExtracurricular }] = useLazyGetStudentExtracurricularQuery()
   const { data } = useSession()
   const studentId = data?.user?.roleId
-  const useSteppedWizard = false;
+  const profileComplete = data?.user?.profileComplete;
 
     // fetch student interested schools
     const handleGetStudenExtracurriculars = async (studentId) => {
@@ -56,7 +56,7 @@ export default function ExtracurricularPage() {
         addStudentExtracurriculars({ data: selectedExtracurriculars, studentId: studentId })
         .unwrap()
         .then(data => {
-          if (useSteppedWizard) {
+          if (!profileComplete) {
             toast.success('Record submitted successfully')
             router.push('/student/onboarding/transcripts') 
           } else {
@@ -64,7 +64,11 @@ export default function ExtracurricularPage() {
           }
         })
       }else{
-        router.push('/student/onboarding/transcripts')
+        if(profileComplete){
+          router.push('/student/explore');
+        }else{
+          router.push('/student/onboarding/transcripts')
+        }
       }
     }
 

@@ -15,6 +15,7 @@ declare module "next-auth" {
     roleId: string; // The student/recruiter/admin id associated with the given user
     schoolID: string;
     role?: Role;
+    profileComplete?: boolean;
   }
 
   interface Session extends DefaultSession {
@@ -28,5 +29,6 @@ declare module "next-auth/jwt" {
     roleId: string;
     schoolID: string;
     role: Role;
+    profileComplete: boolean;
   }
 }
