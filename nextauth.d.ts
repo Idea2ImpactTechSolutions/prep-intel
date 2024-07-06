@@ -15,7 +15,7 @@ declare module "next-auth" {
     roleId: string; // The student/recruiter/admin id associated with the given user
     schoolID: string;
     role?: Role;
-    profileComplete?: boolean;
+    profileComplete: boolean;
   }
 
   interface Session extends DefaultSession {

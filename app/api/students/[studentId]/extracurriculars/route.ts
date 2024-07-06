@@ -95,14 +95,7 @@ export async function PATCH(
   const extracurriculars = await req.json()
 
   const studentMajorInterests = await updateStudentExtracurriculars(student, extracurriculars);
-  if(!student.user.profile_complete){
-    await Users.update(
-      {
-        profile_complete: true,
-      },
-      { where: { id: student.user.id } }
-    );
-  }
+
   if (!studentMajorInterests) {
     return apiResponse("No extracurriculars selected", 200);
   }
