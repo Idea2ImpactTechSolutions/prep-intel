@@ -20,6 +20,9 @@ import GoalAndSkills from './goals-skills-section'
 
 import { useGetStudentProfileQuery } from '@/redux/services/recruiter/recruiterApi';
 import LoadingSpinner from '@/components/loading-spinner';
+import CustomSelect from "@/components/custom-select";
+import { ApplicantStatus } from '@/app/enums/applicant-status'
+import { useUpdateRecruitMutation } from "@/redux/services/student/studentApi";
 
 interface PageProps {
   studentId: string;
@@ -34,6 +37,7 @@ export default function StudentInformation({ studentId, schoolId, recruiterId }:
     const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false)
     const {data: session}: any = useSession()
     const router = useRouter()
+    const [updateRecruit, { isLoading: isSendingApplicantStatus }] = useUpdateRecruitMutation();
 
     const [createConnectionRequest, { isLoading: isLoadingConnectionRequest }] = useCreateConnectionRequestsMutation();
     const [sendMessage, { isLoading: isSending }] = useSendMessageMutation()
@@ -114,7 +118,33 @@ export default function StudentInformation({ studentId, schoolId, recruiterId }:
                         loading={isLoadingConnectionRequest}
                         onClick={sendConnectRequest}
                       >Connect To Unlock</Button>
-                      : <Button variant="outline" className='text-xl' onClick={()=>setShowModal(true)}>Message</Button>
+                      : (<div className="flex flex-col">
+                          <Button variant="outline" className='text-xl' onClick={()=>setShowModal(true)}>Message</Button>
+                          <CustomSelect
+                            label="Applicant Status"
+                            labelClass="mt-3 text-xs font-normal text-[#61646B]"
+                            name="applicantStatus"
+                            showSearch={false}
+                            disabled={isSendingApplicantStatus}
+                            selected={studentDetails?.applicant_status}
+                            setSelected={(selected) => updateRecruit({
+                                studentId,
+                                data: {
+                                  applicant_status: selected.toUpperCase(),
+                                  school_id: schoolId,
+                                },
+                              })
+                            }
+                            options={
+                              Object.values(ApplicantStatus).map((status) => (
+                                {
+                                  label: status,
+                                  value: status,
+                                }
+                              ))
+                            }
+                          />
+                        </div>)
                   }
               </div>
               <UserInformation userInfo={studentDetails} />
@@ -153,7 +183,7 @@ export default function StudentInformation({ studentId, schoolId, recruiterId }:
                         }}
                         className='w-full sm:w-fit md:px-10 rounded-lg font-[500] text-primary'
                     >
-                            No, cancel
+                      Cancel
                     </Button>
 
                     <Button

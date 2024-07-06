@@ -16,10 +16,11 @@ type CustomSelectType = {
     disabled?: boolean,
     setSelected: (event: any) => void,
     touched?: any,
+    showSearch?: boolean,
     error: any
 }
 
-export default function CustomSelect({ options, selected, disabled, label, name, labelClass, setSelected, error, touched }: CustomSelectType) {
+export default function CustomSelect({ options, selected, disabled, label, name, labelClass, setSelected, error, touched, showSearch=true}: CustomSelectType) {
     const [open, setOpen] = useState(false)
     const buttonRef = useRef<HTMLButtonElement>(null)
 
@@ -57,10 +58,14 @@ export default function CustomSelect({ options, selected, disabled, label, name,
                 </PopoverTrigger>
                 <PopoverContent className="p-0" style={{ width: `${buttonRef?.current?.offsetWidth}px` }}>
                     <Command className="">
+                      { showSearch &&
+                        <>
                         <CommandInput
                             placeholder={`Search`}
                             className="h-9"
                         />
+                        </>
+                      }
                         <CommandEmpty>No Record Found.</CommandEmpty>
                         <CommandGroup
                             className="h-56 overflow-y-scroll"
