@@ -9,10 +9,11 @@ export default withAuth(
     const invalidSession = !token;
 
     // Authorization restrictions by area and role
-    if (((path.startsWith("/admin") || path.startsWith("/api/admin")) && token?.role !== Role.admin) ||
-        (path.startsWith("/school/") && token?.role !== Role.manager) ||
-        (path.startsWith("/recruiter/") && token?.role !== Role.recruiter ||
-        (path.startsWith("/student/") && token?.role !== Role.student))) {
+    if (
+        ((path.startsWith("/admin") || path.startsWith("/api/admin")) && token?.role !== Role.admin)  ||
+        (path.startsWith("/school/") && !(token?.role === Role.manager || token?.role === Role.admin)) ||
+        (path.startsWith("/recruiter/") && token?.role !== Role.recruiter) ||
+        (path.startsWith("/student/") && token?.role !== Role.student)) {
       return NextResponse.rewrite(
         new URL("/denied", req.url)
       );
