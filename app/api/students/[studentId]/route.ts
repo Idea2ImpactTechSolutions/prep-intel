@@ -1,7 +1,7 @@
 import { apiResponse } from "app/config/helpers";
 import { models } from "@/app/models";
 const { Students, Users } = models;
-
+const USER_FIELDS =  ['profile_complete'];
 /**
  * @openapi
  * /api/students/{studentId}:
@@ -51,11 +51,10 @@ export async function PATCH(
     if (!user) {
       return apiResponse("User not found", 404);
     }
-    
-    const userKeys =  ['profile_complete'];
+  
 
     // Update all fields in payload that correspond to the user model
-    const userUpdateData = filterKeys(updateData, userKeys);
+    const userUpdateData = filterKeys(updateData, USER_FIELDS);
     if (Object.keys(userUpdateData).length > 0) {
       user.set(userUpdateData);
       await user.save();
