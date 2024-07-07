@@ -12,8 +12,12 @@ export default withAuth(
     const token = req.nextauth.token; // Available when middleware is augmented via "withAuth"
     const invalidSession = !token;
 
+    // Allowed Anonymous access
+    const allowedPaths = ["/", "/register", "/api/admin/schools"]
+    const isAllowedPath = allowedPaths.includes(path);
+
     // Authorization restrictions by area and role
-    if (
+    if (!isAllowedPath &&
         ((path.startsWith("/admin") || path.startsWith("/api/admin")) && token?.role !== Role.admin)  ||
         (path.startsWith("/school/") && !(token?.role === Role.manager || token?.role === Role.admin)) ||
         (path.startsWith("/recruiter/") && token?.role !== Role.recruiter) ||
@@ -23,9 +27,6 @@ export default withAuth(
       );
     }
 
-    // Allowed Anonymous access
-    const allowedPaths = ["/", "/register"]
-    const isAllowedPath = allowedPaths.includes(path);
     const isRegisterPost = isRegisterRequest(path, req.method);
     const isAuthRequest = path.startsWith("/api/auth")
 
