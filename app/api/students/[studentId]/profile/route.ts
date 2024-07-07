@@ -103,6 +103,7 @@ async function getInstitutionView(studentId, schoolId) {
     interested: recruit?.interested || null,
     recruiter_id: recruit?.recruiter_id || null,
     connection_date: recruit?.create_date || null,
+    applicant_status: recruit?.applicant_status || null,
   });
 
   // Conditionally lookup and push primary recruiter information on recruit record to 

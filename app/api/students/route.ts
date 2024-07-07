@@ -21,28 +21,9 @@ import bcrypt from "bcryptjs";
  *                 type: string
  *               password:
  *                 type: string
- *           examples:
- *             One Sample:
- *               value:
- *                 email: "abelkelly6022@gmail.com"
- *                 password: "abelkelly"
  *     responses:
  *       200:
  *         description: Successfully created new student
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 email:
- *                   type: string
- *                 password:
- *                   type: string
- *             examples:
- *               One Sample:
- *                 value:
- *                   email: "abelkelly6022@gmail.com"
- *                   password: "abelkelly"
  */
 export async function POST(req: Request) {
   try {

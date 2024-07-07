@@ -54,7 +54,7 @@ const studentApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: payload.data,
       }),
-      invalidatesTags: ['SCHOOLS'],
+      invalidatesTags: ['SCHOOLS', 'STUDENT'],
     }),
     getStudentMajors: builder.query({
       query: (studentId) => ({
