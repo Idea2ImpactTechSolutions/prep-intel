@@ -258,7 +258,7 @@ export default function ExtracurricularPage() {
       <OnboardingFooter
         prevPageHandler={() => router.push('/student/onboarding/majors')}
         nextPageHandler={handleSubmitExtracurriculars}
-        preventGoBack={false}
+        useSteppedWizard={!profileComplete}
         loading={isAddingStudentExtracurricular || isSuccess}
       />
     </form>

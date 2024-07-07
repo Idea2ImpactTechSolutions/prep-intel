@@ -138,7 +138,7 @@ export default function TranscriptsPage() {
           <OnboardingFooter
             prevPageHandler={() => router.push('/student/onboarding/extracurricular')}
             nextPageHandler={handleSubmitTranscripts}
-            preventGoBack={false}
+            useSteppedWizard={!profileComplete}
             loading={isUpdatingStudentProfile || isProfileUpdated}
             nextBtnLabel="Finish"
           />

@@ -231,7 +231,7 @@ export default function MajorPage() {
             <OnboardingFooter
               prevPageHandler={() => router.push('/student/onboarding/schools')}
               nextPageHandler={handleSubmitMajors}
-              preventGoBack={false}
+              useSteppedWizard={!profileComplete}
               loading={isAddingStudentMajor || isSuccess}
             />
           </form>

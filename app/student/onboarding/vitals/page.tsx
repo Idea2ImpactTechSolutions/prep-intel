@@ -311,8 +311,10 @@ export default function VitalsPage() {
             </div>
 
             <OnboardingFooter
-              prevPageHandler={() => router.push('/register')}
+              prevPageHandler={() => {}}
               nextPageHandler={handleSubmit}
+              preventGoBack={true}
+              useSteppedWizard={!profileComplete}
               loading={isAddingVitals || isSuccess}
             />
           </form>

@@ -254,7 +254,7 @@ export default function SchoolPage() {
                         <OnboardingFooter
                             prevPageHandler={() => router.push('/student/onboarding/vitals')}
                             nextPageHandler={handleSubmitSchool}
-                            preventGoBack={false}
+                            useSteppedWizard={!profileComplete}
                             loading={isAddingStudentSchool || isSuccess}
                         />
                     </form>
