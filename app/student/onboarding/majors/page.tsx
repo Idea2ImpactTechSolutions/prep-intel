@@ -98,13 +98,14 @@ export default function MajorPage() {
   }
   return (
     <>
-      <OnboardingTabs className="pi-container" active_step="Majors" />
+      <OnboardingTabs active_step="Majors" useSteppedWizard={!profileComplete} />
       <PageContent>
         <OnboardingTitle
           title="Choose your interested Major"
           subtitle="Where Will Your Curiosity Take You?"
+          visible={!profileComplete}
         />
-        <div className="mt-10">
+        <div className="">
           <form>
             <div className="flex-1">
               <SectionContainer

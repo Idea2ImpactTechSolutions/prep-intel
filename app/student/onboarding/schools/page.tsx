@@ -115,13 +115,14 @@ export default function SchoolPage() {
 
     return (
         <>
-            <OnboardingTabs className="pi-container" active_step="Schools" />
+            <OnboardingTabs active_step="Schools" useSteppedWizard={!profileComplete} />
             <PageContent>
                 <OnboardingTitle
                     title="Choose the Institution you are interested in"
                     subtitle="Where Will Your Curiosity Take You?"
+                    visible={!profileComplete}
                 />
-                <div className="mt-10">
+                <div className="">
                     <form>
                         <div className="flex-1">
                             <SectionContainer

@@ -115,13 +115,14 @@ export default function VitalsPage() {
 
   return (
     <>
-      <OnboardingTabs className="pi-container" active_step="Vitals" />
+      <OnboardingTabs active_step="Vitals" useSteppedWizard={!profileComplete} />
       <PageContent>
         <OnboardingTitle
           title="Complete Your Profile"
           subtitle="Please take a few minutes to fill in your profile so we can customize the opportunities for you."
+          visible={!profileComplete}
         />
-        <div className="mt-12">
+        <div className="">
           <form onSubmit={handleSubmit}>
             <div className="flex-1">
               <SectionContainer

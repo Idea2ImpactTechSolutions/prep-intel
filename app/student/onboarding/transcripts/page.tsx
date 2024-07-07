@@ -40,7 +40,7 @@ export default function TranscriptsPage() {
       })
     }else{
       router.push("/student/explore")
-    } 
+    }
   }
 
   useEffect(() => {
@@ -61,7 +61,6 @@ export default function TranscriptsPage() {
   }, [insertedFile])
 
 
-  
   if (isUpdatingStudentProfile) {
     return <LoadingSpinner />
   }

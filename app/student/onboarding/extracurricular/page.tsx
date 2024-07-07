@@ -121,13 +121,14 @@ export default function ExtracurricularPage() {
 
   return (
     <>
-    <OnboardingTabs className="pi-container" active_step="Extracurricular" />
+    <OnboardingTabs active_step="Extracurricular" useSteppedWizard={!profileComplete} />
     <PageContent>
       <OnboardingTitle
           title="Choose your interested Extracurricular Activities"
           subtitle="How do you pass time?"
+          visible={!profileComplete}
       />
-      <div className="mt-10">
+      <div className="">
         <form>
           <div className="flex-1">
           <SectionContainer
