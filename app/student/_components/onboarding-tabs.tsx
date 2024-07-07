@@ -100,7 +100,7 @@ export default function OnboardingTabs({ active_step: activeTabName, className, 
 
   // Original stepped progress control
   return (
-      <nav className={cn(`p-4 pb-8 md:pt-12`, className)}>
+      <nav className={cn(`pi-container p-4 pb-8 md:pt-12`, className)}>
         <div className="">
           <div className="flex-1">
             <div className='grid grid-cols-5 w-full'>

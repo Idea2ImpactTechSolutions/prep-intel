@@ -25,7 +25,6 @@ const TABS = [
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     const location = usePathname() as string;
-
     const { data: session } = useSession();
     const profileComplete = session?.user.profileComplete || false;
 
@@ -43,6 +42,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                {children}
             </section>
         </section>
-        </main>
+      </main>
     )
 }
