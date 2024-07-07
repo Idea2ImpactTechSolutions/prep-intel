@@ -36,7 +36,7 @@ export async function GET(
       return apiResponse("Major interests not found", 404);
     }
 
-    return apiResponse("Major interests retrieved successfully", 200, student.majors);
+    return apiResponse("Major interests retrieved successfully", 200, student.majors || []);
   } catch (error: any) {
     return apiResponse("Internal Server Error", 500, { error: error.message });
   }
