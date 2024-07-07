@@ -36,9 +36,9 @@ export default function ExtracurricularPage() {
   const [pageUpdatedFlag, setPageUpdatedFlag] = useState(false); //used to track if activities are added or not. if not updated we dont call the backend
   const [addStudentExtracurriculars, { isLoading: isAddingStudentExtracurricular }] = useAddStudentExtracurricularMutation()
   const [getStudentExtracurriculars, { isLoading: isGettingStudentExtracurricular, isFetching: isFetchingStudentExtracurricular }] = useLazyGetStudentExtracurricularQuery()
-  const { data } = useSession()
-  const studentId = data?.user?.roleId
-  const profileComplete = data?.user?.profileComplete;
+  const { data: session } = useSession()
+  const studentId = session?.user.roleId
+  const profileComplete = session?.user.profileComplete;
 
     // fetch student interested schools
     const handleGetStudenExtracurriculars = async (studentId) => {

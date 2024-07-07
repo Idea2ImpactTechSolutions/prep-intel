@@ -25,11 +25,11 @@ import { PageContent } from "@/components/common-page";
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
 export default function VitalsPage() {
-  const { data } = useSession();
+  const { data: session } = useSession();
   const router = useRouter()
-  const studentId = data?.user?.roleId;
-  const profileComplete = data?.user?.profileComplete;
-  const userId = data?.user?.id;
+  const studentId = session?.user.roleId;
+  const profileComplete = session?.user.profileComplete;
+  const userId = session?.user.id;
   const [getStudentVitals, { isLoading, isFetching }] = useLazyGetStudentVitalsQuery()
   const [addStudentVitals, { isLoading: isAddingVitals }] = useAddStudentVitalsMutation()
 

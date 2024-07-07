@@ -20,11 +20,11 @@ export default function TranscriptsPage() {
   const [ uploadAsset , { isLoading: isLoadingUpload, isSuccess }] = useUploadAssetMutation()
   const [updateStudentProfile,{ isLoading: isUpdatingStudentProfile }] = useUpdateStudentProfileMutation()
 
-  const { data } = useSession()
-  const userId = data?.user?.id
-  const studentId = data?.user?.roleId
+  const { data: session } = useSession()
+  const userId = session?.user.id
+  const studentId = session?.user.roleId
 
-  const profileComplete = data?.user?.profileComplete;
+  const profileComplete = session?.user.profileComplete;
   const { data: assets, isLoading:isLoadingAssets, refetch } = useGetAssetsQuery({ userId: userId, category: "user-document" });
 
   async function handleUploadFile(bodyContent){

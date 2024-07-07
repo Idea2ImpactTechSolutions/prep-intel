@@ -26,9 +26,9 @@ export default function SchoolPage() {
     const [selectedSchools, setSelectedSchools] = useState<Dictionary[]>([]);
     const router = useRouter()
 
-    const { data } = useSession()
-    const studentId = data?.user?.roleId
-    const profileComplete = data?.user?.profileComplete;
+    const { data: session } = useSession()
+    const studentId = session?.user.roleId
+    const profileComplete = session?.user.profileComplete;
 
     const { delayedFunction } = useDelayedFunction(500)
 
