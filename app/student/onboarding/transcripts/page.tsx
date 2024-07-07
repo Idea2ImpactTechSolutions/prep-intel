@@ -12,6 +12,7 @@ import { useUpdateStudentProfileMutation } from "@/redux/services/student/studen
 import LoadingSpinner from '@/components/loading-spinner';
 import { FaFileAlt } from "react-icons/fa";
 import { PageContent } from "@/components/common-page";
+import OnboardingTabs from "../../_components/onboarding-tabs";
 
 export default function TranscriptsPage() {
   const [insertedFile, setInsertedFile] = useState<File>()
@@ -25,7 +26,7 @@ export default function TranscriptsPage() {
   const studentId = session?.user.roleId
 
   const profileComplete = session?.user.profileComplete;
-  const { data: assets, isLoading:isLoadingAssets, refetch } = useGetAssetsQuery({ userId: userId, category: "user-document" });
+  const { data: assets, isLoading:isLoadingAssets, refetch, isUninitialized } = useGetAssetsQuery({ userId: userId, category: "user-document" }, {skip: !userId});
 
   async function handleUploadFile(bodyContent){
     await uploadAsset(bodyContent).unwrap()
@@ -44,9 +45,11 @@ export default function TranscriptsPage() {
   }
 
   useEffect(() => {
-    // Reload assets on successful upload
-    refetch();
-  }, [isSuccess])
+    if (!isUninitialized) {
+      // Reload assets on successful upload
+      refetch();
+    }
+  }, [isSuccess, isUninitialized])
 
 
   useEffect(() => {
@@ -67,6 +70,7 @@ export default function TranscriptsPage() {
 
   return (
     <>
+      <OnboardingTabs active_step="Transcripts" useSteppedWizard={!profileComplete} />
       <PageContent>
         <SectionContainer title="Upload Important Documents">
           <>
