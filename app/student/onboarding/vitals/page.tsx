@@ -31,7 +31,7 @@ export default function VitalsPage() {
   const profileComplete = session?.user.profileComplete;
   const userId = session?.user.id;
   const [getStudentVitals, { isLoading, isFetching }] = useLazyGetStudentVitalsQuery()
-  const [addStudentVitals, { isLoading: isAddingVitals }] = useAddStudentVitalsMutation()
+  const [addStudentVitals, { isLoading: isAddingVitals, isSuccess  }] = useAddStudentVitalsMutation()
 
   const [studentData, setStudentData] = useState({
     user: {
@@ -313,7 +313,7 @@ export default function VitalsPage() {
             <OnboardingFooter
               prevPageHandler={() => router.push('/register')}
               nextPageHandler={handleSubmit}
-              loading={isAddingVitals}
+              loading={isAddingVitals || isSuccess}
             />
           </form>
         </div>

@@ -19,7 +19,7 @@ export default function TranscriptsPage() {
   const [documentType, setDocumentType] = useState("");
   const router = useRouter();
   const [ uploadAsset , { isLoading: isLoadingUpload, isSuccess }] = useUploadAssetMutation()
-  const [updateStudentProfile,{ isLoading: isUpdatingStudentProfile }] = useUpdateStudentProfileMutation()
+  const [updateStudentProfile,{ isLoading: isUpdatingStudentProfile, isSuccess: isProfileUpdated }] = useUpdateStudentProfileMutation()
 
   const { data: session } = useSession()
   const userId = session?.user.id
@@ -139,6 +139,7 @@ export default function TranscriptsPage() {
             prevPageHandler={() => router.push('/student/onboarding/extracurricular')}
             nextPageHandler={handleSubmitTranscripts}
             preventGoBack={false}
+            loading={isUpdatingStudentProfile || isProfileUpdated}
             nextBtnLabel="Finish"
           />
       </PageContent>

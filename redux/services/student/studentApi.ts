@@ -25,7 +25,7 @@ const studentApi = baseApi.injectEndpoints({
         url: `/students/${payload.studentId}/vitals`,
         method: "POST",
         body: payload.data
-    }),
+      }),
     }),
     connectWithRecruiter: builder.mutation({
       query:(payload)=>({

@@ -33,7 +33,7 @@ export default function SchoolPage() {
     const { delayedFunction } = useDelayedFunction(500)
 
     const [getMatchingSchools, { isLoading, isFetching }] = useLazyGetSchoolsQuery();
-    const [addStudentSchools, { isLoading: isAddingStudentSchool }] = useAddStudentSchoolsMutation()
+    const [addStudentSchools, { isLoading: isAddingStudentSchool, isSuccess }] = useAddStudentSchoolsMutation()
     const [getStudentSchools, { isLoading: isGettingStudentSchool, isFetching: isFetchingStudentSchool }] = useLazyGetStudentSchoolsQuery()
 
     // fetch student interested schools
@@ -255,7 +255,7 @@ export default function SchoolPage() {
                             prevPageHandler={() => router.push('/student/onboarding/vitals')}
                             nextPageHandler={handleSubmitSchool}
                             preventGoBack={false}
-                            loading={isAddingStudentSchool}
+                            loading={isAddingStudentSchool || isSuccess}
                         />
                     </form>
                 </div>
