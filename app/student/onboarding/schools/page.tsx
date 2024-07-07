@@ -26,9 +26,9 @@ export default function SchoolPage() {
     const [selectedSchools, setSelectedSchools] = useState<Dictionary[]>([]);
     const router = useRouter()
 
-    const { data } = useSession()
-    const studentId = data?.user?.roleId
-    const profileComplete = data?.user?.profileComplete;
+    const { data: session } = useSession()
+    const studentId = session?.user.roleId
+    const profileComplete = session?.user.profileComplete;
 
     const { delayedFunction } = useDelayedFunction(500)
 
@@ -115,13 +115,14 @@ export default function SchoolPage() {
 
     return (
         <>
-            <OnboardingTabs className="pi-container" active_step="Schools" />
+            <OnboardingTabs active_step="Schools" useSteppedWizard={!profileComplete} />
             <PageContent>
                 <OnboardingTitle
                     title="Choose the Institution you are interested in"
                     subtitle="Where Will Your Curiosity Take You?"
+                    visible={!profileComplete}
                 />
-                <div className="mt-10">
+                <div className="">
                     <form>
                         <div className="flex-1">
                             <SectionContainer

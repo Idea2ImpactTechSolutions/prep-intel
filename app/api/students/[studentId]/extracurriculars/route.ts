@@ -36,15 +36,15 @@ export async function GET(
   { params }: {params: {studentId: string}}
 ) {
   try {
-    const { studentId } = params;
-    const studentExtracurriculars: any = await getStudentExtracurriculars(studentId);
-    if (studentExtracurriculars === null) {
+    const student = await Students.findByPk(params.studentId);
+    if (!student){
       return apiResponse("Student not found", 404);
     }
+
     return apiResponse(
       "Extracurricular interests retrieved successfully",
-        200,
-        studentExtracurriculars);
+      200,
+      student.extracurriculars || []);
   } catch (error: any) {
     return apiResponse("Internal Server Error", 500, { error: error.message });
   }
@@ -102,14 +102,6 @@ export async function PATCH(
   else{
     return apiResponse("Student Extracurricular Interests created successfully.", 200, studentMajorInterests);
   }
-}
-
-async function getStudentExtracurriculars(studentId) {
-  const student = await Students.findByPk(studentId);
-  if (!student){
-    return null;
-  }
-  return student.extracurriculars;
 }
 
 async function updateStudentExtracurriculars(student, extracurriculars) {

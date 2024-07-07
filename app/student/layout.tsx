@@ -3,6 +3,7 @@ import React from 'react'
 import { Navbar, TabLink} from "components/ui/nav-bar"
 import { GraduationCap, LayoutGrid, UserPlus } from "lucide-react"
 import { usePathname } from "next/navigation";
+import { useSession } from 'next-auth/react';
 
 const TABS = [
   {
@@ -25,13 +26,16 @@ const TABS = [
 export default function Layout({ children }: { children: React.ReactNode }) {
     const location = usePathname() as string;
 
+    const { data: session } = useSession();
+    const profileComplete = session?.user.profileComplete || false;
+
     return (
       <main className="font-sans">
         <section className="">
             <Navbar
-                showTabs={!location.includes('onboarding')}
+                showTabs={profileComplete || !location.includes('onboarding')}
                 leftContent={
-                  location.includes('onboarding') && <span className="ml-10 md:border-l md:pl-10">Complete Account Setup</span>
+                 !profileComplete &&  location.includes('onboarding') && <span className="ml-10 md:border-l md:pl-10">Complete Account Setup</span>
                 }
                 tabs={TABS}
             />

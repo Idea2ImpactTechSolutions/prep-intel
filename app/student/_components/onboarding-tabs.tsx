@@ -74,9 +74,8 @@ export default function OnboardingTabs({ active_step: activeTabName, className, 
       <>
       <PageHeader title="Edit Profile" />
       <div className={cn(
-        "p-0 flex gap-x-2",
+        "pi-container p-4 !pb-2 flex gap-x-2",
         className,
-        '!p-4',
         )}>
       {
           tabs.map(({ title, path }, index) => (
@@ -101,7 +100,7 @@ export default function OnboardingTabs({ active_step: activeTabName, className, 
 
   // Original stepped progress control
   return (
-      <nav className={cn(`p-4 pb-8`, className)}>
+      <nav className={cn(`p-4 pb-8 md:pt-12`, className)}>
         <div className="">
           <div className="flex-1">
             <div className='grid grid-cols-5 w-full'>

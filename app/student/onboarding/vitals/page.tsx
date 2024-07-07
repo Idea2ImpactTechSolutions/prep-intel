@@ -25,11 +25,11 @@ import { PageContent } from "@/components/common-page";
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
 export default function VitalsPage() {
-  const { data } = useSession();
+  const { data: session } = useSession();
   const router = useRouter()
-  const studentId = data?.user?.roleId;
-  const profileComplete = data?.user?.profileComplete;
-  const userId = data?.user?.id;
+  const studentId = session?.user.roleId;
+  const profileComplete = session?.user.profileComplete;
+  const userId = session?.user.id;
   const [getStudentVitals, { isLoading, isFetching }] = useLazyGetStudentVitalsQuery()
   const [addStudentVitals, { isLoading: isAddingVitals }] = useAddStudentVitalsMutation()
 
@@ -115,13 +115,14 @@ export default function VitalsPage() {
 
   return (
     <>
-      <OnboardingTabs className="pi-container" active_step="Vitals" />
+      <OnboardingTabs active_step="Vitals" useSteppedWizard={!profileComplete} />
       <PageContent>
         <OnboardingTitle
           title="Complete Your Profile"
           subtitle="Please take a few minutes to fill in your profile so we can customize the opportunities for you."
+          visible={!profileComplete}
         />
-        <div className="mt-12">
+        <div className="">
           <form onSubmit={handleSubmit}>
             <div className="flex-1">
               <SectionContainer
