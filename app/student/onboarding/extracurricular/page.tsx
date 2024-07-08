@@ -34,7 +34,7 @@ export default function ExtracurricularPage() {
   const [customExtracurricular, setCustomExtracurricular] = useState([]);
   const [newExtracurricular, setNewExtracurricular] = useState("");
   const [pageUpdatedFlag, setPageUpdatedFlag] = useState(false); //used to track if activities are added or not. if not updated we dont call the backend
-  const [addStudentExtracurriculars, { isLoading: isAddingStudentExtracurricular }] = useAddStudentExtracurricularMutation()
+  const [addStudentExtracurriculars, { isLoading: isAddingStudentExtracurricular, isSuccess }] = useAddStudentExtracurricularMutation()
   const [getStudentExtracurriculars, { isLoading: isGettingStudentExtracurricular, isFetching: isFetchingStudentExtracurricular }] = useLazyGetStudentExtracurricularQuery()
   const { data: session } = useSession()
   const studentId = session?.user.roleId
@@ -58,7 +58,7 @@ export default function ExtracurricularPage() {
         .then(data => {
           if (!profileComplete) {
             toast.success('Record submitted successfully')
-            router.push('/student/onboarding/transcripts') 
+            router.push('/student/onboarding/transcripts')
           } else {
             router.push('/student/explore');
           }
@@ -258,8 +258,8 @@ export default function ExtracurricularPage() {
       <OnboardingFooter
         prevPageHandler={() => router.push('/student/onboarding/majors')}
         nextPageHandler={handleSubmitExtracurriculars}
-        preventGoBack={false}
-        loading={isAddingStudentExtracurricular}
+        useSteppedWizard={!profileComplete}
+        loading={isAddingStudentExtracurricular || isSuccess}
       />
     </form>
       </div>

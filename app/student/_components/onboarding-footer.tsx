@@ -11,10 +11,10 @@ type OnboardingFooterType = {
     nextBtnLabel?: string,
     preventGoBack?: boolean,
     loading?: boolean,
-    useSteppedWizard?: boolean;
+    useSteppedWizard: boolean;
 }
 
-export default function OnboardingFooter({prevPageHandler, nextPageHandler, nextBtnLabel, useSteppedWizard=false, preventGoBack = true, loading = false}: OnboardingFooterType) {
+export default function OnboardingFooter({prevPageHandler, nextPageHandler, nextBtnLabel, useSteppedWizard=false, preventGoBack = false, loading = false}: OnboardingFooterType) {
   const router = useRouter();
   if (!useSteppedWizard) {
     return (
@@ -54,7 +54,7 @@ export default function OnboardingFooter({prevPageHandler, nextPageHandler, next
                     spaceGrotesk.className,
                     "p-5 px-8 border border-gray-300 text-gray-400",
                     !preventGoBack && "hover:bg-[#E3E3E3]/80 hover:border-[#E3E3E3] hover:text-[#141111]",
-                    preventGoBack && "hover:bg-transparent hover:text-[#8E8E8E]"
+                    preventGoBack && "pointer-events-none hover:bg-transparent hover:text-[#8E8E8E]"
                 )}
                 disabled={preventGoBack}
             >Back</Button>

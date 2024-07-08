@@ -22,7 +22,7 @@ export default function MajorPage() {
   const [majors, setMajors] = useState<string[]>([]);
   const [selectedMajors, setSelectedMajors] = useState<string[]>([]);
 
-  const [addStudentMajors, { isLoading: isAddingStudentMajor }] = useAddStudentMajorsMutation()
+  const [addStudentMajors, { isLoading: isAddingStudentMajor, isSuccess }] = useAddStudentMajorsMutation()
   const [getStudentMajors, { isLoading: isGettingStudentMajor, isFetching: isFetchingStudentMajor }] = useLazyGetStudentMajorsQuery()
 
   const router = useRouter()
@@ -231,8 +231,8 @@ export default function MajorPage() {
             <OnboardingFooter
               prevPageHandler={() => router.push('/student/onboarding/schools')}
               nextPageHandler={handleSubmitMajors}
-              preventGoBack={false}
-              loading={isAddingStudentMajor}
+              useSteppedWizard={!profileComplete}
+              loading={isAddingStudentMajor || isSuccess}
             />
           </form>
         </div>
