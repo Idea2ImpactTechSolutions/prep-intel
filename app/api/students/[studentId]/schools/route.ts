@@ -227,9 +227,32 @@ export async function POST(
       return apiResponse("Not Found", 404);
     }
 
-    const inputData : number[] = await req.json();
+    const requestBody = await req.json();
+
+    // Check if the request body is an object, and if so, extract the school IDs
+    // to make a connection for
+    if (typeof requestBody === 'object') {
+      await Recruits.findOrCreate({
+        where: {
+          student_id: params.studentId,
+          school_id: requestBody.school_id
+        },
+        defaults: {
+          student_id: params.studentId,
+          school_id: requestBody.school_id,
+          criteria: 'INTERESTED',
+          interested: true,
+          is_viewable: true,
+        },
+      });
+
+      return apiResponse("Connection Created", 201);
+    }
+
+    // Otherwise, original case of array of school IDs
+    const inputData : number[] = requestBody;
     if (inputData.length == 0) {
-      return Response.json(responseBody("No Content", 204), { status: 200 });
+      return apiResponse("No Content", 204);
     }
 
     const validInputData = validateRequestBody(req.method, inputData);

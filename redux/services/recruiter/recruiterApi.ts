@@ -1,10 +1,20 @@
 import { baseApi } from "../baseApi";
 
+
+function buildQueryString(params: { [key: string]: any }): string {
+  const queryString = Object.keys(params)
+    .filter(key => params[key] !== undefined && params[key] !== null && params[key] !== '')
+    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+    .join('&');
+
+  return queryString ? `?${queryString}` : '';
+}
+
 const recruiterApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getConnections: builder.query({
-      query: ({schoolId, searchTerm, recruiterId, currentPage}) => ({
-        url: `/schools/${schoolId}/recruits?recruiterId=${recruiterId}&searchTerm=${searchTerm}&page=${currentPage}`,
+      query: ({schoolId, ...options}) => ({
+        url: `/schools/${schoolId}/recruits${buildQueryString(options)}`,
         method: "GET",
       }),
     }),
