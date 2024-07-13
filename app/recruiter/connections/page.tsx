@@ -133,26 +133,27 @@ export default function Page() {
         titleClass="text-sm"
       />
        <PageContent className="p-4">
-          <div className="flex items-center justify-between gap-x-16 mb-6">
-            <div className="hidden md:flex md:justify-between md:items-center">
-              {
-                subTabs.map((title, index) => (
-                  <Link
-                    key={index}
-                    href="#"
-                    onClick={() => setActiveTab(title)}
-                    className={cn(
-                        "text-sm pb-1 mr-10 hover:text-primary px-2",
-                        activeTab === title && 'text-primary border-b-2 border-b-primary'
-                    )}
-                  >
-                    {title}
-                  </Link>
-                ))
-              }
-            </div>
-            </div>
            {!studentId ? (
+           <>
+            <div className="flex items-center justify-between gap-x-16 mb-6">
+              <div className="hidden md:flex md:justify-between md:items-center">
+                {
+                  subTabs.map((title, index) => (
+                    <Link
+                      key={index}
+                      href="#"
+                      onClick={() => setActiveTab(title)}
+                      className={cn(
+                          "text-sm pb-1 mr-10 hover:text-primary px-2",
+                          activeTab === title && 'text-primary border-b-2 border-b-primary'
+                      )}
+                    >
+                      {title}
+                    </Link>
+                  ))
+                }
+              </div>
+           </div>
            <DataTable
              title={activeTab}
              columns={COLUMNS}
@@ -165,6 +166,7 @@ export default function Page() {
              prevPage={() => setCurrentPage(currentPage - 1)}
              isLoading={isLoading || isFetching}
            />
+           </>
             ) :(
             <StudentInformation studentId={studentId} schoolId={schoolId} recruiterId={recruiterId} />
          )}
