@@ -65,6 +65,10 @@ export default function Page() {
       render: (row: any) => `${row.student.graduation_year}`,
     },
     {
+        title: "Applicant Status",
+        render: (row: any) => `${row.applicant_status || ""}`,
+    },
+    {
       title: "Action",
       render: (row) => (
         <span
