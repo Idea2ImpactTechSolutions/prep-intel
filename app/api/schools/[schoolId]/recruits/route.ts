@@ -90,11 +90,13 @@ export async function GET(
 
     const requestData = {
       schoolId,
-      unclaimed: searchParams.get('unclaimed'),
+      unclaimed: searchParams.get('unclaimed') || false,
       searchTerm: searchParams.get('searchTerm'),
+      recruiterId: searchParams.get('recruiterId'),
       // Pagination parameters
       page,
       limit,
+      applicants: false,
       offset: (page - 1) * limit,
     }
 

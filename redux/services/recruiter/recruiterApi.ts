@@ -13,6 +13,7 @@ function buildQueryString(params: { [key: string]: any }): string {
 const recruiterApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getConnections: builder.query({
+      // options = {schoolId, recruiterId?, unclaimed?, searchTerm, page}
       query: ({schoolId, ...options}) => ({
         url: `/schools/${schoolId}/recruits${buildQueryString(options)}`,
         method: "GET",
