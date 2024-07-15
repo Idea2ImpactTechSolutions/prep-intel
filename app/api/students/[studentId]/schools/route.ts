@@ -231,7 +231,7 @@ export async function POST(
 
     // Check if the request body is an object, and if so, extract the school IDs
     // to make a connection for
-    if (typeof requestBody === 'object') {
+    if (!Array.isArray(requestBody)) {
       await Recruits.findOrCreate({
         where: {
           student_id: params.studentId,
