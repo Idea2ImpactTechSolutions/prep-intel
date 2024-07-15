@@ -227,20 +227,43 @@ export async function POST(
       return apiResponse("Not Found", 404);
     }
 
-    const inputData : number[] = await req.json();
-    if (inputData.length == 0) {
-      return Response.json(responseBody("No Content", 204), { status: 200 });
+    const requestBody = await req.json();
+
+    // Check if the request body is an object, and if so, extract the school IDs
+    // to make a connection for
+    if (!Array.isArray(requestBody)) {
+      await Recruits.findOrCreate({
+        where: {
+          student_id: params.studentId,
+          school_id: requestBody.school_id
+        },
+        defaults: {
+          student_id: params.studentId,
+          school_id: requestBody.school_id,
+          criteria: 'INTERESTED',
+          interested: true,
+          is_viewable: true,
+        },
+      });
+
+      return apiResponse("Connection Created", 201);
     }
 
-    const validInputData = validateRequestBody(req.method, inputData);
+    // Otherwise, original case of array of school IDs
+    const interestedSchoolIds : number[] = requestBody;
+    if (interestedSchoolIds.length == 0) {
+      return apiResponse("No Content", 204);
+    }
+
+    const validInputData = validateRequestBody(req.method, interestedSchoolIds);
     if (!validInputData) {
       return apiResponse("Bad Request", 400);
     }
 
     const schoolsCount : number = await School.count({
-      where: { id: inputData }
+      where: { id: interestedSchoolIds }
     });
-    if (schoolsCount < inputData.length) {
+    if (schoolsCount < interestedSchoolIds.length) {
       return apiResponse("Not Found", 404);
     }
 
@@ -252,17 +275,17 @@ export async function POST(
 
     // Create or Update
     if (count == 0) {
-      await addNewSchoolInterests(inputData, params.studentId);
+      await addNewSchoolInterests(interestedSchoolIds, params.studentId);
     } else {
       const studentSchoolIds = rows.map(row => row.school_id);
 
-      let newStudentSchools = inputData.filter(
+      let newStudentSchools = interestedSchoolIds.filter(
         (schoolId) => studentSchoolIds.indexOf(schoolId) === -1
       );
       await addNewSchoolInterests(newStudentSchools, params.studentId);
 
       let renewedSchoolInterests = studentSchoolIds.filter(
-        (schoolId) => inputData.includes(schoolId)
+        (schoolId) => interestedSchoolIds.includes(schoolId)
       );
       await renewSchoolInterests(renewedSchoolInterests, params.studentId);
     }

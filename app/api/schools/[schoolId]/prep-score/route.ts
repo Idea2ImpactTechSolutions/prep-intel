@@ -115,8 +115,8 @@ export async function GET(
 }
 
 function getStudentPrepScore(school, student) {
-  // Non-required scores are given a default score of defaultScore
-  const defaultScore = 4.3; // TODO: Update default score to 5 after showcasing behavior
+  // Non-required scores are defaulted to `defaultScore`
+  const defaultScore = 5; // TODO: Update default score to 5 after showcasing behavior
   const scores = {
     gpaScore: school.diploma_required ? getGPAPrepScore(school, student) : defaultScore,
     satScore: school.sat_required ? getSATPrepScore(school, student) : defaultScore,

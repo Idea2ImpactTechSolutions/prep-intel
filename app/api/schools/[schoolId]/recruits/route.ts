@@ -9,6 +9,7 @@ const VALID_QUERY_PARAMS = [
   "applicants",
   "recruiterId",
   "accepted_connection",
+  "unclaimed",
   "searchTerm",
   "page",
   "pageSize",
@@ -89,13 +90,13 @@ export async function GET(
 
     const requestData = {
       schoolId,
-      accepted_connection :searchParams.get('accepted_connection') === 'true',
-      applicants : searchParams.get('applicants') === 'true',
-      recruiterId : searchParams.get('recruiterId'),
+      unclaimed: searchParams.get('unclaimed') || false,
       searchTerm: searchParams.get('searchTerm'),
+      recruiterId: searchParams.get('recruiterId'),
       // Pagination parameters
       page,
       limit,
+      applicants: false,
       offset: (page - 1) * limit,
     }
 
@@ -110,8 +111,8 @@ export async function GET(
 
 async function getRecruits({
   schoolId,
-  accepted_connection,
   applicants,
+  unclaimed,
   recruiterId,
   searchTerm,
   page,
@@ -122,9 +123,10 @@ async function getRecruits({
   //   1. student applicants
   //   2. students who accepted connection requests
   //   3. specific recruiter ids
-  const {count: totalItems, rows: results} = await Recruits.findAndCountAll({
+  const options = {
     where: {
       school_id: schoolId,
+      ...(unclaimed ? { recruiter_id: null } : {}),
       // Conditionally add applicants only constraint
       ...(applicants ? { is_applicant: true } : {}),
     },
@@ -180,7 +182,10 @@ async function getRecruits({
       },
     ],
     nest: true,
-  });
+  };
+
+  // Extract options data to dedicated object for debugging
+  const {count: totalItems, rows: results} = await Recruits.findAndCountAll(options);
 
   // Return results enumeration with additional paging variables
   return {
