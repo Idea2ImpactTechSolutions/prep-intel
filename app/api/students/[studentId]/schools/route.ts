@@ -250,20 +250,20 @@ export async function POST(
     }
 
     // Otherwise, original case of array of school IDs
-    const inputData : number[] = requestBody;
-    if (inputData.length == 0) {
+    const interestedSchoolIds : number[] = requestBody;
+    if (interestedSchoolIds.length == 0) {
       return apiResponse("No Content", 204);
     }
 
-    const validInputData = validateRequestBody(req.method, inputData);
+    const validInputData = validateRequestBody(req.method, interestedSchoolIds);
     if (!validInputData) {
       return apiResponse("Bad Request", 400);
     }
 
     const schoolsCount : number = await School.count({
-      where: { id: inputData }
+      where: { id: interestedSchoolIds }
     });
-    if (schoolsCount < inputData.length) {
+    if (schoolsCount < interestedSchoolIds.length) {
       return apiResponse("Not Found", 404);
     }
 
@@ -275,17 +275,17 @@ export async function POST(
 
     // Create or Update
     if (count == 0) {
-      await addNewSchoolInterests(inputData, params.studentId);
+      await addNewSchoolInterests(interestedSchoolIds, params.studentId);
     } else {
       const studentSchoolIds = rows.map(row => row.school_id);
 
-      let newStudentSchools = inputData.filter(
+      let newStudentSchools = interestedSchoolIds.filter(
         (schoolId) => studentSchoolIds.indexOf(schoolId) === -1
       );
       await addNewSchoolInterests(newStudentSchools, params.studentId);
 
       let renewedSchoolInterests = studentSchoolIds.filter(
-        (schoolId) => inputData.includes(schoolId)
+        (schoolId) => interestedSchoolIds.includes(schoolId)
       );
       await renewSchoolInterests(renewedSchoolInterests, params.studentId);
     }
