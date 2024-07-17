@@ -40,6 +40,7 @@ const handler = NextAuth({
             role: user.role,
             roleId : roleId,
             profileComplete: user.profile_complete,
+            userIsActive: user.is_active,
             schoolID: user.school_id
           };
         } else {

@@ -58,6 +58,7 @@ const Users = sequelize.define(
         is_active: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
+            default: true,
         },
     },
     {

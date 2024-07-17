@@ -12,6 +12,7 @@ import logger from 'lib/logger';
  *     description: Returns a list of schools that match the search query.
  *     tags:
  *       - school
+ *       - admin
  *     parameters:
  *       - in: query
  *         name: q
