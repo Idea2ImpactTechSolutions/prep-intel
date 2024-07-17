@@ -14,7 +14,14 @@ export default withAuth(
 
     // Allowed Anonymous access
     const allowedPaths = ["/", "/register", "/api/admin/schools"]
-    const isAllowedPath = allowedPaths.includes(path);
+    const isAllowedPath = allowedPaths.includes(path) || path.startsWith("/api/students") && req.method === "POST";
+
+    // Authorization restrictions by area and role
+    if (!isAllowedPath && !token?.userIsActive) {
+      return NextResponse.rewrite(
+        new URL("/inactive", req.url)
+      );
+    }
 
     // Authorization restrictions by area and role
     if (!isAllowedPath &&
