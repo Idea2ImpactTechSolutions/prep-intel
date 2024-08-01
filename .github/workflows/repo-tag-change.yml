@@ -1,0 +1,39 @@
+name: repo-tag-change
+
+on:
+  push:
+    tags:
+      - 'prod-latest'
+      - 'dev-latest'
+
+env:
+  ECR_REPO: "533267153582.dkr.ecr.us-east-1.amazonaws.com/prep-intel-app"
+
+jobs:
+  tag_change_job:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write   # Required for requesting the JWT
+      contents: read    # Required for actions/checkout
+
+    steps:
+      - name: Checkout app code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::533267153582:role/AWS_PrepIntel_GHA_Role
+          aws-region: "us-east-1"
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build tagged Docker image
+        run: |
+          docker build -t  ${{ env.ECR_REPO }}:${{ github.ref_name }}
+
+      - name: Push tagged Docker image to ECR
+        run: |
+          docker push ${{ env.ECR_REPO }}:${{ github.ref_name }}
