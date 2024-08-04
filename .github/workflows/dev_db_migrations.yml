@@ -20,22 +20,10 @@ jobs:
     
     - name: Install dependencies
       run: npm install
-      
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
     
-    - name: run pip install
-      run: pip install -r ./db/docker/nces/requirements.txt
-
-    - name: install dotenv
-      run: pip install python-dotenv
-
     - name: Run DB migration
       run: |
-        cd db
-        python initialize-db.py -m
+        npx sequelize db:migrate
       env:
         DB_USERNAME: ${{vars.DB_USERNAME}}
         DB_PASSWORD: ${{vars.DB_PASSWORD}}

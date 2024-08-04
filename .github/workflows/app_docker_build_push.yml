@@ -6,16 +6,9 @@ on:
 env:
   AWS_REGION: "us-east-1"
   ECR_REPO: "533267153582.dkr.ecr.us-east-1.amazonaws.com/prep-intel-app"
-  IMAGE_VERSION: latest
-  DB_USERNAME: ${{vars.DB_USERNAME}}
-  DB_PASSWORD: ${{vars.DB_PASSWORD}}
-  DB_NAME: ${{vars.DB_NAME}}
-  DB_HOST: ${{vars.DB_HOST}}
-  NEXTAUTH_URL: ${{vars.NEXTAUTH_URL}}
-  AWS_ACCESS_KEY_ID: ${{vars.AWS_ACCESS_KEY_ID}}
-  AWS_SECRET_ACCESS_KEY: ${{vars.AWS_SECRET_ACCESS_KEY}}
-  BUCKET_NAME: ${{vars.BUCKET_NAME}}
-  NEXTAUTH_SECRET: "test"
+  IMAGE_VERSION: dev-latest
+  ECS_CLUSTER: "prep-dev"
+  ECS_SERVICE: "prep-dev-svc"
 
 jobs:
   docker-build-and-push:
@@ -37,22 +30,15 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build tagged Docker image
-        run: |
-          docker build -t ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }} \
-          --build-arg DB_USERNAME=${{env.DB_USERNAME}} \
-          --build-arg DB_PASSWORD=${{env.DB_PASSWORD}} \
-          --build-arg DB_NAME=${{env.DB_NAME}} \
-          --build-arg DB_HOST=${{env.DB_HOST}} \
-          --build-arg NEXTAUTH_SECRET=${{env.NEXTAUTH_SECRET}} \
-          --build-arg AWS_ACCESS_KEY_ID=${{env.AWS_ACCESS_KEY_ID}} \
-          --build-arg AWS_REGION=${{env.AWS_REGION}} \
-          --build-arg AWS_SECRET_ACCESS_KEY=${{env.AWS_SECRET_ACCESS_KEY}} \
-          --build-arg BUCKET_NAME=${{env.BUCKET_NAME}} .
+      - name: Build and tag Docker image
+           run: |
+           COMMIT_SHA=$(git rev-parse --short HEAD)
+           docker build -t ${{ env.ECR_REPO }}:$COMMIT_SHA -t ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }} .
 
       - name: Push tagged Docker image to ECR
         run: |
-          docker push ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }}
+        docker push ${{ env.ECR_REPO }}:$COMMIT_SHA
+        docker push ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }}
 
   deploy:
     needs: docker-build-and-push
@@ -71,26 +57,15 @@ jobs:
           role-to-assume: arn:aws:iam::533267153582:role/AWS_PrepIntel_GHA_Role
           aws-region: ${{ env.AWS_REGION }}
 
-
-      - name: Refresh ASG for testing infrastructure
+      - name: Force new deployment in ECS service
         run: |
-          aws autoscaling start-instance-refresh \
-          --auto-scaling-group-name Infra-ECS-Cluster-prep-intel-test-cluster-5782ea1b-ECSAutoScalingGroup-rF6sAHZRw0lv \
-          --preferences '{"InstanceWarmup": 60, "MinHealthyPercentage": 50}'
+          aws ecs update-service \
+            --cluster ${{ env.ECS_CLUSTER }} \
+            --service ${{ env.ECS_SERVICE }} \
+            --force-new-deployment
 
-
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def
+      - name: Wait for the service to stabilize
         run: |
-          IMAGE_URI="${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }}"
-          TASK_DEF=$(sed -e "s|<CONTAINER_NAME>:latest|${IMAGE_URI}|g" task-definition.json)
-          echo "::set-output name=task_definition::${TASK_DEF}"
-
-      # - name: Deploy image to Amazon ECS
-      #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      #   with:
-      #     task-definition: task-definition.json
-      #     service: prep-intel-dev
-      #     cluster: prep-intel-test-cluster
-      #     wait-for-service-stability: true
-
+          aws ecs wait services-stable \
+            --cluster ${{ env.ECS_CLUSTER }} \
+            --services ${{ env.ECS_SERVICE }}
