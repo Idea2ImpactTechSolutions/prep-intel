@@ -23,6 +23,9 @@ jobs:
       - name: Checkout app code
         uses: actions/checkout@v4
 
+      - name: Set up environment variables
+        run: echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -34,12 +37,11 @@ jobs:
 
       - name: Build and tag Docker image
         run: |
-          COMMIT_SHA=$(git rev-parse --short HEAD)
-          docker build -t ${{ env.ECR_REPO }}:$COMMIT_SHA -t ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }} .
+          docker build -t ${{ env.ECR_REPO }}:${{ env.COMMIT_SHA }} -t ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }} .
 
       - name: Push tagged Docker image to ECR
         run: |
-          docker push ${{ env.ECR_REPO }}:$COMMIT_SHA
+          docker push ${{ env.ECR_REPO }}:${{ env.COMMIT_SHA }}
           docker push ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }}
 
   deploy:
