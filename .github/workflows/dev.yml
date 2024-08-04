@@ -1,6 +1,8 @@
 name: Dev App Build and Push
 
 on:
+  push:
+    branches: [ main ]
   workflow_dispatch:
 
 env:
