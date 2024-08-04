@@ -1,4 +1,4 @@
-name: DB Migration
+name: Production DB Migration
 
 on:
   release:

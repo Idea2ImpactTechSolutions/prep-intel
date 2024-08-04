@@ -3,6 +3,7 @@ name: Production App Docker Build and Push
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 env:
   AWS_REGION: "us-east-1"

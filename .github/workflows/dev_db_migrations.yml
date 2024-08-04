@@ -1,4 +1,4 @@
-name: DB Migration
+name: Development DB Migration
 
 on:
   push:
