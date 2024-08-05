@@ -23,6 +23,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up environment variables
+        run: |
+          echo "RELEASE_TAG=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+          COMMIT_SHA=$(git rev-parse --short HEAD)
+          echo "COMMIT_SHA=$COMMIT_SHA" >> $GITHUB_ENV
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -34,13 +40,11 @@ jobs:
 
       - name: Tag and push Docker image
         run: |
-          RELEASE_TAG=${{ github.event.release.tag_name }}
-          COMMIT_SHA=$(git rev-parse --short HEAD)
-          docker pull ${{ env.ECR_REPO }}:$COMMIT_SHA
-          docker tag ${{ env.ECR_REPO }}:$COMMIT_SHA ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }}
-          docker tag ${{ env.ECR_REPO }}:$COMMIT_SHA ${{ env.ECR_REPO }}:$RELEASE_TAG
+          docker pull ${{ env.ECR_REPO }}:${{ env.COMMIT_SHA }}
+          docker tag ${{ env.ECR_REPO }}:${{ env.COMMIT_SHA }} ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }}
+          docker tag ${{ env.ECR_REPO }}:${{ env.COMMIT_SHA }} ${{ env.ECR_REPO }}:${{ env.RELEASE_TAG }}
           docker push ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }}
-          docker push ${{ env.ECR_REPO }}:$RELEASE_TAG
+          docker push ${{ env.ECR_REPO }}:${{ env.RELEASE_TAG }}
 
   deploy:
     needs: tag-and-push
