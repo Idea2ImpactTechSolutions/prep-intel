@@ -1,7 +1,9 @@
 import { NextRequest } from "next/server";
 import { models } from "app/models";
 const {  Users } = models;
-import { responseBody, getAuthCode } from "app/config/helpers";
+import { responseBody, getAuthCode, getBaseUrl } from "app/config/helpers";
+import {sendEmail} from "app/config/email-service";
+
 
 /**
  * @openapi
@@ -89,6 +91,14 @@ export async function POST(req: NextRequest) {
       auth_code_expiration: expiresAt,
       is_active: false,
     });
+    const claimUrl = `${getBaseUrl()}/users/claim?auth_code=${authCode}`;
+
+    sendEmail({
+      to: email,
+      subject: "Claim your PrepIntel account",
+      text: `Claim your PrepIntel account today\n ${claimUrl}`
+    })
+  
 
     return Response.json(
       responseBody("Admin account created successfully", 201, [

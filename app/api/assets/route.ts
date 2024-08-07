@@ -73,6 +73,7 @@ export async function GET(req: NextRequest) {
         ...constraint,
         category,
       },
+      attributes: ['id', 'category', 'description', 'is_active', 'school_id', 'user_id'],
     });
     return apiResponse("Success", 200, assets);
   } catch (error: any) {
@@ -211,7 +212,7 @@ async function uploadDocument(
   try {
     const bufferedView = await getBufferedView(assetFile);
     const response = await uploadFileToS3({
-      Bucket: "prep-bucket-upload",
+      Bucket: process.env.BUCKET_NAME,
       Key: documentPath,
       Body: bufferedView,
     });
@@ -239,6 +240,7 @@ async function uploadDocument(
         location: response.Location,
         fileName: assetFile.name,
         is_active: true,
+        s3_key : documentPath,
         ...assetFields,
       });
     }

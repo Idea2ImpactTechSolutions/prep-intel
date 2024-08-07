@@ -7,12 +7,13 @@ import { CheckCircle2, FileText } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import { useUploadAssetMutation, useGetAssetsQuery } from "@/redux/services/assets/assetApi";
+import { useUploadAssetMutation } from "@/redux/services/assets/assetApi";
 import { useUpdateStudentProfileMutation } from "@/redux/services/student/studentApi";
 import LoadingSpinner from '@/components/loading-spinner';
 import { FaFileAlt } from "react-icons/fa";
 import { PageContent } from "@/components/common-page";
 import OnboardingTabs from "../../_components/onboarding-tabs";
+import { TranscriptsList } from "@/components/transcript-list";
 
 export default function TranscriptsPage() {
   const [insertedFile, setInsertedFile] = useState<File>()
@@ -25,8 +26,9 @@ export default function TranscriptsPage() {
   const userId = session?.user.id
   const studentId = session?.user.roleId
 
+  console.log("userID is", userId);
+
   const profileComplete = session?.user.profileComplete;
-  const { data: assets, isLoading:isLoadingAssets, refetch, isUninitialized } = useGetAssetsQuery({ userId: userId, category: "user-document" }, {skip: !userId});
 
   async function handleUploadFile(bodyContent){
     await uploadAsset(bodyContent).unwrap()
@@ -43,14 +45,6 @@ export default function TranscriptsPage() {
       router.push("/student/explore")
     }
   }
-
-  useEffect(() => {
-    if (!isUninitialized) {
-      // Reload assets on successful upload
-      refetch();
-    }
-  }, [isSuccess, isUninitialized])
-
 
   useEffect(() => {
     if (insertedFile) {
@@ -122,17 +116,7 @@ export default function TranscriptsPage() {
           </>
         </SectionContainer>
           <div>
-              <h3 className="mb-1 mt-4 font-semibold">Documents</h3>
-              <ul className="ml-2">
-              { isLoadingAssets ? <LoadingSpinner/> :
-                assets && assets.data.map(asset => (
-                  <li key={asset.id}>
-                    <a href={asset.location} className="underline flex align-middle items-center gap-1" >
-                    <FaFileAlt />{asset.description}
-                    </a>
-                  </li>)
-                )}
-              </ul>
+             <TranscriptsList reloadData="isSuccess" userId={userId as string} />
           </div>
 
           <OnboardingFooter

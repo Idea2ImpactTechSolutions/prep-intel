@@ -13,6 +13,9 @@ const Assets = sequelize.define(
         school_id: {
             type: DataTypes.INTEGER,
         },
+        s3_key: {
+            type: DataTypes.STRING,
+        },
         user_id: {
           type: DataTypes.INTEGER,
         },

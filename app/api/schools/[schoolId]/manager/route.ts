@@ -1,7 +1,8 @@
 import { models } from "app/models";
 const { School, Managers, Users } = models;
-import { responseBody, getAuthCode } from "app/config/helpers";
 import { type NextRequest } from "next/server";
+import { responseBody, getAuthCode } from "app/config/helpers";
+import {sendEmail} from "app/config/email-service";
 
 /**
  * @openapi
@@ -58,12 +59,11 @@ export async function POST(
   try {
     const { email, first_name, last_name } = await req.json();
     let school_id = params.schoolId;
-
     const { message, code, data } = await createManager({
       email,
       first_name,
       last_name,
-      school_id,
+      school_id
     });
     return Response.json(
       responseBody(message, code, { school: data }),
@@ -125,6 +125,12 @@ let createManager = async ({ email, first_name, last_name, school_id }) => {
   await Managers.create({
     user_id: user.id,
   });
+  const claimUrl = `${process.env.NEXTAUTH_URL}/users/claim?auth_code=${authCode}`;
+  sendEmail({
+    to: email,
+    subject: "Claim your PrepIntel account",
+    text: `Claim your PrepIntel account today\n ${claimUrl}`
+  })
 
   return {
     code: 201,
