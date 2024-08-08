@@ -38,7 +38,7 @@ jobs:
         DB_HOST: ${{vars.DB_HOST}}
 
     - name: DB migration (prod)
-      if: github.event_name == 'release' && github.ref == 'refs/tags/dev-latest'
+      if: github.event_name == 'release'
       run: |
           cd db
           npx sequelize db:migrate
