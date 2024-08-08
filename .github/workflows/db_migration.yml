@@ -1,9 +1,15 @@
-name: Production DB Migration
+name: Database Migration
 
 on:
+  push:
+    branches: [ main ]
   release:
     types: [published]
   workflow_dispatch:
+
+env:
+  LOCAL_DB: false
+  DB_NAME: ${{vars.DB_NAME}}
 
 jobs:
   db-migration-job:
@@ -17,17 +23,27 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '20'
-    
+
     - name: Install dependencies
       run: npm install
-      
-    - name: Run DB migration
+
+    - name: DB migration (dev)
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       run: |
         cd db
         npx sequelize db:migrate
       env:
+        DB_USERNAME: ${{vars.DB_USERNAME}}
+        DB_PASSWORD: ${{vars.DB_PASSWORD}}
+        DB_HOST: ${{vars.DB_HOST}}
+
+    - name: DB migration (prod)
+      if: github.event_name == 'release' && github.ref == 'refs/tags/dev-latest'
+      run: |
+          cd db
+          npx sequelize db:migrate
+      env:
         DB_USERNAME: ${{vars.DB_USERNAME_PROD}}
         DB_PASSWORD: ${{vars.DB_PASSWORD_PROD}}
-        DB_NAME: ${{vars.DB_NAME}}
         DB_HOST: ${{vars.DB_HOST_PROD}}
         LOCAL_DB: false

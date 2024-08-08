@@ -1,33 +1,30 @@
-name: Production App Docker Build and Push
+name: Build, Push, and Deploy Docker Image
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [ main ]
   workflow_dispatch:
 
 env:
   AWS_REGION: "us-east-1"
   ECR_REPO: "533267153582.dkr.ecr.us-east-1.amazonaws.com/prep-intel-app"
-  IMAGE_VERSION: prod-latest
-  ECS_CLUSTER: "prep-intel-prod"
-  ECS_SERVICE: "prep-intel-prod-svc"
+  IMAGE_VERSION: dev-latest
+  ECS_CLUSTER: "prep-dev"
+  ECS_SERVICE: "prep-dev-svc"
 
 jobs:
-  tag-and-push:
+  docker-build-and-push:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
-      contents: read
+      id-token: write   # Required for requesting the JWT
+      contents: read    # Required for actions/checkout
 
     steps:
-      - name: Checkout code
+      - name: Checkout app code
         uses: actions/checkout@v4
 
       - name: Set up environment variables
-        run: |
-          echo "RELEASE_TAG=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
-          COMMIT_SHA=$(git rev-parse --short HEAD)
-          echo "COMMIT_SHA=$COMMIT_SHA" >> $GITHUB_ENV
+        run: echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -38,20 +35,21 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Tag and push Docker image
+      - name: Build and tag Docker image
         run: |
-          docker pull ${{ env.ECR_REPO }}:${{ env.COMMIT_SHA }}
-          docker tag ${{ env.ECR_REPO }}:${{ env.COMMIT_SHA }} ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }}
-          docker tag ${{ env.ECR_REPO }}:${{ env.COMMIT_SHA }} ${{ env.ECR_REPO }}:${{ env.RELEASE_TAG }}
+          docker build -t ${{ env.ECR_REPO }}:${{ env.COMMIT_SHA }} -t ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }} .
+
+      - name: Push tagged Docker image to ECR
+        run: |
+          docker push ${{ env.ECR_REPO }}:${{ env.COMMIT_SHA }}
           docker push ${{ env.ECR_REPO }}:${{ env.IMAGE_VERSION }}
-          docker push ${{ env.ECR_REPO }}:${{ env.RELEASE_TAG }}
 
   deploy:
-    needs: tag-and-push
+    needs: docker-build-and-push
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
-      contents: read
+      id-token: write   # Required for requesting the JWT
+      contents: read    # Required for actions/checkout
 
     steps:
       - name: Checkout the repository
