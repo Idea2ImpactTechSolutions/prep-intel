@@ -42,7 +42,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const jsonBody = await req.json();
-    const baseUrl = getBaseUrl(req);
+    const baseUrl = getBaseUrl();
 
     const { message, code, data } = await createRecruiter(jsonBody,baseUrl);
     return Response.json(

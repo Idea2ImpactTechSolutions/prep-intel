@@ -45,7 +45,7 @@ export default async function AuthHandler(
     });
 
     const {authCode, expiresAt } = getAuthCode();
-    const baseUrl = getBaseUrl(req);
+    const baseUrl = getBaseUrl();
     const claimUrl = `${baseUrl}/users/claim?auth_code=${authCode}`;
 
     let user = await Users.create({

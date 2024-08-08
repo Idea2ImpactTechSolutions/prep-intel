@@ -16,8 +16,6 @@ const client = new S3Client({
   },
 });
 
-
-
 /**
  * @openapi
  * /api/assets/{id}:
