@@ -2,7 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { models } from "app/models";
 const { Users } = models;
 import { responseBody, getAuthCode, getBaseUrl } from "app/config/helpers";
-import {  sendResetPasswordEmail } from "../users/mail"
+import {sendEmail} from "@/app/config/email-service";
+
 
 export default async function AuthHandler(
   req: NextApiRequest,
@@ -21,7 +22,7 @@ export default async function AuthHandler(
 async function handleResetPassword(req, res) {
   try {
 
-    const { email } = req.body;
+    let { email } = req.body;
 
     let user = await Users.findOne({
       where: {
@@ -37,10 +38,13 @@ async function handleResetPassword(req, res) {
 
     user.save();
 
-    const baseUrl = getBaseUrl(req);
-    const claimUrl = `${baseUrl}/users/set-password?auth_code=${authCode}`;
+    const claimUrl = `${getBaseUrl()}/users/set-password?auth_code=${authCode}`;
 
-    sendResetPasswordEmail(email, claimUrl);
+    sendEmail({
+      to: email,
+      subject: "Password Reset",
+      text: `Reset your PrepIntel password: \n ${claimUrl}`
+    })
 
     return res.status(200).json(
       responseBody("Success", 200, claimUrl)

@@ -152,7 +152,7 @@ export default function StudentInformation({ studentId, schoolId, recruiterId }:
           </div>
         </div>
 
-        <TranscriptSection />
+        <TranscriptSection userId={studentDetails.user_id} />
 
         <GoalAndSkills student_details={studentDetails}/>
 

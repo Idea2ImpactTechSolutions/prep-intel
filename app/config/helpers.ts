@@ -1,4 +1,3 @@
-import { NextApiRequest } from "next";
 import { v4 as uuid } from "uuid";
 
 export const responseBody = (message: string, code: number, data: any = null) => {
@@ -19,10 +18,9 @@ export function getAuthCode() {
  }
 }
 
-export function getBaseUrl(req: NextApiRequest) {
-  const host = req.headers.host;
-  const protocol = host?.includes('localhost') ? 'http' : 'https';
-  return `${protocol}://${host}`;
+
+export function getBaseUrl(): string {
+  return process.env.NEXTAUTH_URL as string;
 }
 
 // Implements a convention based apiResponse with a message, status, and data object

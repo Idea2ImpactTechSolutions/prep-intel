@@ -1,5 +1,9 @@
-import { responseBody, getAuthCode } from "@/app/config/helpers";
+import { responseBody, getAuthCode, getBaseUrl } from "@/app/config/helpers";
 import { models } from "@/app/models";
+import { type NextRequest } from "next/server";
+import {sendEmail} from "@/app/config/email-service";
+
+
 const { School, Recruiters, Users } = models;
 
 /**
@@ -35,10 +39,12 @@ export async function GET() {
  *       200:
  *         description:
  */
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const jsonBody = await req.json();
-    const { message, code, data } = await createRecruiter(jsonBody);
+    const baseUrl = getBaseUrl();
+
+    const { message, code, data } = await createRecruiter(jsonBody,baseUrl);
     return Response.json(
       responseBody(message, code, { school: data }), {
       status: code,
@@ -55,7 +61,7 @@ export async function POST(req: Request) {
   }
 }
 
-async function createRecruiter(json) {
+async function createRecruiter(json,baseUrl) {
   try {
     const { first_name, last_name, email, school_id } = json;
 
@@ -99,6 +105,13 @@ async function createRecruiter(json) {
       user_id: user.id,
     });
 
+    const claimUrl = `${baseUrl}/users/claim?auth_code=${authCode}`;
+    sendEmail({
+      to: email,
+      subject: "Claim your PrepIntel account",
+      text: `Claim your PrepIntel account today\n ${claimUrl}`
+    })
+  
     // Send a successful response
     return {
       message: "recruiter created successfully",

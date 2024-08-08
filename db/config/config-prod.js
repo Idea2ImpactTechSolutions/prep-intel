@@ -4,6 +4,4 @@ const cfg = require('dotenv').config({ path: '../.env' });
 
 const config = require("../../app/config/config.js")
 
-console.log("config:", config);
-
 module.exports = config;

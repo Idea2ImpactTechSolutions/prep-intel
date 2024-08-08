@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { models } from "app/models";
 const { Managers, School, Users } = models;
 import { responseBody, getAuthCode, getBaseUrl } from "app/config/helpers";
-import {  sendClaimEmail } from "../users/mail"
+import {sendEmail} from "@/app/config/email-service"
 
 export default async function AuthHandler(
   req: NextApiRequest,
@@ -10,7 +10,6 @@ export default async function AuthHandler(
 ) {
   try {
     const { school_name, email, first_name, last_name } = req.body;
-
     let school = await School.findOne({
       where: {
         name: school_name,
@@ -46,7 +45,7 @@ export default async function AuthHandler(
     });
 
     const {authCode, expiresAt } = getAuthCode();
-    const baseUrl = getBaseUrl(req);
+    const baseUrl = getBaseUrl();
     const claimUrl = `${baseUrl}/users/claim?auth_code=${authCode}`;
 
     let user = await Users.create({
@@ -65,9 +64,12 @@ export default async function AuthHandler(
     await Managers.create({
       user_id : user.id
     });
-
-    sendClaimEmail(email, claimUrl);
-
+  
+    sendEmail({
+        to: email,
+        subject: "Claim your PrepIntel account",
+        text: `Claim your PrepIntel account today\n ${claimUrl}`
+    })
     return res
       .status(200)
       .json(

@@ -12,7 +12,7 @@ const assetApi = baseApi.injectEndpoints({
     }),
     getAssets: builder.query({
       query: ({ userId="", schoolId="", category }) => ({
-        url: `/assets?schoolId=${schoolId}&userId=${userId}&category=${category}&what=true`,
+        url: `/assets?schoolId=${schoolId}&userId=${userId}&category=${category}`,
         method: "GET",
       }),
     }),
