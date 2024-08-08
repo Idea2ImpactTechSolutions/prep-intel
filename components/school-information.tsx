@@ -62,6 +62,12 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
       return parseFloat(formatted);
     }
 
+    const socialMediaLogos = {
+      facebook: <Facebook width={15} height={15} />,
+      twitter: <Instagram width={15} height={15} />,
+      instagram: <Twitter width={15} height={15} />,
+    };
+
     return (
         <section>
             <div className="rounded-lg shadow-md shadow-gray-100">
@@ -128,15 +134,16 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
                                   </div>))
                               }
                               <div className="flex gap-4 mt-2">
-                                  <Link href={
-                                      schoolData?.school_social_medias?.filter((f) => f.social_media === 'facebook')[0]?.url || '#'
-                                  } target="_blank" className="w-6 h-6 border border-primary rounded-full grid place-content-center text-primary"><Facebook width={15} height={15} /></Link>
-                                  <Link href={
-                                      schoolData?.school_social_medias?.filter((f) => f.social_media === 'twitter')[0]?.url || '#'
-                                  } target="_blank" className="w-6 h-6 border border-primary rounded-full grid place-content-center text-primary"><Instagram width={15} height={15} /></Link>
-                                  <Link href={
-                                      schoolData?.school_social_medias?.filter((f) => f.social_media === 'instagram')[0]?.url || '#'
-                                  } target="_blank" className="w-6 h-6 border border-primary rounded-full grid place-content-center text-primary"><Twitter width={15} height={15} /></Link>
+                                {
+                                  // Loop over defined social media accounts, outputting a link for each if the URL is present
+                                  schoolData?.school_social_medias?.map((info: any) => {
+                                    return info?.url ? (
+                                      <Link key={info.id} href={info.url} target="_blank" className="w-6 h-6 border border-primary rounded-full grid place-content-center text-primary">
+                                        { socialMediaLogos[info.social_media] }
+                                      </Link>)
+                                      : null;
+                                    })
+                                }
                               </div>
                         </div>
                     </div>
