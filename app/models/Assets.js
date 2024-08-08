@@ -30,13 +30,17 @@ const Assets = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        bytes: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
         is_active: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
         },
     },
     {
-        timestamps: false,
+        timestamps: true,
     }
 );
 

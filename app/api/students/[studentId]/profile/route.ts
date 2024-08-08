@@ -148,7 +148,7 @@ async function getStudentProfile(studentId, includePrivateDetails = false) {
   const student = await Students.findByPk(studentId, {
     include: {
       model: Users,
-      attributes: ["first_name", "last_name", "email", "profile_image"],
+      attributes: ["id", "first_name", "last_name", "email", "profile_image"],
     },
   });
 
@@ -166,6 +166,7 @@ async function getStudentProfile(studentId, includePrivateDetails = false) {
   });
 
   return {
+    user_id: student.user.id,
     student_id: studentId,
     student_high_school: student.high_school || null,
     student_act_score: student.act_score || null,

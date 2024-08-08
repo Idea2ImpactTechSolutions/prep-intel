@@ -73,7 +73,7 @@ export async function GET(req: NextRequest) {
         ...constraint,
         category,
       },
-      attributes: ['id', 'category', 'description', 'is_active', 'school_id', 'user_id'],
+      attributes: ['id', 'category', 'description', 'is_active', 'school_id', 'user_id', 'bytes'],
     });
     return apiResponse("Success", 200, assets);
   } catch (error: any) {
@@ -211,14 +211,14 @@ async function uploadDocument(
 ) {
   try {
     const bufferedView = await getBufferedView(assetFile);
-    const response = await uploadFileToS3({
+    const uploadResponse = await uploadFileToS3({
       Bucket: process.env.BUCKET_NAME,
       Key: documentPath,
       Body: bufferedView,
     });
 
     if (onUploadSuccess) {
-      onUploadSuccess(response.Location);
+      onUploadSuccess(uploadResponse.Location);
     }
 
     let existingAsset: any = null;
@@ -227,7 +227,8 @@ async function uploadDocument(
       existingAsset = await Assets.findOne({ where: assetFields });
 
       if (existingAsset) {
-        existingAsset.location = response.Location;
+        existingAsset.bytes = bufferedView.length;
+        existingAsset.location = uploadResponse.Location;
         existingAsset.save();
       }
     }
@@ -237,7 +238,8 @@ async function uploadDocument(
       // Create a new asset for the upload
       await Assets.create({
         description: assetFile.name,
-        location: response.Location,
+        bytes: bufferedView.length,
+        location: uploadResponse.Location,
         fileName: assetFile.name,
         is_active: true,
         s3_key : documentPath,
@@ -246,7 +248,7 @@ async function uploadDocument(
     }
 
     return apiResponse("uploaded successfully", 201, {
-      assetUrl: response.Location,
+      assetUrl: uploadResponse.Location,
     });
   } catch (error: any) {
     logger.error(error);

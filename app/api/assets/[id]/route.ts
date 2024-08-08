@@ -3,7 +3,7 @@ import { getToken } from "next-auth/jwt";
 import { Role } from "@/nextauth.d";
 
 const { models } = require("@/app/models");
-const { Assets, School, Users, Recruits,Students} = models;
+const { Assets, Recruits, Students} = models;
 import logger from "lib/logger";
 import { USER_DOCUMENT } from "types/assetTypes";
 import { NextRequest, NextResponse } from "next/server";
@@ -71,14 +71,17 @@ export async function GET(
         case Role.manager:
         case Role.recruiter:
           // Verify school connection - look up recruits record and verify student exists for school
-          if (await !verifySchoolConnection(schoolId, asset.userID)) {
-            return new NextResponse("Access Denied", { status: 403 });
-          };
-        case Role.student:
-          if (asset.userID != token.id) {
+          const hasSchoolConnection = await verifySchoolConnection(schoolId, asset.user_id);
+          if (!hasSchoolConnection) {
             return new NextResponse("Access Denied", { status: 403 });
           }
+          break;
+
+        case Role.student:
           // Verify asset ownership - compare requesting assets userID to ensure students can only view their documents
+          if (asset.user_id != token.id) {
+            return new NextResponse("Access Denied", { status: 403 });
+          }
           break;
       }
     }
@@ -88,19 +91,19 @@ export async function GET(
       Key:  asset.s3_key,
     });
 
-    const sthreeResponse = await client.send(command);
+    const fileResponse = await client.send(command);
 
     // Set headers
     const headers = new Headers();
-    headers.set('Content-Type', sthreeResponse.ContentType || 'application/octet-stream');
-    headers.set('Content-Length', sthreeResponse.ContentLength?.toString() || '0');
+    headers.set('Content-Type', fileResponse.ContentType || 'application/octet-stream');
+    headers.set('Content-Length', fileResponse.ContentLength?.toString() || '0');
     headers.set('Cache-Control', 'max-age=3600'); // Cache for 1 hour
-    
+
     const segments = asset.s3_key.split('/');
     const filename = segments[segments.length - 1];
     headers.set('Content-Disposition', `attachment; filename="${filename}"`);
 
-    return new NextResponse(sthreeResponse.Body as ReadableStream, {
+    return new NextResponse(fileResponse.Body as ReadableStream, {
       status: 200,
       headers: headers,
     });
@@ -136,5 +139,5 @@ async function verifySchoolConnection(schoolId, assetUserId) {
 
   // School connections exist if the student for the given userId exists, 
   // and the school has a valid recruit record
-  return student && recruit;
+  return !!student && !!recruit;
 }

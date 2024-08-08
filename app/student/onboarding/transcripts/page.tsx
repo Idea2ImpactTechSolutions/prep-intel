@@ -26,8 +26,6 @@ export default function TranscriptsPage() {
   const userId = session?.user.id
   const studentId = session?.user.roleId
 
-  console.log("userID is", userId);
-
   const profileComplete = session?.user.profileComplete;
 
   async function handleUploadFile(bodyContent){
@@ -116,7 +114,8 @@ export default function TranscriptsPage() {
           </>
         </SectionContainer>
           <div>
-             <TranscriptsList reloadData="isSuccess" userId={userId as string} />
+             <h3 className="mb-1 mt-4 font-semibold">Documents</h3>
+             <TranscriptsList reloadData={isSuccess} userId={userId as string} />
           </div>
 
           <OnboardingFooter
