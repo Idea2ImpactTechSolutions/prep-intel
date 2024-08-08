@@ -2,7 +2,7 @@ import { models } from "app/models";
 const { School, Managers, Users } = models;
 import { type NextRequest } from "next/server";
 import { responseBody, getAuthCode } from "app/config/helpers";
-import {sendEmail} from "app/config/email-service";
+import {sendEmail} from "@/app/config/email-service";
 
 /**
  * @openapi

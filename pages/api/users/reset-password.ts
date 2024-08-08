@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { models } from "app/models";
 const { Users } = models;
 import { responseBody, getAuthCode, getBaseUrl } from "app/config/helpers";
-import {sendEmail} from "app/config/email-service";
+import {sendEmail} from "@/app/config/email-service";
 
 
 export default async function AuthHandler(

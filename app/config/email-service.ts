@@ -1,6 +1,6 @@
 
 import AWS from 'aws-sdk';
-import logger from 'lib/logger';
+import logger from '@/lib/logger';
 
 AWS.config.update({
   accessKeyId: process.env.AWS_SES_KEY,

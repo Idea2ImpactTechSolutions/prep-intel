@@ -1,7 +1,7 @@
 import { responseBody, getAuthCode, getBaseUrl } from "@/app/config/helpers";
 import { models } from "@/app/models";
 import { type NextRequest } from "next/server";
-import {sendEmail} from "app/config/email-service";
+import {sendEmail} from "@/app/config/email-service";
 
 
 const { School, Recruiters, Users } = models;

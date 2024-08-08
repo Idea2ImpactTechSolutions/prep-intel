@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { models } from "app/models";
 const {  Users } = models;
 import { responseBody, getAuthCode, getBaseUrl } from "app/config/helpers";
-import {sendEmail} from "app/config/email-service";
+import {sendEmail} from "@/app/config/email-service";
 
 
 /**
