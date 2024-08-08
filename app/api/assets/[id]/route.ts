@@ -1,4 +1,4 @@
-import { S3, S3Client, GetObjectCommand} from "@aws-sdk/client-s3";
+import { S3Client, GetObjectCommand} from "@aws-sdk/client-s3";
 import { getToken } from "next-auth/jwt";
 import { Role } from "@/nextauth.d";
 
