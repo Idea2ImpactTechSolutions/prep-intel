@@ -19,7 +19,7 @@ interface EmailParams {
 export const sendEmail = async ({ to, subject, text }: EmailParams): Promise<void> => {
   if(process.env.SEND_EMAIL){
     const params = {
-      Source: process.env.SES_VERIFIED_EMAIL, // Your verified email address
+      Source: process.env.SES_VERIFIED_EMAIL as string, // Your verified email address
       Destination: {
         ToAddresses: [to],
       },
@@ -30,7 +30,7 @@ export const sendEmail = async ({ to, subject, text }: EmailParams): Promise<voi
         Subject: { Data: subject },
       },
     };
-  
+
     try {
       await ses.sendEmail(params).promise();
     } catch (error) {
