@@ -17,7 +17,6 @@ interface EmailParams {
 }
 
 export const sendEmail = async ({ to, subject, text }: EmailParams): Promise<void> => {
-  to = "lewin76@gmail.com" // Overriding until SES production access is approved
   if(process.env.SEND_EMAIL){
     const params = {
       Source: process.env.SES_VERIFIED_EMAIL, // Your verified email address

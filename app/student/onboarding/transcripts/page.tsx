@@ -10,7 +10,6 @@ import { useState, useEffect } from "react";
 import { useUploadAssetMutation } from "@/redux/services/assets/assetApi";
 import { useUpdateStudentProfileMutation } from "@/redux/services/student/studentApi";
 import LoadingSpinner from '@/components/loading-spinner';
-import { FaFileAlt } from "react-icons/fa";
 import { PageContent } from "@/components/common-page";
 import OnboardingTabs from "../../_components/onboarding-tabs";
 import { TranscriptsList } from "@/components/transcript-list";

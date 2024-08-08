@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { models } from "app/models";
 const { Managers, School, Users } = models;
 import { responseBody, getAuthCode, getBaseUrl } from "app/config/helpers";
-import {sendEmail} from "../users/aws-ses-email-service"
+import {sendEmail} from "app/config/email-service"
 
 export default async function AuthHandler(
   req: NextApiRequest,
@@ -10,7 +10,6 @@ export default async function AuthHandler(
 ) {
   try {
     const { school_name, email, first_name, last_name } = req.body;
-    console.log('We are in the school entity')
     let school = await School.findOne({
       where: {
         name: school_name,
