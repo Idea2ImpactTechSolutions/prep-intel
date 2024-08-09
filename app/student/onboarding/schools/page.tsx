@@ -62,7 +62,9 @@ export default function SchoolPage() {
             .unwrap()
             .then(data => {
               if (!profileComplete) {
-                toast.success(data.message)
+                if (data?.message) {
+                  toast.success(data.message)
+                }
                 router.push('/student/onboarding/majors')
               } else {
                 router.push('/student/explore');
