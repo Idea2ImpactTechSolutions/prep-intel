@@ -15,7 +15,7 @@ const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
 export default function Home() {
   const router = useRouter();
-  const pathname = usePathname();
+  // const pathname = usePathname();
 
   // const PAGE_TABS = [
   //   {title: "Home", href: "/"},
