@@ -10,17 +10,10 @@ import bulletImage from "public/images/bullet.png";
 import workWithImage from "public/images/work-with.png";
 import Link from "next/link";
 import { Space_Grotesk } from "next/font/google";
-import { usePathname } from 'next/navigation'
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
 export default function Home() {
   const router = useRouter();
-  // const pathname = usePathname();
-
-  // const PAGE_TABS = [
-  //   {title: "Home", href: "/"},
-  //   {title: "Search", href: "/login"},
-  //   {title: "Blog", href: "/login"}];
 
   return (
     <>
@@ -33,17 +26,6 @@ export default function Home() {
           height={150}
           alt='logo'
           />
-        {/* <div className="flex space-x-24 font-bold">
-          {
-            PAGE_TABS.map((item, index) => (
-              <Link
-                href={item.href}
-                key={index}
-                className={`pb-1 ml-4 text-sm transition-all hover:border-b-[2px] hover:border-b-[#FEBB0E] md:ml-12 md:text-[1rem] ${pathname === item.href && 'border-b-[2px] border-b-[#FEBB0E]'} `}
-              >{item.title}</Link>
-            ))
-          }
-        </div> */}
 
         <Button className="bg-[#FEBB0E] border-[#FEBB0E] text-black mt-0 mr-20"
             onClick={() => router.push('/login')}
