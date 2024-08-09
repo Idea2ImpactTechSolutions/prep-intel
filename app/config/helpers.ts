@@ -29,12 +29,21 @@ export function apiResponse(
   status: number,
   data: object = {} // TODO: determine if null or empty is preferred
 ) {
+
+  if (status === 204) {
+    return new Response(null, { status});
+  }
+
   return Response.json(
     { status, message, data },
     {
       status,
     }
   );
+}
+
+export function buildAssetUrl(assetID) {
+  return `/api/assets/${assetID}`;
 }
 
 export function cacheBust(url) {

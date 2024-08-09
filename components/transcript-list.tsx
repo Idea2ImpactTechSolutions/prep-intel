@@ -2,6 +2,7 @@ import { useGetAssetsQuery } from "@/redux/services/assets/assetApi";
 import LoadingSpinner from "./loading-spinner";
 import { FaFileAlt } from "react-icons/fa";
 import { useEffect } from "react";
+import { buildAssetUrl } from "@/app/config/helpers";
 
 
 interface Props {
@@ -40,7 +41,7 @@ export function TranscriptsList({userId, reloadData=false} : Props) {
       { isLoadingAssets ? <LoadingSpinner/> :
         (assets && assets.data.length) ? assets.data.map(asset => (
           <li key={asset.id} className="border rounded-md p-0 w-full my-4">
-            <a href={`/api/assets/${asset.id}`} className="p-4 w-full flex align-middle items-center gap-1 no-underline hover:bg-slate-100" >
+            <a href={buildAssetUrl(asset.id)} className="p-4 w-full flex align-middle items-center gap-1 no-underline hover:bg-slate-100" >
               <div className="flex items-center justify-center w-12 h-12 bg-slate-100 rounded-full">
                 <FaFileAlt className="text-primary text-xl stroke-current fill-current" />
               </div>

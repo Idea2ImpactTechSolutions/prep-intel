@@ -90,7 +90,10 @@ export async function GET(
 
     const segments = asset.s3_key.split('/');
     const filename = segments[segments.length - 1];
-    headers.set('Content-Disposition', `attachment; filename="${filename}"`);
+
+    if (asset.category === USER_DOCUMENT) {
+      headers.set('Content-Disposition', `attachment; filename="${filename}"`);
+    }
 
     return new NextResponse(fileResponse.Body as ReadableStream, {
       status: 200,

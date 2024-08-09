@@ -9,7 +9,7 @@ import Link from 'next/link'
 import React from 'react'
 import { toast } from 'sonner'
 import { FaSchool } from "react-icons/fa6";
-import { cacheBust } from '@/app/config/helpers'
+import { buildAssetUrl, cacheBust } from '@/app/config/helpers'
 import LoadingSpinner from './loading-spinner'
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import "react-circular-progressbar/dist/styles.css";
@@ -48,11 +48,11 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
     }
 
     function profileImage(schoolData) {
-      return schoolData?.assets?.filter((f) => f.category === 'school-profile-image')?.[0]?.location;
+      return buildAssetUrl(schoolData?.assets?.find(f => f.category === 'school-profile-image')?.id);
     }
 
     function bannerImage(schoolData) {
-      return schoolData?.assets?.filter((f) => f.category === 'school-banner-image')?.[0]?.location;
+      return buildAssetUrl(schoolData?.assets?.find(f => f.category === 'school-banner-image')?.id);
     }
 
     function formatNumber(num: number, precision: number = 1): number {

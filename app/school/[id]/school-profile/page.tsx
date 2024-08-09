@@ -28,7 +28,7 @@ import {
   SCHOOL_PROFILE_IMAGE,
   SCHOOL_BANNER_IMAGE,
 } from "types/assetTypes";
-import { cacheBust } from "@/app/config/helpers";
+import { cacheBust, buildAssetUrl } from "@/app/config/helpers";
 
 interface initialValues {
   school_id: string,
@@ -233,8 +233,8 @@ export default function Page() {
 
   useEffect(() => {
     // TODO: Add these simple props to the data returned by the endpoint
-    setBannerImageUrl(cacheBust(school_data?.assets?.filter((f) => f.category === SCHOOL_BANNER_IMAGE)?.[0]?.location));
-    setProfileImageUrl(cacheBust(school_data?.assets?.filter((f) => f.category === SCHOOL_PROFILE_IMAGE)?.[0]?.location));
+    setBannerImageUrl(cacheBust(buildAssetUrl(school_data?.assets?.find(f => f.category === SCHOOL_BANNER_IMAGE)?.id)));
+    setProfileImageUrl(cacheBust(buildAssetUrl(school_data?.assets?.find(f => f.category === SCHOOL_PROFILE_IMAGE)?.id)));
 
     setInitialSchoolData({
       school_id: school_data?.id || '',

@@ -33,6 +33,10 @@ const handler = NextAuth({
         const credentialsMatch = await bcrypt.compare(credentials.password, user.password);
         if (user && credentialsMatch) {
           const roleId =  await getUsersRoleId(user.id, user.role);
+          user.set({
+            last_login: new Date()
+          });
+          await user.save();
           return {
             id: user.id,
             firstName: user.first_name,
