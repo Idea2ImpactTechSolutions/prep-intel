@@ -42,6 +42,10 @@ export function apiResponse(
   );
 }
 
+export function buildAssetUrl(assetID) {
+  return `/api/assets/${assetID}`;
+}
+
 export function cacheBust(url) {
   if (!url) {
     return '';

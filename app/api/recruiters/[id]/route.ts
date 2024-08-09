@@ -1,4 +1,4 @@
-import { apiResponse } from "@/app/config/helpers";
+import { apiResponse, buildAssetUrl } from "@/app/config/helpers";
 import { models } from "@/app/models";
 const { Users, Recruiters, Assets } = models;
 
@@ -49,15 +49,15 @@ export async function GET(
 
     // Collect the profile image and merge it into the response. Could be done with
     // more effort and a join, but this is very low cost as is...
-    const assets = await Assets.findOne({
+    const asset = await Assets.findOne({
       where: {
         user_id: recruiter.user.id,
         category: "recruiter-profile-image",
       },
     });
 
-    if (assets) {
-      recruiter.dataValues['profile_img'] = assets.location;
+    if (asset) {
+      recruiter.dataValues['profile_img'] = buildAssetUrl(asset.id);
     }
 
     if (recruiter) {
