@@ -61,7 +61,7 @@ export default function TranscriptsPage() {
 
   return (
     <>
-      <OnboardingTabs active_step="Transcript" useSteppedWizard={!profileComplete} />
+      <OnboardingTabs active_step="Transcripts" useSteppedWizard={!profileComplete} />
       <PageContent>
         <SectionContainer title="Upload Important Documents">
           <>
