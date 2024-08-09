@@ -1,4 +1,4 @@
-import { apiResponse } from "app/config/helpers";
+import { apiResponse, buildAssetUrl } from "app/config/helpers";
 import { S3Client } from "@aws-sdk/client-s3";
 const { Upload } = require("@aws-sdk/lib-storage");
 const { models } = require("@/app/models");
@@ -173,7 +173,7 @@ async function uploadUserDocument(userId: string, category: string, isSingleInst
       category,
     });
 
-  const assetLocation = `/api/assets/${asset.id}`;
+  const assetLocation = buildAssetUrl(asset.id);
 
   // When profile images are uploaded, update the user object with the new image
   if (category === STUDENT_PROFILE_IMAGE || category === RECRUITER_PROFILE_IMAGE) {
@@ -203,7 +203,7 @@ async function uploadSchoolDocument(schoolId: string, category: string, isSingle
     });
 
   return apiResponse("uploaded successfully", 201, {
-    assetUrl: `/api/assets/${asset.id}`,
+    assetUrl: buildAssetUrl(asset.id),
   });
 }
 
