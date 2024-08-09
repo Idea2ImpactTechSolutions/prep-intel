@@ -4,6 +4,7 @@ const models = require("@/app/models");
 const { Users, Recruiters,Students, Managers } = models.models;
 import bcrypt from "bcryptjs";
 import logger from 'lib/logger';
+import { DataTypes, Sequelize } from "sequelize";
 
 const handler = NextAuth({
   providers: [
@@ -33,6 +34,10 @@ const handler = NextAuth({
         const credentialsMatch = await bcrypt.compare(credentials.password, user.password);
         if (user && credentialsMatch) {
           const roleId =  await getUsersRoleId(user.id, user.role);
+          user.set({
+            last_login: new Date()
+          });
+          await user.save();
           return {
             id: user.id,
             firstName: user.first_name,

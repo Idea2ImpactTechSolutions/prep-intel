@@ -15,6 +15,14 @@ import {
   STUDENT_PROFILE_IMAGE,
 } from "types/assetTypes";
 
+
+
+const SINGLE_INSTANCE_TYPES = [
+  RECRUITER_PROFILE_IMAGE,
+  STUDENT_PROFILE_IMAGE,
+  SCHOOL_PROFILE_IMAGE,
+  SCHOOL_BANNER_IMAGE,
+];
 /**
  * @openapi
  * /api/assets:
@@ -135,59 +143,23 @@ export async function POST(req: Request) {
     const formData = await req.formData();
     const category = formData.get("category") as string;
     const file = formData.get("file") as File;
-    const singleInstanceTypes = [
-      RECRUITER_PROFILE_IMAGE,
-      STUDENT_PROFILE_IMAGE,
-      SCHOOL_PROFILE_IMAGE,
-      SCHOOL_BANNER_IMAGE,
-    ];
-    const singleInstanceAsset = singleInstanceTypes.includes(category);
+    const isSingleInstanceAssetType = SINGLE_INSTANCE_TYPES.includes(category);
 
-    switch (category) {
+    switch (category) 
+    {
       case USER_DOCUMENT:
       case STUDENT_PROFILE_IMAGE:
       case RECRUITER_PROFILE_IMAGE: {
-        const userId = formData.get("userId") as string;
-        const user = await Users.findByPk(userId);
-        if (!user) {
-          return apiResponse("No user found", 404);
-        }
-
-        return await uploadDocument(
-          file,
-          `user/${userId}/${singleInstanceAsset ? category : file.name}`,
-          singleInstanceAsset,
-          {
-            user_id: userId,
-            category,
-          },
-          async (location) => {
-            // After upload, set the user's profile image to the uploaded image S3 url
-            user.profile_image = location;
-            await user.save()
-          }
-        );
+        // Validate the given user exists
+        return await uploadUserDocument(formData.get("userId") as string, category, isSingleInstanceAssetType, file);
       }
 
       case SCHOOL_IMAGE:
       case SCHOOL_BANNER_IMAGE:
       case SCHOOL_PROFILE_IMAGE:
       case SCHOOL_DOCUMENT: {
-        const schoolId = formData.get("schoolId") as string;
-        const school = await School.findByPk(schoolId);
-        if (!school) {
-          return apiResponse("No school found", 404);
-        }
-
-        return await uploadDocument(
-          file,
-          `school/${schoolId}/${singleInstanceAsset ? category : file.name}`,
-          singleInstanceAsset,
-          {
-            category,
-            school_id: schoolId,
-          },
-        );
+        // Validate the given school exists
+        return await uploadSchoolDocument(formData.get("schoolId") as string, category, isSingleInstanceAssetType, file);
       }
     }
   } catch (error: any) {
@@ -195,6 +167,55 @@ export async function POST(req: Request) {
       error: error.message,
     });
   }
+}
+
+async function uploadUserDocument(userId: string, category: string, isSingleInstanceAssetType:boolean, file: File) {
+  const user = await Users.findByPk(userId);
+  if (!user) {
+    return apiResponse("No user found", 404);
+  }
+
+  const asset = await uploadDocument(
+    file,
+    `user/${userId}/${isSingleInstanceAssetType ? category : file.name}`,
+    isSingleInstanceAssetType,
+    {
+      user_id: userId,
+      category,
+    });
+
+  const assetLocation = `/api/assets/${asset.id}`;
+
+  // When profile images are uploaded, update the user object with the new image
+  if (category === STUDENT_PROFILE_IMAGE || category === RECRUITER_PROFILE_IMAGE) {
+    // After upload, set the user's profile image to the uploaded image S3 url
+    user.profile_image = assetLocation;
+    await user.save()
+  }
+
+  return apiResponse("uploaded successfully", 201, {
+    assetUrl: assetLocation,
+  });
+}
+
+async function uploadSchoolDocument(schoolId: string, category: string, isSingleInstanceAssetType:boolean, file: File) {
+  const school = await School.findByPk(schoolId);
+  if (!school) {
+    return apiResponse("No school found", 404);
+  }
+
+  const asset = await uploadDocument(
+    file,
+    `school/${schoolId}/${isSingleInstanceAssetType ? category : file.name}`,
+    isSingleInstanceAssetType,
+    {
+      category,
+      school_id: schoolId,
+    });
+
+  return apiResponse("uploaded successfully", 201, {
+    assetUrl: `/api/assets/${asset.id}`,
+  });
 }
 
 async function getBufferedView(assetFile: File) {
@@ -205,11 +226,9 @@ async function getBufferedView(assetFile: File) {
 async function uploadDocument(
   assetFile: File,
   documentPath: string,
-  singleInstanceAsset: boolean,
+  isSingleInstanceAssetType: boolean,
   assetFields,
-  onUploadSuccess?: (location: string) => void,
 ) {
-  try {
     const bufferedView = await getBufferedView(assetFile);
     const uploadResponse = await uploadFileToS3({
       Bucket: process.env.BUCKET_NAME,
@@ -217,26 +236,22 @@ async function uploadDocument(
       Body: bufferedView,
     });
 
-    if (onUploadSuccess) {
-      onUploadSuccess(uploadResponse.Location);
-    }
+    let asset: any = null;
 
-    let existingAsset: any = null;
+    if (isSingleInstanceAssetType) {
+      asset = await Assets.findOne({ where: assetFields });
 
-    if (singleInstanceAsset) {
-      existingAsset = await Assets.findOne({ where: assetFields });
-
-      if (existingAsset) {
-        existingAsset.bytes = bufferedView.length;
-        existingAsset.location = uploadResponse.Location;
-        existingAsset.save();
+      if (asset) {
+        asset.bytes = bufferedView.length;
+        asset.location = uploadResponse.Location;
+        asset.save();
       }
     }
 
     // In the single-instance case, if no record exist to update, create - otherwise always create
-    if (!existingAsset) {
+    if (!asset) {
       // Create a new asset for the upload
-      await Assets.create({
+      asset = await Assets.create({
         description: assetFile.name,
         bytes: bufferedView.length,
         location: uploadResponse.Location,
@@ -247,15 +262,7 @@ async function uploadDocument(
       });
     }
 
-    return apiResponse("uploaded successfully", 201, {
-      assetUrl: uploadResponse.Location,
-    });
-  } catch (error: any) {
-    logger.error(error);
-    return apiResponse("An unexpected error occurred", 500, {
-      error: error.message,
-    });
-  }
+    return asset;
 }
 
 async function uploadFileToS3(params: any) {

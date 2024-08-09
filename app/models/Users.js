@@ -55,6 +55,10 @@ const Users = sequelize.define(
             type: DataTypes.STRING,
             allowNull: true,
         },
+        last_login: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        },
         is_active: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
