@@ -17,10 +17,10 @@ export default function Home() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const PAGE_TABS = [
-    {title: "Home", href: "/"},
-    {title: "Search", href: "/login"},
-    {title: "Blog", href: "/login"}];
+  // const PAGE_TABS = [
+  //   {title: "Home", href: "/"},
+  //   {title: "Search", href: "/login"},
+  //   {title: "Blog", href: "/login"}];
 
   return (
     <>
@@ -33,7 +33,7 @@ export default function Home() {
           height={150}
           alt='logo'
           />
-        <div className="flex space-x-24 font-bold">
+        {/* <div className="flex space-x-24 font-bold">
           {
             PAGE_TABS.map((item, index) => (
               <Link
@@ -43,7 +43,7 @@ export default function Home() {
               >{item.title}</Link>
             ))
           }
-        </div>
+        </div> */}
 
         <Button className="bg-[#FEBB0E] border-[#FEBB0E] text-black mt-0 mr-20"
             onClick={() => router.push('/login')}
