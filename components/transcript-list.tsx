@@ -48,7 +48,7 @@ export function TranscriptsList({userId, reloadData=false} : Props) {
 
               <div className="pl-2">
                   <span className="block font-medium text-lg">{asset.description}</span>
-                  {/* <span className="block text-sm text-gray-500 mt-[-.3em]">{formatFileSize(asset.bytes)}</span> */}
+                  <span className="block text-sm text-gray-500 mt-[-.3em]">{formatFileSize(asset.bytes)}</span>
               </div>
             </a>
           </li> )
