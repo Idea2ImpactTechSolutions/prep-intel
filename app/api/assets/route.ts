@@ -3,7 +3,7 @@ import { S3Client } from "@aws-sdk/client-s3";
 const { Upload } = require("@aws-sdk/lib-storage");
 const { models } = require("@/app/models");
 const { Assets, School, Users } = models;
-import logger from "lib/logger";
+import mime from "mime-types";
 import { type NextRequest } from "next/server";
 import {
   SCHOOL_PROFILE_IMAGE,
@@ -15,14 +15,13 @@ import {
   STUDENT_PROFILE_IMAGE,
 } from "types/assetTypes";
 
-
-
 const SINGLE_INSTANCE_TYPES = [
   RECRUITER_PROFILE_IMAGE,
   STUDENT_PROFILE_IMAGE,
   SCHOOL_PROFILE_IMAGE,
   SCHOOL_BANNER_IMAGE,
 ];
+
 /**
  * @openapi
  * /api/assets:
@@ -56,16 +55,6 @@ const SINGLE_INSTANCE_TYPES = [
  *           application/json:
  *             schema:
  *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   first_name:
- *                     type: string
- *               examples:
- *                 One Sample:
- *                   value: '[{"id": 1, "first_name": "John"}]'
  */
 export async function GET(req: NextRequest) {
   try {
@@ -145,7 +134,7 @@ export async function POST(req: Request) {
     const file = formData.get("file") as File;
     const isSingleInstanceAssetType = SINGLE_INSTANCE_TYPES.includes(category);
 
-    switch (category) 
+    switch (category)
     {
       case USER_DOCUMENT:
       case STUDENT_PROFILE_IMAGE:
@@ -230,10 +219,15 @@ async function uploadDocument(
   assetFields,
 ) {
     const bufferedView = await getBufferedView(assetFile);
+
+    // Infer the content type from the file extension
+    const contentType = mime.lookup(assetFile.name) || "application/octet-stream";
+
     const uploadResponse = await uploadFileToS3({
       Bucket: process.env.BUCKET_NAME,
       Key: documentPath,
       Body: bufferedView,
+      ContentType: contentType,
     });
 
     let asset: any = null;
