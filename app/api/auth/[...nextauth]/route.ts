@@ -4,7 +4,6 @@ const models = require("@/app/models");
 const { Users, Recruiters,Students, Managers } = models.models;
 import bcrypt from "bcryptjs";
 import logger from 'lib/logger';
-import { DataTypes, Sequelize } from "sequelize";
 
 const handler = NextAuth({
   providers: [
