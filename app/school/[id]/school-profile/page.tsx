@@ -11,13 +11,13 @@ import { useUploadAssetMutation  } from "@/redux/services/assets/assetApi";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { Dictionary } from "@/types/dictionary";
 import { statePaths } from "@/data/state-paths";
-import { formatRMDatePicker } from "@/utils/helpers/date-format";
 import { Formik, Form, FieldArray, Field } from "formik";
 import { File, ImagePlus, MinusCircle, PlusSquare } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import * as yup from "yup"
 import { toast } from "sonner"
+import moment from 'moment';
 import { CompletionPanel } from "@/components/completion-panel";
 import FormFooter from "../../_components/form-footer";
 import { setSchoolInformation } from "@/redux/features/school/managerSlice";
@@ -379,7 +379,7 @@ export default function Page() {
                             label="Founded Date"
                             labelClass="text-xs font-normal text-[#61646B]"
                             value={values?.school_details?.founded_date || ""}
-                            handleChange={(date) => setFieldValue(`school_details.founded_date`, formatRMDatePicker(date))}
+                            handleChange={(date) => setFieldValue('school_details.founded_date', date ? moment(date).format('YYYY-MM-DD') : "")}
                             touched={touched?.school_details?.founded_date}
                             error={errors?.school_details?.founded_date}
                           />
