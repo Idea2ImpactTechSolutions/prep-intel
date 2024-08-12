@@ -39,7 +39,7 @@ export default async function handler(req, res) {
         school_id
      } = req.query;
 
-    const schoolExists = await findSchool(school_id);
+    const schoolExists = await School.findByPk(school_id);
 
     if (schoolExists) {
       let users = await Users.findAll({where: {
@@ -47,7 +47,13 @@ export default async function handler(req, res) {
         role: PERSONNEL_ROLES
       }});
 
-      responseData = await finalizePersonnelData(users);
+      responseData = users.map((user) => ({
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        role: user.role,
+        is_active: user.is_active  ? "Active" : "Inactive"
+      }));
       responseCode = 200;
       responseMessage = "Personnel retrieved successfully";
     } else {
@@ -55,25 +61,4 @@ export default async function handler(req, res) {
     }
 
     return {responseData, responseCode, responseMessage};
-  }
-
-  async function findSchool(schoolID) {
-    const school = await School.findByPk(schoolID);
-    if (!school) {
-      return false;
-    }
-    else {
-      return true;
-    }
-  }
-
-  async function finalizePersonnelData(userRecords) {
-    const finalizedRecords = userRecords.map((userRecord) => ({
-      first_name: userRecord.first_name,
-      last_name: userRecord.last_name,
-      email: userRecord.email,
-      role: userRecord.role,
-      is_active: userRecord.is_active === 1 ? "Active" : "Inactive"
-    }));
-    return finalizedRecords;
   }
