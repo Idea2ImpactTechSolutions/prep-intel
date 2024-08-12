@@ -237,6 +237,9 @@ async function uploadDocument(
 
       if (asset) {
         asset.bytes = bufferedView.length;
+        asset.description = assetFile.name,
+        asset.fileName = assetFile.name,
+        asset.s3_key = documentPath,
         asset.location = uploadResponse.Location;
         asset.save();
       }
