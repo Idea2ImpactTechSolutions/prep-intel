@@ -17,18 +17,18 @@ import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import * as yup from "yup"
 import { toast } from "sonner"
-import moment from 'moment';
 import { CompletionPanel } from "@/components/completion-panel";
 import FormFooter from "../../_components/form-footer";
 import { setSchoolInformation } from "@/redux/features/school/managerSlice";
 import LoadingSpinner from "@/components/loading-spinner";
 import ProfilePublishedLabel from "@/components/profile-published-label";
 import { PageContent } from "@/components/common-page";
+import Image from "next/image";
 import {
   SCHOOL_PROFILE_IMAGE,
   SCHOOL_BANNER_IMAGE,
 } from "types/assetTypes";
-import { cacheBust, buildAssetUrl } from "@/app/config/helpers";
+import { cacheBust, buildAssetUrl, dateWithLocalOffset } from "@/app/config/helpers";
 
 interface initialValues {
   school_id: string,
@@ -318,12 +318,16 @@ export default function Page() {
                             }}
                             uploading={isLoading && Boolean(selectedImage)}
                           >
-                            <div className={cn(
-                              "border border-dashed border-gray-400 w-32 h-32 grid place-content-center rounded-[5px]",
-                            )}
-                            >
-                              {profileImageUrl ? <img src={profileImageUrl} alt=""/> :
-                                <ImagePlus className="w-10 h-10 text-gray-400" />
+                            <div className="border border-dashed border-gray-400 w-32 h-32 grid place-content-center rounded-full mt-2">
+                              {profileImageUrl ?(
+                                <Image
+                                  className="rounded-full object-cover w-28 h-28"
+                                  src={profileImageUrl}
+                                  alt="logo"
+                                  width={32}
+                                  height={32}
+                                  />
+                                ) : (<ImagePlus className="w-10 h-10 text-gray-400" />)
                               }
                             </div>
                           </CustomFileInput>
@@ -378,8 +382,8 @@ export default function Page() {
                           <CustomDatePicker
                             label="Founded Date"
                             labelClass="text-xs font-normal text-[#61646B]"
-                            value={values?.school_details?.founded_date || ""}
-                            handleChange={(date) => setFieldValue('school_details.founded_date', date ? moment(date).format('YYYY-MM-DD') : "")}
+                            value={dateWithLocalOffset(values?.school_details?.founded_date)}
+                            handleChange={(date) => setFieldValue('school_details.founded_date', date.format("YYYY-MM-DD"))}
                             touched={touched?.school_details?.founded_date}
                             error={errors?.school_details?.founded_date}
                           />

@@ -77,11 +77,10 @@ export default function SchoolInformation({ schoolData }: SchoolInformationProps
 
                     {profileImage(schoolData) ? (
                       <Image src={cacheBust(profileImage(schoolData))}
+                        className="rounded-full object-cover w-28 h-28"
                         alt="logo"
-                        width={0}
-                        height={0}
-                        sizes="100vw"
-                        style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+                        width={32}
+                        height={32}
                       />
                     ) : (
                       <div className="flex items-center justify-center w-full h-full text-gray-500 text-6xl">
