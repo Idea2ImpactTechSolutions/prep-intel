@@ -24,6 +24,7 @@ import { setSchoolInformation } from "@/redux/features/school/managerSlice";
 import LoadingSpinner from "@/components/loading-spinner";
 import ProfilePublishedLabel from "@/components/profile-published-label";
 import { PageContent } from "@/components/common-page";
+import Image from "next/image";
 import {
   SCHOOL_PROFILE_IMAGE,
   SCHOOL_BANNER_IMAGE,
@@ -318,12 +319,16 @@ export default function Page() {
                             }}
                             uploading={isLoading && Boolean(selectedImage)}
                           >
-                            <div className={cn(
-                              "border border-dashed border-gray-400 w-32 h-32 grid place-content-center rounded-[5px]",
-                            )}
-                            >
-                              {profileImageUrl ? <img src={profileImageUrl} alt=""/> :
-                                <ImagePlus className="w-10 h-10 text-gray-400" />
+                            <div className="border border-dashed border-gray-400 w-32 h-32 grid place-content-center rounded-full mt-2">
+                              {profileImageUrl ?(
+                                <Image
+                                  className="rounded-full object-cover w-28 h-28"
+                                  src={profileImageUrl}
+                                  alt="logo"
+                                  width={32}
+                                  height={32}
+                                  />
+                                ) : (<ImagePlus className="w-10 h-10 text-gray-400" />)
                               }
                             </div>
                           </CustomFileInput>
