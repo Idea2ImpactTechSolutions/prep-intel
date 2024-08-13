@@ -17,7 +17,6 @@ import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import * as yup from "yup"
 import { toast } from "sonner"
-import moment from 'moment';
 import { CompletionPanel } from "@/components/completion-panel";
 import FormFooter from "../../_components/form-footer";
 import { setSchoolInformation } from "@/redux/features/school/managerSlice";
@@ -29,7 +28,7 @@ import {
   SCHOOL_PROFILE_IMAGE,
   SCHOOL_BANNER_IMAGE,
 } from "types/assetTypes";
-import { cacheBust, buildAssetUrl } from "@/app/config/helpers";
+import { cacheBust, buildAssetUrl, dateWithLocalOffset } from "@/app/config/helpers";
 
 interface initialValues {
   school_id: string,
@@ -383,8 +382,8 @@ export default function Page() {
                           <CustomDatePicker
                             label="Founded Date"
                             labelClass="text-xs font-normal text-[#61646B]"
-                            value={values?.school_details?.founded_date || ""}
-                            handleChange={(date) => setFieldValue('school_details.founded_date', date ? moment(date).format('YYYY-MM-DD') : "")}
+                            value={dateWithLocalOffset(values?.school_details?.founded_date)}
+                            handleChange={(date) => setFieldValue('school_details.founded_date', date.format("YYYY-MM-DD"))}
                             touched={touched?.school_details?.founded_date}
                             error={errors?.school_details?.founded_date}
                           />

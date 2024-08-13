@@ -1,4 +1,5 @@
 import { v4 as uuid } from "uuid";
+import moment from 'moment-timezone';
 
 export const responseBody = (message: string, code: number, data: any = null) => {
   return {
@@ -18,6 +19,10 @@ export function getAuthCode() {
  }
 }
 
+export function dateWithLocalOffset(dateString: string) {
+  // Convert the given date string, ala "2021-09-01", to a  local date object with a fixed/local offset applied
+  return dateString ? moment(dateString).tz('America/Los_Angeles').toDate() : ""
+}
 
 export function getBaseUrl(): string {
   return process.env.NEXTAUTH_URL as string;

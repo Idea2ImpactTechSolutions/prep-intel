@@ -5,7 +5,6 @@ import SectionContainer from "@/components/section-container";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useAddStudentVitalsMutation, useLazyGetStudentVitalsQuery } from "@/redux/services/student/studentApi";
-import moment from 'moment';
 import { useFormik } from "formik";
 import { useSession } from "next-auth/react";
 import { Space_Grotesk } from "next/font/google";
@@ -19,7 +18,7 @@ import { statePaths } from "@/data/state-paths";
 import { toast } from "sonner";
 import CustomSelect from "@/components/custom-select";
 import AssetImage from "@/components/asset-image";
-import { cacheBust } from "@/app/config/helpers";
+import { cacheBust, dateWithLocalOffset } from "@/app/config/helpers";
 import { PageContent } from "@/components/common-page";
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
@@ -169,8 +168,8 @@ export default function VitalsPage() {
                       label="Birth Date"
                       className=""
                       inputClass="rounded-lg p-[.8rem] placeholder:text-[#AAAAAA]"
-                      handleChange={(date) => setFieldValue('dob', date ? moment(date).format('YYYY-MM-DD') : "")}
-                      value={values.dob}
+                      handleChange={(date) => setFieldValue('dob', date.format('YYYY-MM-DD'))}
+                      value={dateWithLocalOffset(values.dob)}
                       touched={touched.dob}
                       error={errors.dob}
                       labelClass="mt-3"

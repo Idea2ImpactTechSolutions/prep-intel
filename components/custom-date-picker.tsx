@@ -1,4 +1,4 @@
-import DatePicker from "react-multi-date-picker";
+import DatePicker, { DateObject } from "react-multi-date-picker";
 import { Label } from "./ui/label";
 import { cn } from "@/lib/utils";
 
@@ -8,7 +8,7 @@ type DatePickerType = {
     className?: string,
     inputClass?: string,
     selected?: string, 
-    value?: string,
+    value?: Date | string | number | DateObject,
     handleChange: (event: any) => void,
     onOpenPickNewDate?: false,
     touched?: any,
@@ -35,7 +35,7 @@ export default function CustomDatePicker({label, labelClass, className, inputCla
                 format="MM/DD/YYYY"
                 containerStyle={{width: "100%"}}
                 onOpenPickNewDate={onOpenPickNewDate}
-                value={value ? new Date(value) : ""}
+                value={value}
                 placeholder="MM/DD/YYYY"
                 onChange={handleChange}
             />
