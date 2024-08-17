@@ -17,7 +17,8 @@ interface EmailParams {
 }
 
 export const sendEmail = async ({ to, subject, text }: EmailParams): Promise<void> => {
-  if(process.env.SEND_EMAIL){
+  to = process.env.SES_TO_EMAIL_OVERRIDE ? process.env.SES_TO_EMAIL_OVERRIDE : to; 
+  if(process.env.SEND_LIVE_EMAIL){
     const params = {
       Source: process.env.SES_VERIFIED_EMAIL as string, // Your verified email address
       Destination: {
